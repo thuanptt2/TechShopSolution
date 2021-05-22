@@ -14,9 +14,9 @@ namespace TechShopSolution.Data.Entities
         public DateTime birthday { get; set; }
         public bool sex { get; set; }
         public string address { get; set; }
-        public string orders_list { get; set; }
         public bool status { get; set; }
         public DateTime create_at { get; set; }
         public System.DateTime update_at { get; set; }
+        public List<Order> Order { get; set; }
     }
 }

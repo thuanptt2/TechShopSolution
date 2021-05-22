@@ -11,5 +11,6 @@ namespace TechShopSolution.Data.Entities
         public bool status { get; set; }
         public DateTime create_at { get; set; }
         public DateTime update_at { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

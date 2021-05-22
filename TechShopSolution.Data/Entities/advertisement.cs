@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TechShopSolution.Data.Entities
 {
-    public class advertisement
+    public class Advertisement
     {
         public int id { get; set; }
         public string image { get; set; }

@@ -20,5 +20,11 @@ namespace TechShopSolution.Data.Entities
         public string note { get; set; }
         public DateTime create_at { get; set; }
         public DateTime update_at { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
+        public Customer Customers { get; set; }
+        public Transport Transport { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
+
+
     }
 }

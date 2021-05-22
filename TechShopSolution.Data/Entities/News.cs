@@ -19,5 +19,6 @@ namespace TechShopSolution.Data.Entities
         public string meta_descriptions { get; set; }
         public DateTime create_at { get; set; }
         public DateTime update_at { get; set; }
+        public CategoryNews CategoryNews { get; set; }
     }
 }

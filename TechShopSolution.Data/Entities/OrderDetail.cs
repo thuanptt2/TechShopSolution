@@ -11,5 +11,7 @@ namespace TechShopSolution.Data.Entities
         public int quantity { get; set; }
         public decimal unit_price { get; set; }
         public decimal? promotion_price { get; set; }
-    }
+        public Order Order { get; set; }
+        public Product Product { get; set; }
+}
 }
