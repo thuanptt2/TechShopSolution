@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "TechShopSolutionDB": "Server=.;Database=TechShopSolution;Trusted_Connection=True;"
+  }
+}
