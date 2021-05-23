@@ -10,5 +10,7 @@ namespace TechShopSolution.Application.Catalog.Product
     public interface IPublicProductService
     {
        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
+        Task<List<ProductViewModel>> GetAll();
+
     }
 }

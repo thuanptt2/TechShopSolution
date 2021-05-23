@@ -22,6 +22,8 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.create_at)
                 .HasDefaultValueSql("GetDate()")
                 .HasColumnType("Date");
+            builder.Property(x => x.update_at)
+              .HasColumnType("Date");
 
             builder.HasOne(x => x.CategoryNews).WithMany(t => t.ListNews).HasForeignKey(x => x.cate_id);
         }
