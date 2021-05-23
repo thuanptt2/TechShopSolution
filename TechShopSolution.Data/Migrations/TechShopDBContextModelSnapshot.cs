@@ -61,7 +61,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -104,7 +104,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -169,7 +169,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -219,7 +219,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -264,7 +264,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -431,7 +431,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -541,7 +541,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -596,7 +596,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -687,7 +687,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -702,7 +702,9 @@ namespace TechShopSolution.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("best_seller")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("brand_id")
                         .HasColumnType("int");
@@ -723,7 +725,9 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("featured")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("image")
                         .IsRequired()
@@ -775,7 +779,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<int>("warranty")
                         .ValueGeneratedOnAdd()
@@ -861,7 +865,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -896,7 +900,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
@@ -928,7 +932,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("update_at")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("id");
 
