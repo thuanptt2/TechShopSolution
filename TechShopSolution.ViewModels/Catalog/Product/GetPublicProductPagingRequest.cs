@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using TechShopSolution.Application.DTO;
 
-namespace TechShopSolution.ViewModels.Catalog.Product.Public
+namespace TechShopSolution.ViewModels.Catalog.Product
 {
-    public class GetProductPagingRequest : PagingRequestBase
+    public class GetPublicProductPagingRequest : PagingRequestBase
     {
         public int? CategoryId { get; set; }
     }

@@ -4,7 +4,6 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Product;
-using TechShopSolution.ViewModels.Catalog.Product.Public;
 using TechShopSolution.Application.DTO;
 using TechShopSolution.Data.EF;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +18,7 @@ namespace TechShopSolution.Application.Catalog.Product
             _context = context;
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pic in _context.CategoryProducts on p.id equals pic.product_id

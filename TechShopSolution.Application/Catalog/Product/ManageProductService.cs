@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Product;
-using TechShopSolution.ViewModels.Catalog.Product.Manage;
 using TechShopSolution.Application.DTO;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Utilities.Exceptions;
@@ -25,12 +24,10 @@ namespace TechShopSolution.Application.Catalog.Product
             _context = context;
             _storageService = storageService;
         }
-
         public Task<int> AddImages(int productId, IFormFile file)
         {
             throw new NotImplementedException();
         }
-
         public async Task<int> Create(ProductCreateRequest request)
         {
             var product = new TechShopSolution.Data.Entities.Product
@@ -75,7 +72,7 @@ namespace TechShopSolution.Application.Catalog.Product
         }
 
 
-        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pic in _context.CategoryProducts on p.id equals pic.product_id
@@ -123,6 +120,11 @@ namespace TechShopSolution.Application.Catalog.Product
                 Items = await data,
             };
             return pageResult;
+        }
+
+        public Task<PagedResult<ProductViewModel>> GetAllPaging(GetPublicProductPagingRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<int> RemoveImages(int productId, IFormFile file)

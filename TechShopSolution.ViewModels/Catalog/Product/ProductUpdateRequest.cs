@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TechShopSolution.ViewModels.Catalog.Product.Manage
+namespace TechShopSolution.ViewModels.Catalog.Product
 {
     public class ProductUpdateRequest
     {
