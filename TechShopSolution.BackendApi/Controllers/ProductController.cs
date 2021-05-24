@@ -33,6 +33,14 @@ namespace TechShopSolution.BackendApi.Controllers
             var products = await _publicProductService.GetAllByCategoryId(requet);
             return Ok(products);
         }
+        [HttpGet("filter")]
+        public async Task<IActionResult> GetManagerProductByFilter([FromQuery] GetManageProductPagingRequest requet)
+        {
+            var products = await _manageProductService.GetAllPaging(requet);
+            if (products == null)
+                return BadRequest("Không tồn tại sản phẩm này");
+            return Ok(products);
+        }
 
         [HttpGet("productId")]
         public async Task<IActionResult> GetById(int productId)
@@ -55,7 +63,7 @@ namespace TechShopSolution.BackendApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] ProductUpdateRequest request)
+        public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
         {
             var affectedResult = await _manageProductService.Update(request);
             if (affectedResult == 0)
