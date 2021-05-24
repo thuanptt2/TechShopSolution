@@ -14,9 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.Data", "Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.Application", "TechShopSolution.Application\TechShopSolution.Application.csproj", "{57687B25-263D-4550-B08F-5F09239FE044}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechShopSolution.Utilities", "TechShopSolution.Utilities\TechShopSolution.Utilities.csproj", "{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.Utilities", "TechShopSolution.Utilities\TechShopSolution.Utilities.csproj", "{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechShopSolution.ViewModels", "TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj", "{C4E9C882-986C-4B90-B7D9-F23BE896D171}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.ViewModels", "TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj", "{C4E9C882-986C-4B90-B7D9-F23BE896D171}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Infrastructrue", "1. Infrastructrue", "{4C28F55B-39DA-42F0-9521-F4B4999518BE}"
 EndProject
@@ -24,7 +24,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Domain", "2. Domain", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Host", "3. Host", "{7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechShopSolution.BackendApi", "TechShopSolution.BackendApi\TechShopSolution.BackendApi.csproj", "{F6DBA955-0D95-43C3-A105-E6654D8E735F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.BackendApi", "TechShopSolution.BackendApi\TechShopSolution.BackendApi.csproj", "{F6DBA955-0D95-43C3-A105-E6654D8E735F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechShopSolution.AdminApp", "TechShopSolution.AdminApp\TechShopSolution.AdminApp.csproj", "{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{F6DBA955-0D95-43C3-A105-E6654D8E735F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6DBA955-0D95-43C3-A105-E6654D8E735F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6DBA955-0D95-43C3-A105-E6654D8E735F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA} = {4C28F55B-39DA-42F0-9521-F4B4999518BE}
 		{C4E9C882-986C-4B90-B7D9-F23BE896D171} = {4C28F55B-39DA-42F0-9521-F4B4999518BE}
 		{F6DBA955-0D95-43C3-A105-E6654D8E735F} = {7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6} = {7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B94A4BC-1A94-45F5-B575-B503FAA6ADCB}
