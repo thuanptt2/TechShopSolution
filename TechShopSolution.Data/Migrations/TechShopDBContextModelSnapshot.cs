@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 using TechShopSolution.Data.EF;
 
 namespace TechShopSolution.Data.Migrations
 {
-    [DbContext(typeof(TechShopDBContext))]
+    [DbContext(typeof(IConfiguration))]
     partial class TechShopDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
