@@ -5,11 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 using TechShopSolution.Data.EF;
 
 namespace TechShopSolution.Data.Migrations
 {
-    [DbContext(typeof(TechShopDBContext))]
+    [DbContext(typeof(IConfiguration))]
     [Migration("20210523144343_UpdateProperty")]
     partial class UpdateProperty
     {
