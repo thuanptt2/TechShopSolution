@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +16,7 @@ using TechShopSolution.Application.Common;
 using TechShopSolution.Application.System;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Utilities.Constants;
+using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.BackendApi
 {
@@ -37,10 +40,11 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 
 
 
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
             services.AddSwaggerGen(c =>
             {
