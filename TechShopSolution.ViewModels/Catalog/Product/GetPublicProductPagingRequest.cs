@@ -8,5 +8,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
     public class GetPublicProductPagingRequest : PagingRequestBase
     {
         public int? CategoryId { get; set; }
+        public int? BrandId { get; set; }
+
     }
 }

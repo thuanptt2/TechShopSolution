@@ -35,5 +35,15 @@ namespace TechShopSolution.Application.Common
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
         }
+
+        public bool isExistFile(string filename)
+        {
+            var filePath = Path.Combine(_userContentFolder, filename);
+            if (File.Exists(filePath))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

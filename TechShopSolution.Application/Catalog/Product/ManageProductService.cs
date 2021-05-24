@@ -44,7 +44,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 meta_descriptions = request.Meta_descriptions,
                 meta_keywords = request.Meta_keywords,
                 meta_tittle = request.Meta_tittle,
-                more_images = request.More_images,
                 promotion_price = request.Promotion_price,
                 short_desc = request.Short_desc,
                 slug = request.Slug,
@@ -53,12 +52,27 @@ namespace TechShopSolution.Application.Catalog.Product
                 unit_price = request.Unit_price,
                 warranty = request.Warranty,
             };
-                if (request.Image != null)
+            if (request.Image != null)
+            {
+                product.image = await this.SaveFile(request.Image);
+            }
+            if (request.More_images != null)
+            {
+                if (request.More_images.Count == 1)
+                    product.more_images = await this.SaveFile(request.More_images[0]);
+                else
                 {
-                    product.image = await this.SaveFile(request.Image);
+                    for (int i = 0; i < request.More_images.Count(); i++)
+                    {
+                        if (request.More_images.Count - i == 1)
+                            product.more_images += await this.SaveFile(request.More_images[i]);
+                        else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+                    }
                 }
-                _context.Products.Add(product);
-                return await _context.SaveChangesAsync();
+            }
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return product.id;
         }
 
         public async Task<int> Delete(int productID)
@@ -67,6 +81,14 @@ namespace TechShopSolution.Application.Catalog.Product
             if (product == null) throw new TechshopException($"Không tìm thấy sản phẩm: {productID}");
             if (product.image != null)
                 await _storageService.DeleteFileAsync(product.image);
+            if (product.more_images != null)
+            {
+                string strListImage = product.more_images;
+                string[] listImage = strListImage.Split(',');   
+                for(int i = 0; i < listImage.Count();i++)
+                    await _storageService.DeleteFileAsync(listImage[i]);
+            }
+
             _context.Products.Remove(product);
             return await _context.SaveChangesAsync();
         }
@@ -77,12 +99,16 @@ namespace TechShopSolution.Application.Catalog.Product
             var query = from p in _context.Products
                         join pic in _context.CategoryProducts on p.id equals pic.product_id
                         join ct in _context.Categories on pic.cate_id equals ct.id
-                        select new { p, pic};
+                        select new { p };
             if (!String.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.p.name.Contains(request.Keyword));
-            if(request.CategoryID.Count > 0)
+            if (request.CategoryID != null)
             {
-                query = query.Where(p => request.CategoryID.Contains(p.pic.cate_id));
+                query = query.Where(x => x.p.cate_id == request.CategoryID);
+            }
+            if(request.BrandID != null)
+            {
+                query = query.Where(x => x.p.brand_id == request.BrandID);
             }
             int totalRow = await query.CountAsync();
 
@@ -121,52 +147,82 @@ namespace TechShopSolution.Application.Catalog.Product
             };
             return pageResult;
         }
-
-        public Task<PagedResult<ProductViewModel>> GetAllPaging(GetPublicProductPagingRequest request)
+        public async Task<ProductViewModel> GetById(int productId)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FindAsync(productId);
+            if (product != null)
+            {
+                var productViewModel = new ProductViewModel
+                {
+                    id = product.id,
+                    name = product.name,
+                    best_seller = product.best_seller,
+                    brand_id = product.brand_id,
+                    cate_id = product.cate_id,
+                    code = product.code,
+                    create_at = product.create_at,
+                    descriptions = product.descriptions,
+                    featured = product.featured,
+                    image = product.image,
+                    instock = product.instock,
+                    meta_descriptions = product.meta_descriptions,
+                    meta_keywords = product.meta_keywords,
+                    meta_tittle = product.meta_tittle,
+                    more_images = product.more_images,
+                    promotion_price = product.promotion_price,
+                    short_desc = product.short_desc,
+                    slug = product.slug,
+                    specifications = product.specifications,
+                    status = product.status,
+                    unit_price = product.unit_price,
+                    warranty = product.warranty,
+                };
+                return productViewModel;
+            }
+            return null;
         }
-
-        public Task<int> RemoveImages(int productId, IFormFile file)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<int> Update(ProductUpdateRequest request)
         {
-            var product = await _context.Products.FindAsync(request.id);
-            if (product == null) throw new TechshopException($"Không tìm thấy sản phẩm với ID: {request.id}");
+            var product = await _context.Products.FindAsync(request.Id);
+            if (product == null) throw new TechshopException($"Không tìm thấy sản phẩm với ID: {request.Id}");
 
-            product.name = request.name;
-            product.slug = request.slug;
-            product.warranty = request.warranty;
-            product.specifications = request.specifications;
-            product.short_desc = request.short_desc;
-            product.descriptions = request.descriptions;
-            product.status = request.status;
-            product.meta_descriptions = request.meta_descriptions;
-            product.meta_keywords = request.meta_keywords;
-            product.meta_tittle = request.meta_tittle;
-            if (request.image != null)
+            product.name = request.Name;
+            product.slug = request.Slug;
+            product.warranty = request.Warranty;
+            product.specifications = request.Specifications;
+            product.short_desc = request.Short_desc;
+            product.descriptions = request.Descriptions;
+            product.status = request.Status;
+            product.meta_descriptions = request.Meta_descriptions;
+            product.meta_keywords = request.Meta_keywords;
+            product.unit_price = request.Unit_price;
+            product.promotion_price = request.Promotion_price;
+            product.best_seller = request.Best_seller;
+            product.featured = request.Featured;
+            product.instock = request.Instock;
+            product.brand_id = request.Brand_id;
+            product.cate_id = request.Cate_id;
+            product.meta_tittle = request.Meta_tittle;
+            product.code = request.Code;
+            if (request.Image != null)
             {
-                product.image = await this.SaveFile(request.image);
+                product.image = await this.SaveFile(request.Image);
+            }
+            if (request.More_images != null)
+            {
+                for (int i = 0; i < request.More_images.Count(); i++)
+                {
+                    if(!this._storageService.isExistFile(request.More_images[i].ToString()))
+                    {
+                        if (request.More_images.Count - i == 1)
+                            product.more_images += await this.SaveFile(request.More_images[i]);
+                        else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+                    }
+                }
             }
             return await _context.SaveChangesAsync();
         }
 
-        public Task<int> UpdateImage(int productId, IFormFile file)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> UpdatePrice(int productID, decimal newPrice, decimal newPromotionPrice)
-        {
-            var product = await _context.Products.FindAsync(productID);
-            if (product == null) throw new TechshopException($"Không tìm thấy sản phẩm với ID: {productID}");
-            product.unit_price = newPrice;
-            product.promotion_price = newPromotionPrice;
-            return await _context.SaveChangesAsync() > 0;
-        }
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
