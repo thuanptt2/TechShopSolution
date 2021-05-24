@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.Application.Catalog.Product;
+using TechShopSolution.Application.Common;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Utilities.Constants;
 
@@ -33,6 +34,9 @@ namespace TechShopSolution.BackendApi
 
             //Declare DI
             services.AddTransient<IPublicProductService, PublicProductService>();
+            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
+
 
             services.AddControllersWithViews();
 

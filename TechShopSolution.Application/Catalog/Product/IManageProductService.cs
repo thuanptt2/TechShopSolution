@@ -13,6 +13,7 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductUpdateRequest request);
         Task<int> Delete(int productID);
+        Task<ProductViewModel> GetById(int productId);
         Task<bool> UpdatePrice(int productID, decimal newPrice, decimal newPromotionPrice);
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetPublicProductPagingRequest request);
         Task<int> AddImages(int productId, IFormFile file);

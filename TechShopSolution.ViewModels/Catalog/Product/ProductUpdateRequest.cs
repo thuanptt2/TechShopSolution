@@ -13,6 +13,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string slug { get; set; }
         public int warranty { get; set; }
         public IFormFile image { get; set; }
+        public List<IFormFile> more_images { get; set; }
         public string specifications { get; set; }
         public string short_desc { get; set; }
         public string descriptions { get; set; }
