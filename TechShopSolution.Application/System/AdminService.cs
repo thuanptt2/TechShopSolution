@@ -38,7 +38,7 @@ namespace TechShopSolution.Application.System
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,admin.email),
-                new Claim(ClaimTypes.GivenName,admin.name),
+                new Claim(ClaimTypes.Name,admin.name),
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

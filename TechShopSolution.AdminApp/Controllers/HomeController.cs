@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,8 @@ using System.Threading.Tasks;
 using TechShopSolution.AdminApp.Models;
 
 namespace TechShopSolution.AdminApp.Controllers
-{
+{ 
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -20,6 +22,7 @@ namespace TechShopSolution.AdminApp.Controllers
 
         public IActionResult Index()
         {
+            var adminName = User.Identity.Name;
             return View();
         }
 
