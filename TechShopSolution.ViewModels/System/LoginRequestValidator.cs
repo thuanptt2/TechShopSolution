@@ -13,7 +13,7 @@ namespace TechShopSolution.ViewModels.System
                 .MaximumLength(50).WithMessage("Email không thể vượt quá 50 kí tự")
                 .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").WithMessage("Email không hợp lệ");
             RuleFor(x => x.Password).NotEmpty().WithMessage("Mật khẩu không được để trống")
-                .MaximumLength(100).WithMessage("Email không thể vượt quá 100 kí tự");
+                .MaximumLength(100).WithMessage("Mật khẩu không thể vượt quá 100 kí tự");
         }
     }
 }

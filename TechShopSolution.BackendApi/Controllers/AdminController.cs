@@ -19,18 +19,18 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             _adminService = adminService;
         }
-        [HttpPost("dang-nhap")]
+        [HttpPost("authenticate")]
         [AllowAnonymous]
-        public IActionResult Authencicate([FromForm] LoginRequest request)
+        public IActionResult Authenticate([FromBody] LoginRequest request)
         {
             if (ModelState.IsValid)
             {
-                string resultToken = _adminService.Authenticate(request);
+                string resultToken =  _adminService.Authenticate(request);
                 if (!string.IsNullOrEmpty(resultToken))
                 {
-                    return Ok( new { token = resultToken });
+                    return Ok(resultToken);
                 }
-                else return BadRequest("Email hoặc mật khẩu không đúng");
+                else return BadRequest("Sai thông tin đăng nhập");
             }
             return BadRequest(ModelState);
         }
