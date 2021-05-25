@@ -25,12 +25,12 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                string resultToken = _adminService.Authenticate(request);
+                string resultToken =  _adminService.Authenticate(request);
                 if (!string.IsNullOrEmpty(resultToken))
                 {
                     return Ok(resultToken);
                 }
-                else return BadRequest("Email hoặc mật khẩu không đúng");
+                else return BadRequest("Sai thông tin đăng nhập");
             }
             return BadRequest(ModelState);
         }

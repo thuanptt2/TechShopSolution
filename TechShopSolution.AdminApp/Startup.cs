@@ -29,14 +29,14 @@ namespace TechShopSolution.AdminApp
         {
             services.AddHttpClient();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddCookie(options =>
-               {
-                   options.LoginPath = "/admin/login";
-                   options.AccessDeniedPath = "/User/Forbidden/";
-               });
-
             services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+              .AddCookie(options =>
+              {
+                  options.LoginPath = "/admin/login";
+                  options.AccessDeniedPath = "/User/Forbidden/";
+              });
 
             services.AddTransient<IAdminApiClient, AdminApiClient>();
 

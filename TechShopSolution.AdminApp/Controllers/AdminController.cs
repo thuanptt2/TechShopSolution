@@ -47,22 +47,30 @@ namespace TechShopSolution.AdminApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            if (!ModelState.IsValid)
-                return View(ModelState);
-            var token = await _adminApiClient.Authenticate(request);
-
-            var adminPrincipal = this.ValidateToken(token);
-            var authProperties = new AuthenticationProperties
+            try
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = false
-            };
-            await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        adminPrincipal,
-                        authProperties);
+                if (!ModelState.IsValid)
+                    return View();
+                var token = await _adminApiClient.Authenticate(request);
 
-            return RedirectToAction("Index", "Home");
+                var adminPrincipal = this.ValidateToken(token);
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    IsPersistent = false
+                };
+                await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            adminPrincipal,
+                            authProperties);
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Sai thông tin đăng nhập");
+                return View();
+            }
         }
 
         private ClaimsPrincipal ValidateToken(string jwtToken)
