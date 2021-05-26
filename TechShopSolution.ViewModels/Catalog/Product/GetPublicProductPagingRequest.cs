@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TechShopSolution.Application.DTO;
+using TechShopSolution.ViewModels.Common;
 
 namespace TechShopSolution.ViewModels.Catalog.Product
 {

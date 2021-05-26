@@ -29,7 +29,7 @@ namespace TechShopSolution.AdminApp
         {
             services.AddHttpClient();
 
-            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
               .AddCookie(options =>
@@ -38,6 +38,14 @@ namespace TechShopSolution.AdminApp
                   options.AccessDeniedPath = "/User/Forbidden/";
               });
 
+            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+
+            services.AddTransient<ICustomerApiClient, CustomerApiClient>();
             services.AddTransient<IAdminApiClient, AdminApiClient>();
 
             IMvcBuilder builder = services.AddRazorPages();
@@ -71,7 +79,7 @@ namespace TechShopSolution.AdminApp
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
