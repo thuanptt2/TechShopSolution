@@ -39,13 +39,13 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Create(CustomerCreateRequest request)
         {
             if (!ModelState.IsValid)
-                return View(ModelState);
+                return View();
             var result = await _customerApiClient.CreateCustomer(request);
             if(result)
             {
                 return RedirectToAction("Index");
             }
-            return View(Request);
+            return View(request);
         }
         public JsonResult LoadProvince()
         {

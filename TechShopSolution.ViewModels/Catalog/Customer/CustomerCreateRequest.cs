@@ -18,10 +18,12 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
         public string email { get; set; }
         [Display(Name = "Mật khẩu")]
         [Required(ErrorMessage = "Vui lòng nhập mật khẩu")]
+        [MinLength(6,ErrorMessage ="Mật khẩu phải ít nhất 6 kí tự")]
         public string password { get; set; }
         [Display(Name = "Số điện thoại")]
         [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
-        [Phone(ErrorMessage ="Vui lòng nhập đúng định dạng")]
+        [RegularExpression(@"(^[0-9\-\+]{9,15}$)", ErrorMessage = "Vui lòng nhập đúng định dạng")]
+        [MinLength(10, ErrorMessage = "Số điện thoại phải đủ 10 kí tự")]
         public string phone { get; set; }
         [Display(Name = "Ngày sinh")]
         [Required(ErrorMessage = "Vui lòng chọn ngày sinh")]
