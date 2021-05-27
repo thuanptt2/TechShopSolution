@@ -1,0 +1,38 @@
+﻿body {
+    font-family: Roboto,sans-serif;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    color: #212121;
+    line-height: 18px;
+    font-size: 14px;
+    background: #f5f5f5 !important;
+    -webkit-overflow-scrolling: touch;
+    height: 100vh !important;
+}
+.padding-container {
+    padding: 30px;
+    margin: 0 auto;
+    width: auto;
+    height: auto;
+}
+.wrapper-content {
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    padding: 20px;
+    border-radius: 10px;
+}
+hr {
+    border: 0px;
+    margin-top: 0px;
+}
+.title-fill {
+    color: #0b3d88;
+    font-size:18.5px;
+    font-weight: bold;
+}
+.btnAdd {
+
+    float:right;
+}

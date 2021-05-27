@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
+using TechShopSolution.Utilities.Exceptions;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
 
@@ -17,9 +18,39 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             _context = context;
         }
-        public Task<int> Create(CustomerCreateRequest request)
+        public async Task<bool> Create(CustomerCreateRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cus = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(request.email));
+                if (cus == null)
+                {
+                    throw new TechshopException($"Email này đã được sử dụng.");
+                }
+                else
+                {
+                    var customer = new TechShopSolution.Data.Entities.Customer
+                    {
+                        name = request.name,
+                        address = request.address,
+                        birthday = request.birthday,
+                        email = request.email,
+                        password = request.password,
+                        phone = request.phone,
+                        sex = request.sex,
+                        status = request.status,
+                        Order = new List<Data.Entities.Order>(),
+                        create_at = DateTime.Now
+                    };
+                    _context.Customers.Add(customer);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public Task<int> Delete(int cusID)

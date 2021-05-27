@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TechShopSolution.ViewModels.Catalog.Customer;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private readonly ICustomerApiClient _customerApiClient;
@@ -15,7 +17,7 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             _customerApiClient = customerApiClient;
         }
-        public async Task<IActionResult> Index(string keyword = "0965349315", int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetCustomerPagingRequest()
             {
@@ -25,6 +27,23 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _customerApiClient.GetCustomerPagings(request);
             return View(data);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(CustomerCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View(ModelState);
+            var result = await _customerApiClient.CreateCustomer(request);
+            if(result)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(Request);
         }
     }
 }

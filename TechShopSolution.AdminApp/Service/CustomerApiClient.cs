@@ -21,6 +21,20 @@ namespace TechShopSolution.AdminApp.Service
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
         }
+
+        public async Task<bool> CreateCustomer(CustomerCreateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/add-customer",httpContent);
+            return respone.IsSuccessStatusCode;
+           
+        }
+
         public async Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();

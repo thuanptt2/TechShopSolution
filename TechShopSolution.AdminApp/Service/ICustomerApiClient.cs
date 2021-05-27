@@ -10,5 +10,6 @@ namespace TechShopSolution.AdminApp.Service
     public interface ICustomerApiClient
     {
         Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request);
+        Task<bool> CreateCustomer(CustomerCreateRequest request);
     }
 }

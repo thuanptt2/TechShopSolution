@@ -26,5 +26,13 @@ namespace TechShopSolution.BackendApi.Controllers
             var products = await _customerService.GetAllPaging(requet);
             return Ok(products);
         }
+        [HttpPost("Add-customer")]
+        public async Task<IActionResult> Create([FromForm] CustomerCreateRequest request)
+        {
+            var customer = await _customerService.Create(request);
+            if (customer==false)
+                return BadRequest();
+            return Ok();
+        }
     }
 }
