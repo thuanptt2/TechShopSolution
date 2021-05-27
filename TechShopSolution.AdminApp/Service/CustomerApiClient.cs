@@ -30,7 +30,7 @@ namespace TechShopSolution.AdminApp.Service
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var respone = await client.PostAsync($"/add-customer",httpContent);
+            var respone = await client.PostAsync($"/api/customer/them-khach-hang",httpContent);
             return respone.IsSuccessStatusCode;
            
         }
@@ -39,7 +39,7 @@ namespace TechShopSolution.AdminApp.Service
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/paging?Keyword={request.Keyword}&pageIndex=" +
+            var respone = await client.GetAsync($"/api/customer/paging?Keyword={request.Keyword}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
             var body = await respone.Content.ReadAsStringAsync();
             var customer = JsonConvert.DeserializeObject<PagedResult<CustomerViewModel>>(body);

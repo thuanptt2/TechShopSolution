@@ -22,30 +22,23 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             try
             {
-                var cus = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(request.email));
-                if (cus == null)
+                string addressCustomer = request.House + ", " + request.Ward + ", " + request.District + ", " + request.City;
+                var customer = new TechShopSolution.Data.Entities.Customer
                 {
-                    throw new TechshopException($"Email này đã được sử dụng.");
-                }
-                else
-                {
-                    var customer = new TechShopSolution.Data.Entities.Customer
-                    {
-                        name = request.name,
-                        address = request.address,
-                        birthday = request.birthday,
-                        email = request.email,
-                        password = request.password,
-                        phone = request.phone,
-                        sex = request.sex,
-                        status = request.status,
-                        Order = new List<Data.Entities.Order>(),
-                        create_at = DateTime.Now
-                    };
-                    _context.Customers.Add(customer);
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
+                    name = request.name,
+                    address = addressCustomer,
+                    birthday = request.birthday,
+                    email = request.email,
+                    password = request.password,
+                    phone = request.phone,
+                    sex = request.sex,
+                    status = request.status,
+                    Order = new List<Data.Entities.Order>(),
+                    create_at = DateTime.Now
+                };
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+                return true;
             }
             catch
             {

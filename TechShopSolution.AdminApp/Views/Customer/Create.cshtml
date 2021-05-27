@@ -5,14 +5,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+@section jsFooter{
+    <script src="~/js/Location.js"></script>
+}
 <form asp-action="Create" asp-controller="customer" method="post">
     <div class="container-fluid">
-        <h2 class="mt-4">Tạo mới người dùng</h2>
+        <h2 class="mt-4">Thêm khách hàng</h2>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-            <li class="breadcrumb-item active">Tạo mới người dùng</li>
+            <li class="breadcrumb-item"><a href="/customer/index">Khách hàng</a></li>
+            <li class="breadcrumb-item active">Thêm khách hàng</li>
         </ol>
-       
+
         <div class="padding-container">
 
             <div class="row">
@@ -26,10 +31,14 @@
                             <input asp-for="name" class="form-control" />
                             <span asp-validation-for="name" class="text-danger"></span>
                         </div>
-
+                        <div class="form-group">
+                            <label asp-for="email" class="control-label"></label>
+                            <input asp-for="email" class="form-control" />
+                            <span asp-validation-for="email" class="text-danger"></span>
+                        </div>
                         <div class="form-group">
                             <label asp-for="password" class="control-label"></label>
-                            <input asp-for="password" class="form-control" />
+                            <input asp-for="password" type="password" class="form-control" />
                             <span asp-validation-for="password" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -42,15 +51,25 @@
                             <input asp-for="birthday" class="form-control" />
                             <span asp-validation-for="birthday" class="text-danger"></span>
                         </div>
-                        <div class="form-group form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" asp-for="sex" /> @Html.DisplayNameFor(model => model.sex)
-                            </label>
-                        </div>
-                        <div class="form-group form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" asp-for="status" /> @Html.DisplayNameFor(model => model.status)
-                            </label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" asp-for="sex"></label>
+                                    <div class="col-md-12">
+                                        <input asp-for="sex" type="radio" value="true" checked="checked" /> Nam
+                                        <input asp-for="sex" type="radio" value="false" class="ml-2" /> Nữ
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" asp-for="status"></label>
+                                    <div class="col-md-12">
+                                        <input asp-for="status" type="radio" value="true" checked="checked" /> Kích hoạt
+                                        <input asp-for="status" type="radio" value="false" class="ml-2" /> Khóa
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -59,10 +78,45 @@
                         <label class="title-fill">Địa chỉ</label>
                         <hr />
                         <div class="form-group">
-                            <label asp-for="address" class="control-label"></label>
-                            <input asp-for="address" class="form-control" />
-                            <span asp-validation-for="address" class="text-danger"></span>
+                            <label asp-for="City" class="control-label"></label>
+                            <select id="ddlCity" asp-for="City" asp-items="new SelectList(new string[] { })" class="form-control" />
+                            <span asp-validation-for="City" class="text-danger"></span>
                         </div>
+                        <div class="form-group">
+                            <label asp-for="City" class="control-label"></label>
+                            <select id="ddlCity" asp-for="City" asp-items="new SelectList(new string[] { })" class="form-control" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="District" class="control-label"></label>
+                            <select id="ddlDistrict" asp-for="District" asp-items="new SelectList(new string[] { })" class="form-control" />
+                            <span asp-validation-for="District" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="District" class="control-label"></label>
+                            <select id="ddlDistrict" asp-for="District" asp-items="new SelectList(new string[] { })" class="form-control">
+                            </select>
+                            <span asp-validation-for="District" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Ward" class="control-label"></label>
+                            <select id="ddlWard" asp-for="Ward" asp-items="new SelectList(new string[] { })" class="form-control" />
+                            <span asp-validation-for="Ward" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Ward" class="control-label"></label>
+                            <select id="ddlWard" asp-for="Ward" asp-items="new SelectList(new string[] { })" class="form-control" />
+                            <span asp-validation-for="Ward" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="House" class="control-label"></label>
+                            <input asp-for="House"  class="form-control" />
+                            <span asp-validation-for="House" class="text-danger"></span>
+                        </div>
+
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -74,7 +128,7 @@
                     <div class="col-2">
                         <button class="btn btn-success btnAdd " type="submit" asp-action="Create" asp-controller="Customer">
                             <i class="fa fa-save"></i>
-                            Lưu
+                            Lưu lại
                         </button>
                     </div>
                 </div>

@@ -8,7 +8,9 @@ using TechShopSolution.ViewModels.Catalog.Customer;
 
 namespace TechShopSolution.BackendApi.Controllers
 {
-    public class CustomerController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
 
@@ -16,21 +18,17 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             _customerService = customerService;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery]GetCustomerPagingRequest requet)
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetCustomerPagingRequest requet)
         {
             var products = await _customerService.GetAllPaging(requet);
             return Ok(products);
         }
-        [HttpPost("Add-customer")]
+        [HttpPost("them-khach-hang")]
         public async Task<IActionResult> Create([FromForm] CustomerCreateRequest request)
         {
             var customer = await _customerService.Create(request);
-            if (customer==false)
+            if (customer == false)
                 return BadRequest();
             return Ok();
         }

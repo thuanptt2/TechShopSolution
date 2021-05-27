@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TechShopSolution.AdminApp.Service;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Location;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
     [Authorize]
     public class CustomerController : Controller
     {
+        private readonly XDocument xmlDoc = XDocument.Load("wwwroot/assets/location/Provinces_Data.xml");
         private readonly ICustomerApiClient _customerApiClient;
         public CustomerController(ICustomerApiClient customerApiClient)
         {
@@ -44,6 +46,67 @@ namespace TechShopSolution.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
             return View(Request);
+        }
+        public JsonResult LoadProvince()
+        {
+            var xElements = xmlDoc.Element("Root").Elements("Item").Where(x => x.Attribute("type").Value == "province");
+            var list = new List<ProvinceModel>();
+            ProvinceModel province = null;
+            foreach (var item in xElements)
+            {
+                province = new ProvinceModel();
+                province.ID = int.Parse(item.Attribute("id").Value);
+                province.Name = item.Attribute("value").Value;
+                list.Add(province);
+
+            }
+            return Json(new
+            {
+                data = list,
+                status = true
+            });
+        }
+        public JsonResult LoadDistrict(int provinceID)
+        {
+            var xElement = xmlDoc.Element("Root").Elements("Item")
+                .Single(x => x.Attribute("type").Value == "province" && int.Parse(x.Attribute("id").Value) == provinceID);
+
+            var list = new List<DistrictModel>();
+            DistrictModel district = null;
+            foreach (var item in xElement.Elements("Item").Where(x => x.Attribute("type").Value == "district"))
+            {
+                district = new DistrictModel();
+                district.ID = int.Parse(item.Attribute("id").Value);
+                district.Name = item.Attribute("value").Value;
+                district.ProvinceID = int.Parse(xElement.Attribute("id").Value);
+                list.Add(district);
+            }
+            return Json(new
+            {
+                data = list,
+                status = true
+            });
+        }
+        public JsonResult LoadWard(int districtID)
+        {
+            var xElement = xmlDoc.Element("Root").Elements("Item").Elements("Item")
+                .Single(x => x.Attribute("type").Value == "district" && int.Parse(x.Attribute("id").Value) == districtID);
+
+            var list = new List<WardModel>();
+            WardModel ward = null;
+            foreach (var item in xElement.Elements("Item").Where(x => x.Attribute("type").Value == "precinct"))
+            {
+                ward = new WardModel();
+                ward.ID = int.Parse(item.Attribute("id").Value);
+                ward.Name = item.Attribute("value").Value;
+                ward.DistrictId = int.Parse(xElement.Attribute("id").Value);
+                list.Add(ward);
+            }
+            return Json(new
+            {
+                data = list,
+                status = true
+            });
         }
     }
 }
