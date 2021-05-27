@@ -95,5 +95,15 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> VerifyEmail(string email)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(email));
+            if(customer!=null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace TechShopSolution.Application.Catalog.Customer
         Task<int> Delete(int cusID);
         Task<CustomerViewModel> GetById(int productId);
         Task<PagedResult<CustomerViewModel>> GetAllPaging(GetCustomerPagingRequest request);
+        Task<bool> VerifyEmail(string email);
     }
 }

@@ -108,5 +108,15 @@ namespace TechShopSolution.AdminApp.Controllers
                 status = true
             });
         }
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> VerifyEmail(string email)
+        {
+            if (await _customerApiClient.VerifyEmail(email) == false)
+            {
+                return Json($"Email {email} đã được sử dụng.");
+            }
+
+            return Json(true);
+        }
     }
 }

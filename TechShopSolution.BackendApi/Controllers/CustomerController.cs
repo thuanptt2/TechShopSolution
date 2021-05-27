@@ -32,5 +32,14 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest();
             return Ok();
         }
+        [HttpGet]
+        public async Task<IActionResult> VerifyEmail(string email)
+        {
+            if( await _customerService.VerifyEmail(email))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

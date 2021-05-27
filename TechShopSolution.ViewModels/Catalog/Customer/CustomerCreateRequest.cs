@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TechShopSolution.ViewModels.Catalog.Customer
 {
@@ -11,6 +12,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
         [Display(Name ="Họ và tên")]
         [Required(ErrorMessage = "Vui lòng nhập tên khách hàng")]
         public string name { get; set; }
+        [Remote(action: "VerifyEmail", controller: "Customer")]
         [Required(ErrorMessage = "Vui lòng nhập địa chỉ Email")]
         [Display(Name = "Địa chỉ Email")]
         public string email { get; set; }
@@ -19,6 +21,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
         public string password { get; set; }
         [Display(Name = "Số điện thoại")]
         [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
+        [Phone(ErrorMessage ="Vui lòng nhập đúng định dạng")]
         public string phone { get; set; }
         [Display(Name = "Ngày sinh")]
         [Required(ErrorMessage = "Vui lòng chọn ngày sinh")]

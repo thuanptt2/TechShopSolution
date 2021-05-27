@@ -11,5 +11,7 @@ namespace TechShopSolution.AdminApp.Service
     {
         Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request);
         Task<bool> CreateCustomer(CustomerCreateRequest request);
+        Task<bool> VerifyEmail(string email);
+
     }
 }

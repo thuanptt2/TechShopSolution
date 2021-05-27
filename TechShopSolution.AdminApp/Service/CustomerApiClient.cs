@@ -32,9 +32,7 @@ namespace TechShopSolution.AdminApp.Service
 
             var respone = await client.PostAsync($"/api/customer/them-khach-hang",httpContent);
             return respone.IsSuccessStatusCode;
-           
         }
-
         public async Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -44,6 +42,14 @@ namespace TechShopSolution.AdminApp.Service
             var body = await respone.Content.ReadAsStringAsync();
             var customer = JsonConvert.DeserializeObject<PagedResult<CustomerViewModel>>(body);
             return customer;
+        }
+
+        public async Task<bool> VerifyEmail(string email)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/customer?email={email}");
+            return respone.IsSuccessStatusCode;
         }
     }
 }
