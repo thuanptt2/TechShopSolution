@@ -18,7 +18,7 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             _context = context;
         }
-        public async Task<bool> Create(CustomerCreateRequest request)
+        public async Task<ApiResult<bool>> Create(CustomerCreateRequest request)
         {
             try
             {
@@ -38,11 +38,11 @@ namespace TechShopSolution.Application.Catalog.Customer
                 };
                 _context.Customers.Add(customer);
                 await _context.SaveChangesAsync();
-                return true;
+                return new ApiSuccessResult<bool>();
             }
             catch
             {
-                return false;
+                return new ApiErrorResult<bool>("Thêm thất bại");
             }
         }
 
@@ -86,14 +86,73 @@ namespace TechShopSolution.Application.Catalog.Customer
             return pageResult;
         }
 
-        public Task<CustomerViewModel> GetById(int productId)
+        public async Task<ApiResult<CustomerViewModel>> GetById(int customertId)
         {
-            throw new NotImplementedException();
+            var cusExist = await _context.Customers.FindAsync(customertId);
+            if(cusExist == null)
+            {
+                return new ApiErrorResult<CustomerViewModel>("Khách hàng không tồn tại");
+            }
+            var customer = new CustomerViewModel()
+            {
+                name = cusExist.name,
+                address = cusExist.address,
+                birthday = cusExist.birthday,
+                email = cusExist.email,
+                password = cusExist.password,
+                phone = cusExist.phone,
+                sex = cusExist.sex,
+                status = cusExist.status,
+                id = cusExist.id
+            };
+            return new ApiSuccessResult<CustomerViewModel>(customer);
+
         }
 
-        public Task<int> Update(CustomerUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(int id, CustomerUpdateRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (await _context.Customers.AnyAsync(x => x.email == request.email && x.id != id))
+                {
+                    return new ApiErrorResult<bool>("Emai đã tồn tại");
+                }
+                var cusExist = await _context.Customers.FindAsync(id);
+                if(cusExist!=null)
+                {
+                    cusExist.email = request.email;
+                    cusExist.name = request.name;
+                    cusExist.phone = request.phone;
+                    cusExist.status = request.status;
+                    cusExist.update_at = DateTime.Now;
+                }
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+
+        public async Task<ApiResult<bool>> UpdateAddress(int id, CustomerUpdateAddressRequest request)
+        {
+            try
+            {
+                var cusExist = await _context.Customers.FindAsync(id);
+                if (cusExist != null)
+                {
+                    string newAddress = request.House + " " + request.Ward + ", " + request.District + ", " + request.City;
+                    cusExist.address = newAddress;
+                    cusExist.update_at = DateTime.Now;
+                }
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
         }
 
         public async Task<bool> VerifyEmail(string email)

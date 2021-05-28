@@ -22,7 +22,7 @@ namespace TechShopSolution.AdminApp.Service
             _configuration = configuration;
         }
 
-        public async Task<bool> CreateCustomer(CustomerCreateRequest request)
+        public async Task<ApiResult<bool>> CreateCustomer(CustomerCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -31,8 +31,24 @@ namespace TechShopSolution.AdminApp.Service
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var respone = await client.PostAsync($"/api/Customer/them-khach-hang",httpContent);
-            return respone.IsSuccessStatusCode;
+            var result = await respone.Content.ReadAsStringAsync();
+            if(respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+
         }
+
+        public async Task<ApiResult<CustomerViewModel>> GetById(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/customer/{id}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if(respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<CustomerViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<CustomerViewModel>>(body);
+        }
+
         public async Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -42,6 +58,36 @@ namespace TechShopSolution.AdminApp.Service
             var body = await respone.Content.ReadAsStringAsync();
             var customer = JsonConvert.DeserializeObject<PagedResult<CustomerViewModel>>(body);
             return customer;
+        }
+
+        public async Task<ApiResult<bool>> UpdateAddress(int id, CustomerUpdateAddressRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/api/Customer/{id}", httpContent);
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<bool>> UpdateCustomer(int id, CustomerUpdateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/api/Customer/{id}", httpContent);
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
         public async Task<bool> VerifyEmail(string email)

@@ -52,7 +52,7 @@ namespace TechShopSolution.AdminApp.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return View();
+                    return View(request);
                 var token = await _adminApiClient.Authenticate(request);
 
                 var adminPrincipal = this.ValidateToken(token);
@@ -72,7 +72,7 @@ namespace TechShopSolution.AdminApp.Controllers
             catch
             {
                 ModelState.AddModelError("", "Sai thông tin đăng nhập");
-                return View();
+                return View(request);
             }
         }
 

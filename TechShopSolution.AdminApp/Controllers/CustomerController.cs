@@ -41,10 +41,50 @@ namespace TechShopSolution.AdminApp.Controllers
             if (!ModelState.IsValid)
                 return View();
             var result = await _customerApiClient.CreateCustomer(request);
-            if(result)
-            {
+            if(result.IsSuccess)
                 return RedirectToAction("Index");
-            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var result = await _customerApiClient.GetById(id);
+            if(!result.IsSuccess)
+                ModelState.AddModelError("", result.Message);
+            var updateRequest = new CustomerUpdateRequest()
+            {
+                name = result.ResultObject.name,
+                address = result.ResultObject.address,
+                birthday = result.ResultObject.birthday,
+                email = result.ResultObject.email,
+                password = result.ResultObject.password,
+                sex = result.ResultObject.sex,
+                phone = result.ResultObject.phone,
+                status = result.ResultObject.status
+            };
+            return View(updateRequest);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, CustomerUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _customerApiClient.UpdateCustomer(id, request);
+            if (result.IsSuccess)
+                return RedirectToAction("Index");
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+        [HttpGet]
+        public async Task<IActionResult> UpdateAddress(int id, CustomerUpdateAddressRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _customerApiClient.UpdateAddress(id, request);
+            if (result.IsSuccess)
+                return RedirectToAction("Index");
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
         public JsonResult LoadProvince()
@@ -130,7 +170,7 @@ namespace TechShopSolution.AdminApp.Controllers
            
         }
         [AcceptVerbs("GET", "POST")]
-        public async Task<IActionResult> VerifyEmail(string email)
+        public async Task<IActionResult> VerifyEmail(string email, int Id)
         {
             if (await _customerApiClient.VerifyEmail(email) == false)
             {

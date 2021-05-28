@@ -21,16 +21,38 @@ namespace TechShopSolution.BackendApi.Controllers
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetCustomerPagingRequest requet)
         {
-            var products = await _customerService.GetAllPaging(requet);
-            return Ok(products);
+            var customer = await _customerService.GetAllPaging(requet);
+            return Ok(customer);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByID(int id)
+        {
+            var customer = await _customerService.GetById(id);
+            return Ok(customer);
         }
         [HttpPost("them-khach-hang")]
         public async Task<IActionResult> Create([FromBody] CustomerCreateRequest request)
         {
-            var customer = await _customerService.Create(request);
-            if (customer == false)
-                return BadRequest();
-            return Ok(customer);
+            var result = await _customerService.Create(request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Message);
+            return Ok(result);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id,[FromBody] CustomerUpdateRequest request)
+        {
+            var result = await _customerService.Update(id,request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Message);
+            return Ok();
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAddress(int id, [FromBody] CustomerUpdateAddressRequest request)
+        {
+            var result = await _customerService.UpdateAddress(id, request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Message);
+            return Ok();
         }
         [HttpGet]
         public async Task<IActionResult> VerifyEmail(string email)

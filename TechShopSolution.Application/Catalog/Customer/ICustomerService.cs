@@ -9,10 +9,11 @@ namespace TechShopSolution.Application.Catalog.Customer
 {
     public interface ICustomerService
     {
-        Task<bool> Create(CustomerCreateRequest request);
-        Task<int> Update(CustomerUpdateRequest request);
+        Task<ApiResult<bool>> Create(CustomerCreateRequest request);
+        Task<ApiResult<bool>> Update(int id, CustomerUpdateRequest request);
+        Task<ApiResult<bool>> UpdateAddress(int id, CustomerUpdateAddressRequest request);
         Task<int> Delete(int cusID);
-        Task<CustomerViewModel> GetById(int productId);
+        Task<ApiResult<CustomerViewModel>> GetById(int CustomerId);
         Task<PagedResult<CustomerViewModel>> GetAllPaging(GetCustomerPagingRequest request);
         Task<bool> VerifyEmail(string email);
     }
