@@ -22,7 +22,7 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             try
             {
-                string addressCustomer = request.House + ", " + request.Ward + ", " + request.District + ", " + request.City;
+                string addressCustomer = request.House + " " + request.Ward + ", " + request.District + ", " + request.City;
                 var customer = new TechShopSolution.Data.Entities.Customer
                 {
                     name = request.name,

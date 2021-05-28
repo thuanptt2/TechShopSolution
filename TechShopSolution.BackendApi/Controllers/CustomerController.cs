@@ -25,12 +25,12 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(products);
         }
         [HttpPost("them-khach-hang")]
-        public async Task<IActionResult> Create([FromForm] CustomerCreateRequest request)
+        public async Task<IActionResult> Create([FromBody] CustomerCreateRequest request)
         {
             var customer = await _customerService.Create(request);
             if (customer == false)
                 return BadRequest();
-            return Ok();
+            return Ok(customer);
         }
         [HttpGet]
         public async Task<IActionResult> VerifyEmail(string email)

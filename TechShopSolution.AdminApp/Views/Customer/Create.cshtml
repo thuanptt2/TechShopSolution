@@ -9,6 +9,7 @@
 @section jsFooter{
     <script src="~/js/Location.js"></script>
 }
+
 <form asp-action="Create" asp-controller="customer" method="post">
     <div class="container-fluid">
         <h2 class="mt-4">Thêm khách hàng</h2>
@@ -17,7 +18,6 @@
             <li class="breadcrumb-item"><a href="/customer/index">Khách hàng</a></li>
             <li class="breadcrumb-item active">Thêm khách hàng</li>
         </ol>
-
         <div class="padding-container">
 
             <div class="row">
@@ -113,10 +113,9 @@
 
                         <div class="form-group">
                             <label asp-for="House" class="control-label"></label>
-                            <input asp-for="House"  class="form-control" />
+                            <input asp-for="House" class="form-control" />
                             <span asp-validation-for="House" class="text-danger"></span>
                         </div>
-
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -132,6 +131,7 @@
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

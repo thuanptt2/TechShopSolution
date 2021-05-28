@@ -6,18 +6,18 @@
     },
     registerEvent: function () {
         $('#ddlCity').off('change').on('change', function () {
-            var id = $(this).val();
-            if (id != '') {
-                customer.loadDistrict(parseInt(id));
+            var name = $(this).val();
+            if (name != '') {
+                customer.loadDistrict(name);
             }
             else {
                 $('#ddlDistrict').html('');
             }
         });
         $('#ddlDistrict').off('change').on('change', function () {
-            var id = $(this).val();
-            if (id != '') {
-                customer.loadWard(parseInt(id));
+            var name = $(this).val();
+            if (name != '') {
+                customer.loadWard(name);
             }
             else {
                 $('#ddlWard').html('');
@@ -35,43 +35,43 @@
                     var html = '<option value="">--Chọn tỉnh thành--</option>';
                     var data = response.data;
                     $.each(data, function (i, item) {
-                        html += '<option value="' + item.id + '">' + item.name + '</option>'
+                        html += '<option value="' + item.name + '">' + item.name + '</option>'
                     });
                     $('#ddlCity').html(html);
                 }
             }
         })
     },
-    loadDistrict: function (id) {
+    loadDistrict: function (Name) {
         $.ajax({
             url: '/customer/LoadDistrict',
             type: "POST",
-            data: { provinceID: id },
+            data: { provinceName: Name },
             dataType: "json",
             success: function (response) {
                 if (response.status == true) {
                     var html = '<option value="">--Chọn quận huyện--</option>';
                     var data = response.data;
                     $.each(data, function (i, item) {
-                        html += '<option value="' + item.id + '">' + item.name + '</option>'
+                        html += '<option value="' + item.name + '">' + item.name + '</option>'
                     });
                     $('#ddlDistrict').html(html);
                 }
             }
         })
     },
-    loadWard: function (id) {
+    loadWard: function (Name) {
         $.ajax({
             url: '/customer/LoadWard',
             type: "POST",
-            data: { districtID: id },
+            data: { districtName: Name },
             dataType: "json",
             success: function (response) {
                 if (response.status == true) {
                     var html = '<option value="">--Chọn phường xã--</option>';
                     var data = response.data;
                     $.each(data, function (i, item) {
-                        html += '<option value="' + item.id + '">' + item.name + '</option>'
+                        html += '<option value="' + item.name + '">' + item.name + '</option>'
                     });
                     $('#ddlWard').html(html);
                 }

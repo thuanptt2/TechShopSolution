@@ -30,7 +30,7 @@ namespace TechShopSolution.AdminApp.Service
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var respone = await client.PostAsync($"/api/customer/them-khach-hang",httpContent);
+            var respone = await client.PostAsync($"/api/Customer/them-khach-hang",httpContent);
             return respone.IsSuccessStatusCode;
         }
         public async Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request)
