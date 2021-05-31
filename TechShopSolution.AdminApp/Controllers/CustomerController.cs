@@ -50,7 +50,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var result = await _customerApiClient.GetById(id);
-            if(!result.IsSuccess)
+            if(!result.IsSuccess || result.ResultObject == null)
                 ModelState.AddModelError("", result.Message);
             var updateRequest = new CustomerUpdateRequest()
             {
@@ -79,8 +79,14 @@ namespace TechShopSolution.AdminApp.Controllers
         [HttpGet]
         public IActionResult UpdateAddress()
         {
-         
-            return PartialView("UpdateAddress");
+            return View();
+        }
+        [HttpPost]
+        public IActionResult UpdateAddress(int id, CustomerUpdateAddressRequest request)
+        {
+            if(ModelState.IsValid)
+                return RedirectToAction("Update");
+            return View();
         }
         public JsonResult LoadProvince()
         {

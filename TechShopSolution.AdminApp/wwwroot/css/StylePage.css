@@ -1,5 +1,5 @@
 ﻿body {
-    font-family: Roboto,sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 400;
     text-transform: none;
     letter-spacing: normal;
@@ -47,4 +47,12 @@ hr {
     align-content: center;
     text-align: center;
     margin-top: 40px;
+}
+
+#btnEdit:hover {
+    cursor: pointer;
+    color: #007bff;
+}
+.modal button.close {
+    z-index: 1000;
 }
