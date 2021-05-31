@@ -30,13 +30,13 @@
                             <th scope="col">
                                 Số điện thoại
                             </th>
-                            <th scope="col">
+                            <th scope="col" class="text-center">
                                 Giới tính
                             </th>
                             <th scope="col">
                                 Địa chỉ
                             </th>
-                            <th scope="col">
+                            <th scope="col" class="text-center">
                                 Trạng thái
                             </th>
                             <th></th>
@@ -47,23 +47,21 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.name)
+                                    @Html.ActionLink(item.name, "Update", new { id = item.id })
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.phone)
                                 </td>
-                                <td>
+                                <td align="center"> 
                                     @Html.DisplayFor(modelItem => item.sex)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.address)
                                 </td>
-                                <td>
+                                <td align="center">
                                     @Html.DisplayFor(modelItem => item.status)
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Sửa", "Update", new { id = item.id }) |
-                                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                                     @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
                                 </td>
                             </tr>

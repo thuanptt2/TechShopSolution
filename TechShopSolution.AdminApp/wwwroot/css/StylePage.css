@@ -49,7 +49,7 @@ hr {
     margin-top: 40px;
 }
 
-#btnEdit:hover {
+#btnEdit:hover{
     cursor: pointer;
     color: #007bff;
 }
