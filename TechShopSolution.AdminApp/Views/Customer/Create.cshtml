@@ -22,7 +22,7 @@
         <div class="padding-container">
             <div class="row">
                 <div class="col-lg-8 col-12">
-                    <div class="wrapper-content">
+                    <div class="wrapper-content mb-3 shadow">
                         <label class="title-fill">Thông tin chung</label>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -55,18 +55,34 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label" asp-for="sex"></label>
-                                    <div class="col-md-12">
-                                        <input asp-for="sex" type="radio" value="true" checked="checked" /> Nam
-                                        <input asp-for="sex" type="radio" value="false" class="ml-2" /> Nữ
+                                    <div class="form-check">
+                                        <input asp-for="sex" class="form-check-input" type="radio" value="true" checked="checked">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Nam
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input asp-for="sex" class="form-check-input" type="radio" value="false">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Nữ
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label" asp-for="status"></label>
-                                    <div class="col-md-12">
-                                        <input asp-for="status" type="radio" value="true" checked="checked" /> Kích hoạt
-                                        <input asp-for="status" type="radio" value="false" class="ml-2" /> Khóa
+                                    <div class="form-check">
+                                        <input asp-for="status" class="form-check-input" type="radio" value="true" checked="checked">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                           Kích hoạt
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input asp-for="status" class="form-check-input" type="radio" value="false">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Khóa
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +90,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="wrapper-content">
+                    <div class="wrapper-content shadow">
                         <label class="title-fill">Địa chỉ</label>
                         <hr />
                         <div class="form-group">

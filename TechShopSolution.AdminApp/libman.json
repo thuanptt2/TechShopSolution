@@ -21,7 +21,10 @@
     {
       "library": "font-awesome@5.15.3",
       "destination": "wwwroot/font-awesome/"
+    },
+    {
+      "library": "bootstrap-toggle@2.2.2",
+      "destination": "wwwroot/bootstrap/bootstrap-toggle"
     }
-
   ]
 }

@@ -6,70 +6,82 @@
 }
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Danh sách khách hàng</h1>
-    <ol class="breadcrumb mb-4">
+    <h3 class="mt-4">Danh sách khách hàng</h3>
+    <ol class="breadcrumb mb-1">
         <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
         <li class="breadcrumb-item active">Danh sách khách Hàng</li>
     </ol>
-    <div class="card mb-4">
-    </div>
-    <div class="card mb-4">
-        <div class="card-header">
-            <a class="btn btn-success btnAdd" asp-action="Create" asp-controller="Customer">
-            <i class="fa fa-plus"></i>
-            Thêm khách hàng</a>
-        </div>
-        <div class="card-body shadow">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th scope="col">
-                                Họ và tên
-                            </th>
-                            <th scope="col">
-                                Số điện thoại
-                            </th>
-                            <th scope="col" class="text-center">
-                                Giới tính
-                            </th>
-                            <th scope="col">
-                                Địa chỉ
-                            </th>
-                            <th scope="col" class="text-center">
-                                Trạng thái
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Items)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.ActionLink(item.name, "Update", new { id = item.id })
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.phone)
-                                </td>
-                                <td align="center"> 
-                                    @Html.DisplayFor(modelItem => item.sex)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.address)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.status)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
 
+   
+    <div class="padding-container">
+        <a class="btn btn-success btnAdd mb-3" asp-action="Create" asp-controller="Customer">
+            <i class="fa fa-plus"></i>
+            Thêm mới
+        </a>
+        <div class="table-responsive shadow-lg">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light thead-dark">
+                    <tr>
+                        <th scope="col">
+                            Họ và tên
+                        </th>
+                        <th scope="col">
+                            Số điện thoại
+                        </th>
+                        <th scope="col" class="text-center">
+                            Giới tính
+                        </th>
+                        <th scope="col">
+                            Địa chỉ
+                        </th>
+                        <th scope="col" class="text-center">
+                            Trạng thái
+                        </th>
+                        <th>
+                            Tác vụ
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.name, "Update", new { id = item.id })
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.phone)
+                            </td>
+
+                            @if (item.sex == true)
+                            {
+                                <td align="center">
+                                    Nam
+                                </td>
+                            }
+                            else
+                            {
+                                <td align="center">
+                                    Nữ
+                                </td>
+                            }
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.address)
+                            </td>
+                            <td align="center">
+                                <input type="checkbox" checked data-toggle="toggle" data-onstyle="info"  data-height="30" data-width="70">
+
+                            </td>
+                            <td>
+                                <a class="btn btn-danger" @Url.Action("Delete", "Delete", new { id = item.id })>Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
+
 </div>

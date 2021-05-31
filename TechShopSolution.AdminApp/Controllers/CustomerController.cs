@@ -183,9 +183,7 @@ namespace TechShopSolution.AdminApp.Controllers
             catch
             {
                 return null;
-            }
-           
-        }
+            }        }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {
@@ -193,7 +191,6 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 return Json($"Email {email} đã được sử dụng.");
             }
-
             return Json(true);
         }
     }
