@@ -54,6 +54,7 @@ namespace TechShopSolution.AdminApp.Controllers
                 ModelState.AddModelError("", result.Message);
             var updateRequest = new CustomerUpdateRequest()
             {
+                Id = id,
                 name = result.ResultObject.name,
                 address = result.ResultObject.address,
                 birthday = result.ResultObject.birthday,
@@ -66,26 +67,41 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(updateRequest);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(int id, CustomerUpdateRequest request)
+        public async Task<IActionResult> Update(CustomerUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return View();
-            var result = await _customerApiClient.UpdateCustomer(id, request);
+            var result = await _customerApiClient.UpdateCustomer(request);
             if (result.IsSuccess)
                 return RedirectToAction("Index");
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
         [HttpGet]
-        public IActionResult UpdateAddress()
+        public async Task<IActionResult> UpdateAddress(int id)
         {
-            return View();
+            var result = await _customerApiClient.GetById(id);
+            if (!result.IsSuccess || result.ResultObject == null)
+                ModelState.AddModelError("", result.Message);
+            var updateAddressRequest = new CustomerUpdateAddressRequest()
+            {
+                Id = id,
+                City = null,
+                District = null,
+                House = null,
+                Ward = null
+            };
+            return View(updateAddressRequest);
         }
         [HttpPost]
-        public IActionResult UpdateAddress(int id, CustomerUpdateAddressRequest request)
+        public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
         {
-            if(ModelState.IsValid)
-                return RedirectToAction("Update");
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _customerApiClient.UpdateAddress(request);
+            if (result.IsSuccess)
+                return RedirectToAction("Update","Customer", request);
+            ModelState.AddModelError("", result.Message);
             return View();
         }
         public JsonResult LoadProvince()

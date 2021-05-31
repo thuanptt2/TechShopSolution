@@ -39,20 +39,20 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(result);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id,[FromBody] CustomerUpdateRequest request)
+        public async Task<IActionResult> Update([FromBody] CustomerUpdateRequest request)
         {
-            var result = await _customerService.Update(id,request);
+            var result = await _customerService.Update(request);
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
             return Ok();
         }
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAddress(int id, [FromBody] CustomerUpdateAddressRequest request)
+        [HttpPut("UpdateAddress/{id}")]
+        public async Task<IActionResult> UpdateAddress(int id,[FromBody]CustomerUpdateAddressRequest request)
         {
             var result = await _customerService.UpdateAddress(id, request);
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
-            return Ok();
+            return Ok(result);
         }
         [HttpGet]
         public async Task<IActionResult> VerifyEmail(string email)

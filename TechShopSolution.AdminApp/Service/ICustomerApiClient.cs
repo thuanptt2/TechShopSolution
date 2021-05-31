@@ -12,8 +12,8 @@ namespace TechShopSolution.AdminApp.Service
         Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request);
         Task<ApiResult<bool>> CreateCustomer(CustomerCreateRequest request);
         Task<bool> VerifyEmail(string email);
-        Task<ApiResult<bool>> UpdateCustomer(int id, CustomerUpdateRequest request);
-        Task<ApiResult<bool>> UpdateAddress(int id, CustomerUpdateAddressRequest request);
+        Task<ApiResult<bool>> UpdateCustomer(CustomerUpdateRequest request);
+        Task<ApiResult<bool>> UpdateAddress(CustomerUpdateAddressRequest request);
         Task<ApiResult<CustomerViewModel>> GetById(int id);
     }
 }

@@ -7,6 +7,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
 {
     public class CustomerUpdateAddressRequest
     {
+        public int Id { get; set; }
         [Display(Name = "Tỉnh/Thành phố")]
         [Required(ErrorMessage = "Vui lòng chọn Tỉnh/Thành")]
         public string City { get; set; }

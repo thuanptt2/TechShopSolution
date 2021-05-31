@@ -8,6 +8,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
 {
     public class CustomerUpdateRequest
     {
+        public int Id { get; set; }
         [Display(Name = "Họ và tên")]
         [Required(ErrorMessage = "Vui lòng nhập tên khách hàng")]
         public string name { get; set; }

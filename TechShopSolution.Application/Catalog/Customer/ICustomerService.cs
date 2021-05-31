@@ -10,7 +10,7 @@ namespace TechShopSolution.Application.Catalog.Customer
     public interface ICustomerService
     {
         Task<ApiResult<bool>> Create(CustomerCreateRequest request);
-        Task<ApiResult<bool>> Update(int id, CustomerUpdateRequest request);
+        Task<ApiResult<bool>> Update(CustomerUpdateRequest request);
         Task<ApiResult<bool>> UpdateAddress(int id, CustomerUpdateAddressRequest request);
         Task<int> Delete(int cusID);
         Task<ApiResult<CustomerViewModel>> GetById(int CustomerId);

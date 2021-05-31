@@ -60,7 +60,7 @@ namespace TechShopSolution.AdminApp.Service
             return customer;
         }
 
-        public async Task<ApiResult<bool>> UpdateAddress(int id, CustomerUpdateAddressRequest request)
+        public async Task<ApiResult<bool>> UpdateAddress(CustomerUpdateAddressRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -68,14 +68,14 @@ namespace TechShopSolution.AdminApp.Service
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var respone = await client.PostAsync($"/api/Customer/{id}", httpContent);
+            var respone = await client.PutAsync($"/api/Customer/UpdateAddress/{request.Id}", httpContent);
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
-        public async Task<ApiResult<bool>> UpdateCustomer(int id, CustomerUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateCustomer(CustomerUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -83,7 +83,7 @@ namespace TechShopSolution.AdminApp.Service
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var respone = await client.PostAsync($"/api/Customer/{id}", httpContent);
+            var respone = await client.PostAsync($"/api/Customer/{request.Id}", httpContent);
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);

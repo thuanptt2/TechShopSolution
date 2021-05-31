@@ -125,7 +125,7 @@
                                     </div>
                                 </div>
                                 <div class="col text-right mt-3">
-                                    <button class="btn btn-success" type="submit" asp-action="Create" asp-controller="Customer">
+                                    <button class="btn btn-success" type="submit" asp-action="Update" asp-controller="Customer">
                                         <i class="fa fa-save"></i>
                                         Cập nhật
                                     </button>
@@ -139,7 +139,7 @@
                                 <label class="title-fill">Địa chỉ mặc định</label>
                             </div>
                             <div class="col text-right">
-                                <a id="btnEdit" onclick="showInPopup('@Url.Action("UpdateAddress","Customer",null, Context.Request.Scheme)','Thay đổi địa chỉ')">
+                                <a id="btnEdit" onclick="showInPopup('@Url.Action("UpdateAddress","Customer",new { id = Model.Id }, Context.Request.Scheme)','Thay đổi địa chỉ')">
                                     <i class="fa fa-edit"></i>
                                 </a>
                             </div>

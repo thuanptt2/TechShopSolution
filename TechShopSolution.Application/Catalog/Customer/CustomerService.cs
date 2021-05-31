@@ -109,15 +109,15 @@ namespace TechShopSolution.Application.Catalog.Customer
 
         }
 
-        public async Task<ApiResult<bool>> Update(int id, CustomerUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(CustomerUpdateRequest request)
         {
             try
             {
-                if (await _context.Customers.AnyAsync(x => x.email == request.email && x.id != id))
+                if (await _context.Customers.AnyAsync(x => x.email == request.email && x.id != request.Id))
                 {
                     return new ApiErrorResult<bool>("Emai đã tồn tại");
                 }
-                var cusExist = await _context.Customers.FindAsync(id);
+                var cusExist = await _context.Customers.FindAsync(request.Id);
                 if(cusExist!=null)
                 {
                     cusExist.email = request.email;
@@ -145,9 +145,10 @@ namespace TechShopSolution.Application.Catalog.Customer
                     string newAddress = request.House + " " + request.Ward + ", " + request.District + ", " + request.City;
                     cusExist.address = newAddress;
                     cusExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
                 }
-                await _context.SaveChangesAsync();
-                return new ApiSuccessResult<bool>();
+                else return new ApiErrorResult<bool>("Không tìm thấy khách hàng này");
             }
             catch
             {
