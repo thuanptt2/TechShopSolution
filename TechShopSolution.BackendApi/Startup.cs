@@ -17,6 +17,9 @@ using TechShopSolution.Application.Common;
 using TechShopSolution.Application.System;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Utilities.Constants;
+using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Customer.Validation;
+using TechShopSolution.ViewModels.Catalog.Customer.Validator;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.BackendApi
@@ -42,6 +45,10 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<IValidator<CustomerCreateRequest>, CreateRequestValidator>();
+            services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
+            services.AddTransient<IValidator<CustomerUpdateAddressRequest>, UpdateAddressRequestValidator>();
+
 
 
 

@@ -27,8 +27,8 @@ namespace TechShopSolution.BackendApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(int id)
         {
-            var customer = await _customerService.GetById(id);
-            return Ok(customer);
+            var result = await _customerService.GetById(id);
+            return Ok(result);
         }
         [HttpPost("them-khach-hang")]
         public async Task<IActionResult> Create([FromBody] CustomerCreateRequest request)

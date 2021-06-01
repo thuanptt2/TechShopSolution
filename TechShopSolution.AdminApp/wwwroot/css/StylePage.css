@@ -89,3 +89,6 @@ hr {
 .hide {
     display: none;
 }
+.table td, .table th {
+    vertical-align: middle;
+}
