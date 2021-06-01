@@ -11,8 +11,7 @@
         <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
         <li class="breadcrumb-item active">Danh sách khách Hàng</li>
     </ol>
-
-   
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="padding-container">
         <a class="btn btn-success btnAdd mb-3" asp-action="Create" asp-controller="Customer">
             <i class="fa fa-plus"></i>
@@ -44,47 +43,50 @@
                     </tr>
                 </thead>
                 <tbody>
-                  @if(Model!=null)
-            {
-                  @foreach (var item in Model.Items)
+                    @if (Model != null)
                     {
-                        <tr>
-                            <td>
-                                @Html.ActionLink(item.name, "Update", new { id = item.id })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.phone)
-                            </td>
-
-                            @if (item.sex == true)
-                            {
-                                <td align="center">
-                                    Nam
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.ActionLink(item.name, "Update", new { id = item.id })
                                 </td>
-                            }
-                            else
-                            {
-                                <td align="center">
-                                    Nữ
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.phone)
                                 </td>
-                            }
 
-                            <td>
-                                @Html.DisplayFor(modelItem => item.address)
-                            </td>
-                            <td align="center">
-                                <input type="checkbox" checked data-toggle="toggle" data-onstyle="info"  data-height="30" data-width="70">
+                                @if (item.sex == true)
+                                {
+                                    <td align="center">
+                                        Nam
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        Nữ
+                                    </td>
+                                }
 
-                            </td>
-                            <td>
-                                <a class="btn btn-danger" @Url.Action("Delete", "Delete", new { id = item.id })>Xóa</a>
-                            </td>
-                        </tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.address)
+                                </td>
+                                <td align="center">
+                                    <input type="checkbox" checked data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger" @Url.Action("Delete", "Delete", new { id = item.id })>Xóa</a>
+                                </td>
+                            </tr>
+                        }
                     }
-            }
                 </tbody>
             </table>
+            @await Component.InvokeAsync("Pager", Model)
+
         </div>
+
     </div>
 
 </div>

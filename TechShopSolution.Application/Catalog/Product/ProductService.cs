@@ -136,7 +136,9 @@ namespace TechShopSolution.Application.Catalog.Product
 
             var pageResult = new PagedResult<ProductViewModel>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex,
                 Items = data,
             };
             return pageResult;
@@ -191,7 +193,9 @@ namespace TechShopSolution.Application.Catalog.Product
 
             var pageResult = new PagedResult<ProductViewModel>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex,
                 Items = await data,
             };
             return pageResult;

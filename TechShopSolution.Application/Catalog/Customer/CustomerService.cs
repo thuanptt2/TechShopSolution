@@ -80,7 +80,9 @@ namespace TechShopSolution.Application.Catalog.Customer
 
             var pageResult = new PagedResult<CustomerViewModel>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
                 Items = await data,
             };
             return pageResult;

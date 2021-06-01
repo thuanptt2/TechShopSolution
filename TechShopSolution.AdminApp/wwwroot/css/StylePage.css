@@ -92,3 +92,6 @@ hr {
 .table td, .table th {
     vertical-align: middle;
 }
+.pagination {
+    justify-content: center;
+}
