@@ -7,7 +7,7 @@ namespace TechShopSolution.ViewModels.Common
     public class ApiErrorResult<T> : ApiResult<T>
     {
         public string[] ValidationError { get; set; }
-        public ApiErrorResult( string message)
+        public ApiErrorResult(string message)
         {
             IsSuccess = false;
             Message = message;

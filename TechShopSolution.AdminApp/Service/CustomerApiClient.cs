@@ -35,7 +35,6 @@ namespace TechShopSolution.AdminApp.Service
             if(respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
-
         }
 
         public async Task<ApiResult<CustomerViewModel>> GetById(int id)
@@ -83,7 +82,7 @@ namespace TechShopSolution.AdminApp.Service
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var respone = await client.PostAsync($"/api/Customer/{request.Id}", httpContent);
+            var respone = await client.PutAsync($"/api/Customer/Update/{request.Id}", httpContent);
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);

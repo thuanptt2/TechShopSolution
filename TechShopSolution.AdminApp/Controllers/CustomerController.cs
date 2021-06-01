@@ -50,8 +50,11 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var result = await _customerApiClient.GetById(id);
-            if(!result.IsSuccess || result.ResultObject == null)
+            if (!result.IsSuccess || result.ResultObject == null)
+            {
                 ModelState.AddModelError("", result.Message);
+                return View("Index");
+            }
             var updateRequest = new CustomerUpdateRequest()
             {
                 Id = id,
@@ -67,6 +70,7 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(updateRequest);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(CustomerUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -93,16 +97,16 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             return View(updateAddressRequest);
         }
-        [HttpPost]
+        [HttpPut]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return Json(new { success = false, message = "Thêm thất bại" });
             var result = await _customerApiClient.UpdateAddress(request);
             if (result.IsSuccess)
-                return RedirectToAction("Update","Customer", request);
-            ModelState.AddModelError("", result.Message);
-            return View();
+                return Json(new { success = true, message = "Thêm thành công" });
+            return Json(new { success = false, message = "Thêm thất bại" });
         }
         public JsonResult LoadProvince()
         {

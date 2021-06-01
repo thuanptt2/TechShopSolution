@@ -38,13 +38,13 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result.Message);
             return Ok(result);
         }
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update([FromBody] CustomerUpdateRequest request)
         {
-            var result = await _customerService.Update(request);
+            var result = await _customerService.Update(request.Id, request);
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
-            return Ok();
+            return Ok(result);
         }
         [HttpPut("UpdateAddress/{id}")]
         public async Task<IActionResult> UpdateAddress(int id,[FromBody]CustomerUpdateAddressRequest request)

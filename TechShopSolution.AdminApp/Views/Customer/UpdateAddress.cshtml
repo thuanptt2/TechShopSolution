@@ -5,14 +5,14 @@
 }
 
 
-<form asp-action="UpdateAddress" asp-controller="customer" method="post">
+<form asp-action="UpdateAddress" asp-controller="customer" method="post" onsubmit="return SubmitForm(this);">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="City" class="control-label"></label>
         <select id="ddlCity" asp-for="City" asp-items="new SelectList(new string[] { })" class="form-control" />
         <span asp-validation-for="City" class="text-danger"></span>
     </div>
-   
+
     <div class="form-group">
         <label asp-for="District" class="control-label"></label>
         <select id="ddlDistrict" asp-for="District" asp-items="new SelectList(new string[] { })" class="form-control" />
@@ -36,3 +36,5 @@
 </form>
 
 <script src="~/js/Location.js"></script>
+<script src="~/jquery-validate/jquery.validate.min.js"></script>
+<script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

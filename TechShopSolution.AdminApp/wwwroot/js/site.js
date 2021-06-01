@@ -21,3 +21,23 @@ $(function () {
 
     })
 });
+function SubmitForm(form) {
+    $.validator.unobtrusive.parse(form);
+    if ($(form).valid()) {
+        $.ajax({
+            type: "PUT",
+            url: form.action,
+            data: $(form).serialize(),
+            success: function (data) {
+                if (data.success) {
+                    $('#form-modal').modal('hide');
+                    location.reload();
+
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+    }
+    return false;
+}

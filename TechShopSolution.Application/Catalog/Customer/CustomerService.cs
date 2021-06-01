@@ -109,20 +109,24 @@ namespace TechShopSolution.Application.Catalog.Customer
 
         }
 
-        public async Task<ApiResult<bool>> Update(CustomerUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(int id, CustomerUpdateRequest request)
         {
             try
             {
-                if (await _context.Customers.AnyAsync(x => x.email == request.email && x.id != request.Id))
+                if (await _context.Customers.AnyAsync(x => x.email == request.email && x.id != id))
                 {
                     return new ApiErrorResult<bool>("Emai đã tồn tại");
                 }
                 var cusExist = await _context.Customers.FindAsync(request.Id);
                 if(cusExist!=null)
                 {
+                    cusExist.password = request.password;
                     cusExist.email = request.email;
                     cusExist.name = request.name;
                     cusExist.phone = request.phone;
+                    cusExist.status = request.status;
+                    cusExist.birthday = request.birthday;
+                    cusExist.sex = request.sex;
                     cusExist.status = request.status;
                     cusExist.update_at = DateTime.Now;
                 }
