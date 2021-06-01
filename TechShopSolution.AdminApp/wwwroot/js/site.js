@@ -1,4 +1,16 @@
-﻿showInPopup = (url, title) => {
+﻿$(function () {
+    $("#loaderbody").addClass('hide');
+
+    $(document).bind('ajaxStart', function () {
+        $("#loaderbody").removeClass('hide');
+    }).bind('ajaxStop', function () {
+        $("#loaderbody").addClass('hide');
+    });
+});
+
+
+
+showInPopup = (url, title) => {
     $.ajax({
         type: "GET",
         url: url,
@@ -23,18 +35,23 @@ $(function () {
 });
 function SubmitForm(form) {
     $.validator.unobtrusive.parse(form);
-    if ($(form).valid()) {
+    if ($(form).valid() == true) {
         $.ajax({
             type: "PUT",
             url: form.action,
             data: $(form).serialize(),
             success: function (data) {
                 if (data.success) {
-                    $('#form-modal').modal('hide');
                     location.reload();
-
+                    $.notify(data.message, {
+                        globalPosition: "top center",
+                        className: "success"
+                    })
                 } else {
-                    alert(data.message);
+                    $.notify(data.message, {
+                        globalPosition: "top center",
+                        className: "error"
+                    })
                 }
             },
         });

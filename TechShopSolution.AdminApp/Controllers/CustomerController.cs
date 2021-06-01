@@ -101,12 +101,12 @@ namespace TechShopSolution.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
         {
-            if (!ModelState.IsValid)
-                return Json(new { success = false, message = "Thêm thất bại" });
             var result = await _customerApiClient.UpdateAddress(request);
+            if(result==null)
+                return Json(new { success = false, message = "Cập nhật thất bại" });
             if (result.IsSuccess)
-                return Json(new { success = true, message = "Thêm thành công" });
-            return Json(new { success = false, message = "Thêm thất bại" });
+                return Json(new { success = true, message = "Cập nhật thành công" });
+            return Json(new { success = false, message = "Cập nhật thất bại" });
         }
         public JsonResult LoadProvince()
         {

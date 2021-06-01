@@ -13,7 +13,6 @@
     <link href="~/css/StylePage.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link href="~/bootstrap/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet" />
@@ -70,7 +69,7 @@
                                 <a class="nav-link" href="#">Danh sách loại sản phẩm</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="/customer/index">
+                        <a class="nav-link" asp-action="Index" asp-controller="Customer">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             Khách hàng
                         </a>
@@ -112,16 +111,22 @@
                 </div>
             </div>
         </div>
+
+        <div class="loaderbody" id="loaderbody">
+            <div class="loader"></div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="/js/scripts.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/scripts.js" asp-append-version="true"></script>
     <script src="~/jquery/jquery.min.js"></script>
     <script src="~/jquery-validate/jquery.validate.min.js"></script>
     <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="~/js/site.js"></script>
-    <script src="~/bootstrap/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/bootstrap/bootstrap-toggle/js/bootstrap-toggle.min.js" asp-append-version="true"></script>
+    <script src="~/js/notify.min.js" asp-append-version="true"></script>
     @RenderSection("jsFooter", required: false)
 </body>
 </html>
