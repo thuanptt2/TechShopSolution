@@ -46,9 +46,23 @@ namespace TechShopSolution.Application.Catalog.Customer
             }
         }
 
-        public Task<int> Delete(int cusID)
+        public async Task<ApiResult<bool>> Delete(int cusID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var customer = await _context.Customers.FindAsync(cusID);
+                if (customer != null)
+                {
+                    _context.Customers.Remove(customer);
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>($"Khách hàng không tồn tại");
+            }
+            catch (Exception ex)
+            {
+                return new ApiErrorResult<bool>(ex.Message);
+            }
         }
 
         public async Task<PagedResult<CustomerViewModel>> GetAllPaging(GetCustomerPagingRequest request)
@@ -161,7 +175,7 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-
+      
         public async Task<bool> VerifyEmail(string email)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(email));

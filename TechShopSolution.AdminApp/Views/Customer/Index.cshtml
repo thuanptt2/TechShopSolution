@@ -76,7 +76,7 @@
 
                                 </td>
                                 <td>
-                                    <a class="btn btn-danger" @Url.Action("Delete", "Delete", new { id = item.id })>Xóa</a>
+                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?')">Delete</a>                                
                                 </td>
                             </tr>
                         }

@@ -30,7 +30,7 @@ namespace TechShopSolution.BackendApi.Controllers
             var result = await _customerService.GetById(id);
             return Ok(result);
         }
-        [HttpPost("them-khach-hang")]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] CustomerCreateRequest request)
         {
             var result = await _customerService.Create(request);
@@ -38,7 +38,7 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result.Message);
             return Ok(result);
         }
-        [HttpPut("Update/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] CustomerUpdateRequest request)
         {
             var result = await _customerService.Update(request.Id, request);
@@ -47,7 +47,7 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(result);
         }
         [HttpPut("UpdateAddress/{id}")]
-        public async Task<IActionResult> UpdateAddress(int id,[FromBody]CustomerUpdateAddressRequest request)
+        public async Task<IActionResult> UpdateAddress(int id, [FromBody] CustomerUpdateAddressRequest request)
         {
             var result = await _customerService.UpdateAddress(id, request);
             if (!result.IsSuccess)
@@ -57,11 +57,22 @@ namespace TechShopSolution.BackendApi.Controllers
         [HttpGet]
         public async Task<IActionResult> VerifyEmail(string email)
         {
-            if( await _customerService.VerifyEmail(email))
+            if (await _customerService.VerifyEmail(email))
             {
                 return Ok();
             }
             return BadRequest();
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _customerService.Delete(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
     }
 }

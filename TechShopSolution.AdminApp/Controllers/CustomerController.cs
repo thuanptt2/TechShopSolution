@@ -103,10 +103,22 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             var result = await _customerApiClient.UpdateAddress(request);
             if(result==null)
-                return Json(new { success = false, message = "Cập nhật thất bại" });
+                return Json(new { success = false, message = result.Message });
             if (result.IsSuccess)
                 return Json(new { success = true, message = "Cập nhật thành công" });
             return Json(new { success = false, message = "Cập nhật thất bại" });
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _customerApiClient.Delete(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("", result.Message);
+            }
+            if (result.IsSuccess)
+                return RedirectToAction("Index");
+            return View("Index");
+
         }
         public JsonResult LoadProvince()
         {

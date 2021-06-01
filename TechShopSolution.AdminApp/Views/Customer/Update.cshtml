@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="password" class="control-label"></label>
-                                    <input asp-for="password" type="password" class="form-control"/>
+                                    <input asp-for="password" type="password" value="@Model.password" class="form-control"/>
                                     <span asp-validation-for="password" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -125,7 +125,7 @@
                                     </div>
                                 </div>
                                 <div class="col text-right mt-3">
-                                    <button class="btn btn-success" type="submit" asp-action="Update" asp-controller="Customer">
+                                    <button class="btn btn-success" type="submit" asp-action="Update" asp-controller="Customer" onclick="deleteCustomer('@Url.Action("Update","Customer",new { id = Model.Id }, Context.Request.Scheme)')">
                                         <i class="fa fa-save"></i>
                                         Cập nhật
                                     </button>

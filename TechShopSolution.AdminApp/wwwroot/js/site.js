@@ -8,8 +8,6 @@
     });
 });
 
-
-
 showInPopup = (url, title) => {
     $.ajax({
         type: "GET",
