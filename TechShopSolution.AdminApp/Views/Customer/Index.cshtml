@@ -13,10 +13,18 @@
     </ol>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="padding-container">
-        <a class="btn btn-success btnAdd mb-3" asp-action="Create" asp-controller="Customer">
+        <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Customer">
             <i class="fa fa-plus"></i>
             Thêm mới
         </a>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
+            <div class="input-group">
+                <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
+                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/Customer/index'"><i class="fas fa-times"></i></button>
+            </div>
+        </form>
         <div class="table-responsive shadow-lg">
             <table class="table table-bordered table-hover">
                 <thead class="table-light thead-dark">
@@ -36,7 +44,7 @@
                         <th scope="col" class="text-center">
                             Trạng thái
                         </th>
-                        <th>
+                        <th class="text-center">
                             Tác vụ
                         </th>
 

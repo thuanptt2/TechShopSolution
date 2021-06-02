@@ -27,6 +27,7 @@ namespace TechShopSolution.AdminApp.Controllers
                 PageSize = pageSize,
             };
             var data = await _customerApiClient.GetCustomerPagings(request);
+            ViewBag.Keyword = keyword;
             return View(data);
         }
         [HttpGet]

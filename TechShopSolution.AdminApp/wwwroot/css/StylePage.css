@@ -95,3 +95,6 @@ hr {
 .pagination {
     justify-content: center;
 }
+.sb-topnav .navbar-brand {
+    width: 205px;
+}
