@@ -9,19 +9,28 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="City" class="control-label"></label>
-        <select id="ddlCity" asp-for="City" asp-items="new SelectList(new string[] { })" class="form-control" />
+        <input asp-for="City" class="form-control" id="txtCity" hidden />
+        <select id="ddlCity" asp-for="City" class="form-control">
+            <option value="">--Chọn tỉnh thành phố--</option>
+        </select>
         <span asp-validation-for="City" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="District" class="control-label"></label>
-        <select id="ddlDistrict" asp-for="District" asp-items="new SelectList(new string[] { })" class="form-control" />
+        <input asp-for="District" class="form-control" id="txtDistrict" hidden />
+        <select id="ddlDistrict" asp-for="District" class="form-control">
+            <option value="">--Chọn quận huyện--</option>
+        </select>
         <span asp-validation-for="District" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Ward" class="control-label"></label>
-        <select id="ddlWard" asp-for="Ward" asp-items="new SelectList(new string[] { })" class="form-control" />
+        <input asp-for="Ward" class="form-control" hidden id="txtWard" />
+        <select id="ddlWard" asp-for="Ward" class="form-control">
+            <option value="">--Chọn phường xã--</option>
+        </select>
         <span asp-validation-for="Ward" class="text-danger"></span>
     </div>
 
@@ -30,6 +39,7 @@
         <input asp-for="House" class="form-control" />
         <span asp-validation-for="House" class="text-danger"></span>
     </div>
+
     <div class="form-group text-right">
         <input type="submit" value="Cập nhật" class="btn btn-primary" />
     </div>

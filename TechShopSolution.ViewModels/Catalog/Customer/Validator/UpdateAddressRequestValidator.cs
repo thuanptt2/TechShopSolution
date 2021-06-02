@@ -9,9 +9,9 @@ namespace TechShopSolution.ViewModels.Catalog.Customer.Validator
     {
         public UpdateAddressRequestValidator()
         {
-            RuleFor(x => x.City).NotEmpty().WithMessage("Ngày sinh không được để trống");
-            RuleFor(x => x.District).NotEmpty().WithMessage("Ngày sinh không được để trống");
-            RuleFor(x => x.Ward).NotEmpty().WithMessage("Ngày sinh không được để trống");
+            RuleFor(x => x.City).NotEmpty().WithMessage("Tỉnh/Thành phố không được để trống");
+            RuleFor(x => x.District).NotEmpty().WithMessage("Quận/Huyện không được để trống");
+            RuleFor(x => x.Ward).NotEmpty().WithMessage("Phường/xã không được để trống");
         }
     }
 }

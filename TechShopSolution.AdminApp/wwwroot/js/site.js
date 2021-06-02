@@ -36,7 +36,7 @@ function SubmitForm(form) {
                         location.reload();
                     }, 1200);
                 } else {
-                    $.notify(data.message, {
+                    $.notify("Cập nhật thất bại", {
                         globalPosition: "top center",
                         className: "error"
                     })

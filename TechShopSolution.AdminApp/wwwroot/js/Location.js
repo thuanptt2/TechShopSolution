@@ -10,18 +10,27 @@
             if (id != '') {
                 customer.loadDistrict(parseInt(id));
                 $('#ddlWard').html('');
+                $('#txtCity').val($("#ddlCity option:selected").text());
             }
             else {
                 $('#ddlDistrict').html('');
+                $('#ddlWard').html('');
             }
         });
         $('#ddlDistrict').off('change').on('change', function () {
             var id = $(this).val();
             if (id != '') {
                 customer.loadWard(parseInt(id));
+                $('#txtDistrict').val($("#ddlDistrict option:selected").text());
             }
             else {
                 $('#ddlWard').html('');
+            }
+        });
+        $('#ddlWard').off('change').on('change', function () {
+            var id = $(this).val();
+            if (id != '') {
+                $('#txtWard').val($("#ddlWard option:selected").text());
             }
         });
     },

@@ -19,9 +19,10 @@ namespace TechShopSolution.ViewModels.Catalog.Customer.Validation
                   .MinimumLength(10).WithMessage("Số điện thoại phải ít nhất 10 kí tự");
             RuleFor(x => x.birthday).NotEmpty().WithMessage("Ngày sinh không được để trống")
                   .Must(BeAValidAge).WithMessage("Ngày sinh không hợp lệ");
-            RuleFor(x => x.City).NotEmpty().WithMessage("Ngày sinh không được để trống");
-            RuleFor(x => x.District).NotEmpty().WithMessage("Ngày sinh không được để trống");
-            RuleFor(x => x.Ward).NotEmpty().WithMessage("Ngày sinh không được để trống");
+            RuleFor(x => x.City).NotEmpty().WithMessage("Tỉnh/Thành phố không được để trống");
+            RuleFor(x => x.District).NotEmpty().WithMessage("Quận/Huyện không được để trống");
+            RuleFor(x => x.Ward).NotEmpty().WithMessage("Phường/xã không được để trống");
+
         }
         protected bool BeAValidAge(DateTime date)
         {
