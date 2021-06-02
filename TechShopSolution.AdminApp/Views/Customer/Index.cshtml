@@ -71,12 +71,20 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.address)
                                 </td>
+                                @if (item.status)
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
                                 <td align="center">
-                                    <input type="checkbox" checked data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
-
-                                </td>
-                                <td>
-                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?')">Delete</a>                                
+                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')">Xóa</a>
                                 </td>
                             </tr>
                         }

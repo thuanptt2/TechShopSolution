@@ -102,11 +102,24 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
         {
             var result = await _customerApiClient.UpdateAddress(request);
-            if(result==null)
-                return Json(new { success = false, message = result.Message });
+            if(result == null)
+                return Json(new { success = false, message = "Cập nhật thất bại" });
             if (result.IsSuccess)
                 return Json(new { success = true, message = "Cập nhật thành công" });
-            return Json(new { success = false, message = "Cập nhật thất bại" });
+            return Json(new { success = false, message = result.Message });
+        }
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _customerApiClient.ChangeStatus(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+            }
+            if (result.IsSuccess)
+                return RedirectToAction("Index");
+            return View();
+
         }
         public async Task<IActionResult> Delete(int id)
         {

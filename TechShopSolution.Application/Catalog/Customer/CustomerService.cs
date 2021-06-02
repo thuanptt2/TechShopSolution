@@ -175,7 +175,28 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-      
+        public async Task<ApiResult<bool>> ChangeStatus(int id)
+        {
+            try
+            {
+                var cusExist = await _context.Customers.FindAsync(id);
+                if (cusExist != null)
+                {
+                    if (cusExist.status)
+                        cusExist.status = false;
+                    else cusExist.status = true;
+                    cusExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy khách hàng này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+
         public async Task<bool> VerifyEmail(string email)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(email));

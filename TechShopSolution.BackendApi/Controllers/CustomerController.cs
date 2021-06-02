@@ -54,6 +54,14 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result.Message);
             return Ok(result);
         }
+        [HttpGet("ChangeStatus/{id}")]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _customerService.ChangeStatus(id);
+            if (!result.IsSuccess)
+                return BadRequest(result.Message);
+            return Ok(result);
+        }
         [HttpGet]
         public async Task<IActionResult> VerifyEmail(string email)
         {
@@ -73,6 +81,5 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest(result);
         }
-
     }
 }
