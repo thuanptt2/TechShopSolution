@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TechShopSolution.Data.EF;
-using TechShopSolution.Utilities.Exceptions;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Location;
 
 namespace TechShopSolution.Application.Catalog.Customer
 {
@@ -196,7 +196,6 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-
         public async Task<bool> VerifyEmail(string email)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(email));

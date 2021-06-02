@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using TechShopSolution.Application.Catalog.Customer;
+using TechShopSolution.Application.Catalog.Location;
 using TechShopSolution.Application.Catalog.Product;
 using TechShopSolution.Application.Common;
 using TechShopSolution.Application.System;
@@ -45,12 +46,10 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<ILoadLocationService, LoadLocationService>();
             services.AddTransient<IValidator<CustomerCreateRequest>, CreateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateAddressRequest>, UpdateAddressRequestValidator>();
-
-
-
 
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());

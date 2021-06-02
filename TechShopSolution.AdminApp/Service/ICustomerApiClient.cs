@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Location;
 
 namespace TechShopSolution.AdminApp.Service
 {
@@ -17,5 +18,9 @@ namespace TechShopSolution.AdminApp.Service
         Task<ApiResult<bool>> ChangeStatus(int Id);
         Task<ApiResult<bool>> Delete(int cusID);
         Task<ApiResult<CustomerViewModel>> GetById(int id);
+        Task<ApiResult<List<ProvinceModel>>> LoadProvince();
+        Task<ApiResult<List<DistrictModel>>> LoadDistrict(int provinceID);
+        Task<ApiResult<List<WardModel>>> LoadWard(int districtID);
+
     }
 }

@@ -13,7 +13,6 @@ namespace TechShopSolution.AdminApp.Controllers
     [Authorize]
     public class CustomerController : Controller
     {
-        private readonly XDocument xmlDoc = XDocument.Load("wwwroot/assets/location/Provinces_Data.xml");
         private readonly ICustomerApiClient _customerApiClient;
         public CustomerController(ICustomerApiClient customerApiClient)
         {
@@ -131,26 +130,20 @@ namespace TechShopSolution.AdminApp.Controllers
             if (result.IsSuccess)
                 return RedirectToAction("Index");
             return View("Index");
-
         }
-        public JsonResult LoadProvince()
+
+        public async Task<JsonResult> LoadProvince()
         {
             try
             {
-                var xElements = xmlDoc.Element("Root").Elements("Item").Where(x => x.Attribute("type").Value == "province");
-                var list = new List<ProvinceModel>();
-                ProvinceModel province = null;
-                foreach (var item in xElements)
+                var result = await _customerApiClient.LoadProvince();
+                if (result == null || !result.IsSuccess)
                 {
-                    province = new ProvinceModel();
-                    province.ID = int.Parse(item.Attribute("id").Value);
-                    province.Name = item.Attribute("value").Value;
-                    list.Add(province);
-
+                    return null;
                 }
                 return Json(new
                 {
-                    data = list,
+                    data = result.ResultObject,
                     status = true
                 });
             }
@@ -159,60 +152,48 @@ namespace TechShopSolution.AdminApp.Controllers
                 return null;
             }
         }
-        public JsonResult LoadDistrict(string provinceName)
+        public async Task<JsonResult> LoadDistrict(int provinceID)
         {
             try
             {
-                var xElement = xmlDoc.Element("Root").Elements("Item")
-                .Single(x => x.Attribute("type").Value == "province" && x.Attribute("value").Value.Equals(provinceName));
-
-                var list = new List<DistrictModel>();
-                DistrictModel district = null;
-                foreach (var item in xElement.Elements("Item").Where(x => x.Attribute("type").Value == "district"))
+                var result = await _customerApiClient.LoadDistrict(provinceID);
+                if (result == null || !result.IsSuccess)
                 {
-                    district = new DistrictModel();
-                    district.ID = int.Parse(item.Attribute("id").Value);
-                    district.Name = item.Attribute("value").Value;
-                    district.ProvinceID = int.Parse(xElement.Attribute("id").Value);
-                    list.Add(district);
+                    return null;
                 }
                 return Json(new
                 {
-                    data = list,
-                    status = true
-                });
-            } catch
-            {
-                return null;
-            }
-        }
-        public JsonResult LoadWard(string districtName)
-        {
-            try
-            {
-                var xElement = xmlDoc.Element("Root").Elements("Item").Elements("Item")
-               .Single(x => x.Attribute("type").Value == "district" && x.Attribute("value").Value.Equals(districtName));
-
-                var list = new List<WardModel>();
-                WardModel ward = null;
-                foreach (var item in xElement.Elements("Item").Where(x => x.Attribute("type").Value == "precinct"))
-                {
-                    ward = new WardModel();
-                    ward.ID = int.Parse(item.Attribute("id").Value);
-                    ward.Name = item.Attribute("value").Value;
-                    ward.DistrictId = int.Parse(xElement.Attribute("id").Value);
-                    list.Add(ward);
-                }
-                return Json(new
-                {
-                    data = list,
+                    data = result.ResultObject,
                     status = true
                 });
             }
             catch
             {
                 return null;
-            }        }
+            }
+        }
+
+        public async Task<JsonResult> LoadWard(int districtID)
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadWard(districtID);
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {

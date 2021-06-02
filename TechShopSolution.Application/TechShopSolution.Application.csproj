@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Catalog\Location\Provinces_Data.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
      <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
     

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Location;
 
 namespace TechShopSolution.Application.Catalog.Customer
 {

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Location;
 
 namespace TechShopSolution.AdminApp.Service
 {
@@ -115,6 +116,39 @@ namespace TechShopSolution.AdminApp.Service
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/customer?email={email}");
             return respone.IsSuccessStatusCode;
+        }
+
+        public async Task<ApiResult<List<ProvinceModel>>> LoadProvince()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/Location/LoadProvince");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<List<ProvinceModel>>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<List<ProvinceModel>>>(result);
+        }
+
+        public async Task<ApiResult<List<DistrictModel>>> LoadDistrict(int provinceID)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/Location/LoadDistrict?provinceID={provinceID}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<List<DistrictModel>>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<List<DistrictModel>>>(result);
+        }
+
+        public async  Task<ApiResult<List<WardModel>>> LoadWard(int districtID)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/Location/LoadWard?districtID={districtID}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<List<WardModel>>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<List<WardModel>>>(result);
         }
     }
 }
