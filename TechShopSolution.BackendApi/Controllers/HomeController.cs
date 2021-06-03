@@ -17,7 +17,6 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return Ok();

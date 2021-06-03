@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
@@ -27,6 +28,7 @@ namespace TechShopSolution.AdminApp.Controllers
         }
         public IActionResult Index()
         {
+
             return View();
         }
         [HttpGet]
@@ -50,7 +52,7 @@ namespace TechShopSolution.AdminApp.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return View();
+                    return View(request);
                 var token = await _adminApiClient.Authenticate(request);
 
                 var adminPrincipal = this.ValidateToken(token);
@@ -59,6 +61,7 @@ namespace TechShopSolution.AdminApp.Controllers
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                     IsPersistent = false
                 };
+                HttpContext.Session.SetString("Token", token);
                 await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
@@ -69,7 +72,7 @@ namespace TechShopSolution.AdminApp.Controllers
             catch
             {
                 ModelState.AddModelError("", "Sai thông tin đăng nhập");
-                return View();
+                return View(request);
             }
         }
 

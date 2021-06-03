@@ -11,11 +11,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using TechShopSolution.Application.Catalog.Customer;
+using TechShopSolution.Application.Catalog.Location;
 using TechShopSolution.Application.Catalog.Product;
 using TechShopSolution.Application.Common;
 using TechShopSolution.Application.System;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Utilities.Constants;
+using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Customer.Validation;
+using TechShopSolution.ViewModels.Catalog.Customer.Validator;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.BackendApi
@@ -36,12 +41,15 @@ namespace TechShopSolution.BackendApi
             options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
 
             //Declare DI
-            services.AddTransient<IPublicProductService, PublicProductService>();
-            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
-
+            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<ILoadLocationService, LoadLocationService>();
+            services.AddTransient<IValidator<CustomerCreateRequest>, CreateRequestValidator>();
+            services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
+            services.AddTransient<IValidator<CustomerUpdateAddressRequest>, UpdateAddressRequestValidator>();
 
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
