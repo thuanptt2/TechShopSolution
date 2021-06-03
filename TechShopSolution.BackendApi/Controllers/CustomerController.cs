@@ -35,7 +35,7 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             var result = await _customerService.Create(request);
             if (!result.IsSuccess)
-                return BadRequest(result.Message);
+                return BadRequest(result);
             return Ok(result);
         }
         [HttpPut("{id}")]
@@ -43,7 +43,7 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             var result = await _customerService.Update(request.Id, request);
             if (!result.IsSuccess)
-                return BadRequest(result.Message);
+                return BadRequest(result);
             return Ok(result);
         }
         [HttpPut("UpdateAddress/{id}")]
@@ -51,7 +51,7 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             var result = await _customerService.UpdateAddress(id, request);
             if (!result.IsSuccess)
-                return BadRequest(result.Message);
+                return BadRequest(result);
             return Ok(result);
         }
         [HttpGet("ChangeStatus/{id}")]
@@ -59,7 +59,7 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             var result = await _customerService.ChangeStatus(id);
             if (!result.IsSuccess)
-                return BadRequest(result.Message);
+                return BadRequest(result);
             return Ok(result);
         }
         [HttpGet]

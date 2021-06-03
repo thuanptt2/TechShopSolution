@@ -28,6 +28,10 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _customerApiClient.GetCustomerPagings(request);
             ViewBag.Keyword = keyword;
+            if(TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
             return View(data);
         }
         [HttpGet]
@@ -41,8 +45,11 @@ namespace TechShopSolution.AdminApp.Controllers
             if (!ModelState.IsValid)
                 return View();
             var result = await _customerApiClient.CreateCustomer(request);
-            if(result.IsSuccess)
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Thêm khách hàng thành công";
                 return RedirectToAction("Index");
+            }
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
@@ -67,6 +74,10 @@ namespace TechShopSolution.AdminApp.Controllers
                 phone = result.ResultObject.phone,
                 status = result.ResultObject.status
             };
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
             return View(updateRequest);
         }
         [HttpPost]
@@ -77,7 +88,10 @@ namespace TechShopSolution.AdminApp.Controllers
                 return View();
             var result = await _customerApiClient.UpdateCustomer(request);
             if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật khách hàng thành công";
                 return RedirectToAction("Index");
+            }
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
@@ -97,16 +111,20 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             return View(updateAddressRequest);
         }
-        [HttpPut]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
         {
+            if (!ModelState.IsValid)
+                return View();
             var result = await _customerApiClient.UpdateAddress(request);
-            if(result == null)
-                return Json(new { success = false, message = "Cập nhật thất bại" });
             if (result.IsSuccess)
-                return Json(new { success = true, message = "Cập nhật thành công" });
-            return Json(new { success = false, message = result.Message });
+            {
+                TempData["result"] = "Cập nhật địa chỉ thành công";
+                return RedirectToAction(nameof(Update), new { id = request.Id });
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
         }
         [HttpGet]
         public async Task<IActionResult> ChangeStatus(int id)
@@ -117,9 +135,11 @@ namespace TechShopSolution.AdminApp.Controllers
                 ModelState.AddModelError("Cập nhật thất bại", result.Message);
             }
             if (result.IsSuccess)
+            {
+                TempData["result"] = "Thay đổi trạng thái thành công";
                 return RedirectToAction("Index");
-            return View();
-
+            }
+            return View("Index");
         }
         public async Task<IActionResult> Delete(int id)
         {
@@ -129,7 +149,10 @@ namespace TechShopSolution.AdminApp.Controllers
                 ModelState.AddModelError("", result.Message);
             }
             if (result.IsSuccess)
+            {
+                TempData["result"] = "Xóa khách hàng thành công";
                 return RedirectToAction("Index");
+            }
             return View("Index");
         }
 
