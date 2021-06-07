@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,8 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _customerApiClient.GetCustomerPagings(request);
             ViewBag.Keyword = keyword;
-            if(TempData["result"] != null)
+            ViewBag.NameLogin = HttpContext.Session.GetString("Token");
+            if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }

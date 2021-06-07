@@ -1,5 +1,6 @@
-﻿@using TechShopSolution.ViewModels.Common;
-@model PagedResult<TechShopSolution.ViewModels.Catalog.Customer.CustomerViewModel>
+﻿
+@using TechShopSolution.ViewModels.Common;
+@model PagedResult<TechShopSolution.ViewModels.Catalog.Product.ProductViewModel>
 @{
     ViewData["Title"] = "Danh sách khách hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -18,14 +19,14 @@
     </script>
 }
 <div class="container-fluid px-4">
-    <h3 class="mt-4">Danh sách khách hàng @ViewBag.NameLogin</h3>
+    <h3 class="mt-4">Danh sách Sản phẩm</h3>
     <ol class="breadcrumb mb-1">
         <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-        <li class="breadcrumb-item active">Danh sách khách Hàng</li>
+        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
     </ol>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="padding-container">
-        <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Customer">
+        <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Product">
             <i class="fa fa-plus"></i>
             Thêm mới
         </a>
@@ -52,22 +53,28 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light thead-dark">
                     <tr>
-                        <th scope="col">
-                            Họ và tên
+                        <th scope="col" width="400px">
+                            Tên sản phẩm
                         </th>
-                        <th scope="col">
-                            Số điện thoại
+                        <th scope="col" class="text-center" width="80px">
+                            Tồn kho
                         </th>
-                        <th scope="col" class="text-center">
-                            Giới tính
+                        <th scope="col" class="text-center" width="80px">
+                            Giá
                         </th>
-                        <th scope="col">
-                            Địa chỉ
+                        <th scope="col" class="text-center" width="80px">
+                            Giá giảm
                         </th>
-                        <th scope="col" class="text-center">
+                        <th scope="col" class="text-center" width="80px">
                             Trạng thái
                         </th>
-                        <th class="text-center">
+                        <th scope="col" class="text-center" width="80px">
+                            Bán chạy
+                        </th>
+                        <th scope="col" class="text-center" width="80px">
+                            Nổi bật
+                        </th>
+                        <th class="text-center" width="80px">
                             Tác vụ
                         </th>
 
@@ -78,7 +85,7 @@
                     {
                         <tr>
                             <td>
-                                Không có khách hàng nào.
+                                Không có sản phẩm nào.
                             </td>
                         </tr>
                     }
@@ -86,7 +93,7 @@
                     {
                         <tr>
                             <td>
-                                Không tìm thấy khách hàng.
+                                Không tìm thấy sản phẩm.
                             </td>
                         </tr>
                     }
@@ -99,26 +106,41 @@
                                     @Html.ActionLink(item.name, "Update", new { id = item.id })
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.phone)
+                                    @Html.DisplayFor(modelItem => item.instock)
                                 </td>
-
-                                @if (item.sex == true)
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.unit_price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.promotion_price)
+                                </td>
+                                @if (item.isActive)
                                 {
                                     <td align="center">
-                                        Nam
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        Nữ
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
 
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.address)
-                                </td>
-                                @if (item.isActive)
+
+                                @if (item.best_seller)
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+                                @if (item.featured)
                                 {
                                     <td align="center">
                                         <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">

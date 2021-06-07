@@ -12,7 +12,6 @@ namespace TechShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -21,15 +20,8 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             _productService = productService;
         }
-
-        [HttpGet("san-pham")]
-        public async Task<IActionResult> GetAllPaging([FromQuery]GetPublicProductPagingRequest requet)
-        {
-            var products = await _productService.GetAllByCategoryId(requet);
-            return Ok(products);
-        }
-        [HttpGet("filter")]
-        public async Task<IActionResult> GetManagerProductByFilter([FromQuery] GetManageProductPagingRequest requet)
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetManagerProductByFilter([FromQuery] GetProductPagingRequest requet)
         {
             var products = await _productService.GetAllPaging(requet);
             if (products == null)

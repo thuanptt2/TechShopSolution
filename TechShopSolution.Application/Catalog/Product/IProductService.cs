@@ -14,7 +14,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<int> Update(ProductUpdateRequest request);
         Task<int> Delete(int productID);
         Task<ProductViewModel> GetById(int productId);
-        Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
-        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
+        Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
     }
 }
