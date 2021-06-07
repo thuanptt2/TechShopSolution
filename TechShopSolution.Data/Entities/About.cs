@@ -10,11 +10,11 @@ namespace TechShopSolution.Data.Entities
         public string title { get; set; }
         public string content { get; set; }
         public string slug { get; set; }
-        public bool status { get; set; }
+        public bool isActive { get; set; }
         public string meta_title { get; set; }
         public string meta_keywords { get; set; }
         public string meta_descriptions { get; set; }
         public DateTime create_at { get; set; }
-        public DateTime update_at { get; set; }
+        public DateTime? update_at { get; set; }
     }
 }

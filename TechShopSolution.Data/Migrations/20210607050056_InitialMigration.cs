@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TechShopSolution.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,12 +16,12 @@ namespace TechShopSolution.Data.Migrations
                     title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     slug = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     meta_title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_keywords = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,7 +39,7 @@ namespace TechShopSolution.Data.Migrations
                     password = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     phone = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,12 +68,14 @@ namespace TechShopSolution.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     brand_name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     brand_slug = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     meta_title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_keywords = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true),
+                    delete_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -89,12 +91,14 @@ namespace TechShopSolution.Data.Migrations
                     cate_name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     cate_slug = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: true, defaultValue: 0),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     meta_title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_keywords = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true),
+                    delete_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -109,12 +113,14 @@ namespace TechShopSolution.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     slug = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     meta_title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_keywords = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true),
+                    delete_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -153,7 +159,7 @@ namespace TechShopSolution.Data.Migrations
                     code = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     quantity = table.Column<int>(type: "int", nullable: true),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     start_at = table.Column<DateTime>(type: "Date", nullable: false),
                     end_at = table.Column<DateTime>(type: "Date", nullable: false)
                 },
@@ -175,9 +181,11 @@ namespace TechShopSolution.Data.Migrations
                     birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
                     sex = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     address = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true),
+                    delete_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -193,7 +201,7 @@ namespace TechShopSolution.Data.Migrations
                     title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    isRead = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     phone = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()")
@@ -226,9 +234,11 @@ namespace TechShopSolution.Data.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true),
+                    delete_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -246,7 +256,7 @@ namespace TechShopSolution.Data.Migrations
                     link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -260,9 +270,11 @@ namespace TechShopSolution.Data.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true),
+                    delete_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -278,7 +290,6 @@ namespace TechShopSolution.Data.Migrations
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    cate_id = table.Column<int>(type: "int", nullable: false),
                     brand_id = table.Column<int>(type: "int", nullable: false),
                     image = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     more_images = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -289,14 +300,16 @@ namespace TechShopSolution.Data.Migrations
                     specifications = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     short_desc = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    featured = table.Column<bool>(type: "bit", nullable: false),
-                    best_seller = table.Column<bool>(type: "bit", nullable: false),
-                    status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    featured = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    best_seller = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     meta_tittle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_keywords = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true),
+                    delete_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -320,13 +333,13 @@ namespace TechShopSolution.Data.Migrations
                     cate_id = table.Column<int>(type: "int", nullable: false),
                     img = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     slug = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     meta_tittle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     featured = table.Column<bool>(type: "bit", nullable: true),
                     meta_keywords = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     meta_descriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -350,7 +363,7 @@ namespace TechShopSolution.Data.Migrations
                     cod_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     lading_code = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -397,7 +410,7 @@ namespace TechShopSolution.Data.Migrations
                     score = table.Column<int>(type: "int", nullable: false),
                     content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     date_rating = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    status = table.Column<int>(type: "int", nullable: false),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
                 },
@@ -426,10 +439,12 @@ namespace TechShopSolution.Data.Migrations
                     subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     transport_fee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     payment_id = table.Column<int>(type: "int", nullable: false),
-                    status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    isPay = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    isShip = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     create_at = table.Column<DateTime>(type: "Date", nullable: false, defaultValueSql: "GetDate()"),
-                    update_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    update_at = table.Column<DateTime>(type: "Date", nullable: true)
                 },
                 constraints: table =>
                 {

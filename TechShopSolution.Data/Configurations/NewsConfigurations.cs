@@ -17,7 +17,7 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.cate_id).IsRequired();
             builder.Property(x => x.img).IsRequired();
             builder.Property(x => x.slug).IsRequired().HasMaxLength(255).IsUnicode(false);
-            builder.Property(x => x.status).IsRequired().HasDefaultValue(true);
+            builder.Property(x => x.isActive).IsRequired();
             builder.Property(x => x.title).IsRequired().HasMaxLength(255);
             builder.Property(x => x.create_at)
                 .HasDefaultValueSql("GetDate()")

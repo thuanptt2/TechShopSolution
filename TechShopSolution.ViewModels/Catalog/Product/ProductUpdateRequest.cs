@@ -11,7 +11,6 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string Name { get; set; }
         public string Code { get; set; }
         public string Slug { get; set; }
-        public int Cate_id { get; set; }
         public int Brand_id { get; set; }
         public IFormFile Image { get; set; }
         public List<IFormFile> More_images { get; set; }
@@ -24,7 +23,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string Descriptions { get; set; }
         public bool Featured { get; set; }
         public bool Best_seller { get; set; }
-        public int Status { get; set; }
+        public bool IsActive { get; set; }
         public string Meta_tittle { get; set; }
         public string Meta_keywords { get; set; }
         public string Meta_descriptions { get; set; }

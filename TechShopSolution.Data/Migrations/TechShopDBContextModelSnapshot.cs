@@ -4,12 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Configuration;
 using TechShopSolution.Data.EF;
 
 namespace TechShopSolution.Data.Migrations
 {
-    [DbContext(typeof(IConfiguration))]
+    [DbContext(typeof(TechShopDBContext))]
     partial class TechShopDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -36,6 +35,9 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("Date")
                         .HasDefaultValueSql("GetDate()");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("meta_descriptions")
                         .HasColumnType("nvarchar(max)");
 
@@ -51,17 +53,12 @@ namespace TechShopSolution.Data.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
                     b.Property<string>("title")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -104,7 +101,7 @@ namespace TechShopSolution.Data.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -155,6 +152,15 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("Date")
                         .HasDefaultValueSql("GetDate()");
 
+                    b.Property<DateTime?>("delete_at")
+                        .HasColumnType("Date");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDelete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("meta_descriptions")
                         .HasColumnType("nvarchar(max)");
 
@@ -164,12 +170,7 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<string>("meta_title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -200,6 +201,15 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("Date")
                         .HasDefaultValueSql("GetDate()");
 
+                    b.Property<DateTime?>("delete_at")
+                        .HasColumnType("Date");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDelete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("meta_descriptions")
                         .HasColumnType("nvarchar(max)");
 
@@ -214,12 +224,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -238,6 +243,15 @@ namespace TechShopSolution.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("Date")
                         .HasDefaultValueSql("GetDate()");
+
+                    b.Property<DateTime?>("delete_at")
+                        .HasColumnType("Date");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDelete")
+                        .HasColumnType("bit");
 
                     b.Property<string>("meta_descriptions")
                         .HasColumnType("nvarchar(max)");
@@ -259,12 +273,7 @@ namespace TechShopSolution.Data.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -357,6 +366,9 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<DateTime>("end_at")
                         .HasColumnType("Date");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -367,11 +379,6 @@ namespace TechShopSolution.Data.Migrations
 
                     b.Property<DateTime>("start_at")
                         .HasColumnType("Date");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
 
                     b.HasKey("id");
 
@@ -398,11 +405,20 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("Date")
                         .HasDefaultValueSql("GetDate()");
 
+                    b.Property<DateTime?>("delete_at")
+                        .HasColumnType("Date");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDelete")
+                        .HasColumnType("bit");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -422,16 +438,9 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.Property<bool>("sex")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -462,6 +471,9 @@ namespace TechShopSolution.Data.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<bool>("isRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -473,11 +485,6 @@ namespace TechShopSolution.Data.Migrations
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("title")
                         .IsRequired()
@@ -516,6 +523,9 @@ namespace TechShopSolution.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("meta_descriptions")
                         .HasColumnType("nvarchar(max)");
 
@@ -531,17 +541,12 @@ namespace TechShopSolution.Data.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
                     b.Property<string>("title")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -570,6 +575,12 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<decimal>("discount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("isPay")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isShip")
+                        .HasColumnType("bit");
+
                     b.Property<string>("name_receiver")
                         .HasColumnType("nvarchar(max)");
 
@@ -582,10 +593,8 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<string>("phone_receiver")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                    b.Property<bool>("status")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("subtotal")
                         .HasColumnType("decimal(18,2)");
@@ -596,7 +605,7 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<decimal>("transport_fee")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -677,17 +686,23 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("Date")
                         .HasDefaultValueSql("GetDate()");
 
+                    b.Property<DateTime?>("delete_at")
+                        .HasColumnType("Date");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDelete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -703,14 +718,9 @@ namespace TechShopSolution.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("best_seller")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<int>("brand_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("cate_id")
                         .HasColumnType("int");
 
                     b.Property<string>("code")
@@ -722,13 +732,14 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("Date")
                         .HasDefaultValueSql("GetDate()");
 
+                    b.Property<DateTime?>("delete_at")
+                        .HasColumnType("Date");
+
                     b.Property<string>("descriptions")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("featured")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<string>("image")
                         .IsRequired()
@@ -737,6 +748,12 @@ namespace TechShopSolution.Data.Migrations
 
                     b.Property<int?>("instock")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDelete")
+                        .HasColumnType("bit");
 
                     b.Property<string>("meta_descriptions")
                         .HasColumnType("nvarchar(max)");
@@ -756,9 +773,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<decimal>("promotion_price")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("short_desc")
                         .HasColumnType("nvarchar(max)");
@@ -771,21 +786,14 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<string>("specifications")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
                     b.Property<decimal>("unit_price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.Property<int>("warranty")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("id");
 
@@ -815,6 +823,9 @@ namespace TechShopSolution.Data.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -824,9 +835,6 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("score")
-                        .HasColumnType("int");
-
-                    b.Property<int>("status")
                         .HasColumnType("int");
 
                     b.HasKey("id");
@@ -865,7 +873,7 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -900,7 +908,7 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<int>("transporter_id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");
@@ -922,17 +930,21 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("Date")
                         .HasDefaultValueSql("GetDate()");
 
+                    b.Property<DateTime?>("delete_at")
+                        .HasColumnType("Date");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDelete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("update_at")
+                    b.Property<DateTime?>("update_at")
                         .HasColumnType("Date");
 
                     b.HasKey("id");

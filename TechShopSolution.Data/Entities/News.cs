@@ -12,13 +12,13 @@ namespace TechShopSolution.Data.Entities
         public int cate_id { get; set; }
         public string img { get; set; }
         public string slug { get; set; }
-        public bool status { get; set; }
+        public bool isActive { get; set; }
         public string meta_tittle { get; set; }
         public bool? featured { get; set; }
         public string meta_keywords { get; set; }
         public string meta_descriptions { get; set; }
         public DateTime create_at { get; set; }
-        public DateTime update_at { get; set; }
+        public DateTime? update_at { get; set; }
         public CategoryNews CategoryNews { get; set; }
     }
 }

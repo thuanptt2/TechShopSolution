@@ -10,7 +10,6 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string name { get; set; }
         public string code { get; set; }
         public string slug { get; set; }
-        public int cate_id { get; set; }
         public int brand_id { get; set; }
         public string image { get; set; }
         public string more_images { get; set; }
@@ -23,7 +22,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string descriptions { get; set; }
         public bool featured { get; set; }
         public bool best_seller { get; set; }
-        public int status { get; set; }
+        public bool isActive { get; set; }
         public string meta_tittle { get; set; }
         public string meta_keywords { get; set; }
         public string meta_descriptions { get; set; }

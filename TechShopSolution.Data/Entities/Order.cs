@@ -16,15 +16,15 @@ namespace TechShopSolution.Data.Entities
         public decimal subtotal { get; set; }
         public decimal transport_fee { get; set; }
         public int payment_id { get; set; }
-        public int status { get; set; }
+        public bool status { get; set; }
+        public bool isPay { get; set; }
+        public bool isShip { get; set; }
         public string note { get; set; }
         public DateTime create_at { get; set; }
-        public DateTime update_at { get; set; }
+        public DateTime? update_at { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
         public Customer Customers { get; set; }
         public Transport Transport { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
-
-
     }
 }
