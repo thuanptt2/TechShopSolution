@@ -35,7 +35,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 name = request.Name,
                 best_seller = false,
                 brand_id = request.Brand_id,
-                cate_id = request.Cate_id,
                 code = request.Code,
                 create_at = DateTime.Now,
                 descriptions = request.Descriptions,
@@ -48,7 +47,8 @@ namespace TechShopSolution.Application.Catalog.Product
                 short_desc = request.Short_desc,
                 slug = request.Slug,
                 specifications = request.Specifications,
-                status = request.Status,
+                isActive = request.IsActive,
+                isDelete = false,
                 unit_price = request.Unit_price,
                 warranty = request.Warranty,
             };
@@ -114,7 +114,6 @@ namespace TechShopSolution.Application.Catalog.Product
                     name = a.p.name,
                     best_seller = a.p.best_seller,
                     brand_id = a.p.brand_id,
-                    cate_id = a.p.cate_id,
                     code = a.p.code,
                     create_at = a.p.create_at,
                     descriptions = a.p.descriptions,
@@ -129,7 +128,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     short_desc = a.p.short_desc,
                     slug = a.p.slug,
                     specifications = a.p.specifications,
-                    status = a.p.status,
+                    isActive = a.p.isActive,
                     unit_price = a.p.unit_price,
                     warranty = a.p.warranty,
                 }).ToListAsync();
@@ -150,12 +149,12 @@ namespace TechShopSolution.Application.Catalog.Product
             var query = from p in _context.Products
                         join pic in _context.CategoryProducts on p.id equals pic.product_id
                         join ct in _context.Categories on pic.cate_id equals ct.id
-                        select new { p };
+                        select new { p, pic};
             if (!String.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.p.name.Contains(request.Keyword));
             if (request.CategoryID != null)
             {
-                query = query.Where(x => x.p.cate_id == request.CategoryID);
+                query = query.Where(x => x.pic.cate_id == request.CategoryID);
             }
             if(request.BrandID != null)
             {
@@ -171,7 +170,6 @@ namespace TechShopSolution.Application.Catalog.Product
                     name = a.p.name,
                     best_seller = a.p.best_seller,
                     brand_id = a.p.brand_id,
-                    cate_id = a.p.cate_id,
                     code = a.p.code,
                     create_at = a.p.create_at,
                     descriptions = a.p.descriptions,
@@ -186,7 +184,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     short_desc = a.p.short_desc,
                     slug = a.p.slug,
                     specifications = a.p.specifications,
-                    status = a.p.status,
+                    isActive = a.p.isActive,
                     unit_price = a.p.unit_price,
                     warranty = a.p.warranty,
                 }).ToListAsync();
@@ -211,7 +209,6 @@ namespace TechShopSolution.Application.Catalog.Product
                     name = product.name,
                     best_seller = product.best_seller,
                     brand_id = product.brand_id,
-                    cate_id = product.cate_id,
                     code = product.code,
                     create_at = product.create_at,
                     descriptions = product.descriptions,
@@ -226,7 +223,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     short_desc = product.short_desc,
                     slug = product.slug,
                     specifications = product.specifications,
-                    status = product.status,
+                    isActive = product.isActive,
                     unit_price = product.unit_price,
                     warranty = product.warranty,
                 };
@@ -245,7 +242,7 @@ namespace TechShopSolution.Application.Catalog.Product
             product.specifications = request.Specifications;
             product.short_desc = request.Short_desc;
             product.descriptions = request.Descriptions;
-            product.status = request.Status;
+            product.isActive = request.IsActive;
             product.meta_descriptions = request.Meta_descriptions;
             product.meta_keywords = request.Meta_keywords;
             product.unit_price = request.Unit_price;
@@ -254,7 +251,6 @@ namespace TechShopSolution.Application.Catalog.Product
             product.featured = request.Featured;
             product.instock = request.Instock;
             product.brand_id = request.Brand_id;
-            product.cate_id = request.Cate_id;
             product.meta_tittle = request.Meta_tittle;
             product.code = request.Code;
             if (request.Image != null)

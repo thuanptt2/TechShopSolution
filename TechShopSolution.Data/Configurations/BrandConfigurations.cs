@@ -15,12 +15,15 @@ namespace TechShopSolution.Data.Configurations
             builder.HasKey(x => x.id);
             builder.Property(x => x.brand_name).IsRequired().HasMaxLength(255);
             builder.Property(x => x.brand_slug).IsRequired().HasMaxLength(255).IsUnicode(false);
-            builder.Property(x => x.status).IsRequired().HasDefaultValue(true);
+            builder.Property(x => x.isActive).IsRequired();
+            builder.Property(x => x.isDelete).IsRequired();
             builder.Property(x => x.create_at)
               .HasDefaultValueSql("GetDate()")
               .HasColumnType("Date");
             builder.Property(x => x.update_at)
               .HasColumnType("Date");
+            builder.Property(x => x.delete_at)
+             .HasColumnType("Date");
         }
     }
 }

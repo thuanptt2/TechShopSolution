@@ -72,7 +72,7 @@ namespace TechShopSolution.AdminApp.Controllers
                 password = result.ResultObject.password,
                 sex = result.ResultObject.sex,
                 phone = result.ResultObject.phone,
-                status = result.ResultObject.status
+                isActive = result.ResultObject.isActive
             };
             if (TempData["result"] != null)
             {

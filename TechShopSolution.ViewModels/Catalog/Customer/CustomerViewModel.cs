@@ -14,6 +14,6 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
         public DateTime birthday { get; set; }
         public bool sex { get; set; }
         public string address { get; set; }
-        public bool status { get; set; }
+        public bool isActive { get; set; }
     }
 }

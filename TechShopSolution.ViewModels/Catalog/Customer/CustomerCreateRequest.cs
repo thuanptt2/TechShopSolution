@@ -33,7 +33,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
         [Display(Name = "Số nhà, tên đường")]
         public string House { get; set; }
         [Display(Name = "Trạng thái")]
-        public bool status { get; set; }
+        public bool isActive { get; set; }
 
     }
 }

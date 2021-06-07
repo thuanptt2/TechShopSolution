@@ -16,7 +16,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
         [Display(Name = "Mật khẩu")]
         public string password { get; set; }
         [Display(Name = "Trạng thái")]
-        public bool status { get; set; }
+        public bool isActive { get; set; }
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]
         public DateTime birthday { get; set; }

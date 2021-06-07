@@ -118,7 +118,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.address)
                                 </td>
-                                @if (item.status)
+                                @if (item.isActive)
                                 {
                                     <td align="center">
                                         <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">

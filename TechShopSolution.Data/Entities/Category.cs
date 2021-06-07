@@ -10,12 +10,14 @@ namespace TechShopSolution.Data.Entities
         public string cate_name { get; set; }
         public string cate_slug { get; set; }
         public int? parent_id { get; set; }
-        public bool status { get; set; }
+        public bool isActive { get; set; }
+        public bool isDelete { get; set; }
         public string meta_title { get; set; }
         public string meta_keywords { get; set; }
         public string meta_descriptions { get; set; }
         public DateTime create_at { get; set; }
-        public DateTime update_at { get; set; }
+        public DateTime? update_at { get; set; }
+        public DateTime? delete_at { get; set; }
         public List<CategoryProduct> ProductInCategory { get; set; }
 
     }

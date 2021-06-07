@@ -32,7 +32,8 @@ namespace TechShopSolution.Application.Catalog.Customer
                     password = request.password,
                     phone = request.phone,
                     sex = request.sex,
-                    status = request.status,
+                    isActive = request.isActive,
+                    isDelete = false,
                     Order = new List<Data.Entities.Order>(),
                     create_at = DateTime.Now
                 };
@@ -53,7 +54,8 @@ namespace TechShopSolution.Application.Catalog.Customer
                 var customer = await _context.Customers.FindAsync(cusID);
                 if (customer != null)
                 {
-                    _context.Customers.Remove(customer);
+                    customer.isDelete = true;
+                    customer.delete_at = DateTime.Now;
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }
@@ -68,6 +70,7 @@ namespace TechShopSolution.Application.Catalog.Customer
         public async Task<PagedResult<CustomerViewModel>> GetAllPaging(GetCustomerPagingRequest request)
         {
             var query = from cus in _context.Customers
+                        where cus.isDelete == false
                         select cus;
 
             if (!String.IsNullOrEmpty(request.Keyword))
@@ -89,7 +92,7 @@ namespace TechShopSolution.Application.Catalog.Customer
                     password = a.password,
                     phone = a.phone,
                     sex = a.sex,
-                    status = a.status,
+                    isActive = a.isActive,
                 }).ToListAsync();
 
             var pageResult = new PagedResult<CustomerViewModel>()
@@ -105,7 +108,7 @@ namespace TechShopSolution.Application.Catalog.Customer
         public async Task<ApiResult<CustomerViewModel>> GetById(int customertId)
         {
             var cusExist = await _context.Customers.FindAsync(customertId);
-            if(cusExist == null)
+            if (cusExist == null || cusExist.isDelete)
             {
                 return new ApiErrorResult<CustomerViewModel>("Khách hàng không tồn tại");
             }
@@ -118,7 +121,7 @@ namespace TechShopSolution.Application.Catalog.Customer
                 password = cusExist.password,
                 phone = cusExist.phone,
                 sex = cusExist.sex,
-                status = cusExist.status,
+                isActive = cusExist.isActive,
                 id = cusExist.id
             };
             return new ApiSuccessResult<CustomerViewModel>(customer);
@@ -134,20 +137,21 @@ namespace TechShopSolution.Application.Catalog.Customer
                     return new ApiErrorResult<bool>("Emai đã tồn tại");
                 }
                 var cusExist = await _context.Customers.FindAsync(request.Id);
-                if(cusExist!=null)
+                if(cusExist!=null || cusExist.isDelete)
                 {
                     cusExist.password = request.password;
                     cusExist.email = request.email;
                     cusExist.name = request.name;
                     cusExist.phone = request.phone;
-                    cusExist.status = request.status;
+                    cusExist.isActive = request.isActive;
                     cusExist.birthday = request.birthday;
                     cusExist.sex = request.sex;
-                    cusExist.status = request.status;
                     cusExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
                 }
-                await _context.SaveChangesAsync();
-                return new ApiSuccessResult<bool>();
+                else return new ApiErrorResult<bool>("Không tìm thấy khách hàng này");
+
             }
             catch
             {
@@ -160,7 +164,7 @@ namespace TechShopSolution.Application.Catalog.Customer
             try
             {
                 var cusExist = await _context.Customers.FindAsync(id);
-                if (cusExist != null)
+                if (cusExist != null || cusExist.isDelete)
                 {
                     string newAddress = request.House + " " + request.Ward + ", " + request.District + ", " + request.City;
                     cusExist.address = newAddress;
@@ -180,11 +184,11 @@ namespace TechShopSolution.Application.Catalog.Customer
             try
             {
                 var cusExist = await _context.Customers.FindAsync(id);
-                if (cusExist != null)
+                if (cusExist != null || cusExist.isDelete)
                 {
-                    if (cusExist.status)
-                        cusExist.status = false;
-                    else cusExist.status = true;
+                    if (cusExist.isActive)
+                        cusExist.isActive = false;
+                    else cusExist.isActive = true;
                     cusExist.update_at = DateTime.Now;
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();

@@ -14,9 +14,10 @@ namespace TechShopSolution.Data.Configurations
             builder.ToTable("Customer");
             builder.HasKey(x => x.id);
             builder.Property(x => x.name).IsRequired().HasMaxLength(255);
-            builder.Property(x => x.password).IsRequired().HasMaxLength(30).IsUnicode(false); 
-            builder.Property(x => x.status).IsRequired().HasDefaultValue(true);
-            builder.Property(x => x.sex).IsRequired().HasDefaultValue(true);
+            builder.Property(x => x.password).IsRequired().HasMaxLength(30).IsUnicode(false);
+            builder.Property(x => x.isActive).IsRequired();
+            builder.Property(x => x.isDelete).IsRequired();
+            builder.Property(x => x.sex).IsRequired();
             builder.Property(x => x.phone).IsRequired().HasMaxLength(20).IsUnicode(false);
             builder.Property(x => x.address).IsRequired().HasMaxLength(255);
             builder.Property(x => x.birthday).IsRequired();
@@ -26,6 +27,8 @@ namespace TechShopSolution.Data.Configurations
                 .HasColumnType("Date");
             builder.Property(x => x.update_at)
               .HasColumnType("Date");
+            builder.Property(x => x.delete_at)
+               .HasColumnType("Date");
         }
     }
 }

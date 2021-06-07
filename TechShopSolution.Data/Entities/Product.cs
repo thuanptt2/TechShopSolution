@@ -10,7 +10,6 @@ namespace TechShopSolution.Data.Entities
         public string name { get; set; }
         public string code { get; set; }
         public string slug { get; set; }
-        public int cate_id { get; set; }
         public int brand_id { get; set; }
         public string image { get; set; }
         public string more_images { get; set; }
@@ -23,13 +22,14 @@ namespace TechShopSolution.Data.Entities
         public string descriptions { get; set; }
         public bool featured { get; set; }
         public bool best_seller { get; set; }
-        public int status { get; set; }
+        public bool isActive { get; set; }
+        public bool isDelete { get; set; }
         public string meta_tittle { get; set; }
         public string meta_keywords { get; set; }
         public string meta_descriptions { get; set; }
         public DateTime create_at { get; set; }
-        public DateTime update_at { get; set; }
-
+        public DateTime? update_at { get; set; }
+        public DateTime? delete_at { get; set; }
         public Brand Brand { get; set; }
         public List<CategoryProduct> ProductInCategory { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
