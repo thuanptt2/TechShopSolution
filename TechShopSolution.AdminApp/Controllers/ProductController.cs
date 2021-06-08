@@ -32,6 +32,24 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View(data);
         }
-       
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _productApiClient.CreateProduct(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Thêm sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }

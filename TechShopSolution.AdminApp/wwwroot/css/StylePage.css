@@ -24,7 +24,6 @@
     box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
     padding: 20px;
     border-radius: 10px;
-    min-height: 200px
 }
 
 hr {
@@ -169,4 +168,57 @@ hr {
         top: 0;
         opacity: 0;
     }
+}
+.ImageBoxMain {
+    width: 100%;
+    height: 250px;
+    background-color: #F7F7F9;
+    border: 3px solid #c3c3c3;
+    border-style: dashed;
+    vertical-align: central;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 40px;
+    display: inline-block;
+}
+.fa-image {
+    color: #c3c3c3;
+}
+.lableFormField {
+    font-weight: 500;
+    font-size: 1.0rem;
+    color: #6c798f;
+}
+.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable, .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+    min-height: 250px;
+    max-height: 450px;
+}
+.SeoPadding {
+    display: flex;
+    justify-content: space-between;
+}
+.SlugUrl {
+    align-self: center;
+    flex: none;
+    white-space: nowrap;
+    height: 18px;
+    color: #6c798f;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 18px;
+    cursor: pointer;
+    padding-left: 5px;
+}
+.SlugProduct {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    background: #fff;
+    padding: 0;
+    justify-content: flex-start;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+}
+.InputSlug {
+    border: 0;
 }

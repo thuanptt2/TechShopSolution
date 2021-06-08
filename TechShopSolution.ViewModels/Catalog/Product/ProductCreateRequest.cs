@@ -11,6 +11,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string Code { get; set; }
         public string Slug { get; set; }
         public int Brand_id { get; set; }
+        public int CateID { get; set; }
         public IFormFile Image { get; set; }
         public List<IFormFile> More_images { get; set; }
         public decimal Unit_price { get; set; }

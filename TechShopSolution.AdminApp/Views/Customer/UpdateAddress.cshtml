@@ -8,7 +8,7 @@
 <form asp-action="UpdateAddress" asp-controller="customer" method="post" onsubmit="return SubmitForm(this);">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="City" class="control-label"></label>
+        <label asp-for="City" class="control-label lableFormField"></label>
         <input asp-for="City" class="form-control" id="txtCity" hidden />
         <select id="ddlCity" asp-for="City" class="form-control">
             <option value="">--Chọn tỉnh thành phố--</option>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="District" class="control-label"></label>
+        <label asp-for="District" class="control-label lableFormField"></label>
         <input asp-for="District" class="form-control" id="txtDistrict" hidden />
         <select id="ddlDistrict" asp-for="District" class="form-control">
             <option value="">--Chọn quận huyện--</option>
@@ -26,7 +26,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Ward" class="control-label"></label>
+        <label asp-for="Ward" class="control-label lableFormField"></label>
         <input asp-for="Ward" class="form-control" hidden id="txtWard" />
         <select id="ddlWard" asp-for="Ward" class="form-control">
             <option value="">--Chọn phường xã--</option>
@@ -35,7 +35,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="House" class="control-label"></label>
+        <label asp-for="House" class="control-label lableFormField"></label>
         <input asp-for="House" class="form-control" />
         <span asp-validation-for="House" class="text-danger"></span>
     </div>

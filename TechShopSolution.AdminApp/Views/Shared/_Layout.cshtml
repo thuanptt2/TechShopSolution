@@ -8,21 +8,16 @@
     <meta name="author" content="" />
     <title>TechShop</title>
     <link href="/css/styles.css" rel="stylesheet" />
-    <script src="~/font-awesome/js/all.min.js"></script>
     <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link href="~/bootstrap/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet" />
     <link href="~/css/StylePage.css" rel="stylesheet" />
-
+    <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body class="sb-nav-fixed">
-    <div class="loaderbody" id="loaderbody">
-        <div class="loader"></div>
-    </div>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="#">TechShop Solution</a>
@@ -99,7 +94,9 @@
                 @RenderBody()
             </main>
         </div>
-
+        <div class="loaderbody" id="loaderbody">
+            <div class="loader"></div>
+        </div>
         <div class="modal fade" tabindex="-1" role="dialog" id="form-modal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -128,6 +125,8 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/bootstrap/bootstrap-toggle/js/bootstrap-toggle.min.js" asp-append-version="true"></script>
     <script src="~/js/notify.min.js" asp-append-version="true"></script>
+    <script src="~/font-awesome/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     @RenderSection("jsFooter", required: false)
 </body>
 </html>

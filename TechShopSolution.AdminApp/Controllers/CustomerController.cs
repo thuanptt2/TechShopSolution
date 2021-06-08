@@ -29,7 +29,6 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _customerApiClient.GetCustomerPagings(request);
             ViewBag.Keyword = keyword;
-            ViewBag.NameLogin = HttpContext.Session.GetString("Token");
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
