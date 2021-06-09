@@ -28,6 +28,38 @@
             .catch(err => {
                 console.error(err.stack);
             });
+
+        $().ready(function () {
+            $("#ProductImageInput").change(function (event) {
+                var x = URL.createObjectURL(event.target.files[0]);
+                $("#ProductImage").attr("src", x);
+                console.log(event);
+            })
+        });
+       
+        $().ready(function () {
+            $("#ProductMoreImagesInput").change(function (event) {
+                var listImg = event.target.files;
+                var imgURL = $("#ImagesURL").val();
+                $("#NonImageProduct").hide();
+                for (var i = 0; i < listImg.length; i++) {
+                    var x = URL.createObjectURL(event.target.files[i]);
+                    $("#ProductImages").append(' <div class="col-lg-3 col-3 col-sm-3 mb-3"><img src="' + x + '" class="ProductMoreImage"/><div class="middle"><i class="fas fa-trash fa-2x" id="btnRemoveImage"></i></div></div>');
+                }
+                $("#ProductMoreImagesInput").val(null);
+                $("#ImagesURL").val(imgURL);
+                $(".middle").click(function (e) {
+                    e.preventDefault();
+                    $(this).parent().remove();
+                    if (!$("#ProductImages").children(".col-lg-3").length) {
+                        $("#NonImageProduct").show();
+                    }
+                })
+            });
+        });
+       
+      
+
     </script>
 }
 <div class="container-fluid">
@@ -37,7 +69,7 @@
         <li class="breadcrumb-item"><a href="/product/index">Sản phẩm</a></li>
         <li class="breadcrumb-item active">Thêm sản phẩm</li>
     </ol>
-    <form>
+    <form asp-action="Create" asp-controller="Product" method="post" enctype="multipart/form-data">
         <div class="padding-container">
             <div class="row">
                 <div class="col-lg-9 mb-3">
@@ -119,10 +151,10 @@
                                 <div class="form-group">
                                     <label asp-for="Image" class="control-label lableFormField"></label>
                                     <div class="ImageBoxMain">
-                                        <i class="fas fa-image fa-10x"></i>
+                                        <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="ProductImage" class="image hoverDel"/>
                                     </div>
                                     <div class="custom-file">
-                                        <input type="file" accept=".jpeg,.png,.gif,.jpg" class="custom-file-input" id="customFile" asp-for="Image">
+                                        <input asp-for="Image" type="file" accept=".jpeg,.png,.gif,.jpg" class="custom-file-input" id="ProductImageInput">
                                         <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
                                     </div>
                                     <span asp-validation-for="Image" class="text-danger"></span>
@@ -133,11 +165,20 @@
                                 <div class="form-group">
                                     <label asp-for="More_images" class="control-label lableFormField"></label>
                                     <div class="ImageBoxMain">
-                                        <i class="fas fa-image fa-10x"></i>
+                                        <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="NonImageProduct" class="image hoverDel" />
+                                        <div class="col-lg-12 col-12 col-sm-12">
+                                            <div class="row" id="ProductImages">
+
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="custom-file">
-                                        <input type="file" accept=".jpeg,.png,.gif,.jpg" class="custom-file-input" id="customFile" asp-for="More_images">
-                                        <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
+                                  
+                                    <div class="ProductMoreImages">
+                                        <div class="custom-file">
+                                            <input type="file" multiple accept=".jpeg,.png,.gif,.jpg" id="ProductMoreImagesInput" class="custom-file-input">
+                                            <input asp-for="More_images" type="text" id="ImagesURL" hidden>
+                                            <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -187,7 +228,7 @@
                                 <input asp-for="Meta_descriptions" class="form-control" placeholder="Nhập mô tả trang"/>
                                 <span asp-validation-for="Meta_descriptions" class="text-danger"></span>
                             </div>
-                            <div class="form-group mb-4">
+                            <div class="form-group mb-3">
                                 <label asp-for="Meta_keywords" class="control-label lableFormField"></label>
                                 <input asp-for="Meta_keywords" class="form-control" placeholder="Nhập từ khóa trang"/>
                                 <span asp-validation-for="Meta_keywords" class="text-danger"></span>
@@ -208,7 +249,7 @@
                         <a class="btn btn-primary" href="/product/index">
                             <i class="fa fa-chevron-left"></i>  Trở về
                         </a>
-                        <button class="btn btn-success" type="submit" asp-action="Create" asp-controller="Customer">
+                        <button class="btn btn-success" type="submit" asp-action="Create" asp-controller="Product">
                             <i class="fa fa-save"></i>
                             Lưu lại
                         </button>
@@ -272,3 +313,4 @@
         </div>
     </form>
 </div>
+

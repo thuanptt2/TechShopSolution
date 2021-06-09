@@ -48,6 +48,18 @@ namespace TechShopSolution.AdminApp.Service
                 ByteArrayContent bytes = new ByteArrayContent(data);
                 requestContent.Add(bytes, "Image", request.Image.FileName);
             }
+
+            //if (request.More_images != null)
+            //{
+            //    byte[] data;
+            //    using (var br = new BinaryReader(img.OpenReadStream()))
+            //    {
+            //        data = br.ReadBytes((int)img.OpenReadStream().Length);
+            //    }
+            //    ByteArrayContent bytes = new ByteArrayContent(data);
+            //    requestContent.Add(bytes, "More_Image", img.FileName);
+            //}
+
             requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
             requestContent.Add(new StringContent(request.Brand_id.ToString()), "Brand_id");
             requestContent.Add(new StringContent(request.Code.ToString()), "Code");

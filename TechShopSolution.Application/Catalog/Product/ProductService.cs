@@ -56,20 +56,20 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 product.image = await this.SaveFile(request.Image);
             }
-            if (request.More_images != null)
-            {
-                if (request.More_images.Count == 1)
-                    product.more_images = await this.SaveFile(request.More_images[0]);
-                else
-                {
-                    for (int i = 0; i < request.More_images.Count(); i++)
-                    {
-                        if (request.More_images.Count - i == 1)
-                            product.more_images += await this.SaveFile(request.More_images[i]);
-                        else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
-                    }
-                }
-            }
+            //if (request.More_images != null)
+            //{
+            //    if (request.More_images.Count == 1)
+            //        product.more_images = await this.SaveFile(request.More_images[0]);
+            //    else
+            //    {
+            //        for (int i = 0; i < request.More_images.Count(); i++)
+            //        {
+            //            if (request.More_images.Count - i == 1)
+            //                product.more_images += await this.SaveFile(request.More_images[i]);
+            //            else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+            //        }
+            //    }
+            //}
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return product.id;
