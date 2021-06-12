@@ -32,12 +32,12 @@ namespace TechShopSolution.Application.Catalog.Product
             var product = new TechShopSolution.Data.Entities.Product
             {
                 name = request.Name,
-                best_seller = false,
+                best_seller = request.Best_seller,
                 brand_id = request.Brand_id,
                 code = request.Code,
                 create_at = DateTime.Now,
                 descriptions = request.Descriptions,
-                featured = false,
+                featured = request.Featured,
                 instock = request.Instock,
                 meta_descriptions = request.Meta_descriptions,
                 meta_keywords = request.Meta_keywords,
@@ -145,7 +145,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     code = a.p.code,
                     create_at = a.p.create_at,
                     descriptions = a.p.descriptions,
-                    featured = false,
+                    featured = a.p.featured,
                     image = a.p.image,
                     instock = a.p.instock,
                     meta_descriptions = a.p.meta_descriptions,
