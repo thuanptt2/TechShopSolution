@@ -10,9 +10,10 @@ namespace TechShopSolution.Application.Catalog.Product
 {
     public interface IProductService
     {
-        Task<int> Create(ProductCreateRequest request);
-        Task<int> Update(ProductUpdateRequest request);
-        Task<int> Delete(int productID);
+        Task<ApiResult<bool>> Create(ProductCreateRequest request);
+        Task<ApiResult<bool>> Update(ProductUpdateRequest request);
+        Task<ApiResult<bool>> Delete(int productID);
+        Task DeleteImage(string fileName);
         Task<ProductViewModel> GetById(int productId);
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
     }

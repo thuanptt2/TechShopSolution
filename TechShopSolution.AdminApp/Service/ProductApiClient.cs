@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,11 +20,15 @@ namespace TechShopSolution.AdminApp.Service
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        public ProductApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) 
+        private readonly IHostingEnvironment _environment;
+    
+        public ProductApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IHostingEnvironment environment) 
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _environment = environment;
+
         }
 
         public Task<ApiResult<bool>> ChangeStatus(int Id)
@@ -49,19 +55,45 @@ namespace TechShopSolution.AdminApp.Service
                 requestContent.Add(bytes, "Image", request.Image.FileName);
             }
 
-            //if (request.More_images != null)
-            //{
-            //    byte[] data;
-            //    using (var br = new BinaryReader(img.OpenReadStream()))
-            //    {
-            //        data = br.ReadBytes((int)img.OpenReadStream().Length);
-            //    }
-            //    ByteArrayContent bytes = new ByteArrayContent(data);
-            //    requestContent.Add(bytes, "More_Image", img.FileName);
-            //}
+            var provider = new PhysicalFileProvider(_environment.WebRootPath);
+            var contents = provider.GetDirectoryContents(Path.Combine("assets", "ProductImage"));
+            var objFiles = contents.OrderBy(m => m.LastModified);
+            string[] imageList = request.Name_more_images.Split(",");
+            foreach (var item in contents.ToList())
+            {
+                bool flag = false;
+                foreach (string name in imageList)
+                {
+                    if (name.Equals(item.Name))
+                    {
+                        byte[] bytes = System.IO.File.ReadAllBytes(item.PhysicalPath);
+                        ByteArrayContent byteArr = new ByteArrayContent(bytes);
+                        requestContent.Add(byteArr, "More_images", item.Name);
+                        flag = true;
+                        File.Delete(item.PhysicalPath);
+                    }
+                }
+                if (!flag)
+                    File.Delete(item.PhysicalPath);
+            }
+              
+            string month = DateTime.Now.Month.ToString();
+            if (month.Length == 1) month = "0" + month;
+            string date = DateTime.Now.Day.ToString();
+            if (date.Length == 1) date = "0" + date;
+            string hour = DateTime.Now.Hour.ToString();
+            if (hour.Length == 1) hour = "0" + hour;
+            string minute = DateTime.Now.Minute.ToString();
+            if (minute.Length == 1) minute = "0" + minute;
+            string second = DateTime.Now.Second.ToString();
+            if (second.Length == 1) second = "0" + second;
+
+
+            request.Code = DateTime.Now.Year.ToString().Substring(2, 2) + month + date + hour + minute + second;
 
             requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
-            requestContent.Add(new StringContent(request.Brand_id.ToString()), "Brand_id");
+            requestContent.Add(new StringContent("1"), "Brand_id");
+            requestContent.Add(new StringContent("1"), "CateID");
             requestContent.Add(new StringContent(request.Code.ToString()), "Code");
             requestContent.Add(new StringContent(request.Descriptions.ToString()), "Descriptions");
             requestContent.Add(new StringContent(request.Featured.ToString()), "Featured");
@@ -87,6 +119,13 @@ namespace TechShopSolution.AdminApp.Service
         public Task<ApiResult<bool>> Delete(int cusID)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task DeleteImage(string fileName)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.DeleteAsync($"/api/Product/DeleteImage/{fileName}");
         }
 
         public Task<ApiResult<ProductViewModel>> GetById(int id)

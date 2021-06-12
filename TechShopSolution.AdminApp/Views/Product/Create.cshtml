@@ -28,39 +28,20 @@
             .catch(err => {
                 console.error(err.stack);
             });
-
-        $().ready(function () {
-            $("#ProductImageInput").change(function (event) {
-                var x = URL.createObjectURL(event.target.files[0]);
-                $("#ProductImage").attr("src", x);
-                console.log(event);
+        ClassicEditor
+            .create(document.querySelector('#txtShortDesc'), {
+                // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
             })
-        });
-       
-        $().ready(function () {
-            $("#ProductMoreImagesInput").change(function (event) {
-                var listImg = event.target.files;
-                var imgURL = $("#ImagesURL").val();
-                $("#NonImageProduct").hide();
-                for (var i = 0; i < listImg.length; i++) {
-                    var x = URL.createObjectURL(event.target.files[i]);
-                    $("#ProductImages").append(' <div class="col-lg-3 col-3 col-sm-3 mb-3"><img src="' + x + '" class="ProductMoreImage"/><div class="middle"><i class="fas fa-trash fa-2x" id="btnRemoveImage"></i></div></div>');
-                }
-                $("#ProductMoreImagesInput").val(null);
-                $("#ImagesURL").val(imgURL);
-                $(".middle").click(function (e) {
-                    e.preventDefault();
-                    $(this).parent().remove();
-                    if (!$("#ProductImages").children(".col-lg-3").length) {
-                        $("#NonImageProduct").show();
-                    }
-                })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(err => {
+                console.error(err.stack);
             });
-        });
-       
-      
 
     </script>
+    <script src="~/js/Product.js"></script>
+
 }
 <div class="container-fluid">
     <h3 class="mt-4">Thêm sản phẩm</h3>
@@ -79,7 +60,7 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group mb-4 mt-4">
                             <label asp-for="Name" class="control-label lableFormField"></label>
-                            <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm"/>
+                            <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -151,7 +132,7 @@
                                 <div class="form-group">
                                     <label asp-for="Image" class="control-label lableFormField"></label>
                                     <div class="ImageBoxMain">
-                                        <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="ProductImage" class="image hoverDel"/>
+                                        <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="ProductImage" class="image hoverDel" />
                                     </div>
                                     <div class="custom-file">
                                         <input asp-for="Image" type="file" accept=".jpeg,.png,.gif,.jpg" class="custom-file-input" id="ProductImageInput">
@@ -172,11 +153,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                  
+
                                     <div class="ProductMoreImages">
                                         <div class="custom-file">
-                                            <input type="file" multiple accept=".jpeg,.png,.gif,.jpg" id="ProductMoreImagesInput" class="custom-file-input">
-                                            <input asp-for="More_images" type="text" id="ImagesURL" hidden>
+                                            <input  type="file" name="More_images" multiple accept=".jpeg,.png,.gif,.jpg" id="ProductMoreImagesInput" class="custom-file-input">
+                                            @*<input asp-for="More_images" type="file" multiple id="ImagesURL" hidden>*@
+                                            <input  type="text" asp-for="Name_more_images" id="MoreImages" hidden>
                                             <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
                                         </div>
                                     </div>
@@ -184,7 +166,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="wrapper-content mb-4">
                         <label class="title-fill">
                             Mô tả sản phẩm
@@ -194,6 +175,12 @@
                             <div class="form-group mb-4">
                                 <label asp-for="Specifications" class="control-label lableFormField"></label>
                                 <textarea id="txtSpecs" asp-for="Specifications" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <div class="form-group">
+                                <label asp-for="Short_desc" class="control-label lableFormField"></label>
+                                <textarea id="txtShortDesc" asp-for="Short_desc" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="form-group mb-4">
@@ -220,17 +207,17 @@
                         <div class="collapse" id="collapseSEO">
                             <div class="form-group mb-4">
                                 <label asp-for="Meta_tittle" class="control-label lableFormField"></label>
-                                <input asp-for="Meta_tittle" class="form-control" placeholder="Nhập tiêu đề trang"/>
+                                <input asp-for="Meta_tittle" class="form-control" placeholder="Nhập tiêu đề trang" />
                                 <span asp-validation-for="Meta_tittle" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
                                 <label asp-for="Meta_descriptions" class="control-label lableFormField"></label>
-                                <input asp-for="Meta_descriptions" class="form-control" placeholder="Nhập mô tả trang"/>
+                                <input asp-for="Meta_descriptions" class="form-control" placeholder="Nhập mô tả trang" />
                                 <span asp-validation-for="Meta_descriptions" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-3">
                                 <label asp-for="Meta_keywords" class="control-label lableFormField"></label>
-                                <input asp-for="Meta_keywords" class="form-control" placeholder="Nhập từ khóa trang"/>
+                                <input asp-for="Meta_keywords" class="form-control" placeholder="Nhập từ khóa trang" />
                                 <span asp-validation-for="Meta_keywords" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
@@ -239,7 +226,7 @@
                                     <span class="SlugUrl">
                                         http://techshopSolution.com/san-pham/
                                     </span>
-                                    <input asp-for="Slug" class="form-control InputSlug" placeholder="Đường dẫn sản phẩm"/>
+                                    <input asp-for="Slug" class="form-control InputSlug" placeholder="Đường dẫn sản phẩm" />
                                 </div>
                             </div>
                         </div>
@@ -249,13 +236,13 @@
                         <a class="btn btn-primary" href="/product/index">
                             <i class="fa fa-chevron-left"></i>  Trở về
                         </a>
-                        <button class="btn btn-success" type="submit" asp-action="Create" asp-controller="Product">
+                        <button class="btn btn-success" type="submit" asp-action="Create" asp-controller="Product" id="btnSave">
                             <i class="fa fa-save"></i>
                             Lưu lại
                         </button>
                     </div>
                 </div>
-             
+
                 <div class="col-lg-3">
                     <div class="wrapper-content mb-4">
                         <label class="title-fill">

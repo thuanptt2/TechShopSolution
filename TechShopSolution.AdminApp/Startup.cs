@@ -37,7 +37,7 @@ namespace TechShopSolution.AdminApp
             services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
             });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();
@@ -69,13 +69,13 @@ namespace TechShopSolution.AdminApp
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
 
             app.UseAuthentication();
 
             app.UseRouting();
             app.UseAuthorization();
+            app.UseStaticFiles();
 
             app.UseSession();
             app.UseEndpoints(endpoints =>

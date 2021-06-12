@@ -42,33 +42,37 @@ namespace TechShopSolution.BackendApi.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm]ProductCreateRequest request)
         {
-            var productId = await _productService.Create(request);
-            if (productId == 0)
-                return BadRequest();
-
-            var product = await _productService.GetById(productId);
-            return CreatedAtAction(nameof(GetById), new { id = productId }, productId);
+            var result = await _productService.Create(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
         {
-            var affectedResult = await _productService.Update(request);
-            if (affectedResult == 0)
-                return BadRequest();
-
-            return Ok();
+            var result = await _productService.Update(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
         }
 
-        [HttpDelete("productId")]
-        public async Task<IActionResult> Delete(int productId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var affectedResult = await _productService.Delete(productId);
-            if (affectedResult == 0)
-                return BadRequest();
-
-            return Ok();
+            var result = await _productService.Delete(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
+        [HttpDelete("DeleteImage/{fileName}")]
+        public async Task<IActionResult> DeleteImage(string fileName)
+        {
+            await _productService.DeleteImage(fileName);
+            return Ok();
+        }
     }
 }

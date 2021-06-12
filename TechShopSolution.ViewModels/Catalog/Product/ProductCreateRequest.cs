@@ -13,7 +13,8 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public int Brand_id { get; set; }
         public int CateID { get; set; }
         public IFormFile Image { get; set; }
-        public string More_images { get; set; }
+        public List<IFormFile> More_images { get; set; }
+        public string Name_more_images { get; set; }
         public decimal Unit_price { get; set; }
         public decimal Promotion_price { get; set; }
         public int Warranty { get; set; }

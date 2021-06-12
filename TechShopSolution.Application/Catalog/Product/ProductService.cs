@@ -24,11 +24,11 @@ namespace TechShopSolution.Application.Catalog.Product
             _context = context;
             _storageService = storageService;
         }
-        public Task<int> AddImages(int productId, IFormFile file)
+        public Task<ApiResult<bool>> AddImages(int productId, IFormFile file)
         {
             throw new NotImplementedException();
         }
-        public async Task<int> Create(ProductCreateRequest request)
+        public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
             var product = new TechShopSolution.Data.Entities.Product
             {
@@ -56,41 +56,60 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 product.image = await this.SaveFile(request.Image);
             }
-            //if (request.More_images != null)
-            //{
-            //    if (request.More_images.Count == 1)
-            //        product.more_images = await this.SaveFile(request.More_images[0]);
-            //    else
-            //    {
-            //        for (int i = 0; i < request.More_images.Count(); i++)
-            //        {
-            //            if (request.More_images.Count - i == 1)
-            //                product.more_images += await this.SaveFile(request.More_images[i]);
-            //            else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
-            //        }
-            //    }
-            //}
+            if (request.More_images != null)
+            {
+                if (request.More_images.Count == 1)
+                    product.more_images = await this.SaveFile(request.More_images[0]);
+                else
+                {
+                    for (int i = 0; i < request.More_images.Count(); i++)
+                    {
+                        if (request.More_images.Count - i == 1)
+                            product.more_images += await this.SaveFile(request.More_images[i]);
+                        else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+                    }
+                }
+            }
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
-            return product.id;
+            var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct
+            {
+                cate_id = request.CateID,
+                product_id = product.id
+            };
+            _context.CategoryProducts.Add(productInCategory);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
         }
 
-        public async Task<int> Delete(int productID)
+        public async Task<ApiResult<bool>> Delete(int productID)
         {
-            var product = await _context.Products.FindAsync(productID);
-            if (product == null) throw new TechshopException($"Không tìm thấy sản phẩm: {productID}");
-            if (product.image != null)
-                await _storageService.DeleteFileAsync(product.image);
-            if (product.more_images != null)
+            try
             {
-                string strListImage = product.more_images;
-                string[] listImage = strListImage.Split(',');   
-                for(int i = 0; i < listImage.Count();i++)
-                    await _storageService.DeleteFileAsync(listImage[i]);
+                var product = await _context.Products.FindAsync(productID);
+                if (product == null) return new ApiErrorResult<bool>($"Không tìm thấy sản phẩm: {productID}");
+                if (product.image != null)
+                    await _storageService.DeleteFileAsync(product.image);
+                if (product.more_images != null)
+                {
+                    string strListImage = product.more_images;
+                    string[] listImage = strListImage.Split(',');
+                    for (int i = 0; i < listImage.Count(); i++)
+                        await _storageService.DeleteFileAsync(listImage[i]);
+                }
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
             }
+            catch
+            {
+                return new ApiErrorResult<bool>("Xóa thất bại");
+            }
+        }
 
-            _context.Products.Remove(product);
-            return await _context.SaveChangesAsync();
+        public async Task DeleteImage(string fileName)
+        {
+            await _storageService.DeleteFileAsync(fileName);
         }
 
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
@@ -180,45 +199,53 @@ namespace TechShopSolution.Application.Catalog.Product
             }
             return null;
         }
-        public async Task<int> Update(ProductUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(ProductUpdateRequest request)
         {
-            var product = await _context.Products.FindAsync(request.Id);
-            if (product == null) throw new TechshopException($"Không tìm thấy sản phẩm với ID: {request.Id}");
+            try
+            {
+                var product = await _context.Products.FindAsync(request.Id);
+                if (product == null) return new ApiErrorResult<bool>($"Không tìm thấy sản phẩm: {request.Id}");
 
-            product.name = request.Name;
-            product.slug = request.Slug;
-            product.warranty = request.Warranty;
-            product.specifications = request.Specifications;
-            product.short_desc = request.Short_desc;
-            product.descriptions = request.Descriptions;
-            product.isActive = request.IsActive;
-            product.meta_descriptions = request.Meta_descriptions;
-            product.meta_keywords = request.Meta_keywords;
-            product.unit_price = request.Unit_price;
-            product.promotion_price = request.Promotion_price;
-            product.best_seller = request.Best_seller;
-            product.featured = request.Featured;
-            product.instock = request.Instock;
-            product.brand_id = request.Brand_id;
-            product.meta_tittle = request.Meta_tittle;
-            product.code = request.Code;
-            if (request.Image != null)
-            {
-                product.image = await this.SaveFile(request.Image);
-            }
-            if (request.More_images != null)
-            {
-                for (int i = 0; i < request.More_images.Count(); i++)
+                product.name = request.Name;
+                product.slug = request.Slug;
+                product.warranty = request.Warranty;
+                product.specifications = request.Specifications;
+                product.short_desc = request.Short_desc;
+                product.descriptions = request.Descriptions;
+                product.isActive = request.IsActive;
+                product.meta_descriptions = request.Meta_descriptions;
+                product.meta_keywords = request.Meta_keywords;
+                product.unit_price = request.Unit_price;
+                product.promotion_price = request.Promotion_price;
+                product.best_seller = request.Best_seller;
+                product.featured = request.Featured;
+                product.instock = request.Instock;
+                product.brand_id = request.Brand_id;
+                product.meta_tittle = request.Meta_tittle;
+                product.code = request.Code;
+                if (request.Image != null)
                 {
-                    if(!this._storageService.isExistFile(request.More_images[i].ToString()))
+                    product.image = await this.SaveFile(request.Image);
+                }
+                if (request.More_images != null)
+                {
+                    for (int i = 0; i < request.More_images.Count(); i++)
                     {
-                        if (request.More_images.Count - i == 1)
-                            product.more_images += await this.SaveFile(request.More_images[i]);
-                        else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+                        if (!this._storageService.isExistFile(request.More_images[i].ToString()))
+                        {
+                            if (request.More_images.Count - i == 1)
+                                product.more_images += await this.SaveFile(request.More_images[i]);
+                            else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+                        }
                     }
                 }
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
             }
-            return await _context.SaveChangesAsync();
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
         }
 
         private async Task<string> SaveFile(IFormFile file)

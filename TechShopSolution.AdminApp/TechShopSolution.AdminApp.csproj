@@ -20,4 +20,8 @@
     <ProjectReference Include="..\TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\ProductImage\" />
+  </ItemGroup>
+
 </Project>

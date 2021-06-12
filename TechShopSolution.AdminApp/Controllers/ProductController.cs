@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TechShopSolution.AdminApp.Service;
 using TechShopSolution.ViewModels.Catalog.Product;
+using Microsoft.AspNetCore.Hosting;
+using System.Net.Http.Headers;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
@@ -10,11 +15,13 @@ namespace TechShopSolution.AdminApp.Controllers
     public class ProductController : Controller
     {
         private readonly IProductApiClient _productApiClient;
-        public ProductController(IProductApiClient productApiClient)
+        private readonly IHostingEnvironment _environment;
+        public ProductController(IProductApiClient productApiClient, IHostingEnvironment environment)
         {
             _productApiClient = productApiClient;
+            _environment = environment;
         }
-        public async Task<IActionResult> Index(string keyword,int? CategoryID,int? BrandID, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int? CategoryID, int? BrandID, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetProductPagingRequest()
             {
@@ -51,6 +58,23 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+        public async Task<string> sendListMoreImage(List<IFormFile> files)
+        {
+            var nameListImages = "";
+            if (files != null)
+            {
+                foreach (IFormFile image in files)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\assets\ProductImage", image.FileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                       await image.CopyToAsync(fileStream);
+                    }
+                    nameListImages = nameListImages + image.FileName + ",";
+                }
+            }
+            return nameListImages;
         }
     }
 }
