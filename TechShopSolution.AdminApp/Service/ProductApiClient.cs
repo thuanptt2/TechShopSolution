@@ -133,7 +133,7 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
+        
         public Task<ApiResult<bool>> Delete(int cusID)
         {
             throw new NotImplementedException();
@@ -146,9 +146,15 @@ namespace TechShopSolution.AdminApp.Service
             var respone = await client.DeleteAsync($"/api/Product/DeleteImage/{fileName}");
         }
 
-        public Task<ApiResult<ProductViewModel>> GetById(int id)
+        public async Task<ApiResult<ProductViewModel>> GetById(int id)
         {
-            throw new NotImplementedException();
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/{id}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
         }
 
         public async Task<PagedResult<ProductViewModel>> GetProductPagings(GetProductPagingRequest request)

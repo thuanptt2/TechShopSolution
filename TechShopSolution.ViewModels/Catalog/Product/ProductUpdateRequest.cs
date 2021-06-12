@@ -9,6 +9,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string CateID { get; set; }
         public string Code { get; set; }
         public string Slug { get; set; }
         public int Brand_id { get; set; }
@@ -19,6 +20,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public int Warranty { get; set; }
         public int? Instock { get; set; }
         public string Specifications { get; set; }
+        public string Name_more_images { get; set; }
         public string Short_desc { get; set; }
         public string Descriptions { get; set; }
         public bool Featured { get; set; }

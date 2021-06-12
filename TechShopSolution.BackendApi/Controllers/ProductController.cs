@@ -29,12 +29,10 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(products);
         }
 
-        [HttpGet("productId")]
-        public async Task<IActionResult> GetById(int productId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            var product = await _productService.GetById(productId);
-            if (product == null)
-                return BadRequest("Không tìm thấy sản phẩm này");
+            var product = await _productService.GetById(id);
             return Ok(product);
         }
 
