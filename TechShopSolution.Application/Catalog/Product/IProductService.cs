@@ -17,5 +17,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<ProductViewModel>> GetById(int id);
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
         Task<bool> isValidSlug(string email);
+        Task<List<ImageListResult>> GetImagesByProductID(int id);
     }
 }

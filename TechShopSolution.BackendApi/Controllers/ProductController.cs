@@ -16,7 +16,7 @@ namespace TechShopSolution.BackendApi.Controllers
     {
         private readonly IProductService _productService;
 
-        public ProductController(IProductService productService )
+        public ProductController(IProductService productService)
         {
             _productService = productService;
         }
@@ -38,7 +38,7 @@ namespace TechShopSolution.BackendApi.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm]ProductCreateRequest request)
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             var result = await _productService.Create(request);
             if (!result.IsSuccess)
@@ -80,6 +80,12 @@ namespace TechShopSolution.BackendApi.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+        [HttpGet("image/{id}")]
+        public async Task<IActionResult> GetImageByProductID(int id)
+        {
+            var result = await _productService.GetImagesByProductID(id);
+            return Ok(result);
         }
     }
 }

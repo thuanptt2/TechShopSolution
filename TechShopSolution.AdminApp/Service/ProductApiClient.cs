@@ -28,9 +28,7 @@ namespace TechShopSolution.AdminApp.Service
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _environment = environment;
-
         }
-
         public Task<ApiResult<bool>> ChangeStatus(int Id)
         {
             throw new NotImplementedException();
@@ -58,23 +56,12 @@ namespace TechShopSolution.AdminApp.Service
             var provider = new PhysicalFileProvider(_environment.WebRootPath);
             var contents = provider.GetDirectoryContents(Path.Combine("assets", "ProductImage"));
             var objFiles = contents.OrderBy(m => m.LastModified);
-            string[] imageList = request.Name_more_images.Split(",");
             foreach (var item in contents.ToList())
             {
-                bool flag = false;
-                foreach (string name in imageList)
-                {
-                    if (name.Equals(item.Name))
-                    {
-                        byte[] bytes = System.IO.File.ReadAllBytes(item.PhysicalPath);
-                        ByteArrayContent byteArr = new ByteArrayContent(bytes);
-                        requestContent.Add(byteArr, "More_images", item.Name);
-                        flag = true;
-                        File.Delete(item.PhysicalPath);
-                    }
-                }
-                if (!flag)
-                    File.Delete(item.PhysicalPath);
+                byte[] bytes = System.IO.File.ReadAllBytes(item.PhysicalPath);
+                ByteArrayContent byteArr = new ByteArrayContent(bytes);
+                requestContent.Add(byteArr, "More_images", item.Name);
+                File.Delete(item.PhysicalPath);
             }
 
             string month = DateTime.Now.Month.ToString();
@@ -182,6 +169,20 @@ namespace TechShopSolution.AdminApp.Service
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/product?slug={slug}");
             return respone.IsSuccessStatusCode;
+        }
+        public async Task<List<ImageListResult>> GetImageByProductID(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/image/{id}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+            {
+                var result =  JsonConvert.DeserializeObject<List<ImageListResult>>(body);
+                return result;
+            }
+            else return null;
+               
         }
     }
 }

@@ -17,5 +17,6 @@ namespace TechShopSolution.AdminApp.Service
         Task DeleteImage(string fileName);
         Task<ApiResult<ProductViewModel>> GetById(int id);
         Task<bool> isValidSlug(string slug);
+        Task<List<ImageListResult>> GetImageByProductID(int id);
     }
 }

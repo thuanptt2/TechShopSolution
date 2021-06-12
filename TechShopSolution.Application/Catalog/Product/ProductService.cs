@@ -2,16 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.Data.EF;
-using TechShopSolution.Utilities.Exceptions;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http.Headers;
 using System.IO;
 using TechShopSolution.Application.Common;
 using TechShopSolution.ViewModels.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TechShopSolution.Application.Catalog.Product
 {
@@ -74,7 +73,7 @@ namespace TechShopSolution.Application.Catalog.Product
             await _context.SaveChangesAsync();
 
             string[] cateIDs = request.CateID.Split(" ");
-            foreach(string cateID in cateIDs)
+            foreach (string cateID in cateIDs)
             {
                 var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct
                 {
@@ -122,14 +121,14 @@ namespace TechShopSolution.Application.Catalog.Product
             var query = from p in _context.Products
                         join pic in _context.CategoryProducts on p.id equals pic.product_id
                         join ct in _context.Categories on pic.cate_id equals ct.id
-                        select new { p, pic};
+                        select new { p, pic };
             if (!String.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.p.name.Contains(request.Keyword));
             if (request.CategoryID != null)
             {
                 query = query.Where(x => x.pic.cate_id == request.CategoryID);
             }
-            if(request.BrandID != null)
+            if (request.BrandID != null)
             {
                 query = query.Where(x => x.p.brand_id == request.BrandID);
             }
@@ -171,6 +170,42 @@ namespace TechShopSolution.Application.Catalog.Product
             };
             return pageResult;
         }
+        public async Task<List<ImageListResult>> GetImagesByProductID(int id)
+        {
+            List<ImageListResult> ImagesResult = new List<ImageListResult>();
+            var product = await _context.Products.FindAsync(id);
+            if (product != null)
+            {
+                if (product.image != null)
+                {
+                    ImageListResult image = new ImageListResult();
+                    string imageBase64 = GetBase64StringForImage(_storageService.GetFileUrl(product.image));
+                    image.FileName = product.image;
+                    image.FileAsBase64 = imageBase64;
+                    ImagesResult.Add(image);
+                }
+                if (product.more_images != null)
+                {
+                    string[] moreImagesName = product.more_images.Split(",");
+                    foreach (string moreimage in moreImagesName)
+                    {
+                        ImageListResult images = new ImageListResult();
+                        string imageBase64 = GetBase64StringForImage(_storageService.GetFileUrl(moreimage));
+                        images.FileName = moreimage;
+                        images.FileAsBase64 = imageBase64;
+                        ImagesResult.Add(images);
+                    }
+                }
+            }
+            return ImagesResult;
+
+        }
+        protected static string GetBase64StringForImage(string imgPath)
+        {
+            byte[] imageBytes = File.ReadAllBytes(imgPath);
+            string base64String = Convert.ToBase64String(imageBytes);
+            return base64String;
+        }
         public async Task<ApiResult<ProductViewModel>> GetById(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -178,7 +213,7 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 return new ApiErrorResult<ProductViewModel>("Sản phẩm không tồn tại");
             }
-           
+
             var productViewModel = new ProductViewModel
             {
                 id = product.id,
@@ -240,6 +275,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 product.brand_id = request.Brand_id;
                 product.meta_tittle = request.Meta_tittle;
                 product.code = request.Code;
+                product.update_at = DateTime.Now;
                 if (request.Image != null)
                 {
                     product.image = await this.SaveFile(request.Image);

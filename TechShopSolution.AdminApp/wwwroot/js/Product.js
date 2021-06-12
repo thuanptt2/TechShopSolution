@@ -23,49 +23,57 @@ $().ready(function () {
         }
         $(".middle").click(function (e) {
             e.preventDefault();
+            var flag = false;
             for (var key of formData.keys()) {
-                if ($(this).parent().children()[0].getAttribute("src") == key)
+                if ($(this).parent().children()[0].getAttribute("src") == key) {
                     formData.delete(key);
-            }
-            $(this).parent().remove();
-            if (!$("#ProductImages").children(".col-lg-3").length) {
-                $("#NonImageProduct").show();
-            }
-
-            listImages = new FormData();
-            for (var key of formData.keys()) {
-                listImages.append("files", formData.get(key));
-            }
-            $.ajax(
-                {
-                    url: "/Product/sendListMoreImage",
-                    data: listImages,
-                    processData: false,
-                    contentType: false,
-                    type: "POST",
-                    success: function (data) {
-                        $("#MoreImages").val(data);
+                    flag = true;
+                    $(this).parent().remove();
+                    if (!$("#ProductImages").children(".col-lg-3").length) {
+                        $("#NonImageProduct").show();
                     }
+                    break;
                 }
-            );
+            }
+            if (flag == false) {
+                var fileName = $(this).parent().children()[0].getAttribute("data-name")
+                $.ajax(
+                    {
+                        url: "/Product/DeleteImage",
+                        data: fileName,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        success: function (data) {
+                            $(this).parent().remove();
+                            if (!$("#ProductImages").children(".col-lg-3").length) {
+                                $("#NonImageProduct").show();
+                            }
+                        }
+                    }
+                );
+            }
         });
 
-        listImages = new FormData();
-        for (var key of formData.keys()) {
-            listImages.append("files", formData.get(key));
-        }
-        $.ajax(
-            {
-                url: "/Product/sendListMoreImage",
-                data: listImages,
-                processData: false,
-                contentType: false,
-                type: "POST",
-                success: function (data) {
-                    $("#MoreImages").val(data);
+        $("#btnSave").click(function () {
+            var form = $("#CreateForm");
+            $.validator.unobtrusive.parse(form);
+            if (form.valid()) {
+                listImages = new FormData();
+                for (var key of formData.keys()) {
+                    listImages.append("files", formData.get(key));
                 }
+                $.ajax(
+                    {
+                        url: "/Product/sendListMoreImage",
+                        data: listImages,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                    }
+                );
             }
-        );
+        })
     });
 
 
@@ -135,4 +143,61 @@ $().ready(function () {
     })
 })
 
-    
+//$("#ProductMoreImagesInput").change(function () {
+//    var input = document.getElementById("ProductMoreImagesInput");
+//    var files = input.files;
+
+//    $("#NonImageProduct").hide();
+//    for (var i = 0; i != files.length; i++) {
+//        var x = (window.URL || window.webkitURL).createObjectURL(files[i]);
+//        $("#ProductImages").append(' <div class="col-lg-3 col-3 col-sm-3 mb-3"><img src="' + x + '" class="ProductMoreImage"/><div class="middle"><i class="fas fa-trash fa-2x" id="btnRemoveImage"></i></div></div>');
+//        formData.append(x, files[i]);
+//    }
+//    $(".middle").click(function (e) {
+//        e.preventDefault();
+//        for (var key of formData.keys()) {
+//            if ($(this).parent().children()[0].getAttribute("src") == key) {
+//                formData.delete(key);
+//                break;
+//            }
+//        }
+//        $(this).parent().remove();
+//        if (!$("#ProductImages").children(".col-lg-3").length) {
+//            $("#NonImageProduct").show();
+//        }
+
+//        listImages = new FormData();
+//        for (var key of formData.keys()) {
+//            listImages.append("files", formData.get(key));
+//        }
+//        $.ajax(
+//            {
+//                url: "/Product/sendListMoreImage",
+//                data: listImages,
+//                processData: false,
+//                contentType: false,
+//                type: "POST",
+//                success: function (data) {
+//                    $("#MoreImages").val(data);
+//                }
+//            }
+//        );
+//    });
+
+//    listImages = new FormData();
+//    for (var key of formData.keys()) {
+//        listImages.append("files", formData.get(key));
+//    }
+//    $.ajax(
+//        {
+//            url: "/Product/sendListMoreImage",
+//            data: listImages,
+//            processData: false,
+//            contentType: false,
+//            type: "POST",
+//            success: function (data) {
+//                $("#MoreImages").val(data);
+//            }
+//        }
+//    );
+//});

@@ -8,6 +8,8 @@
 @section jsFooter {
     <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
     <script src="~/js/Product.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
 }
 <div class="container-fluid">
@@ -17,7 +19,7 @@
         <li class="breadcrumb-item"><a href="/product/index">Sản phẩm</a></li>
         <li class="breadcrumb-item active">Thêm sản phẩm</li>
     </ol>
-    <form asp-action="Create" asp-controller="Product" method="post" enctype="multipart/form-data">
+    <form asp-action="Create" asp-controller="Product" method="post" enctype="multipart/form-data" id="CreateForm">
         <div class="padding-container">
             <div class="row">
                 <div class="col-lg-9 mb-3">
@@ -123,9 +125,8 @@
 
                                     <div class="ProductMoreImages">
                                         <div class="custom-file">
-                                            <input  type="file" name="More_images" multiple accept=".jpeg,.png,.gif,.jpg" id="ProductMoreImagesInput" class="custom-file-input">
+                                            <input type="file" name="More_images" multiple accept=".jpeg,.png,.gif,.jpg" id="ProductMoreImagesInput" class="custom-file-input">
                                             @*<input asp-for="More_images" type="file" multiple id="ImagesURL" hidden>*@
-                                            <input  type="text" asp-for="Name_more_images" id="MoreImages" hidden>
                                             <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
                                         </div>
                                     </div>
@@ -228,7 +229,7 @@
                             <div class="well">
                                 <div class="form-group">
                                     <label asp-for="Instock" class="control-label lableFormField"></label>
-                                    <input asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn"/>
+                                    <input asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
                                 </div>
                             </div>
                         </div>
@@ -241,7 +242,7 @@
                         <div class="form-group ml-3">
                             <div class="form-check form-switch">
                                 <input asp-for="IsActive" class="form-check-input mr-3" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                <input type="hidden" asp-for="IsActive" value="false" name="IsActiveIsActive" />
+                                <input type="hidden" asp-for="IsActive" value="false" />
                                 <label asp-for="IsActive" class="lableFormField" for="flexSwitchCheckChecked"></label>
                             </div>
                         </div>
@@ -254,14 +255,14 @@
                         <div class="form-group ml-3 mb-4">
                             <div class="form-check form-switch">
                                 <input asp-for="Best_seller" class="form-check-input mr-3" name="Best_seller" type="checkbox" id="flexSwitchCheckChecked2">
-                                <input type="hidden" asp-for="Best_seller" value="false" name="Best_seller" />
+                                <input type="hidden" asp-for="Best_seller" value="false" />
                                 <label asp-for="Best_seller" class="lableFormField" for="flexSwitchCheckChecked2"></label>
                             </div>
                         </div>
                         <div class="form-group ml-3">
                             <div class="form-check form-switch">
                                 <input asp-for="Featured" class="form-check-input mr-3" name="Best_seller" type="checkbox" id="flexSwitchCheckChecked3">
-                                <input type="hidden" asp-for="Featured" value="false" name="Featured" />
+                                <input type="hidden" asp-for="Featured" value="false" />
                                 <label asp-for="Featured" class="lableFormField" for="flexSwitchCheckChecked3"></label>
                             </div>
                         </div>

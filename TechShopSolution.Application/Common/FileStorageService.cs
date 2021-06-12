@@ -26,7 +26,7 @@ namespace TechShopSolution.Application.Common
 
         public string GetFileUrl(string fileName)
         {
-            return "/{USER_CONTENT_FOLDER_NAME}/{fileName}";
+            return Path.Combine(_userContentFolder, fileName);
         }
 
         public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)

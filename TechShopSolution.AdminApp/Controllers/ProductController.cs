@@ -62,8 +62,9 @@ namespace TechShopSolution.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-
-            var result = await _productApiClient.GetById(id);
+            var imageList = await Task.Run(() => _productApiClient.GetImageByProductID(id));
+            ViewData["imageList"] = imageList;
+            var result = await Task.Run(() => _productApiClient.GetById(id));
             if (!result.IsSuccess || result.ResultObject == null)
             {
                 ModelState.AddModelError("", result.Message);
@@ -97,9 +98,8 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(updateRequest);
         }
 
-        public async Task<string> sendListMoreImage(List<IFormFile> files)
+        public async Task sendListMoreImage(List<IFormFile> files)
         {
-            var nameListImages = "";
             if (files != null)
             {
                 foreach (IFormFile image in files)
@@ -109,11 +109,10 @@ namespace TechShopSolution.AdminApp.Controllers
                     {
                        await image.CopyToAsync(fileStream);
                     }
-                    nameListImages = nameListImages + image.FileName + ",";
                 }
             }
-            return nameListImages;
         }
+
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(string slug)
         {
