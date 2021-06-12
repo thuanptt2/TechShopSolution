@@ -76,5 +76,14 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return nameListImages;
         }
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> isValidSlug(string slug)
+        {
+            if (await _productApiClient.isValidSlug(slug) == false)
+            {
+                return Json($"Đường dẫn {slug} đã được sử dụng.");
+            }
+            return Json(true);
+        }
     }
 }

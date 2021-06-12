@@ -21,8 +21,8 @@ namespace TechShopSolution.AdminApp.Service
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _environment;
-    
-        public ProductApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IHostingEnvironment environment) 
+
+        public ProductApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IHostingEnvironment environment)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
@@ -44,7 +44,7 @@ namespace TechShopSolution.AdminApp.Service
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
             var requestContent = new MultipartFormDataContent();
-            if(request.Image!=null)
+            if (request.Image != null)
             {
                 byte[] data;
                 using (var br = new BinaryReader(request.Image.OpenReadStream()))
@@ -76,7 +76,7 @@ namespace TechShopSolution.AdminApp.Service
                 if (!flag)
                     File.Delete(item.PhysicalPath);
             }
-              
+
             string month = DateTime.Now.Month.ToString();
             if (month.Length == 1) month = "0" + month;
             string date = DateTime.Now.Day.ToString();
@@ -95,20 +95,38 @@ namespace TechShopSolution.AdminApp.Service
             requestContent.Add(new StringContent("1"), "Brand_id");
             requestContent.Add(new StringContent("1"), "CateID");
             requestContent.Add(new StringContent(request.Code.ToString()), "Code");
-            requestContent.Add(new StringContent(request.Descriptions.ToString()), "Descriptions");
             requestContent.Add(new StringContent(request.Featured.ToString()), "Featured");
             requestContent.Add(new StringContent(request.Instock.ToString()), "Instock");
             requestContent.Add(new StringContent(request.IsActive.ToString()), "IsActive");
-            requestContent.Add(new StringContent(request.Meta_descriptions.ToString()), "Meta_descriptions");
-            requestContent.Add(new StringContent(request.Meta_keywords.ToString()), "Meta_keywords");
-            requestContent.Add(new StringContent(request.Meta_tittle.ToString()), "Meta_tittle");
             requestContent.Add(new StringContent(request.Name.ToString()), "Name");
             requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
-            requestContent.Add(new StringContent(request.Short_desc.ToString()), "Short_desc");
             requestContent.Add(new StringContent(request.Slug.ToString()), "Slug");
-            requestContent.Add(new StringContent(request.Specifications.ToString()), "Specifications");
             requestContent.Add(new StringContent(request.Unit_price.ToString()), "Unit_price");
             requestContent.Add(new StringContent(request.Warranty.ToString()), "Warranty");
+            if (request.Specifications != null)
+            {
+                requestContent.Add(new StringContent(request.Specifications.ToString()), "Specifications");
+            }
+            if (request.Meta_descriptions != null)
+            {
+                requestContent.Add(new StringContent(request.Meta_descriptions.ToString()), "Meta_descriptions");
+            }
+            if (request.Descriptions != null)
+            {
+                requestContent.Add(new StringContent(request.Descriptions.ToString()), "Descriptions");
+            }
+            if (request.Meta_keywords != null)
+            {
+                requestContent.Add(new StringContent(request.Meta_keywords.ToString()), "Meta_keywords");
+            }
+            if (request.Meta_tittle != null)
+            {
+                requestContent.Add(new StringContent(request.Meta_tittle.ToString()), "Meta_tittle");
+            }
+            if (request.Short_desc != null)
+            {
+                requestContent.Add(new StringContent(request.Short_desc.ToString()), "Short_desc");
+            }
             var respone = await client.PostAsync($"/api/product", requestContent);
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
@@ -150,6 +168,14 @@ namespace TechShopSolution.AdminApp.Service
         public Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> isValidSlug(string slug)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product?slug={slug}");
+            return respone.IsSuccessStatusCode;
         }
     }
 }

@@ -16,5 +16,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task DeleteImage(string fileName);
         Task<ProductViewModel> GetById(int productId);
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
+        Task<bool> isValidSlug(string email);
     }
 }

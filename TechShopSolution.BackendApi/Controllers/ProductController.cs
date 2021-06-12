@@ -74,5 +74,14 @@ namespace TechShopSolution.BackendApi.Controllers
             await _productService.DeleteImage(fileName);
             return Ok();
         }
+        [HttpGet]
+        public async Task<IActionResult> isValidSlug(string slug)
+        {
+            if (await _productService.isValidSlug(slug))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }
