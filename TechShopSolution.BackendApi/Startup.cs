@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using TechShopSolution.Application.Catalog.Brand;
 using TechShopSolution.Application.Catalog.Customer;
 using TechShopSolution.Application.Catalog.Location;
 using TechShopSolution.Application.Catalog.Product;
@@ -47,6 +48,7 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<ILoadLocationService, LoadLocationService>();
             services.AddTransient<IValidator<CustomerCreateRequest>, CreateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
