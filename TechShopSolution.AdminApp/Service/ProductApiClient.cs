@@ -30,9 +30,35 @@ namespace TechShopSolution.AdminApp.Service
             _httpContextAccessor = httpContextAccessor;
             _environment = environment;
         }
-        public Task<ApiResult<bool>> ChangeStatus(int Id)
+        public async Task<ApiResult<bool>> ChangeStatus(int Id)
         {
-            throw new NotImplementedException();
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/changestatus/{Id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+        public async Task<ApiResult<bool>> OffBestSeller(int Id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/offbestseller/{Id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+        public async Task<ApiResult<bool>> OffFeautured(int Id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/offfeatured/{Id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
         public async Task<ApiResult<bool>> CreateProduct(ProductCreateRequest request)

@@ -117,13 +117,13 @@
                                 @if (item.isActive)
                                 {
                                     <td align="center">
-                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
 
@@ -131,25 +131,25 @@
                                 @if (item.best_seller)
                                 {
                                     <td align="center">
-                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("OffBestSeller", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("OffBestSeller", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 @if (item.featured)
                                 {
                                     <td align="center">
-                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("OffFeatured", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("OffFeatured", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 <td align="center">

@@ -126,6 +126,51 @@ namespace TechShopSolution.AdminApp.Controllers
                 }
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _productApiClient.ChangeStatus(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Tắt top bán chạy thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> OffBestSeller(int id)
+        {
+            var result = await _productApiClient.OffBestSeller(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Tắt top bán chạy thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> OffFeatured(int id)
+        {
+            var result = await _productApiClient.OffFeautured(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Tắt top nổi bật thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
         [HttpPost]
         public async Task<JsonResult> DeleteImage(int id, string fileName)
         {

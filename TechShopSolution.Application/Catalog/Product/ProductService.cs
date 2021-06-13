@@ -83,13 +83,12 @@ namespace TechShopSolution.Application.Catalog.Product
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
         }
-
         public async Task<ApiResult<bool>> Delete(int productID)
         {
             try
             {
                 var product = await _context.Products.FindAsync(productID);
-                if (product == null) return new ApiErrorResult<bool>($"Không tìm thấy sản phẩm: {productID}");
+                if (product == null || product.isDelete) return new ApiErrorResult<bool>($"Không tìm thấy sản phẩm: {productID}");
                 if (product.image != null)
                     await _storageService.DeleteFileAsync(product.image);
                 if (product.more_images != null)
@@ -108,7 +107,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 return new ApiErrorResult<bool>("Xóa thất bại");
             }
         }
-
         public async Task<ApiResult<bool>> DeleteImage(int id, string fileName)
         {
             var product = await _context.Products.FindAsync(id);
@@ -145,12 +143,12 @@ namespace TechShopSolution.Application.Catalog.Product
             }
             return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
         }
-
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pic in _context.CategoryProducts on p.id equals pic.product_id
                         join ct in _context.Categories on pic.cate_id equals ct.id
+                        where p.isDelete == false
                         select new { p, pic };
             if (!String.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.p.name.Contains(request.Keyword));
@@ -205,7 +203,7 @@ namespace TechShopSolution.Application.Catalog.Product
         {
             List<ImageListResult> ImagesResult = new List<ImageListResult>();
             var product = await _context.Products.FindAsync(id);
-            if (product != null)
+            if (product != null || product.isDelete)
             {
                 if (product.image != null)
                 {
@@ -278,20 +276,18 @@ namespace TechShopSolution.Application.Catalog.Product
             };
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
-
         public async Task<bool> isValidSlug(string Code, string slug)
         {
             if(await _context.Products.AnyAsync(x => x.slug.Equals(slug) && !x.code.Equals(Code)))
                 return false;
             return true;
         }
-
         public async Task<ApiResult<bool>> Update(ProductUpdateRequest request)
         {
             try
             {
                 var product = await _context.Products.FindAsync(request.Id);
-                if (product == null) return new ApiErrorResult<bool>($"Không tìm thấy sản phẩm: {request.Id}");
+                if (product == null || product.isDelete) return new ApiErrorResult<bool>($"Không tìm thấy sản phẩm: {request.Id}");
 
                 product.name = request.Name;
                 product.slug = request.Slug;
@@ -331,13 +327,75 @@ namespace TechShopSolution.Application.Catalog.Product
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
+        }
+        public async Task<ApiResult<bool>> ChangeStatus(int id)
+        {
+            try
+            {
+                var productExist = await _context.Products.FindAsync(id);
+                if (productExist != null || productExist.isDelete)
+                {
+                    if (productExist.isActive)
+                        productExist.isActive = false;
+                    else productExist.isActive = true;
+                    productExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy sản phẩm này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+        public async Task<ApiResult<bool>> OffBestSeller(int id)
+        {
+            try
+            {
+                var productExist = await _context.Products.FindAsync(id);
+                if (productExist != null || productExist.isDelete)
+                {
+                    if (productExist.best_seller)
+                        productExist.best_seller = false;
+                    else productExist.best_seller = true;
+                    productExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy sản phẩm này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+        public async Task<ApiResult<bool>> OffFeatured(int id)
+        {
+            try
+            {
+                var productExist = await _context.Products.FindAsync(id);
+                if (productExist != null || productExist.isDelete)
+                {
+                    if (productExist.featured)
+                        productExist.featured = false;
+                    else productExist.featured = true;
+                    productExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy sản phẩm này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
         }
     }
 }

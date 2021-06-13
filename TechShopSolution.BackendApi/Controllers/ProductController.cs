@@ -30,7 +30,6 @@ namespace TechShopSolution.BackendApi.Controllers
             var product = await _productService.GetById(id);
             return Ok(product);
         }
-
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
@@ -40,7 +39,6 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-
         [HttpPut]
         public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
         {
@@ -49,7 +47,6 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -60,7 +57,6 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest(result);
         }
-
         [HttpDelete("DeleteImage")]
         public async Task<IActionResult> DeleteImage(int id, string fileName)
         {
@@ -82,6 +78,30 @@ namespace TechShopSolution.BackendApi.Controllers
         public async Task<IActionResult> GetImageByProductID(int id)
         {
             var result = await _productService.GetImagesByProductID(id);
+            return Ok(result);
+        }
+        [HttpGet("ChangeStatus/{id}")]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _productService.ChangeStatus(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("OffBestSeller/{id}")]
+        public async Task<IActionResult> OffBestSeller(int id)
+        {
+            var result = await _productService.OffBestSeller(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("OffFeatured/{id}")]
+        public async Task<IActionResult> OffFeatured(int id)
+        {
+            var result = await _productService.OffFeatured(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
             return Ok(result);
         }
     }
