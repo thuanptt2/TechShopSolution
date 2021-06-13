@@ -88,23 +88,35 @@ namespace TechShopSolution.Application.Catalog.Product
             try
             {
                 var product = await _context.Products.FindAsync(productID);
-                if (product == null || product.isDelete) return new ApiErrorResult<bool>($"Không tìm thấy sản phẩm: {productID}");
-                if (product.image != null)
-                    await _storageService.DeleteFileAsync(product.image);
-                if (product.more_images != null)
+                if (product != null)
                 {
-                    string strListImage = product.more_images;
-                    string[] listImage = strListImage.Split(',');
-                    for (int i = 0; i < listImage.Count(); i++)
-                        await _storageService.DeleteFileAsync(listImage[i]);
+                    product.isDelete = true;
+                    product.delete_at = DateTime.Now;
+
+                    //Xóa hình ảnh sản phẩm
+                    if (product.image != null)
+                    {
+                        await _storageService.DeleteFileAsync(product.image);
+                        product.image = "";
+                    }
+                    if (product.more_images != null)
+                    {
+                        List<string> moreImages = product.more_images.Split(",").ToList();
+                        foreach (string img in moreImages)
+                        {
+                            await _storageService.DeleteFileAsync(img);
+                        }
+                        product.more_images = "";
+                    }
+
+                    var result = await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
                 }
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-                return new ApiSuccessResult<bool>();
+                else return new ApiErrorResult<bool>($"Sản phẩm không tồn tại");
             }
-            catch
+            catch (Exception ex)
             {
-                return new ApiErrorResult<bool>("Xóa thất bại");
+                return new ApiErrorResult<bool>(ex.Message);
             }
         }
         public async Task<ApiResult<bool>> DeleteImage(int id, string fileName)
@@ -130,6 +142,7 @@ namespace TechShopSolution.Application.Catalog.Product
                                 }
                             }
                             product.more_images = MoreImageAfterDelete;
+                            product.update_at = DateTime.Now;
                             var result = await _storageService.DeleteFileAsync(fileName);
                             await _context.SaveChangesAsync();
                             flag = true;

@@ -37,7 +37,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<ApiResult<bool>> Delete(int cusID)
         {
             var client = _httpClientFactory.CreateClient();
@@ -48,7 +47,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<ApiResult<CustomerViewModel>> GetById(int id)
         {
             var client = _httpClientFactory.CreateClient();
@@ -59,7 +57,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<CustomerViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<CustomerViewModel>>(body);
         }
-
         public async Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -70,7 +67,6 @@ namespace TechShopSolution.AdminApp.Service
             var customer = JsonConvert.DeserializeObject<PagedResult<CustomerViewModel>>(body);
             return customer;
         }
-
         public async Task<ApiResult<bool>> UpdateAddress(CustomerUpdateAddressRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -109,7 +105,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<bool> VerifyEmail(string email)
         {
             var client = _httpClientFactory.CreateClient();
@@ -117,7 +112,6 @@ namespace TechShopSolution.AdminApp.Service
             var respone = await client.GetAsync($"/api/customer?email={email}");
             return respone.IsSuccessStatusCode;
         }
-
         public async Task<ApiResult<List<ProvinceModel>>> LoadProvince()
         {
             var client = _httpClientFactory.CreateClient();
@@ -128,7 +122,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<List<ProvinceModel>>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<List<ProvinceModel>>>(result);
         }
-
         public async Task<ApiResult<List<DistrictModel>>> LoadDistrict(int provinceID)
         {
             var client = _httpClientFactory.CreateClient();
@@ -139,7 +132,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<List<DistrictModel>>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<List<DistrictModel>>>(result);
         }
-
         public async  Task<ApiResult<List<WardModel>>> LoadWard(int districtID)
         {
             var client = _httpClientFactory.CreateClient();

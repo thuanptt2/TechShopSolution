@@ -46,6 +46,14 @@ namespace TechShopSolution.BackendApi.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
+        }    
+        [HttpDelete("DeleteImage")]
+        public async Task<IActionResult> DeleteImage(int id, string fileName)
+        {
+            var result = await _productService.DeleteImage(id, fileName);
+            if(result.IsSuccess)
+                return Ok(result);
+            return BadRequest(result);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -55,14 +63,6 @@ namespace TechShopSolution.BackendApi.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest(result);
-        }
-        [HttpDelete("DeleteImage")]
-        public async Task<IActionResult> DeleteImage(int id, string fileName)
-        {
-            var result = await _productService.DeleteImage(id, fileName);
-            if(result.IsSuccess)
-                return Ok(result);
             return BadRequest(result);
         }
         [HttpGet]

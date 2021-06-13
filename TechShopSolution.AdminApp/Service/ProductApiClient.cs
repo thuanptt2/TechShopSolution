@@ -60,7 +60,16 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
+        public async Task<ApiResult<bool>> Delete(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.DeleteAsync($"/api/product/{id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
         public async Task<ApiResult<bool>> CreateProduct(ProductCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -152,11 +161,6 @@ namespace TechShopSolution.AdminApp.Service
                 return DateTime.Now.Year.ToString().Substring(2, 2) + month + date + hour + minute + second;
             });
         }
-        public Task<ApiResult<bool>> Delete(int cusID)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ApiResult<bool>> DeleteImage(int id, string fileName)
         {
             var client = _httpClientFactory.CreateClient();
@@ -167,7 +171,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
         }
-
         public async Task<ApiResult<ProductViewModel>> GetById(int id)
         {
             var client = _httpClientFactory.CreateClient();
@@ -178,7 +181,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
         }
-
         public async Task<PagedResult<ProductViewModel>> GetProductPagings(GetProductPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -192,7 +194,6 @@ namespace TechShopSolution.AdminApp.Service
             var product = JsonConvert.DeserializeObject<PagedResult<ProductViewModel>>(body);
             return product;
         }
-
         public async Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -266,7 +267,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-     
         public async Task<bool> isValidSlug(string Code, string slug)
         {
             var client = _httpClientFactory.CreateClient();

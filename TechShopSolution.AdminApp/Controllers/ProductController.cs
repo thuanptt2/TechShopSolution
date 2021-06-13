@@ -98,7 +98,7 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(updateRequest);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update(ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -178,6 +178,20 @@ namespace TechShopSolution.AdminApp.Controllers
             if (result.IsSuccess)
                 return Json(new { success = true, message = "Xóa hình ảnh thành công" });
             return Json(new { success = false, message = result.Message });
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _productApiClient.Delete(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Xóa sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
         }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(string code, string slug)

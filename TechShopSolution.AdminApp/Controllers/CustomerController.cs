@@ -156,7 +156,6 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View("Index");
         }
-
         public async Task<JsonResult> LoadProvince()
         {
             try
@@ -197,7 +196,6 @@ namespace TechShopSolution.AdminApp.Controllers
                 return null;
             }
         }
-
         public async Task<JsonResult> LoadWard(int districtID)
         {
             try
@@ -218,7 +216,6 @@ namespace TechShopSolution.AdminApp.Controllers
                 return null;
             }
         }
-
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {
