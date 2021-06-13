@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +20,8 @@ using TechShopSolution.Utilities.Constants;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Catalog.Customer.Validation;
 using TechShopSolution.ViewModels.Catalog.Customer.Validator;
+using TechShopSolution.ViewModels.Catalog.Product;
+using TechShopSolution.ViewModels.Catalog.Product.Validator;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.BackendApi
@@ -50,7 +51,7 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IValidator<CustomerCreateRequest>, CreateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateAddressRequest>, UpdateAddressRequestValidator>();
-
+            services.AddTransient<IValidator<ProductCreateRequest>, CreateProductValidator>();
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 

@@ -15,18 +15,23 @@ namespace TechShopSolution.Application.Common
         {
             _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME);
         }
-        public async Task DeleteFileAsync(string fileName)
+        public async Task<bool> DeleteFileAsync(string fileName)
         {
             var filePath = Path.Combine(_userContentFolder, fileName);
             if(File.Exists(filePath))
             {
                 await Task.Run(() => File.Delete(filePath));
+                return true;
             }
+            return false;
         }
 
         public string GetFileUrl(string fileName)
         {
-            return "/{USER_CONTENT_FOLDER_NAME}/{fileName}";
+            string filePath = Path.Combine(_userContentFolder, fileName);
+            if (File.Exists(filePath))
+                return filePath;
+            return "";
         }
 
         public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)

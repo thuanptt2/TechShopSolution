@@ -8,4 +8,8 @@ namespace TechShopSolution.Utilities.Constants
     {
         public const string MainConnectionString = "TechShopSolutionDB";
     }
+    public class AppSettings
+    {
+        public const string Token = "Token";
+    }
 }

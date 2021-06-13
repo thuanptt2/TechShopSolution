@@ -1,0 +1,304 @@
+﻿@using TechShopSolution.ViewModels.Common
+@model TechShopSolution.ViewModels.Catalog.Product.ProductUpdateRequest
+
+@{
+    ViewData["Title"] = "Cập nhật";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section jsFooter {
+    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
+    <script src="~/js/Product.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+@{
+    var images = (List<ImageListResult>)ViewData["imageList"];
+}
+
+<div class="container-fluid">
+    <h3 class="mt-4">Thêm sản phẩm</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/product/index">Sản phẩm</a></li>
+        <li class="breadcrumb-item active">Cập nhật sản phẩm</li>
+    </ol>
+    <div class="alert alert-success" id="snackbar" role="alert">
+        <b id="messageNotification"></b>
+    </div>
+    <form asp-action="Update" asp-controller="Product" method="post" enctype="multipart/form-data" id="CreateForm">
+        <div class="padding-container">
+            <div class="row">
+                <div class="col-lg-9 mb-3">
+                    <div class="wrapper-content mb-4">
+                        <label class="title-fill">Thông tin chung</label>
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="Code" class="form-control" hidden />
+                        <input asp-for="Id" class="form-control" hidden />
+                        <div class="form-group mb-4 mt-4">
+                            <label asp-for="Name" class="control-label lableFormField"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm" id="txtName" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6 mb-4">
+                                    <label asp-for="CateID" class="control-label lableFormField"></label>
+                                    <select class="custom-select custom-select-sm">
+                                        <option selected>Chọn Danh mục sản phẩm</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                    <span asp-validation-for="CateID" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <label asp-for="Brand_id" class="control-label lableFormField"></label>
+                                    <select class="custom-select custom-select-sm">
+                                        <option selected>Chọn thương hiệu sản phẩm</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                    <span asp-validation-for="Brand_id" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-4 mb-4">
+                                    <label asp-for="Unit_price" class="control-label lableFormField"></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" asp-for="Unit_price" placeholder="0đ">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">VND</span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Unit_price" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-4 mb-4">
+                                    <label asp-for="Promotion_price" class="control-label lableFormField"></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" asp-for="Promotion_price" placeholder="0đ">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">VND</span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Promotion_price" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-4 mb-4">
+                                    <label asp-for="Warranty" class="control-label lableFormField"></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Tháng</span>
+                                        </div>
+                                        <input type="number" min="0" class="form-control" placeholder="Thời hạn bảo hành" asp-for="Warranty">
+                                    </div>
+                                    <span asp-validation-for="Warranty" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 mb-4">
+                                <div class="form-group">
+                                    <label asp-for="Image" class="control-label lableFormField"></label>
+                                    <div class="ImageBoxMain">
+                                        @if (images == null)
+                                        {
+                                            <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="ProductImage" class="image hoverDel" />
+                                        }
+                                        else
+                                        {
+                                            <img src="data:image/jpeg;base64,@images.First().FileAsBase64" id="ProductImage" data-name="@images.First().FileName" class="image hoverDel" />
+                                        }
+                                    </div>
+                                    <div class="custom-file">
+                                        <input asp-for="Image" type="file" accept=".jpeg,.png,.gif,.jpg" class="custom-file-input" id="ProductImageInput">
+                                        <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
+                                    </div>
+                                    <span asp-validation-for="Image" class="text-danger"></span>
+                                </div>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            </div>
+                            <div class="col-lg-8 mb-4">
+                                <div class="form-group">
+                                    <label asp-for="More_images" class="control-label lableFormField"></label>
+                                    <div class="ImageBoxMain">
+                                        @if (images == null)
+                                        {
+                                            <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="NonImageProduct" class="image hoverDel" />
+                                        }
+                                        <div class="col-lg-12 col-12 col-sm-12">
+                                            <div class="row" id="ProductImages">
+                                                @if (images != null)
+                                                {
+                                                    @for (int i = 1; i < images.Count(); i++)
+                                                    {
+                                                        <div class="col-lg-3 col-3 col-sm-3 mb-3">
+                                                            <img src="data:image/jpeg;base64,@images[i].FileAsBase64" data-name="@images[i].FileName" data-id="@Model.Id" class="ProductMoreImage" />
+                                                            <div class="DeleteImageButton" id="btnRemoveExistImage">
+                                                                <i class="fas fa-trash fa-2x"></i>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="ProductMoreImages">
+                                        <div class="custom-file">
+                                            <input type="file" name="More_images" multiple accept=".jpeg,.png,.gif,.jpg" id="ProductMoreImagesInput" class="custom-file-input">
+                                            @*<input asp-for="More_images" type="file" multiple id="ImagesURL" hidden>*@
+                                            <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper-content mb-4">
+                        <label class="title-fill">
+                            Mô tả sản phẩm
+                        </label>
+                        <hr />
+                        <div class="form-group mb-4 mt-3">
+                            <div class="form-group mb-4">
+                                <label asp-for="Specifications" class="control-label lableFormField"></label>
+                                <textarea id="txtSpecs" asp-for="Specifications" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <div class="form-group">
+                                <label asp-for="Short_desc" class="control-label lableFormField"></label>
+                                <textarea id="txtShortDesc" asp-for="Short_desc" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <div class="form-group">
+                                <label asp-for="Descriptions" class="control-label lableFormField"></label>
+                                <textarea id="txtDesc" asp-for="Descriptions" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wrapper-content mb-4">
+                        <div class="SeoPadding">
+                            <label class="title-fill">
+                                Tối ưu SEO
+                            </label>
+                            <a data-toggle="collapse" href="#collapseSEO" role="button" aria-expanded="false" aria-controls="collapseSEO">
+                                Chỉnh sửa SEO
+                            </a>
+                        </div>
+                        <hr />
+                        <label class="control-label mb-3">
+                            Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy danh mục này trên công cụ tìm kiếm như Google
+                        </label>
+                        <div class="collapse" id="collapseSEO">
+                            <div class="form-group mb-4">
+                                <label asp-for="Meta_tittle" class="control-label lableFormField"></label>
+                                <input asp-for="Meta_tittle" class="form-control" placeholder="Nhập tiêu đề trang" />
+                                <span asp-validation-for="Meta_tittle" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Meta_descriptions" class="control-label lableFormField"></label>
+                                <input asp-for="Meta_descriptions" class="form-control" placeholder="Nhập mô tả trang" />
+                                <span asp-validation-for="Meta_descriptions" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Meta_keywords" class="control-label lableFormField"></label>
+                                <input asp-for="Meta_keywords" class="form-control" placeholder="Nhập từ khóa trang" />
+                                <span asp-validation-for="Meta_keywords" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Slug" class="control-label lableFormField"></label>
+                                <div class="SlugProduct">
+                                    <span class="SlugUrl">
+                                        http://techshopSolution.com/san-pham/
+                                    </span>
+                                    <input asp-for="Slug" class="form-control InputSlug" placeholder="Đường dẫn sản phẩm" id="txtSlug" />
+                                </div>
+                                <span asp-validation-for="Slug" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-right">
+                        <a class="btn btn-primary" href="/product/index">
+                            <i class="fa fa-chevron-left"></i>  Trở về
+                        </a>
+                        <button class="btn btn-success" id="btnSave" type="button">
+                            <i class="fa fa-save"></i>
+                            Lưu lại
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="wrapper-content mb-4">
+                        <label class="title-fill">
+                            Quản Lý Tồn Kho
+                        </label>
+                        <hr />
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    <input type="checkbox" />  Có quản lý tồn kho
+                                </label>
+                            </div>
+                        </div>
+                        <div id="collapseOne" aria-expanded="false" class="collapse">
+                            <div class="well">
+                                <div class="form-group">
+                                    <label asp-for="Instock" class="control-label lableFormField"></label>
+                                    <input asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper-content mb-4">
+                        <label class="title-fill">
+                            Trạng thái sản phẩm
+                        </label>
+                        <hr />
+                        <div class="form-group ml-3">
+                            <div class="form-check form-switch">
+                                <input asp-for="IsActive" class="form-check-input mr-3" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                <input type="hidden" asp-for="IsActive" value="false" name="IsActiveIsActive" />
+                                <label asp-for="IsActive" class="lableFormField" for="flexSwitchCheckChecked"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper-content mb-4">
+                        <label class="title-fill">
+                            Loại sản phẩm
+                        </label>
+                        <hr />
+                        <div class="form-group ml-3 mb-4">
+                            <div class="form-check form-switch">
+                                <input asp-for="Best_seller" class="form-check-input mr-3" type="checkbox" id="flexSwitchCheckChecked2">
+                                <input type="hidden" asp-for="Best_seller" value="false" />
+                                <label asp-for="Best_seller" class="lableFormField" for="flexSwitchCheckChecked2"></label>
+                            </div>
+                        </div>
+                        <div class="form-group ml-3">
+                            <div class="form-check form-switch">
+                                <input asp-for="Featured" class="form-check-input mr-3" type="checkbox" id="flexSwitchCheckChecked3">
+                                <input type="hidden" asp-for="Featured" value="false" />
+                                <label asp-for="Featured" class="lableFormField" for="flexSwitchCheckChecked3"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

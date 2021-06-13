@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TechShopSolution.Application.Catalog.Product;
 using TechShopSolution.ViewModels.Catalog.Product;
@@ -12,24 +7,16 @@ namespace TechShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
 
-        public ProductController(IProductService productService )
+        public ProductController(IProductService productService)
         {
             _productService = productService;
         }
-
-        [HttpGet("san-pham")]
-        public async Task<IActionResult> GetAllPaging([FromQuery]GetPublicProductPagingRequest requet)
-        {
-            var products = await _productService.GetAllByCategoryId(requet);
-            return Ok(products);
-        }
-        [HttpGet("filter")]
-        public async Task<IActionResult> GetManagerProductByFilter([FromQuery] GetManageProductPagingRequest requet)
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetManagerProductByFilter([FromQuery] GetProductPagingRequest requet)
         {
             var products = await _productService.GetAllPaging(requet);
             if (products == null)
@@ -37,45 +24,85 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(products);
         }
 
-        [HttpGet("productId")]
-        public async Task<IActionResult> GetById(int productId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            var product = await _productService.GetById(productId);
-            if (product == null)
-                return BadRequest("Không tìm thấy sản phẩm này");
+            var product = await _productService.GetById(id);
             return Ok(product);
         }
-
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm]ProductCreateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
-            var productId = await _productService.Create(request);
-            if (productId == 0)
-                return BadRequest();
-
-            var product = await _productService.GetById(productId);
-            return CreatedAtAction(nameof(GetById), new { id = productId }, productId);
+            var result = await _productService.Create(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
         }
-
         [HttpPut]
         public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
         {
-            var affectedResult = await _productService.Update(request);
-            if (affectedResult == 0)
-                return BadRequest();
-
-            return Ok();
-        }
-
-        [HttpDelete("productId")]
-        public async Task<IActionResult> Delete(int productId)
+            var result = await _productService.Update(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }    
+        [HttpDelete("DeleteImage")]
+        public async Task<IActionResult> DeleteImage(int id, string fileName)
         {
-            var affectedResult = await _productService.Delete(productId);
-            if (affectedResult == 0)
-                return BadRequest();
-
-            return Ok();
+            var result = await _productService.DeleteImage(id, fileName);
+            if(result.IsSuccess)
+                return Ok(result);
+            return BadRequest(result);
         }
-
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _productService.Delete(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet]
+        public async Task<IActionResult> isValidSlug(string Code, string slug)
+        {
+            if (await _productService.isValidSlug(Code, slug))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpGet("image/{id}")]
+        public async Task<IActionResult> GetImageByProductID(int id)
+        {
+            var result = await _productService.GetImagesByProductID(id);
+            return Ok(result);
+        }
+        [HttpGet("ChangeStatus/{id}")]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _productService.ChangeStatus(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("OffBestSeller/{id}")]
+        public async Task<IActionResult> OffBestSeller(int id)
+        {
+            var result = await _productService.OffBestSeller(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("OffFeatured/{id}")]
+        public async Task<IActionResult> OffFeatured(int id)
+        {
+            var result = await _productService.OffFeatured(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

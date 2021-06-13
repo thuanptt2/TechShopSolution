@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _customerApiClient.GetCustomerPagings(request);
             ViewBag.Keyword = keyword;
-            if(TempData["result"] != null)
+            if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
@@ -155,7 +156,6 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View("Index");
         }
-
         public async Task<JsonResult> LoadProvince()
         {
             try
@@ -196,7 +196,6 @@ namespace TechShopSolution.AdminApp.Controllers
                 return null;
             }
         }
-
         public async Task<JsonResult> LoadWard(int districtID)
         {
             try
@@ -217,7 +216,6 @@ namespace TechShopSolution.AdminApp.Controllers
                 return null;
             }
         }
-
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {

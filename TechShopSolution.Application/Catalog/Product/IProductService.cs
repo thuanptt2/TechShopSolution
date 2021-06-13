@@ -10,11 +10,16 @@ namespace TechShopSolution.Application.Catalog.Product
 {
     public interface IProductService
     {
-        Task<int> Create(ProductCreateRequest request);
-        Task<int> Update(ProductUpdateRequest request);
-        Task<int> Delete(int productID);
-        Task<ProductViewModel> GetById(int productId);
-        Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
-        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
+        Task<ApiResult<bool>> Create(ProductCreateRequest request);
+        Task<ApiResult<bool>> Update(ProductUpdateRequest request);
+        Task<ApiResult<bool>> Delete(int productID);
+        Task<ApiResult<bool>> DeleteImage(int id, string fileName);
+        Task<ApiResult<ProductViewModel>> GetById(int id);
+        Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
+        Task<bool> isValidSlug(string Code, string slug);
+        Task<List<ImageListResult>> GetImagesByProductID(int id);
+        Task<ApiResult<bool>> OffFeatured(int id);
+        Task<ApiResult<bool>> OffBestSeller(int id);
+        Task<ApiResult<bool>> ChangeStatus(int id);
     }
 }

@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,16 +34,15 @@ namespace TechShopSolution.AdminApp
                   options.LoginPath = "/admin/login";
                   options.AccessDeniedPath = "/User/Forbidden/";
               });
-
             services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
-
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
             });
-
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();
             services.AddTransient<IAdminApiClient, AdminApiClient>();
+            services.AddTransient<IProductApiClient, ProductApiClient>();
 
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -57,6 +57,7 @@ namespace TechShopSolution.AdminApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -68,13 +69,14 @@ namespace TechShopSolution.AdminApp
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+
 
             app.UseAuthentication();
 
             app.UseRouting();
-
             app.UseAuthorization();
+            app.UseStaticFiles();
+
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {

@@ -50,33 +50,33 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <fieldset disabled="disabled" id="fieldSetUpdate">
                                 <div class="form-group">
-                                    <label asp-for="name" class="control-label"></label>
+                                    <label asp-for="name" class="control-label lableFormField"></label>
                                     <input asp-for="name" class="form-control" />
                                     <span asp-validation-for="name" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="email" class="control-label"></label>
+                                    <label asp-for="email" class="control-label lableFormField"></label>
                                     <input asp-for="email" class="form-control" />
                                     <span asp-validation-for="email" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="password" class="control-label"></label>
+                                    <label asp-for="password" class="control-label lableFormField"></label>
                                     <input asp-for="password" type="password" value="@Model.password" class="form-control" />
                                     <span asp-validation-for="password" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="phone" class="control-label"></label>
+                                    <label asp-for="phone" class="control-label lableFormField"></label>
                                     <input asp-for="phone" class="form-control" />
                                     <span asp-validation-for="phone" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="birthday" class="control-label"></label>
+                                    <label asp-for="birthday" class="control-label lableFormField"></label>
                                     <input asp-for="birthday" class="form-control" />
                                     <span asp-validation-for="birthday" class="text-danger"></span>
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <label class="control-label" asp-for="sex"></label>
+                                        <label class="control-label lableFormField" asp-for="sex"></label>
                                         @if (Model.sex == true)
                                         {
                                             <div class="form-check">
@@ -109,7 +109,7 @@
                                         }
                                     </div>
                                     <div class="col">
-                                        <label class="control-label" asp-for="isActive"></label>
+                                        <label class="control-label lableFormField" asp-for="isActive"></label>
                                         @if (Model.isActive == true)
                                         {
                                             <div class="form-check" readonly="readonly">

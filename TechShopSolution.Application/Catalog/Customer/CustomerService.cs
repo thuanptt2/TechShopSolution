@@ -46,7 +46,6 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return new ApiErrorResult<bool>("Thêm thất bại");
             }
         }
-
         public async Task<ApiResult<bool>> Delete(int cusID)
         {
             try
@@ -66,7 +65,6 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return new ApiErrorResult<bool>(ex.Message);
             }
         }
-
         public async Task<PagedResult<CustomerViewModel>> GetAllPaging(GetCustomerPagingRequest request)
         {
             var query = from cus in _context.Customers
@@ -104,7 +102,6 @@ namespace TechShopSolution.Application.Catalog.Customer
             };
             return pageResult;
         }
-
         public async Task<ApiResult<CustomerViewModel>> GetById(int customertId)
         {
             var cusExist = await _context.Customers.FindAsync(customertId);
@@ -127,7 +124,6 @@ namespace TechShopSolution.Application.Catalog.Customer
             return new ApiSuccessResult<CustomerViewModel>(customer);
 
         }
-
         public async Task<ApiResult<bool>> Update(int id, CustomerUpdateRequest request)
         {
             try
@@ -151,14 +147,12 @@ namespace TechShopSolution.Application.Catalog.Customer
                     return new ApiSuccessResult<bool>();
                 }
                 else return new ApiErrorResult<bool>("Không tìm thấy khách hàng này");
-
             }
             catch
             {
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-
         public async Task<ApiResult<bool>> UpdateAddress(int id, CustomerUpdateAddressRequest request)
         {
             try
