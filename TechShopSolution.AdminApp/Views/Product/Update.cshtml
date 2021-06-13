@@ -21,6 +21,9 @@
         <li class="breadcrumb-item"><a href="/product/index">Sản phẩm</a></li>
         <li class="breadcrumb-item active">Cập nhật sản phẩm</li>
     </ol>
+    <div class="alert alert-success" id="snackbar" role="alert">
+        <b id="messageNotification"></b>
+    </div>
     <form asp-action="Update" asp-controller="Product" method="post" enctype="multipart/form-data">
         <div class="padding-container">
             <div class="row">
@@ -130,9 +133,9 @@
                                                 @for (int i = 1; i < images.Count(); i++)
                                                 {
                                                     <div class="col-lg-3 col-3 col-sm-3 mb-3">
-                                                        <img src="data:image/jpeg;base64,@images[i].FileAsBase64" data-name="@images[i].FileName" class="ProductMoreImage" />
-                                                        <div class="middle">
-                                                            <i class="fas fa-trash fa-2x" id="btnRemoveImage"></i>
+                                                        <img src="data:image/jpeg;base64,@images[i].FileAsBase64" data-name="@images[i].FileName" data-id="@Model.Id" class="ProductMoreImage" />
+                                                        <div class="DeleteImageButton" id="btnRemoveExistImage">
+                                                            <i class="fas fa-trash fa-2x"></i>
                                                         </div>
                                                     </div>
                                                 }

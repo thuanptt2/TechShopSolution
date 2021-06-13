@@ -123,7 +123,7 @@
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
 
@@ -137,7 +137,7 @@
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 @if (item.featured)
@@ -149,11 +149,11 @@
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Customer", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 <td align="center">
-                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')">Xóa</a>
+                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này, hành động này không thể hoàn tác?')">Xóa</a>
                                 </td>
                             </tr>
                         }

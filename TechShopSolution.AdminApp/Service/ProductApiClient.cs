@@ -63,20 +63,7 @@ namespace TechShopSolution.AdminApp.Service
                 requestContent.Add(byteArr, "More_images", item.Name);
                 File.Delete(item.PhysicalPath);
             }
-
-            string month = DateTime.Now.Month.ToString();
-            if (month.Length == 1) month = "0" + month;
-            string date = DateTime.Now.Day.ToString();
-            if (date.Length == 1) date = "0" + date;
-            string hour = DateTime.Now.Hour.ToString();
-            if (hour.Length == 1) hour = "0" + hour;
-            string minute = DateTime.Now.Minute.ToString();
-            if (minute.Length == 1) minute = "0" + minute;
-            string second = DateTime.Now.Second.ToString();
-            if (second.Length == 1) second = "0" + second;
-
-
-            request.Code = DateTime.Now.Year.ToString().Substring(2, 2) + month + date + hour + minute + second;
+            request.Code = await GenerateCode();
 
             requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
             requestContent.Add(new StringContent("1"), "Brand_id");
@@ -120,17 +107,38 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-        
+        public async Task<string> GenerateCode()
+        {
+            string Code = "";
+            return Code = await Task.Run(() =>
+            {
+                string month = DateTime.Now.Month.ToString();
+                if (month.Length == 1) month = "0" + month;
+                string date = DateTime.Now.Day.ToString();
+                if (date.Length == 1) date = "0" + date;
+                string hour = DateTime.Now.Hour.ToString();
+                if (hour.Length == 1) hour = "0" + hour;
+                string minute = DateTime.Now.Minute.ToString();
+                if (minute.Length == 1) minute = "0" + minute;
+                string second = DateTime.Now.Second.ToString();
+                if (second.Length == 1) second = "0" + second;
+                return DateTime.Now.Year.ToString().Substring(2, 2) + month + date + hour + minute + second;
+            });
+        }
         public Task<ApiResult<bool>> Delete(int cusID)
         {
             throw new NotImplementedException();
         }
 
-        public async Task DeleteImage(string fileName)
+        public async Task<ApiResult<bool>> DeleteImage(int id, string fileName)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.DeleteAsync($"/api/Product/DeleteImage/{fileName}");
+            var respone = await client.DeleteAsync($"/api/Product/DeleteImage?id={id}&fileName={fileName}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if ( respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
         }
 
         public async Task<ApiResult<ProductViewModel>> GetById(int id)

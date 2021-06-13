@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TechShopSolution.Application.Catalog.Product;
 using TechShopSolution.ViewModels.Catalog.Product;
@@ -66,11 +61,13 @@ namespace TechShopSolution.BackendApi.Controllers
             return BadRequest(result);
         }
 
-        [HttpDelete("DeleteImage/{fileName}")]
-        public async Task<IActionResult> DeleteImage(string fileName)
+        [HttpDelete("DeleteImage")]
+        public async Task<IActionResult> DeleteImage(int id, string fileName)
         {
-            await _productService.DeleteImage(fileName);
-            return Ok();
+            var result = await _productService.DeleteImage(id, fileName);
+            if(result.IsSuccess)
+                return Ok(result);
+            return BadRequest(result);
         }
         [HttpGet]
         public async Task<IActionResult> isValidSlug(string slug)

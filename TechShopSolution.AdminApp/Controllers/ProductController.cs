@@ -112,7 +112,14 @@ namespace TechShopSolution.AdminApp.Controllers
                 }
             }
         }
-
+        [HttpPost]
+        public async Task<JsonResult> DeleteImage(int id, string fileName)
+        {
+            var result = await _productApiClient.DeleteImage(id, fileName);
+            if (result.IsSuccess)
+                return Json(new { success = true, message = "Xóa hình ảnh thành công" });
+            return Json(new { success = false, message = result.Message });
+        }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(string slug)
         {

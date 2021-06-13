@@ -22,58 +22,77 @@ $().ready(function () {
             formData.append(x, files[i]);
         }
         $(".middle").click(function (e) {
-            e.preventDefault();
-            var flag = false;
-            for (var key of formData.keys()) {
-                if ($(this).parent().children()[0].getAttribute("src") == key) {
-                    formData.delete(key);
-                    flag = true;
-                    $(this).parent().remove();
-                    if (!$("#ProductImages").children(".col-lg-3").length) {
-                        $("#NonImageProduct").show();
+            if (confirm("Bạn có chắc muốn xóa hình ảnh này, hành động này không thể hoàn tác ?")) {
+                e.preventDefault();
+                for (var key of formData.keys()) {
+                    if ($(this).parent().children()[0].getAttribute("src") == key) {
+                        formData.delete(key);
+                        flag = true;
+                        $(this).parent().remove();
+                        if (!$("#ProductImages").children(".col-lg-3").length) {
+                            $("#NonImageProduct").show();
+                        }
+                        break;
                     }
-                    break;
                 }
             }
-            if (flag == false) {
-                var fileName = $(this).parent().children()[0].getAttribute("data-name")
-                $.ajax(
-                    {
-                        url: "/Product/DeleteImage",
-                        data: fileName,
-                        processData: false,
-                        contentType: false,
-                        type: "POST",
-                        success: function (data) {
-                            $(this).parent().remove();
+        });
+      
+    });
+    $("#btnSave").click(function () {
+        var form = $("#CreateForm");
+        $.validator.unobtrusive.parse(form);
+        if (form.valid()) {
+            listImages = new FormData();
+            for (var key of formData.keys()) {
+                listImages.append("files", formData.get(key));
+            }
+            $.ajax(
+                {
+                    url: "/Product/sendListMoreImage",
+                    data: listImages,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                }
+            );
+        }
+    })
+    $(".DeleteImageButton").click(function (e) {
+        if (confirm("Bạn có chắc muốn xóa hình ảnh này, hành động này không thể hoàn tác ?")) {
+            e.preventDefault();
+            var image = $(this).parent();
+            var fileName = $(this).parent().children()[0].getAttribute("data-name");
+            var id = $(this).parent().children()[0].getAttribute("data-id");
+            $.ajax(
+                {
+                    url: "/Product/DeleteImage",
+                    data: { 'id': id, 'fileName': fileName },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            image.remove();
                             if (!$("#ProductImages").children(".col-lg-3").length) {
                                 $("#NonImageProduct").show();
                             }
                         }
-                    }
-                );
-            }
-        });
+                        else {
+                            $("#snackbar").css("background-color", "#155724");
+                            $("#snackbar").css("color", "#fff");
+                        }
+                        $("#messageNotification").html(data.message);
+                        var x = document.getElementById("snackbar");
 
-        $("#btnSave").click(function () {
-            var form = $("#CreateForm");
-            $.validator.unobtrusive.parse(form);
-            if (form.valid()) {
-                listImages = new FormData();
-                for (var key of formData.keys()) {
-                    listImages.append("files", formData.get(key));
-                }
-                $.ajax(
-                    {
-                        url: "/Product/sendListMoreImage",
-                        data: listImages,
-                        processData: false,
-                        contentType: false,
-                        type: "POST",
+                        // Add the "show" class to DIV
+                        x.className = "show";
+
+                        // After 3 seconds, remove the show class from DIV
+                        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
                     }
-                );
-            }
-        })
+                }
+            );s
+        }
     });
 
 

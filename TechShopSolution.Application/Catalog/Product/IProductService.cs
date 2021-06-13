@@ -13,7 +13,7 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<bool>> Create(ProductCreateRequest request);
         Task<ApiResult<bool>> Update(ProductUpdateRequest request);
         Task<ApiResult<bool>> Delete(int productID);
-        Task DeleteImage(string fileName);
+        Task<ApiResult<bool>> DeleteImage(int id, string fileName);
         Task<ApiResult<ProductViewModel>> GetById(int id);
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
         Task<bool> isValidSlug(string email);

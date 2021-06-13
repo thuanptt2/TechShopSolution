@@ -111,9 +111,38 @@ namespace TechShopSolution.Application.Catalog.Product
             }
         }
 
-        public async Task DeleteImage(string fileName)
+        public async Task<ApiResult<bool>> DeleteImage(int id, string fileName)
         {
-            await _storageService.DeleteFileAsync(fileName);
+            var product = await _context.Products.FindAsync(id);
+            if(product!=null)
+            {
+                List<string> moreImagesName = product.more_images.Split(",").ToList();
+                bool flag = false;
+                foreach (string moreimage in moreImagesName)
+                {
+                    if(moreimage!="")
+                    {
+                        if (moreimage.Equals(fileName))
+                        {
+                            moreImagesName.Remove(moreimage);
+                            string MoreImageAfterDelete = "";
+                            foreach (string imagestr in moreImagesName)
+                            {
+                                MoreImageAfterDelete += imagestr + ",";
+                            }
+                            product.more_images = MoreImageAfterDelete;
+                            var result = await _storageService.DeleteFileAsync(fileName);
+                            await _context.SaveChangesAsync();
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                if (!flag)
+                    return new ApiErrorResult<bool>("Hình này không tồn tại trong CSDL của sản phẩm");
+                else return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
         }
 
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
@@ -186,19 +215,26 @@ namespace TechShopSolution.Application.Catalog.Product
                 }
                 if (product.more_images != null)
                 {
-                    string[] moreImagesName = product.more_images.Split(",");
+                    List<string> moreImagesName = product.more_images.Split(",").ToList();
                     foreach (string moreimage in moreImagesName)
                     {
-                        ImageListResult images = new ImageListResult();
-                        string imageBase64 = GetBase64StringForImage(_storageService.GetFileUrl(moreimage));
-                        images.FileName = moreimage;
-                        images.FileAsBase64 = imageBase64;
-                        ImagesResult.Add(images);
+                        if(moreimage != "")
+                        {
+                            string filePath = _storageService.GetFileUrl(moreimage);
+                            if (filePath != "")
+                            {
+                                ImageListResult images = new ImageListResult();
+                                string imageBase64 = GetBase64StringForImage(filePath);
+                                images.FileName = moreimage;
+                                images.FileAsBase64 = imageBase64;
+                                ImagesResult.Add(images);
+                            }
+                        }
                     }
                 }
+                return ImagesResult;
             }
             return ImagesResult;
-
         }
         protected static string GetBase64StringForImage(string imgPath)
         {
