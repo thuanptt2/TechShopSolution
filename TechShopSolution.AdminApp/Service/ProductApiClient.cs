@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
@@ -166,16 +167,85 @@ namespace TechShopSolution.AdminApp.Service
             return product;
         }
 
-        public Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> isValidSlug(string slug)
+        public async Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/product?slug={slug}");
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var requestContent = new MultipartFormDataContent();
+            if (request.Image != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.Image.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Image.OpenReadStream().Length);
+                }
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "Image", request.Image.FileName);
+            }
+
+            var provider = new PhysicalFileProvider(_environment.WebRootPath);
+            var contents = provider.GetDirectoryContents(Path.Combine("assets", "ProductImage"));
+            var objFiles = contents.OrderBy(m => m.LastModified);
+            foreach (var item in contents.ToList())
+            {
+                byte[] bytes = System.IO.File.ReadAllBytes(item.PhysicalPath);
+                ByteArrayContent byteArr = new ByteArrayContent(bytes);
+                requestContent.Add(byteArr, "More_images", item.Name);
+                File.Delete(item.PhysicalPath);
+            }
+
+            requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
+            requestContent.Add(new StringContent("1"), "Brand_id");
+            requestContent.Add(new StringContent("1"), "CateID");
+            requestContent.Add(new StringContent(request.Code.ToString()), "Code");
+            requestContent.Add(new StringContent(request.Id.ToString()), "Id");
+            requestContent.Add(new StringContent(request.Featured.ToString()), "Featured");
+            requestContent.Add(new StringContent(request.Instock.ToString()), "Instock");
+            requestContent.Add(new StringContent(request.IsActive.ToString()), "IsActive");
+            requestContent.Add(new StringContent(request.Name.ToString()), "Name");
+            requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
+            requestContent.Add(new StringContent(request.Slug.ToString()), "Slug");
+            requestContent.Add(new StringContent(request.Unit_price.ToString()), "Unit_price");
+            requestContent.Add(new StringContent(request.Warranty.ToString()), "Warranty");
+            if (request.Specifications != null)
+            {
+                requestContent.Add(new StringContent(request.Specifications.ToString()), "Specifications");
+            }
+            if (request.Meta_descriptions != null)
+            {
+                requestContent.Add(new StringContent(request.Meta_descriptions.ToString()), "Meta_descriptions");
+            }
+            if (request.Descriptions != null)
+            {
+                requestContent.Add(new StringContent(request.Descriptions.ToString()), "Descriptions");
+            }
+            if (request.Meta_keywords != null)
+            {
+                requestContent.Add(new StringContent(request.Meta_keywords.ToString()), "Meta_keywords");
+            }
+            if (request.Meta_tittle != null)
+            {
+                requestContent.Add(new StringContent(request.Meta_tittle.ToString()), "Meta_tittle");
+            }
+            if (request.Short_desc != null)
+            {
+                requestContent.Add(new StringContent(request.Short_desc.ToString()), "Short_desc");
+            }
+            var respone = await client.PutAsync($"/api/product", requestContent);
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+     
+        public async Task<bool> isValidSlug(string Code, string slug)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product?slug={slug}&code={Code}");
             return respone.IsSuccessStatusCode;
         }
         public async Task<List<ImageListResult>> GetImageByProductID(int id)

@@ -63,9 +63,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 {
                     for (int i = 0; i < request.More_images.Count(); i++)
                     {
-                        if (request.More_images.Count - i == 1)
-                            product.more_images += await this.SaveFile(request.More_images[i]);
-                        else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+                         product.more_images += await this.SaveFile(request.More_images[i]) + ",";
                     }
                 }
             }
@@ -125,10 +123,13 @@ namespace TechShopSolution.Application.Catalog.Product
                         if (moreimage.Equals(fileName))
                         {
                             moreImagesName.Remove(moreimage);
-                            string MoreImageAfterDelete = "";
+                            string MoreImageAfterDelete = null;
                             foreach (string imagestr in moreImagesName)
                             {
-                                MoreImageAfterDelete += imagestr + ",";
+                                if(imagestr!="")
+                                {
+                                    MoreImageAfterDelete += imagestr + ",";
+                                }
                             }
                             product.more_images = MoreImageAfterDelete;
                             var result = await _storageService.DeleteFileAsync(fileName);
@@ -165,6 +166,7 @@ namespace TechShopSolution.Application.Catalog.Product
 
             var data = query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
+                .OrderByDescending(m => m.p.create_at)
                 .Select(a => new ProductViewModel()
                 {
                     id = a.p.id,
@@ -277,13 +279,10 @@ namespace TechShopSolution.Application.Catalog.Product
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
 
-        public async Task<bool> isValidSlug(string slug)
+        public async Task<bool> isValidSlug(string Code, string slug)
         {
-            var result = await _context.Products.FirstOrDefaultAsync(x => x.slug.Equals(slug));
-            if (result != null)
-            {
+            if(await _context.Products.AnyAsync(x => x.slug.Equals(slug) && !x.code.Equals(Code)))
                 return false;
-            }
             return true;
         }
 
@@ -314,18 +313,14 @@ namespace TechShopSolution.Application.Catalog.Product
                 product.update_at = DateTime.Now;
                 if (request.Image != null)
                 {
+                    await _storageService.DeleteFileAsync(product.image);
                     product.image = await this.SaveFile(request.Image);
                 }
                 if (request.More_images != null)
                 {
                     for (int i = 0; i < request.More_images.Count(); i++)
                     {
-                        if (!this._storageService.isExistFile(request.More_images[i].ToString()))
-                        {
-                            if (request.More_images.Count - i == 1)
-                                product.more_images += await this.SaveFile(request.More_images[i]);
-                            else product.more_images += await this.SaveFile(request.More_images[i]) + ",";
-                        }
+                        product.more_images += await this.SaveFile(request.More_images[i]) + "," ;
                     }
                 }
                 await _context.SaveChangesAsync();

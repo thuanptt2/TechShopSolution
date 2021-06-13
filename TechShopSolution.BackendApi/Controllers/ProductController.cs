@@ -70,9 +70,9 @@ namespace TechShopSolution.BackendApi.Controllers
             return BadRequest(result);
         }
         [HttpGet]
-        public async Task<IActionResult> isValidSlug(string slug)
+        public async Task<IActionResult> isValidSlug(string Code, string slug)
         {
-            if (await _productService.isValidSlug(slug))
+            if (await _productService.isValidSlug(Code, slug))
             {
                 return Ok();
             }

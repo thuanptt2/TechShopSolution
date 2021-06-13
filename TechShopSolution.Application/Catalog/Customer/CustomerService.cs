@@ -151,7 +151,6 @@ namespace TechShopSolution.Application.Catalog.Customer
                     return new ApiSuccessResult<bool>();
                 }
                 else return new ApiErrorResult<bool>("Không tìm thấy khách hàng này");
-
             }
             catch
             {

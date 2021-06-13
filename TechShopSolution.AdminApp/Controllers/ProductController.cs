@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using TechShopSolution.AdminApp.Service;
 using TechShopSolution.ViewModels.Catalog.Product;
 using Microsoft.AspNetCore.Hosting;
-using System.Net.Http.Headers;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+
 
 namespace TechShopSolution.AdminApp.Controllers
 {
@@ -72,7 +72,7 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             var updateRequest = new ProductUpdateRequest()
             {
-                Id = id,
+                Id = result.ResultObject.id,
                 Best_seller = result.ResultObject.best_seller,
                 Brand_id = result.ResultObject.brand_id,
                 Code = result.ResultObject.code,
@@ -97,7 +97,21 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View(updateRequest);
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(ProductUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _productApiClient.UpdateProduct(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
         public async Task sendListMoreImage(List<IFormFile> files)
         {
             if (files != null)
@@ -121,9 +135,9 @@ namespace TechShopSolution.AdminApp.Controllers
             return Json(new { success = false, message = result.Message });
         }
         [AcceptVerbs("GET", "POST")]
-        public async Task<IActionResult> isValidSlug(string slug)
+        public async Task<IActionResult> isValidSlug(string code, string slug)
         {
-            if (await _productApiClient.isValidSlug(slug) == false)
+            if (await _productApiClient.isValidSlug(code, slug) == false)
             {
                 return Json($"Đường dẫn {slug} đã được sử dụng.");
             }

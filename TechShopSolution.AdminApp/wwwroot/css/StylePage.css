@@ -270,5 +270,8 @@ hr {
     object-fit: contain;
     border: 1px solid #D0D0D0;
 }
-
+.btnSaveImage {
+    position: absolute;
+    bottom: 0;
+}
 

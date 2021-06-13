@@ -8,9 +8,10 @@
 @section jsFooter {
     <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
     <script src="~/js/Product.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
-@{ 
+@{
     var images = (List<ImageListResult>)ViewData["imageList"];
 }
 
@@ -24,7 +25,7 @@
     <div class="alert alert-success" id="snackbar" role="alert">
         <b id="messageNotification"></b>
     </div>
-    <form asp-action="Update" asp-controller="Product" method="post" enctype="multipart/form-data">
+    <form asp-action="Update" asp-controller="Product" method="post" enctype="multipart/form-data" id="CreateForm">
         <div class="padding-container">
             <div class="row">
                 <div class="col-lg-9 mb-3">
@@ -32,6 +33,8 @@
                         <label class="title-fill">Thông tin chung</label>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="Code" class="form-control" hidden />
+                        <input asp-for="Id" class="form-control" hidden />
                         <div class="form-group mb-4 mt-4">
                             <label asp-for="Name" class="control-label lableFormField"></label>
                             <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm" id="txtName" />
@@ -110,7 +113,10 @@
                                         {
                                             <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="NonImageProduct" class="image hoverDel" />
                                         }
-                                        <img src="data:image/jpeg;base64,@images.First().FileAsBase64" id="ProductImage" data-name="@images.First().FileName" class="image hoverDel" />
+                                        else
+                                        {
+                                            <img src="data:image/jpeg;base64,@images.First().FileAsBase64" id="ProductImage" data-name="@images.First().FileName" class="image hoverDel" />
+                                        }
                                     </div>
                                     <div class="custom-file">
                                         <input asp-for="Image" type="file" accept=".jpeg,.png,.gif,.jpg" class="custom-file-input" id="ProductImageInput">
@@ -130,14 +136,17 @@
                                         }
                                         <div class="col-lg-12 col-12 col-sm-12">
                                             <div class="row" id="ProductImages">
-                                                @for (int i = 1; i < images.Count(); i++)
+                                                @if (images != null)
                                                 {
-                                                    <div class="col-lg-3 col-3 col-sm-3 mb-3">
-                                                        <img src="data:image/jpeg;base64,@images[i].FileAsBase64" data-name="@images[i].FileName" data-id="@Model.Id" class="ProductMoreImage" />
-                                                        <div class="DeleteImageButton" id="btnRemoveExistImage">
-                                                            <i class="fas fa-trash fa-2x"></i>
+                                                    @for (int i = 1; i < images.Count(); i++)
+                                                    {
+                                                        <div class="col-lg-3 col-3 col-sm-3 mb-3">
+                                                            <img src="data:image/jpeg;base64,@images[i].FileAsBase64" data-name="@images[i].FileName" data-id="@Model.Id" class="ProductMoreImage" />
+                                                            <div class="DeleteImageButton" id="btnRemoveExistImage">
+                                                                <i class="fas fa-trash fa-2x"></i>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    }
                                                 }
                                             </div>
                                         </div>
@@ -147,7 +156,6 @@
                                         <div class="custom-file">
                                             <input type="file" name="More_images" multiple accept=".jpeg,.png,.gif,.jpg" id="ProductMoreImagesInput" class="custom-file-input">
                                             @*<input asp-for="More_images" type="file" multiple id="ImagesURL" hidden>*@
-                                            <input type="text" asp-for="Name_more_images" id="MoreImages" hidden>
                                             <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
                                         </div>
                                     </div>
@@ -226,7 +234,7 @@
                         <a class="btn btn-primary" href="/product/index">
                             <i class="fa fa-chevron-left"></i>  Trở về
                         </a>
-                        <button class="btn btn-success" type="submit" asp-action="Create" asp-controller="Product" id="btnSave">
+                        <button class="btn btn-success" id="btnSave" type="button">
                             <i class="fa fa-save"></i>
                             Lưu lại
                         </button>
@@ -275,15 +283,15 @@
                         <hr />
                         <div class="form-group ml-3 mb-4">
                             <div class="form-check form-switch">
-                                <input asp-for="Best_seller" class="form-check-input mr-3" name="Best_seller" type="checkbox" id="flexSwitchCheckChecked2">
-                                <input type="hidden" asp-for="Best_seller" value="false" name="Best_seller" />
+                                <input asp-for="Best_seller" class="form-check-input mr-3" type="checkbox" id="flexSwitchCheckChecked2">
+                                <input type="hidden" asp-for="Best_seller" value="false" />
                                 <label asp-for="Best_seller" class="lableFormField" for="flexSwitchCheckChecked2"></label>
                             </div>
                         </div>
                         <div class="form-group ml-3">
                             <div class="form-check form-switch">
-                                <input asp-for="Featured" class="form-check-input mr-3" name="Best_seller" type="checkbox" id="flexSwitchCheckChecked3">
-                                <input type="hidden" asp-for="Featured" value="false" name="Featured" />
+                                <input asp-for="Featured" class="form-check-input mr-3" type="checkbox" id="flexSwitchCheckChecked3">
+                                <input type="hidden" asp-for="Featured" value="false" />
                                 <label asp-for="Featured" class="lableFormField" for="flexSwitchCheckChecked3"></label>
                             </div>
                         </div>
