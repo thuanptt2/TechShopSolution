@@ -37,7 +37,7 @@ namespace TechShopSolution.AdminApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(BrandCreateRequest request)
+        public async Task<IActionResult> Create(BrandUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return View();
@@ -119,6 +119,15 @@ namespace TechShopSolution.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
             return View("Index");
+        }
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> isValidSlug(int id, string brand_slug)
+        {
+            if (await _brandApiClient.isValidSlug(id, brand_slug) == false)
+            {
+                return Json($"Đường dẫn {brand_slug} đã được sử dụng.");
+            }
+            return Json(true);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace TechShopSolution.Application.Catalog.Brand
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-        public async Task<ApiResult<bool>> Create(BrandCreateRequest request)
+        public async Task<ApiResult<bool>> Create(BrandUpdateRequest request)
         {
             try
             {
@@ -165,7 +165,7 @@ namespace TechShopSolution.Application.Catalog.Brand
         }
         public async Task<bool> isValidSlug(int id, string slug)
         {
-            if (await _context.Products.AnyAsync(x => x.slug.Equals(slug) && x.id != id))
+            if (await _context.Brands.AnyAsync(x => x.brand_slug.Equals(slug) && x.id != id))
                 return false;
             return true;
         }
