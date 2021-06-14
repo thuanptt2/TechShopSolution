@@ -25,9 +25,12 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _categoryApiClient.GetCategoryPagings(request);
             var tree = await OrderCateToTree(data.Items);
-            data.Items = tree.Skip((request.PageIndex - 1) * request.PageSize)
+            if(tree!=null)
+            {
+                data.Items = tree.Skip((request.PageIndex - 1) * request.PageSize)
                              .Take(request.PageSize).ToList();
-            data.TotalRecords = tree.Count();
+                data.TotalRecords = tree.Count();
+            }
 
 
             ViewBag.Keyword = keyword;
@@ -39,23 +42,27 @@ namespace TechShopSolution.AdminApp.Controllers
         }
         public async Task<List<CategoryViewModel>> OrderCateToTree(List<CategoryViewModel> lst, int parent_id = 0, int level = 0)
         {
-            List<CategoryViewModel> result = new List<CategoryViewModel>();
-            foreach (CategoryViewModel cate in lst)
+            if(lst!= null)
             {
-                if (cate.parent_id == parent_id)
+                List<CategoryViewModel> result = new List<CategoryViewModel>();
+                foreach (CategoryViewModel cate in lst)
                 {
-                    CategoryViewModel tree = new CategoryViewModel();
-                    tree = cate;
-                    tree.level = level;
-                    tree.cate_name = String.Concat(Enumerable.Repeat("|————", level)) + tree.cate_name;
+                    if (cate.parent_id == parent_id)
+                    {
+                        CategoryViewModel tree = new CategoryViewModel();
+                        tree = cate;
+                        tree.level = level;
+                        tree.cate_name = String.Concat(Enumerable.Repeat("|————", level)) + tree.cate_name;
 
-                    result.Add(tree);
-                    List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);
-                    child.OrderByDescending(m => m.create_at);
-                    result.AddRange(child);
+                        result.Add(tree);
+                        List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);
+                        child.OrderByDescending(m => m.create_at);
+                        result.AddRange(child);
+                    }
                 }
+                return result;
             }
-            return result;
+            return null;
         }
         [HttpGet]
         public async Task<IActionResult> Create()

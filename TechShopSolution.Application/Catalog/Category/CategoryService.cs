@@ -100,6 +100,97 @@ namespace TechShopSolution.Application.Catalog.Category
          
             return await data;
         }
+        public async Task<ApiResult<bool>> Delete(int cateID)
+        {
+            try
+            {
+                var cate = await _context.Categories.FindAsync(cateID);
+                if (cate != null)
+                {
+                    cate.isDelete = true;
+                    cate.delete_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>($"Loại sản phẩm không tồn tại");
+            }
+            catch (Exception ex)
+            {
+                return new ApiErrorResult<bool>(ex.Message);
+            }
+        }
+        public async Task<ApiResult<bool>> Update(UpdateCategoryRequest request)
+        {
+            try
+            {
+                var cateExist = await _context.Categories.FindAsync(request.id);
+                if (cateExist != null || cateExist.isDelete)
+                {
+                    cateExist.cate_name = request.cate_name;
+                    cateExist.cate_name = request.cate_slug;
+                    cateExist.isActive = request.isActive;
+                    cateExist.parent_id = request.parent_id;
+                    cateExist.meta_descriptions = request.meta_descriptions;
+                    cateExist.meta_keywords = request.meta_keywords;
+                    cateExist.meta_title = request.meta_title;
+                    cateExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy loại sản phẩm này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+        public async Task<bool> isValidSlug(int id, string slug)
+        {
+            if (await _context.Categories.AnyAsync(x => x.cate_slug.Equals(slug) && x.id != id))
+                return false;
+            return true;
+        }
+        public async Task<ApiResult<bool>> ChangeStatus(int id)
+        {
+            try
+            {
+                var cateExist = await _context.Categories.FindAsync(id);
+                if (cateExist != null || cateExist.isDelete)
+                {
+                    if (cateExist.isActive)
+                        cateExist.isActive = false;
+                    else cateExist.isActive = true;
+                    cateExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy loại sản phẩm này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+        public async Task<ApiResult<CategoryViewModel>> GetById(int brandId)
+        {
+            var cateExist = await _context.Categories.FindAsync(brandId);
+            if (cateExist == null || cateExist.isDelete)
+            {
+                return new ApiErrorResult<CategoryViewModel>("Loại sản phẩm không tồn tại");
+            }
+            var cate = new CategoryViewModel()
+            {
+                id = cateExist.id,
+                cate_name = cateExist.cate_name,
+                cate_slug = cateExist.cate_slug,
+                create_at = cateExist.create_at,
+                isActive = cateExist.isActive,
+                meta_descriptions = cateExist.meta_descriptions,
+                meta_keywords = cateExist.meta_keywords,
+                meta_title = cateExist.meta_title
+            };
+            return new ApiSuccessResult<CategoryViewModel>(cate);
+        }
 
     }
 }

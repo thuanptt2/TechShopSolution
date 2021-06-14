@@ -39,5 +39,46 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromBody] UpdateCategoryRequest request)
+        {
+            var result = await _categoryService.Update(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("ChangeStatus/{id}")]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _categoryService.ChangeStatus(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _categoryService.Delete(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet]
+        public async Task<IActionResult> isValidSlug(int id, string slug)
+        {
+            if (await _categoryService.isValidSlug(id, slug))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByID(int id)
+        {
+            var result = await _categoryService.GetById(id);
+            return Ok(result);
+        }
     }
 }
