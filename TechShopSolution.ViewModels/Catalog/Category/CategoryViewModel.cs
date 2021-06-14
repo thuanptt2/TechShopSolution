@@ -14,5 +14,6 @@ namespace TechShopSolution.ViewModels.Catalog.Category
         public string meta_title { get; set; }
         public string meta_keywords { get; set; }
         public string meta_descriptions { get; set; }
+        public DateTime create_at { get; set; }
     }
 }

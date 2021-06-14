@@ -1,20 +1,22 @@
-﻿@model TechShopSolution.ViewModels.Catalog.Brand.BrandUpdateRequest
+﻿@model TechShopSolution.ViewModels.Catalog.Category.CreateCategoryRequest
 
 @{
-    ViewData["Title"] = "Update";
+    ViewData["Title"] = "Thêm loại linh kiện";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
 @section jsFooter {
     <script src="~/js/Brand.js"></script>
 }
 <div class="container-fluid">
-    <h2 class="mt-4">Cập nhật thương hiệu</h2>
+    <h2 class="mt-4">Thêm loại linh kiện</h2>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-        <li class="breadcrumb-item"><a href="/brand/index">Cập nhật thương hiệu</a></li>
-        <li class="breadcrumb-item active">Cập nhật thương hiệu</li>
+        <li class="breadcrumb-item"><a href="/category/index">Loại linh kiện</a></li>
+        <li class="breadcrumb-item active">Thêm loại linh kiện</li>
     </ol>
-    <form asp-action="Update" asp-controller="Brand" method="post">
+    <form asp-action="Create" asp-controller="Category" method="post">
         <div class="padding-container">
             <div class="row">
                 <div class="col-lg-12 col-12 wrapper-content-limit">
@@ -22,11 +24,15 @@
                         <label class="title-fill">Thông tin chung</label>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input asp-for="id" class="form-control" hidden />
                         <div class="form-group">
-                            <label asp-for="brand_name" class="control-label lableFormField"></label>
-                            <input asp-for="brand_name" class="form-control" />
-                            <span asp-validation-for="brand_name" class="text-danger"></span>
+                            <label asp-for="cate_name" class="control-label lableFormField"></label>
+                            <input asp-for="cate_name" class="form-control" id="txtName" />
+                            <span asp-validation-for="cate_name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="cate_name" class="control-label lableFormField"></label>
+                            @Html.DropDownListFor(model => model.parent_id, new SelectList(ViewBag.ListCate, "id", "cate_name"), "---Không có---", new { @class = "form-control" })
+                            <span asp-validation-for="parent_id" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="isActive" class="control-label lableFormField"></label>
@@ -49,9 +55,9 @@
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="brand_slug" class="control-label lableFormField"></label>
-                            <input asp-for="brand_slug" class="form-control" />
-                            <span asp-validation-for="brand_slug" class="text-danger"></span>
+                            <label asp-for="cate_slug" class="control-label lableFormField"></label>
+                            <input asp-for="cate_slug" class="form-control" id="txtSlug" />
+                            <span asp-validation-for="cate_slug" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="meta_title" class="control-label lableFormField"></label>
@@ -68,8 +74,8 @@
                             <input asp-for="meta_keywords" class="form-control" />
                             <span asp-validation-for="meta_keywords" class="text-danger"></span>
                         </div>
-                        <div class="mt-3 text-right">
-                            <a class="btn btn-primary" href="/brand/index">
+                        <div class="mt-5 text-right">
+                            <a class="btn btn-primary" href="/category/index">
                                 <i class="fa fa-chevron-left"></i>  Trở về
                             </a>
                             <button class="btn btn-success" type="submit">
@@ -83,5 +89,3 @@
         </div>
     </form>
 </div>
-
-

@@ -11,5 +11,6 @@ namespace TechShopSolution.Application.Catalog.Category
     {
         Task<PagedResult<CategoryViewModel>> GetAllPaging(GetCategoryPagingRequest request);
         Task<ApiResult<bool>> Create(CreateCategoryRequest request);
+        Task<List<CategoryViewModel>> GetAllCategory();
     }
 }

@@ -51,14 +51,17 @@ namespace TechShopSolution.AdminApp.Controllers
 
                     result.Add(tree);
                     List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);
+                    child.OrderByDescending(m => m.create_at);
                     result.AddRange(child);
                 }
             }
             return result;
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var cate_tree = await _categoryApiClient.GetAllCategory();
+            ViewBag.ListCate =  await OrderCateToTree(cate_tree);
             return View();
         }
         [HttpPost]

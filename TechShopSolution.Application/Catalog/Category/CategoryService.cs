@@ -39,6 +39,7 @@ namespace TechShopSolution.Application.Catalog.Category
                     meta_keywords = a.meta_keywords,
                     meta_title = a.meta_title,
                     parent_id = a.parent_id,
+                    create_at = a.create_at,
                     isActive = a.isActive,
                 }).ToListAsync();
 
@@ -58,6 +59,7 @@ namespace TechShopSolution.Application.Catalog.Category
                 var cate = new TechShopSolution.Data.Entities.Category
                 {
                     cate_name = request.cate_name,
+                    parent_id = request.parent_id,
                     meta_descriptions = request.meta_descriptions,
                     meta_keywords = request.meta_keywords,
                     meta_title = request.meta_title,
@@ -75,6 +77,28 @@ namespace TechShopSolution.Application.Catalog.Category
             {
                 return new ApiErrorResult<bool>("Thêm thất bại");
             }
+        }
+        public async Task<List<CategoryViewModel>> GetAllCategory()
+        {
+            var query = from cate in _context.Categories
+                        where cate.isDelete == false
+                        select cate;
+            if (query == null)
+                return null;
+
+            var data = query.Select(a => new CategoryViewModel()
+            {
+                id = a.id,
+                cate_name = a.cate_name,
+                cate_slug = a.cate_slug,
+                meta_descriptions = a.meta_descriptions,
+                meta_keywords = a.meta_keywords,
+                meta_title = a.meta_title,
+                parent_id = a.parent_id,
+                isActive = a.isActive,
+            }).ToListAsync();
+         
+            return await data;
         }
 
     }

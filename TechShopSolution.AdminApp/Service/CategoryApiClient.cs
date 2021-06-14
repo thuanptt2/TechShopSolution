@@ -30,6 +30,15 @@ namespace TechShopSolution.AdminApp.Service
             var brand = JsonConvert.DeserializeObject<PagedResult<CategoryViewModel>>(body);
             return brand;
         }
+        public async Task<List<CategoryViewModel>> GetAllCategory()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/category");
+            var body = await respone.Content.ReadAsStringAsync();
+            var brand = JsonConvert.DeserializeObject<List<CategoryViewModel>>(body);
+            return brand;
+        }
         public async Task<ApiResult<bool>> CreateCategory(UpdateCategoryRequest request)
         {
             var client = _httpClientFactory.CreateClient();

@@ -19,6 +19,12 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             _categoryService = categoryService;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllPaging()
+        {
+            var customer = await _categoryService.GetAllCategory();
+            return Ok(customer);
+        }
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetCategoryPagingRequest requet)
         {

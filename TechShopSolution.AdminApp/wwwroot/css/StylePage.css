@@ -25,7 +25,14 @@
     padding: 20px;
     border-radius: 10px;
 }
-
+.wrapper-content-limit .wrapper-content {
+    max-width: 900px;
+}
+.form-check-label {
+    margin-bottom: 0;
+    padding-top: 3px;
+    margin-left: 5px;
+}
 hr {
     border: 0px;
     margin-top: 0px;
