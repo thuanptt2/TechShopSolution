@@ -37,7 +37,7 @@ namespace TechShopSolution.Application.Catalog.Brand
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-        public async Task<ApiResult<bool>> Create(BrandUpdateRequest request)
+        public async Task<ApiResult<bool>> Create(BrandCreateRequest request)
         {
             try
             {

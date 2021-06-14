@@ -37,7 +37,7 @@ namespace TechShopSolution.AdminApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(BrandUpdateRequest request)
+        public async Task<IActionResult> Create(BrandCreateRequest request)
         {
             if (!ModelState.IsValid)
                 return View();

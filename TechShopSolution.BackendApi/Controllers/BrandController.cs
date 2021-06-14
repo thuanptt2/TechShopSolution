@@ -32,7 +32,7 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] BrandUpdateRequest request)
+        public async Task<IActionResult> Create([FromBody] BrandCreateRequest request)
         {
             var result = await _brandService.Create(request);
             if (!result.IsSuccess)
