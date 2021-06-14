@@ -1,0 +1,277 @@
+﻿body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    color: #212121;
+    line-height: 18px;
+    font-size: 14px;
+    background: #f5f5f5 !important;
+    -webkit-overflow-scrolling: touch;
+    height: 100vh !important;
+}
+
+.padding-container {
+    padding: 30px;
+    margin: 0 auto;
+    width: auto;
+    height: auto;
+}
+
+.wrapper-content {
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+hr {
+    border: 0px;
+    margin-top: 0px;
+}
+
+.title-fill {
+    color: #0b3d88;
+    font-size: 18.5px;
+    font-weight: bold;
+}
+
+.btnAdd {
+    float: right;
+}
+
+.ordercus {
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#btnEdit:hover{
+    cursor: pointer;
+    color: #007bff;
+}
+
+.loaderbody {
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    background-color: rgba(128,128,128,0.2);
+    z-index: 2147483647;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+    position: fixed;
+    top: 45%;
+    left: 40%;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.hide {
+    display: none;
+}
+.table td, .table th {
+    vertical-align: middle;
+}
+.pagination {
+    justify-content: center;
+}
+.sb-topnav .navbar-brand {
+    width: 205px;
+}
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #D4EDDA; /* Black background color */
+    color: #155724; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    top: 60px; /* 30px from the bottom */
+}
+
+    /* Show the snackbar when clicking on a button (class added with JavaScript) */
+    #snackbar.show {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 60px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 60px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        top: 60px;
+        opacity: 1;
+    }
+
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        top: 60px;
+        opacity: 1;
+    }
+
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+.ImageBoxMain {
+    width: 100%;
+    height: 100%;
+    background-color: #F7F7F9;
+    border: 1px solid #c3c3c3;
+    border-style: dashed;
+    vertical-align: central;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    display: block;
+}
+.fa-image {
+    color: #c3c3c3;
+}
+.lableFormField {
+    font-weight: 500;
+    font-size: 1.0rem;
+    color: #6c798f;
+}
+.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable, .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+    min-height: 250px;
+    max-height: 450px;
+}
+.SeoPadding {
+    display: flex;
+    justify-content: space-between;
+}
+.SlugUrl {
+    align-self: center;
+    flex: none;
+    white-space: nowrap;
+    height: 18px;
+    color: #6c798f;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 18px;
+    cursor: pointer;
+    padding-left: 5px;
+}
+.SlugProduct {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    background: #fff;
+    padding: 0;
+    justify-content: flex-start;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+}
+.InputSlug {
+    border: 0;
+}
+.middle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #161616;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%)
+}
+.DeleteImageButton {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #161616;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%)
+}
+
+.col-lg-3:hover .ProductMoreImage {
+    opacity: 0.3;
+}
+
+.col-lg-3:hover .middle {
+    opacity: 1;
+}
+.col-lg-3:hover .DeleteImageButton {
+    opacity: 1;
+}
+.image {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: 250px;
+    transition: .5s ease;
+    backface-visibility: hidden;
+    display: block;
+    object-fit: contain;
+}
+.ProductMoreImage {
+    width: 100%;
+    display: block;
+    height: 120px;
+    object-fit: contain;
+    border: 1px solid #D0D0D0;
+}
+.btnSaveImage {
+    position: absolute;
+    bottom: 0;
+}
+

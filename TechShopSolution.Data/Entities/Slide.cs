@@ -12,6 +12,6 @@ namespace TechShopSolution.Data.Entities
         public string link { get; set; }
         public bool status { get; set; }
         public DateTime create_at { get; set; }
-        public DateTime update_at { get; set; }
+        public DateTime? update_at { get; set; }
     }
 }

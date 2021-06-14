@@ -1,0 +1,190 @@
+﻿@model TechShopSolution.ViewModels.Catalog.Customer.CustomerUpdateRequest
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section jsFooter {
+    <script>
+        window.onload = function () {
+            var x = document.getElementById("snackbar");
+
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        };
+    </script>
+}
+<div class="container-fluid">
+    <h2 class="mt-4">Thông tin khách hàng</h2>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/customer/index">Khách hàng</a></li>
+        <li class="breadcrumb-item active">Cập nhật khách hàng</li>
+    </ol>
+    <div class="padding-container">
+        @if (ViewBag.SuccessMsg != null)
+        {
+            <div class="alert alert-success" id="snackbar" role="alert">
+                <b>@ViewBag.SuccessMsg</b>
+            </div>
+        }
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-4 col-12">
+                    <div class="wrapper-content mb-3 shadow">
+                        <div class="row">
+                            <div class="col">
+                                <label class="title-fill">Thông tin liên lạc</label>
+                            </div>
+                            <div class="col text-right">
+                                <a id="btnEditInfo">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <hr />
+                        <form asp-action="Update">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <fieldset disabled="disabled" id="fieldSetUpdate">
+                                <div class="form-group">
+                                    <label asp-for="name" class="control-label lableFormField"></label>
+                                    <input asp-for="name" class="form-control" />
+                                    <span asp-validation-for="name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="email" class="control-label lableFormField"></label>
+                                    <input asp-for="email" class="form-control" />
+                                    <span asp-validation-for="email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="password" class="control-label lableFormField"></label>
+                                    <input asp-for="password" type="password" value="@Model.password" class="form-control" />
+                                    <span asp-validation-for="password" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="phone" class="control-label lableFormField"></label>
+                                    <input asp-for="phone" class="form-control" />
+                                    <span asp-validation-for="phone" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="birthday" class="control-label lableFormField"></label>
+                                    <input asp-for="birthday" class="form-control" />
+                                    <span asp-validation-for="birthday" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="control-label lableFormField" asp-for="sex"></label>
+                                        @if (Model.sex == true)
+                                        {
+                                            <div class="form-check">
+                                                <input asp-for="sex" class="form-check-input" type="radio" value="true" checked="checked">
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    Nam
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="sex" class="form-check-input" type="radio" value="false">
+                                                <label class="form-check-label align-self-center">
+                                                    Nữ
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-check">
+                                                <input asp-for="sex" class="form-check-input" type="radio" value="true">
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    Nam
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="sex" class="form-check-input" type="radio" value="false" checked="checked">
+                                                <label class="form-check-label align-self-center">
+                                                    Nữ
+                                                </label>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="col">
+                                        <label class="control-label lableFormField" asp-for="isActive"></label>
+                                        @if (Model.isActive == true)
+                                        {
+                                            <div class="form-check" readonly="readonly">
+                                                <input asp-for="isActive" class="form-check-input" type="radio" value="true" id="radioKichHoat" checked="checked">
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    Kích hoạt
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="isActive" class="form-check-input" type="radio" value="false" id="radioKhoa">
+                                                <label class="form-check-label align-self-center">
+                                                    Khóa
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-check" readonly="readonly">
+                                                <input asp-for="isActive" class="form-check-input" type="radio" value="true" id="radioKichHoat">
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    Kích hoạt
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="isActive" class="form-check-input" type="radio" value="false" id="radioKhoa" checked="checked" />
+                                                <label class="form-check-label align-self-center">
+                                                    Khóa
+                                                </label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col text-right mt-3">
+                                    <button class="btn btn-success" type="submit" asp-action="Update" asp-controller="Customer" onclick="deleteCustomer('@Url.Action("Update","Customer",new { id = Model.Id }, Context.Request.Scheme)')">
+                                        <i class="fa fa-save"></i>
+                                        Cập nhật
+                                    </button>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="wrapper-content mb-3 shadow">
+                        <div class="row">
+                            <div class="col">
+                                <label class="title-fill">Địa chỉ mặc định</label>
+                            </div>
+                            <div class="col text-right">
+                                <a id="btnEdit" onclick="showInPopup('@Url.Action("UpdateAddress","Customer",new { id = Model.Id }, Context.Request.Scheme)','Thay đổi địa chỉ')">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group" style="font-size: 15px;">
+                            <i class="fa fa-address-card"></i>
+                            <span>@Model.address</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-12">
+                    <div class="wrapper-content shadow">
+                        <label class="title-fill">Đơn hàng gần nhất</label>
+                        <hr />
+                        <div class="ordercus">
+                            <i class="fa fa-inbox fa-3x mb-3"></i>
+                            <br />
+                            Khách hàng này hiện không có đơn hàng.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    //all script
+
+

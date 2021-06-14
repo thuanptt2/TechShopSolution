@@ -15,7 +15,7 @@ namespace TechShopSolution.Data.Configurations
             builder.HasKey(x => x.id);
             builder.Property(x => x.code).IsRequired().IsUnicode(false);
             builder.Property(x => x.name).IsRequired().HasMaxLength(255);
-            builder.Property(x => x.status).IsRequired().HasDefaultValue(true);
+            builder.Property(x => x.isActive).IsRequired();
             builder.Property(x => x.start_at)
                 .HasColumnType("Date");
             builder.Property(x => x.end_at)

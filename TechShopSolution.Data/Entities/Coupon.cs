@@ -10,7 +10,7 @@ namespace TechShopSolution.Data.Entities
         public string code { get; set; }
         public string name { get; set; }
         public int? quantity { get; set; }
-        public bool status { get; set; }
+        public bool isActive { get; set; }
         public DateTime start_at { get; set; }
         public DateTime end_at { get; set; }
     }

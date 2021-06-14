@@ -12,6 +12,6 @@ namespace TechShopSolution.Data.Entities
         public string password { get; set; }
         public string phone { get; set; }
         public DateTime create_at { get; set; }
-        public DateTime update_at { get; set; }
+        public DateTime? update_at { get; set; }
     }
 }

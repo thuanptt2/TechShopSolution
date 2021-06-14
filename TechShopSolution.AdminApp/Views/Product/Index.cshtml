@@ -1,0 +1,170 @@
+﻿
+@using TechShopSolution.ViewModels.Common;
+@model PagedResult<TechShopSolution.ViewModels.Catalog.Product.ProductViewModel>
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section jsFooter {
+    <script>
+        window.onload = function () {
+            var x = document.getElementById("snackbar");
+
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        };
+    </script>
+}
+<div class="container-fluid px-4">
+    <h3 class="mt-4">Danh sách Sản phẩm</h3>
+    <ol class="breadcrumb mb-1">
+        <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+    </ol>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="padding-container">
+        <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Product">
+            <i class="fa fa-plus"></i>
+            Thêm mới
+        </a>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
+            <div class="input-group">
+                <label for="pet-select"></label>
+                <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
+                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/product/index'"><i class="fas fa-times"></i></button>
+            </div>
+        </form>
+        <!-- Notification -->
+        @if (ViewBag.SuccessMsg != null)
+        {
+            <div class="alert alert-success" id="snackbar" role="alert">
+                <b>@ViewBag.SuccessMsg</b>
+            </div>
+
+        }
+
+        <!-- The actual snackbar -->
+        <div class="table-responsive shadow-lg">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light thead-dark">
+                    <tr>
+                        <th scope="col" width="400px">
+                            Tên sản phẩm
+                        </th>
+                        <th scope="col" class="text-center" width="80px">
+                            Tồn kho
+                        </th>
+                        <th scope="col" class="text-center" width="80px">
+                            Giá
+                        </th>
+                        <th scope="col" class="text-center" width="80px">
+                            Giá giảm
+                        </th>
+                        <th scope="col" class="text-center" width="80px">
+                            Trạng thái
+                        </th>
+                        <th scope="col" class="text-center" width="80px">
+                            Bán chạy
+                        </th>
+                        <th scope="col" class="text-center" width="80px">
+                            Nổi bật
+                        </th>
+                        <th class="text-center" width="80px">
+                            Tác vụ
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model == null)
+                    {
+                        <tr>
+                            <td>
+                                Không có sản phẩm nào.
+                            </td>
+                        </tr>
+                    }
+                    else if (Model.TotalRecords == 0)
+                    {
+                        <tr>
+                            <td>
+                                Không tìm thấy sản phẩm.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.ActionLink(item.name, "Update", new { id = item.id })
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.instock)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.unit_price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.promotion_price)
+                                </td>
+                                @if (item.isActive)
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+
+
+                                @if (item.best_seller)
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("OffBestSeller", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("OffBestSeller", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+                                @if (item.featured)
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("OffFeatured", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("OffFeatured", "Product", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                    </td>
+                                }
+                                <td align="center">
+                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này, hành động này không thể hoàn tác?')">Xóa</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            @await Component.InvokeAsync("Pager", Model)
+
+        </div>
+
+
+    </div>
+
+</div>
