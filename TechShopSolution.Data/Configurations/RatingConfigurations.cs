@@ -18,8 +18,7 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.product_id).IsRequired();
             builder.Property(x => x.name).IsRequired().HasMaxLength(255);
             builder.Property(x => x.date_rating)
-                .HasDefaultValueSql("GetDate()")
-                .HasColumnType("Date");
+                .HasDefaultValueSql("GetDate()");
             builder.HasOne(x => x.Product).WithMany(t => t.Ratings).HasForeignKey(x => x.product_id);
         }
     }

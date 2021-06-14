@@ -20,10 +20,8 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.isActive).IsRequired();
             builder.Property(x => x.title).IsRequired().HasMaxLength(255);
             builder.Property(x => x.create_at)
-                .HasDefaultValueSql("GetDate()")
-                .HasColumnType("Date");
-            builder.Property(x => x.update_at)
-              .HasColumnType("Date");
+                .HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.update_at);
 
             builder.HasOne(x => x.CategoryNews).WithMany(t => t.ListNews).HasForeignKey(x => x.cate_id);
         }
