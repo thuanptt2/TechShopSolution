@@ -31,7 +31,7 @@ namespace TechShopSolution.AdminApp.Service
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
-        public async Task<ApiResult<bool>> CreateBrand(BrandUpdateRequest request)
+        public async Task<ApiResult<bool>> CreateBrand(BrandCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);

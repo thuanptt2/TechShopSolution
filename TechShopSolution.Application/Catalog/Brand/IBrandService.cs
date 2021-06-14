@@ -9,7 +9,7 @@ namespace TechShopSolution.Application.Catalog.Brand
 {
     public interface IBrandService
     {
-        Task<ApiResult<bool>> Create(BrandUpdateRequest request);
+        Task<ApiResult<bool>> Create(BrandCreateRequest request);
         Task<ApiResult<bool>> Update(int id, BrandUpdateRequest request);
         Task<ApiResult<bool>> ChangeStatus(int id);
         Task<ApiResult<bool>> Delete(int brandID);
