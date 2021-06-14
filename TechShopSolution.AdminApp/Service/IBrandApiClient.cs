@@ -16,6 +16,5 @@ namespace TechShopSolution.AdminApp.Service
         Task<ApiResult<bool>> Delete(int cusID);
         Task<ApiResult<BrandViewModel>> GetById(int id);
         Task<bool> isValidSlug(int id, string slug);
-
     }
 }

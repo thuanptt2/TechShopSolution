@@ -42,7 +42,7 @@ namespace TechShopSolution.BackendApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] BrandUpdateRequest request)
         {
-            var result = await _brandService.Update(request.Id, request);
+            var result = await _brandService.Update(request.id, request);
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);

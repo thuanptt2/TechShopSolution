@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TechShopSolution.AdminApp.Service;
+using TechShopSolution.ViewModels.Catalog.Brand;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
@@ -21,7 +23,7 @@ namespace TechShopSolution.AdminApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
             };
-            var data = await _brandApiClient.GetCustomerPagings(request);
+            var data = await _brandApiClient.GetBrandPagings(request);
             ViewBag.Keyword = keyword;
             if (TempData["result"] != null)
             {
@@ -59,8 +61,13 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             var updateRequest = new BrandUpdateRequest()
             {
-                Id = id,
-
+                id = id,
+                brand_name = result.ResultObject.brand_name,
+                brand_slug = result.ResultObject.brand_slug,
+                isActive = result.ResultObject.isActive,
+                meta_descriptions = result.ResultObject.meta_descriptions,
+                meta_keywords = result.ResultObject.meta_keywords,
+                meta_title = result.ResultObject.meta_title
             };
             if (TempData["result"] != null)
             {
@@ -74,7 +81,7 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            var result = await _brandApiClient.UpdateCustomer(request);
+            var result = await _brandApiClient.UpdateBrand(request);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Cập nhật thương hiệu thành công";
