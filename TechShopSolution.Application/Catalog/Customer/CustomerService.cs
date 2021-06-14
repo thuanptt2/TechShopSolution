@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
-using TechShopSolution.ViewModels.Location;
 
 namespace TechShopSolution.Application.Catalog.Customer
 {
@@ -122,7 +120,6 @@ namespace TechShopSolution.Application.Catalog.Customer
                 id = cusExist.id
             };
             return new ApiSuccessResult<CustomerViewModel>(customer);
-
         }
         public async Task<ApiResult<bool>> Update(int id, CustomerUpdateRequest request)
         {
