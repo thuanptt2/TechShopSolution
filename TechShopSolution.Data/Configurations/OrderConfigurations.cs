@@ -21,10 +21,8 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.subtotal).IsRequired();
             builder.Property(x => x.total).IsRequired();
             builder.Property(x => x.create_at)
-                .HasDefaultValueSql("GetDate()")
-                .HasColumnType("Date");
-            builder.Property(x => x.update_at)
-                .HasColumnType("Date");
+                .HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.update_at);
             builder.HasOne(x => x.Customers).WithMany(t => t.Order).HasForeignKey(x => x.cus_id);
             builder.HasOne(x => x.PaymentMethod).WithMany(t => t.Orders).HasForeignKey(x => x.payment_id);
         }

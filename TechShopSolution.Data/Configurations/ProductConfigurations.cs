@@ -26,12 +26,9 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.slug).IsRequired().HasMaxLength(255);
             builder.Property(x => x.warranty).IsRequired();
             builder.Property(x => x.create_at)
-                .HasDefaultValueSql("GetDate()")
-                .HasColumnType("Date");
-            builder.Property(x => x.update_at)
-              .HasColumnType("Date");
-            builder.Property(x => x.delete_at)
-               .HasColumnType("Date");
+                .HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.update_at);
+            builder.Property(x => x.delete_at);
             builder.HasOne(x => x.Brand).WithMany(p => p.Products).HasForeignKey(x => x.brand_id);
         }
     }

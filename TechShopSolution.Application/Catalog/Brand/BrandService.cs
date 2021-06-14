@@ -94,7 +94,8 @@ namespace TechShopSolution.Application.Catalog.Brand
 
             int totalRow = await query.CountAsync();
 
-            var data = query.Skip((request.PageIndex - 1) * request.PageSize)
+            var data = query.OrderByDescending(m => m.create_at)
+                .Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(a => new BrandViewModel()
                 {
@@ -169,6 +170,5 @@ namespace TechShopSolution.Application.Catalog.Brand
                 return false;
             return true;
         }
-
     }
 }

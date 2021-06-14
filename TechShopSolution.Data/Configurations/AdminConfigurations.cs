@@ -18,10 +18,8 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.email).IsRequired().HasMaxLength(50).IsUnicode(false);
             builder.Property(x => x.phone).IsRequired().HasMaxLength(20).IsUnicode(false);
             builder.Property(x => x.create_at)
-              .HasDefaultValueSql("GetDate()")
-              .HasColumnType("Date");
-            builder.Property(x => x.update_at)
-              .HasColumnType("Date");
+              .HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.update_at);
         }
     }
 }

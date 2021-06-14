@@ -18,10 +18,8 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.transporter_id).IsRequired();
             builder.Property(x => x.order_id).IsRequired();
             builder.Property(x => x.create_at)
-                .HasDefaultValueSql("GetDate()")
-                .HasColumnType("Date");
-            builder.Property(x => x.update_at)
-              .HasColumnType("Date");
+                .HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.update_at);
 
             builder.HasOne(x => x.Transporter).WithMany(t => t.Transports).HasForeignKey(x => x.transporter_id);
             builder.HasOne(x => x.Order).WithOne(t => t.Transport).HasForeignKey<Order>(x => x.id);
