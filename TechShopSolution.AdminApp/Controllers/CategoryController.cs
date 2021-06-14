@@ -56,7 +56,6 @@ namespace TechShopSolution.AdminApp.Controllers
 
                         result.Add(tree);
                         List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);
-                        child.OrderByDescending(m => m.create_at);
                         result.AddRange(child);
                     }
                 }
@@ -85,6 +84,45 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var result = await _categoryApiClient.GetById(id);
+            if (!result.IsSuccess || result.ResultObject == null)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View("Index");
+            }
+            var updateRequest = new UpdateCategoryRequest()
+            {
+                id = id,
+                cate_name = result.ResultObject.cate_name,
+                cate_slug = result.ResultObject.cate_slug,
+                isActive = result.ResultObject.isActive,
+                meta_descriptions = result.ResultObject.meta_descriptions,
+                meta_keywords = result.ResultObject.meta_keywords,
+                meta_title = result.ResultObject.meta_title,
+                parent_id = result.ResultObject.parent_id,
+            };
+           
+            var cate_tree = await _categoryApiClient.GetAllCategory();
+            ViewBag.ListCate = await OrderCateToTree(cate_tree);
+            return View(updateRequest);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(UpdateCategoryRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _categoryApiClient.UpdateCategory(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật loại sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }

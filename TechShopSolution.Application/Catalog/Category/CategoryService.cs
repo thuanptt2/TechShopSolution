@@ -127,7 +127,7 @@ namespace TechShopSolution.Application.Catalog.Category
                 if (cateExist != null || cateExist.isDelete)
                 {
                     cateExist.cate_name = request.cate_name;
-                    cateExist.cate_name = request.cate_slug;
+                    cateExist.cate_slug = request.cate_slug;
                     cateExist.isActive = request.isActive;
                     cateExist.parent_id = request.parent_id;
                     cateExist.meta_descriptions = request.meta_descriptions;
@@ -185,12 +185,12 @@ namespace TechShopSolution.Application.Catalog.Category
                 cate_slug = cateExist.cate_slug,
                 create_at = cateExist.create_at,
                 isActive = cateExist.isActive,
+                parent_id = cateExist.parent_id,
                 meta_descriptions = cateExist.meta_descriptions,
                 meta_keywords = cateExist.meta_keywords,
                 meta_title = cateExist.meta_title
             };
             return new ApiSuccessResult<CategoryViewModel>(cate);
         }
-
     }
 }
