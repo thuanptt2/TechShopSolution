@@ -19,6 +19,10 @@ using TechShopSolution.Application.Common;
 using TechShopSolution.Application.System;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Utilities.Constants;
+using TechShopSolution.ViewModels.Catalog.Brand;
+using TechShopSolution.ViewModels.Catalog.Brand.Validator;
+using TechShopSolution.ViewModels.Catalog.Category;
+using TechShopSolution.ViewModels.Catalog.Category.Validator;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Catalog.Customer.Validation;
 using TechShopSolution.ViewModels.Catalog.Customer.Validator;
@@ -56,6 +60,11 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateAddressRequest>, UpdateAddressRequestValidator>();
             services.AddTransient<IValidator<ProductCreateRequest>, CreateProductValidator>();
+            services.AddTransient<IValidator<CreateCategoryRequest>, CreateCategoryValidator>();
+            services.AddTransient<IValidator<UpdateCategoryRequest>, UpdateCategoryValidator>();
+            services.AddTransient<IValidator<BrandCreateRequest>, BrandCreateValidator>();
+            services.AddTransient<IValidator<BrandUpdateRequest>, BrandUpdateValidator>();
+
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
