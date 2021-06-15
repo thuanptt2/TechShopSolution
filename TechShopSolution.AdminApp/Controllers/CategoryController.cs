@@ -165,5 +165,14 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View("Index");
         }
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> isValidSlug(int id, string cate_slug)
+        {
+            if (await _categoryApiClient.isValidSlug(id, cate_slug) == false)
+            {
+                return Json($"Đường dẫn {cate_slug} đã được sử dụng.");
+            }
+            return Json(true);
+        }
     }
 }

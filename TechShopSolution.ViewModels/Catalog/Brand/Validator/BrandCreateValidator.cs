@@ -5,9 +5,9 @@ using System.Text;
 
 namespace TechShopSolution.ViewModels.Catalog.Brand.Validator
 {
-    public class CreateBrandValidator : AbstractValidator<BrandCreateRequest>
+    public class BrandCreateValidator : AbstractValidator<BrandCreateRequest>
     {
-        public CreateBrandValidator()
+        public BrandCreateValidator()
         {
             RuleFor(x => x.brand_slug).NotEmpty().WithMessage("Tên thương hiệu không được để trống")
                   .MaximumLength(255).WithMessage("Tên thương hiệu không thể vượt quá 255 kí tự");
