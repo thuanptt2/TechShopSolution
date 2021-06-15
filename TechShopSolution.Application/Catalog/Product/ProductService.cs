@@ -291,7 +291,7 @@ namespace TechShopSolution.Application.Catalog.Product
         }
         public async Task<bool> isValidSlug(string Code, string slug)
         {
-            if(await _context.Products.AnyAsync(x => x.slug.Equals(slug) && !x.code.Equals(Code)))
+            if(await _context.Products.AnyAsync(x => x.slug.Equals(slug) && !x.code.Equals(Code) && x.isDelete == false))
                 return false;
             return true;
         }

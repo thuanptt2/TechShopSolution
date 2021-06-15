@@ -69,6 +69,9 @@
                         <th scope="col" class="text-center">
                             Trạng thái
                         </th>
+                        <th scope="col" class="text-center">
+                            Tác vụ
+                        </th>
 
                     </tr>
                 </thead>
@@ -122,6 +125,9 @@
                                         <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Brand", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
+                                <td align="center">
+                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa loại sản phẩm này? thao tác này không thể hoàn tác?')">Xóa</a>
+                                </td>
                             </tr>
                         }
                     }
