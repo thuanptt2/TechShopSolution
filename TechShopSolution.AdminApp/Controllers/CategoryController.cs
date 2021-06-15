@@ -24,15 +24,20 @@ namespace TechShopSolution.AdminApp.Controllers
                 PageSize = pageSize,
             };
             var data = await _categoryApiClient.GetCategoryPagings(request);
-            var tree = await OrderCateToTree(data.Items);
-            if(tree!=null)
+            List<CategoryViewModel> tree = new List<CategoryViewModel>();
+            if (keyword!=null)
             {
-                data.Items = tree.Skip((request.PageIndex - 1) * request.PageSize)
-                             .Take(request.PageSize).ToList();
-                data.TotalRecords = tree.Count();
+                data.Items = data.Items.Skip((request.PageIndex - 1) * request.PageSize)
+                                 .Take(request.PageSize).ToList();
+            } else {
+                tree = await OrderCateToTree(data.Items);
+                if(tree!=null)
+                {
+                    data.Items = tree.Skip((request.PageIndex - 1) * request.PageSize)
+                                 .Take(request.PageSize).ToList();
+                    data.TotalRecords = tree.Count();
+                }
             }
-
-
             ViewBag.Keyword = keyword;
             if (TempData["result"] != null)
             {
@@ -124,5 +129,20 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _categoryApiClient.Delete(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Xóa loại sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
+
     }
 }
