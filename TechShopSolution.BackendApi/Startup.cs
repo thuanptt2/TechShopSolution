@@ -60,6 +60,7 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateAddressRequest>, UpdateAddressRequestValidator>();
             services.AddTransient<IValidator<ProductCreateRequest>, CreateProductValidator>();
+            services.AddTransient<IValidator<ProductUpdateRequest>, UpdateProductValidator>();
             services.AddTransient<IValidator<CreateCategoryRequest>, CreateCategoryValidator>();
             services.AddTransient<IValidator<UpdateCategoryRequest>, UpdateCategoryValidator>();
             services.AddTransient<IValidator<BrandCreateRequest>, BrandCreateValidator>();
