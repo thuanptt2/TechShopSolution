@@ -194,7 +194,7 @@ namespace TechShopSolution.Application.Catalog.Customer
         }
         public async Task<bool> VerifyEmail(string email)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(email));
+            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(email) && x.isDelete == false);
             if(customer!=null)
             {
                 return false;

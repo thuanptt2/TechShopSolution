@@ -166,7 +166,7 @@ namespace TechShopSolution.Application.Catalog.Brand
         }
         public async Task<bool> isValidSlug(int id, string slug)
         {
-            if (await _context.Brands.AnyAsync(x => x.brand_slug.Equals(slug) && x.id != id))
+            if (await _context.Brands.AnyAsync(x => x.brand_slug.Equals(slug) && x.id != id && x.isDelete == false))
                 return false;
             return true;
         }

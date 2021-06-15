@@ -56,6 +56,9 @@ namespace TechShopSolution.Application.Catalog.Category
         {
             try
             {
+                if (request.parent_id == null)
+                    request.parent_id = 0;
+                else request.parent_id = request.parent_id;
                 var cate = new TechShopSolution.Data.Entities.Category
                 {
                     cate_name = request.cate_name,
@@ -123,6 +126,9 @@ namespace TechShopSolution.Application.Catalog.Category
         {
             try
             {
+                if (request.parent_id == null)
+                    request.parent_id = 0;
+                else request.parent_id = request.parent_id;
                 var cateExist = await _context.Categories.FindAsync(request.id);
                 if (cateExist != null || cateExist.isDelete)
                 {
@@ -146,7 +152,7 @@ namespace TechShopSolution.Application.Catalog.Category
         }
         public async Task<bool> isValidSlug(int id, string slug)
         {
-            if (await _context.Categories.AnyAsync(x => x.cate_slug.Equals(slug) && x.id != id))
+            if (await _context.Categories.AnyAsync(x => x.cate_slug.Equals(slug) && x.id != id && x.isDelete == false))
                 return false;
             return true;
         }
