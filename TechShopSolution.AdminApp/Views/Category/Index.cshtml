@@ -38,7 +38,7 @@
                 <label for="pet-select"></label>
                 <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
                 <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
-                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/brand/index'"><i class="fas fa-times"></i></button>
+                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/category/index'"><i class="fas fa-times"></i></button>
             </div>
         </form>
         <!-- Notification -->
@@ -62,9 +62,6 @@
                             Đường dẫn
                         </th>
                         <th scope="col">
-                            Miêu tả
-                        </th>
-                        <th scope="col">
                             Từ khóa
                         </th>
                         <th scope="col" class="text-center">
@@ -77,7 +74,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model == null)
+                    @if (Model.Items == null)
                     {
                         <tr>
                             <td>
@@ -105,9 +102,6 @@
                                     @Html.DisplayFor(modelItem => item.cate_slug)
                                 </td>
 
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.meta_descriptions)
-                                </td>
 
                                 <td>
                                     @Html.DisplayFor(modelItem => item.meta_keywords)

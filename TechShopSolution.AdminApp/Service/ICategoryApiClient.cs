@@ -11,5 +11,11 @@ namespace TechShopSolution.AdminApp.Service
     {
         Task<PagedResult<CategoryViewModel>> GetCategoryPagings(GetCategoryPagingRequest request);
         Task<ApiResult<bool>> CreateCategory(UpdateCategoryRequest request);
+        Task<List<CategoryViewModel>> GetAllCategory();
+        Task<ApiResult<bool>> UpdateCategory(UpdateCategoryRequest request);
+        Task<bool> isValidSlug(int id, string slug);
+        Task<ApiResult<CategoryViewModel>> GetById(int id);
+        Task<ApiResult<bool>> Delete(int cateID);
+        Task<ApiResult<bool>> ChangeStatus(int Id);
     }
 }
