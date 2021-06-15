@@ -228,6 +228,7 @@ hr {
 }
 .InputSlug {
     border: 0;
+    padding: 2px;
 }
 .middle {
     transition: .5s ease;

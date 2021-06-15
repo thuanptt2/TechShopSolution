@@ -17,7 +17,10 @@ namespace TechShopSolution.AdminApp.Controllers
     public class ProductController : Controller
     {
         private readonly IProductApiClient _productApiClient;
+        [Obsolete]
         private readonly IHostingEnvironment _environment;
+
+        [Obsolete]
         public ProductController(IProductApiClient productApiClient, IHostingEnvironment environment)
         {
             _productApiClient = productApiClient;
@@ -25,22 +28,24 @@ namespace TechShopSolution.AdminApp.Controllers
         }
         public async Task<IActionResult> Index(string keyword, int? CategoryID, int? BrandID, int pageIndex = 1, int pageSize = 10)
         {
+            var categoryList = await _productApiClient.GetAllCategory();
+            List<int?> lstIDCate = await findChildCategory(categoryList, CategoryID);
             var request = new GetProductPagingRequest()
             {
                 Keyword = keyword,
                 BrandID = BrandID,
-                CategoryID = CategoryID,
+                CategoryID = lstIDCate,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
             };
             var data = await _productApiClient.GetProductPagings(request);
             ViewBag.Keyword = keyword;
+           
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
-            var cate_tree = await _productApiClient.GetAllCategory();
-            ViewBag.ListCate = await OrderCateToTree(cate_tree);
+            ViewBag.ListCate = await OrderCateToTree(categoryList);
             ViewBag.ListBrand = await _productApiClient.GetAllBrand();
             return View(data);
         }
@@ -66,6 +71,21 @@ namespace TechShopSolution.AdminApp.Controllers
                 return result;
             }
             return null;
+        }
+        public async Task<List<int?>> findChildCategory(List<CategoryViewModel> lst, int? categoryID)
+        {
+            List<int?> CateIDs = new List<int?>();
+            if (categoryID != null)
+            {
+                CateIDs.Add(categoryID);
+                List<CategoryViewModel> lstCateChild = new List<CategoryViewModel>();
+                lstCateChild = await OrderCateToTree(lst, (int)categoryID);
+                foreach(var cate in lstCateChild)
+                {
+                    CateIDs.Add(cate.id);
+                }
+            }
+            return CateIDs;
         }
 
         [HttpGet]

@@ -63,7 +63,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 {
                     for (int i = 0; i < request.More_images.Count(); i++)
                     {
-                         product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+                        product.more_images += await this.SaveFile(request.More_images[i]) + ",";
                     }
                 }
             }
@@ -122,13 +122,13 @@ namespace TechShopSolution.Application.Catalog.Product
         public async Task<ApiResult<bool>> DeleteImage(int id, string fileName)
         {
             var product = await _context.Products.FindAsync(id);
-            if(product!=null)
+            if (product != null)
             {
                 List<string> moreImagesName = product.more_images.Split(",").ToList();
                 bool flag = false;
                 foreach (string moreimage in moreImagesName)
                 {
-                    if(moreimage!="")
+                    if (moreimage != "")
                     {
                         if (moreimage.Equals(fileName))
                         {
@@ -136,7 +136,7 @@ namespace TechShopSolution.Application.Catalog.Product
                             string MoreImageAfterDelete = null;
                             foreach (string imagestr in moreImagesName)
                             {
-                                if(imagestr!="")
+                                if (imagestr != "")
                                 {
                                     MoreImageAfterDelete += imagestr + ",";
                                 }
@@ -158,64 +158,77 @@ namespace TechShopSolution.Application.Catalog.Product
         }
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
         {
-            var query = from p in _context.Products
-                        join pic in _context.CategoryProducts on p.id equals pic.product_id
-                        join ct in _context.Categories on pic.cate_id equals ct.id
-                        where p.isDelete == false
-                        select new { p, pic };
-
-
-            //->> Lọc loại sản phẩm
-            if (!String.IsNullOrEmpty(request.Keyword))
-                query = query.Where(x => x.p.name.Contains(request.Keyword));
-            if (request.CategoryID != null)
+            try
             {
-                query = query.Where(x => x.pic.cate_id == request.CategoryID);
-            }
-            if (request.BrandID != null)
-            {
-                query = query.Where(x => x.p.brand_id == request.BrandID);
-            }
+                var query = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                            join ct in _context.Categories on pic.cate_id equals ct.id
+                            where p.isDelete == false
+                            select new { p, pic };
 
+                if (!String.IsNullOrEmpty(request.Keyword))
+                    query = query.Where(x => x.p.name.Contains(request.Keyword));
 
-            int totalRow = await query.CountAsync();
-
-            var data = query.OrderByDescending(m => m.p.create_at)
-                .Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(a => new ProductViewModel()
+                if (request.CategoryID.Count() != 0)
                 {
-                    id = a.p.id,
-                    name = a.p.name,
-                    best_seller = a.p.best_seller,
-                    brand_id = a.p.brand_id,
-                    code = a.p.code,
-                    create_at = a.p.create_at,
-                    descriptions = a.p.descriptions,
-                    featured = a.p.featured,
-                    image = a.p.image,
-                    instock = a.p.instock,
-                    meta_descriptions = a.p.meta_descriptions,
-                    meta_keywords = a.p.meta_keywords,
-                    meta_tittle = a.p.meta_tittle,
-                    more_images = a.p.more_images,
-                    promotion_price = a.p.promotion_price,
-                    short_desc = a.p.short_desc,
-                    slug = a.p.slug,
-                    specifications = a.p.specifications,
-                    isActive = a.p.isActive,
-                    unit_price = a.p.unit_price,
-                    warranty = a.p.warranty,
-                }).ToListAsync();
+                    query = query.Where(x => x.pic.cate_id == (request.CategoryID[0]));
+                }
 
-            var pageResult = new PagedResult<ProductViewModel>()
+                if (request.BrandID != null)
+                {
+                    query = query.Where(x => x.p.brand_id == request.BrandID);
+                }
+                int totalRow = await query.CountAsync();
+
+                var data = query.OrderByDescending(m => m.p.create_at)
+                    .Skip((request.PageIndex - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(a => new ProductViewModel()
+                    {
+                        id = a.p.id,
+                        name = a.p.name,
+                        best_seller = a.p.best_seller,
+                        brand_id = a.p.brand_id,
+                        code = a.p.code,
+                        create_at = a.p.create_at,
+                        descriptions = a.p.descriptions,
+                        featured = a.p.featured,
+                        image = a.p.image,
+                        instock = a.p.instock,
+                        meta_descriptions = a.p.meta_descriptions,
+                        meta_keywords = a.p.meta_keywords,
+                        meta_tittle = a.p.meta_tittle,
+                        more_images = a.p.more_images,
+                        promotion_price = a.p.promotion_price,
+                        short_desc = a.p.short_desc,
+                        slug = a.p.slug,
+                        ProductInCategory = a.p.ProductInCategory,
+                        specifications = a.p.specifications,
+                        isActive = a.p.isActive,
+                        unit_price = a.p.unit_price,
+                        warranty = a.p.warranty,
+                    }).ToListAsync();
+
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecords = totalRow,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = await data,
+                };
+                return pageResult;
+            }
+            catch
             {
-                TotalRecords = totalRow,
-                PageSize = request.PageSize,
-                PageIndex = request.PageIndex,
-                Items = await data,
-            };
-            return pageResult;
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecords = 0,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = null,
+                };
+                return pageResult;
+            }
         }
         public async Task<List<ImageListResult>> GetImagesByProductID(int id)
         {
@@ -236,7 +249,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     List<string> moreImagesName = product.more_images.Split(",").ToList();
                     foreach (string moreimage in moreImagesName)
                     {
-                        if(moreimage != "")
+                        if (moreimage != "")
                         {
                             string filePath = _storageService.GetFileUrl(moreimage);
                             if (filePath != "")
@@ -296,7 +309,7 @@ namespace TechShopSolution.Application.Catalog.Product
         }
         public async Task<bool> isValidSlug(string Code, string slug)
         {
-            if(await _context.Products.AnyAsync(x => x.slug.Equals(slug) && !x.code.Equals(Code) && x.isDelete == false))
+            if (await _context.Products.AnyAsync(x => x.slug.Equals(slug) && !x.code.Equals(Code) && x.isDelete == false))
                 return false;
             return true;
         }
@@ -334,7 +347,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 {
                     for (int i = 0; i < request.More_images.Count(); i++)
                     {
-                        product.more_images += await this.SaveFile(request.More_images[i]) + "," ;
+                        product.more_images += await this.SaveFile(request.More_images[i]) + ",";
                     }
                 }
                 await _context.SaveChangesAsync();

@@ -23,8 +23,10 @@ namespace TechShopSolution.AdminApp.Service
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        [Obsolete]
         private readonly IHostingEnvironment _environment;
 
+        [Obsolete]
         public ProductApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IHostingEnvironment environment)
         {
             _httpClientFactory = httpClientFactory;
@@ -72,6 +74,8 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
+
+        [Obsolete]
         public async Task<ApiResult<bool>> CreateProduct(ProductCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -190,12 +194,16 @@ namespace TechShopSolution.AdminApp.Service
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var respone = await client.GetAsync($"/api/Product/paging?Keyword={request.Keyword}&CategoryID={request.CategoryID}&BrandID={request.BrandID}&pageIndex=" +
-                $"{request.PageIndex}&pageSize={request.PageSize}");
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/api/product/filter", httpContent);
             var body = await respone.Content.ReadAsStringAsync();
             var product = JsonConvert.DeserializeObject<PagedResult<ProductViewModel>>(body);
             return product;
         }
+
+        [Obsolete]
         public async Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
