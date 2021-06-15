@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-
+using TechShopSolution.ViewModels.Catalog.Category;
+using System;
+using System.Linq;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
@@ -37,8 +39,35 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            var cate_tree = await _productApiClient.GetAllCategory();
+            ViewBag.ListCate = await OrderCateToTree(cate_tree);
+            ViewBag.ListBrand = await _productApiClient.GetAllBrand();
             return View(data);
         }
+        public async Task<List<CategoryViewModel>> OrderCateToTree(List<CategoryViewModel> lst, int parent_id = 0, int level = 0)
+        {
+            if (lst != null)
+            {
+                List<CategoryViewModel> result = new List<CategoryViewModel>();
+                foreach (CategoryViewModel cate in lst)
+                {
+                    if (cate.parent_id == parent_id)
+                    {
+                        CategoryViewModel tree = new CategoryViewModel();
+                        tree = cate;
+                        tree.level = level;
+                        tree.cate_name = String.Concat(Enumerable.Repeat("|————", level)) + tree.cate_name;
+
+                        result.Add(tree);
+                        List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);
+                        result.AddRange(child);
+                    }
+                }
+                return result;
+            }
+            return null;
+        }
+
         [HttpGet]
         public IActionResult Create()
         {

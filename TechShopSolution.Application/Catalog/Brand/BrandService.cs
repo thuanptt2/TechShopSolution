@@ -117,6 +117,31 @@ namespace TechShopSolution.Application.Catalog.Brand
             };
             return pageResult;
         }
+        public async Task<List<BrandViewModel>> GetAllBrand()
+        {
+            var query = from cate in _context.Brands
+                        where cate.isDelete == false
+                        select cate;
+            if (query == null)
+                return null;
+
+            var data = query.OrderByDescending(m => m.create_at)
+                .Select(a => new BrandViewModel()
+                {
+                    id = a.id,
+                    brand_name = a.brand_name,
+                    brand_slug = a.brand_slug,
+                    meta_descriptions = a.meta_descriptions,
+                    meta_keywords = a.meta_keywords,
+                    meta_title = a.meta_title,
+                    isActive = a.isActive,
+                    create_at = a.create_at,
+                    delete_at = a.delete_at,
+                    update_at = a.update_at,
+                }).ToListAsync();
+
+            return await data;
+        }
         public async Task<ApiResult<BrandViewModel>> GetById(int brandId)
         {
             var brandExist = await _context.Brands.FindAsync(brandId);
@@ -150,7 +175,7 @@ namespace TechShopSolution.Application.Catalog.Brand
                     brandExist.brand_name = request.brand_name;
                     brandExist.brand_slug = request.brand_slug;
                     brandExist.isActive = request.isActive;
-                    brandExist.meta_descriptions  = request.meta_descriptions;
+                    brandExist.meta_descriptions = request.meta_descriptions;
                     brandExist.meta_keywords = request.meta_keywords;
                     brandExist.meta_title = request.meta_title;
                     brandExist.update_at = DateTime.Now;

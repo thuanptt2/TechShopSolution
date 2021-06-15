@@ -163,6 +163,9 @@ namespace TechShopSolution.Application.Catalog.Product
                         join ct in _context.Categories on pic.cate_id equals ct.id
                         where p.isDelete == false
                         select new { p, pic };
+
+
+            //->> Lọc loại sản phẩm
             if (!String.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.p.name.Contains(request.Keyword));
             if (request.CategoryID != null)
@@ -173,6 +176,8 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 query = query.Where(x => x.p.brand_id == request.BrandID);
             }
+
+
             int totalRow = await query.CountAsync();
 
             var data = query.OrderByDescending(m => m.p.create_at)

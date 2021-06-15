@@ -11,6 +11,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using TechShopSolution.ViewModels.Catalog.Brand;
+using TechShopSolution.ViewModels.Catalog.Category;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
 
@@ -287,6 +289,24 @@ namespace TechShopSolution.AdminApp.Service
             }
             else return null;
                
+        }
+        public async Task<List<CategoryViewModel>> GetAllCategory()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/category/all");
+            var body = await respone.Content.ReadAsStringAsync();
+            var category = JsonConvert.DeserializeObject<List<CategoryViewModel>>(body);
+            return category;
+        }
+        public async Task<List<BrandViewModel>> GetAllBrand()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/brand/all");
+            var body = await respone.Content.ReadAsStringAsync();
+            var brand = JsonConvert.DeserializeObject<List<BrandViewModel>>(body);
+            return brand;
         }
     }
 }
