@@ -111,6 +111,13 @@ namespace TechShopSolution.AdminApp.Controllers
             };
            
             var cate_tree = await _categoryApiClient.GetAllCategory();
+
+            // Không hiển thị lại loại này trong danh sách
+            var thisCate = cate_tree.Find(x => x.id == result.ResultObject.id);
+            if (thisCate!=null)
+                cate_tree.Remove(thisCate);
+
+            // Load danh sách category theo dạng tree
             ViewBag.ListCate = await OrderCateToTree(cate_tree);
             return View(updateRequest);
         }
@@ -143,6 +150,20 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View("Index");
         }
-
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _categoryApiClient.ChangeStatus(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Thay đổi trạng thái thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
     }
 }
