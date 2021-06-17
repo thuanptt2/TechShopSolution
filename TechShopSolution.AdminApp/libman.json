@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "twitter-bootstrap@4.6.0",
+      "destination": "wwwroot/bootstrap/"
+    },
+    {
+      "library": "jquery-validate@1.19.2",
+      "destination": "wwwroot/jquery-validate/"
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.12",
+      "destination": "wwwroot/jquery-validate-unobtrusive/"
+    },
+    {
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/jquery/"
+    },
+    {
+      "library": "font-awesome@5.15.3",
+      "destination": "wwwroot/font-awesome/"
+    },
+    {
+      "library": "bootstrap-toggle@2.2.2",
+      "destination": "wwwroot/bootstrap/bootstrap-toggle"
+    }
+  ]
+}

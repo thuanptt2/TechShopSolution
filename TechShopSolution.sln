@@ -3,12 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechShopSolution.WebApp", "TechShopSolution.WebApp\TechShopSolution.WebApp.csproj", "{68EEF6B3-626A-48CF-ABDD-8EE74F1D342D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.WebApp", "TechShopSolution.WebApp\TechShopSolution.WebApp.csproj", "{68EEF6B3-626A-48CF-ABDD-8EE74F1D342D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CAB2C10F-091D-4128-9AE6-BD3877E7C856}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Solution Items", "0. Solution Items", "{CAB2C10F-091D-4128-9AE6-BD3877E7C856}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.Data", "TechShopSolution.Data\TechShopSolution.Data.csproj", "{E26A4E66-52C5-4A56-8D49-D13B1E8CD093}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.Application", "TechShopSolution.Application\TechShopSolution.Application.csproj", "{57687B25-263D-4550-B08F-5F09239FE044}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.Utilities", "TechShopSolution.Utilities\TechShopSolution.Utilities.csproj", "{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.ViewModels", "TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj", "{C4E9C882-986C-4B90-B7D9-F23BE896D171}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Infrastructrue", "1. Infrastructrue", "{4C28F55B-39DA-42F0-9521-F4B4999518BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Domain", "2. Domain", "{E3C4AF1A-ABC4-4D25-A290-2ECE3DAAE2E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Host", "3. Host", "{7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.BackendApi", "TechShopSolution.BackendApi\TechShopSolution.BackendApi.csproj", "{F6DBA955-0D95-43C3-A105-E6654D8E735F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechShopSolution.AdminApp", "TechShopSolution.AdminApp\TechShopSolution.AdminApp.csproj", "{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +38,42 @@ Global
 		{68EEF6B3-626A-48CF-ABDD-8EE74F1D342D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68EEF6B3-626A-48CF-ABDD-8EE74F1D342D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68EEF6B3-626A-48CF-ABDD-8EE74F1D342D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E26A4E66-52C5-4A56-8D49-D13B1E8CD093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E26A4E66-52C5-4A56-8D49-D13B1E8CD093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E26A4E66-52C5-4A56-8D49-D13B1E8CD093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E26A4E66-52C5-4A56-8D49-D13B1E8CD093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57687B25-263D-4550-B08F-5F09239FE044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57687B25-263D-4550-B08F-5F09239FE044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57687B25-263D-4550-B08F-5F09239FE044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57687B25-263D-4550-B08F-5F09239FE044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E9C882-986C-4B90-B7D9-F23BE896D171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4E9C882-986C-4B90-B7D9-F23BE896D171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4E9C882-986C-4B90-B7D9-F23BE896D171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4E9C882-986C-4B90-B7D9-F23BE896D171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6DBA955-0D95-43C3-A105-E6654D8E735F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6DBA955-0D95-43C3-A105-E6654D8E735F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6DBA955-0D95-43C3-A105-E6654D8E735F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6DBA955-0D95-43C3-A105-E6654D8E735F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{68EEF6B3-626A-48CF-ABDD-8EE74F1D342D} = {7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}
+		{E26A4E66-52C5-4A56-8D49-D13B1E8CD093} = {E3C4AF1A-ABC4-4D25-A290-2ECE3DAAE2E2}
+		{57687B25-263D-4550-B08F-5F09239FE044} = {E3C4AF1A-ABC4-4D25-A290-2ECE3DAAE2E2}
+		{F3080CAC-C9CB-4BF9-BE52-E01C89657FAA} = {4C28F55B-39DA-42F0-9521-F4B4999518BE}
+		{C4E9C882-986C-4B90-B7D9-F23BE896D171} = {4C28F55B-39DA-42F0-9521-F4B4999518BE}
+		{F6DBA955-0D95-43C3-A105-E6654D8E735F} = {7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}
+		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6} = {7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B94A4BC-1A94-45F5-B575-B503FAA6ADCB}

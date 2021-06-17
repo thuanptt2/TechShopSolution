@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Catalog\Location\Provinces_Data.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\TechShopSolution.Data\TechShopSolution.Data.csproj" />
+    <ProjectReference Include="..\TechShopSolution.Utilities\TechShopSolution.Utilities.csproj" />
+    <ProjectReference Include="..\TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
