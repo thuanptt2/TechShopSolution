@@ -36,8 +36,8 @@ namespace TechShopSolution.AdminApp.Service
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/category/all");
             var body = await respone.Content.ReadAsStringAsync();
-            var brand = JsonConvert.DeserializeObject<List<CategoryViewModel>>(body);
-            return brand;
+            var category = JsonConvert.DeserializeObject<List<CategoryViewModel>>(body);
+            return category;
         }
         public async Task<ApiResult<bool>> CreateCategory(UpdateCategoryRequest request)
         {

@@ -16,5 +16,6 @@ namespace TechShopSolution.Application.Catalog.Brand
         Task<ApiResult<BrandViewModel>> GetById(int brandId);
         Task<PagedResult<BrandViewModel>> GetAllPaging(GetBrandPagingRequest request);
         Task<bool> isValidSlug(int id, string slug);
+        Task<List<BrandViewModel>> GetAllBrand();
     }
 }

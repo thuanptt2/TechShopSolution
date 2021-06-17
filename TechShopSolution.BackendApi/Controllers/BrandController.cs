@@ -74,5 +74,11 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllBrand()
+        {
+            var customer = await _brandService.GetAllBrand();
+            return Ok(customer);
+        }
     }
 }

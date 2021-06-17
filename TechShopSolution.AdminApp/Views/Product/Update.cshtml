@@ -1,4 +1,5 @@
 ﻿@using TechShopSolution.ViewModels.Common
+@using TechShopSolution.ViewModels.Catalog.Category
 @model TechShopSolution.ViewModels.Catalog.Product.ProductUpdateRequest
 
 @{
@@ -7,16 +8,17 @@
 }
 @section jsFooter {
     <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
-    <script src="~/js/Product.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/Product.js"></script>
+
 }
 @{
     var images = (List<ImageListResult>)ViewData["imageList"];
 }
 
 <div class="container-fluid">
-    <h3 class="mt-4">Thêm sản phẩm</h3>
+    <h3 class="mt-4">Cập nhật sản phẩm</h3>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
         <li class="breadcrumb-item"><a href="/product/index">Sản phẩm</a></li>
@@ -44,21 +46,32 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-4">
                                     <label asp-for="CateID" class="control-label lableFormField"></label>
-                                    <select class="custom-select custom-select-sm">
-                                        <option selected>Chọn Danh mục sản phẩm</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                    <input asp-for="CateID" class="form-control" id="txtCateID" hidden/>
+                                    <select class="custom-select custom-select-sm" asp-items="@(new SelectList(ViewBag.ListCate, "id", "cate_name"))" id="cboCategory"> 
                                     </select>
+                                    <div class="CateTag">
+                                        @{
+                                            var CateTree = ViewBag.ListCate as List<CategoryViewModel>;
+                                            if (CateTree != null && Model.CateID != "")
+                                            {
+                                                string[] catelist = Model.CateID.Split(",");
+                                                for (int i = 0; i < catelist.Length; i++)
+                                                {
+                                                    if (catelist[i] != "")
+                                                    {
+                                                        var cate = CateTree.FirstOrDefault(x => x.id == int.Parse(catelist[i]));
+                                                        <span class="badge badge-pill badge-info badge-cate-tag OldCate" data-id="@cate.id">@cate.cate_name<span class="deleteCateTag">x</span></span>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </div>
                                     <span asp-validation-for="CateID" class="text-danger"></span>
                                 </div>
                                 <div class="col-lg-6 mb-4">
                                     <label asp-for="Brand_id" class="control-label lableFormField"></label>
-                                    <select class="custom-select custom-select-sm">
-                                        <option selected>Chọn thương hiệu sản phẩm</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                    <input asp-for="Brand_id" class="form-control" id="txtBrandID" hidden />
+                                    <select class="custom-select custom-select-sm" asp-for="Brand_id" asp-items="@(new SelectList(ViewBag.ListBrand,"id","brand_name"))" id="cboBrand">
                                     </select>
                                     <span asp-validation-for="Brand_id" class="text-danger"></span>
                                 </div>

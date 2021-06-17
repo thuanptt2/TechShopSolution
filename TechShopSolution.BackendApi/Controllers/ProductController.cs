@@ -15,15 +15,14 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             _productService = productService;
         }
-        [HttpGet("paging")]
-        public async Task<IActionResult> GetManagerProductByFilter([FromQuery] GetProductPagingRequest requet)
+        [HttpPost("filter")]
+        public async Task<IActionResult> GetManagerProductByFilter(GetProductPagingRequest requet)
         {
             var products = await _productService.GetAllPaging(requet);
             if (products == null)
                 return BadRequest("Không tồn tại sản phẩm này");
             return Ok(products);
         }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

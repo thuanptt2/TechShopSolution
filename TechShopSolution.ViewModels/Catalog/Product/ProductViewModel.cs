@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TechShopSolution.Data.Entities;
 
 namespace TechShopSolution.ViewModels.Catalog.Product
 {
@@ -11,6 +12,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string code { get; set; }
         public string slug { get; set; }
         public int brand_id { get; set; }
+        public string CateID { get; set; }
         public string image { get; set; }
         public string more_images { get; set; }
         public decimal unit_price { get; set; }
@@ -28,5 +30,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string meta_descriptions { get; set; }
         public DateTime create_at { get; set; }
         public DateTime update_at { get; set; }
+        public List<CategoryProduct> ProductInCategory { get; set; }
+
     }
 }

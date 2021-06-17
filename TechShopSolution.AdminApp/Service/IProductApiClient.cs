@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TechShopSolution.ViewModels.Catalog.Brand;
+using TechShopSolution.ViewModels.Catalog.Category;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
 
@@ -20,5 +22,7 @@ namespace TechShopSolution.AdminApp.Service
         Task<ApiResult<ProductViewModel>> GetById(int id);
         Task<bool> isValidSlug(string Code, string slug);
         Task<List<ImageListResult>> GetImageByProductID(int id);
+        Task<List<CategoryViewModel>> GetAllCategory();
+        Task<List<BrandViewModel>> GetAllBrand();
     }
 }

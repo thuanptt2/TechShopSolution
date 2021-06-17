@@ -11,6 +11,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using TechShopSolution.ViewModels.Catalog.Brand;
+using TechShopSolution.ViewModels.Catalog.Category;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
 
@@ -21,8 +23,10 @@ namespace TechShopSolution.AdminApp.Service
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        [Obsolete]
         private readonly IHostingEnvironment _environment;
 
+        [Obsolete]
         public ProductApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IHostingEnvironment environment)
         {
             _httpClientFactory = httpClientFactory;
@@ -70,6 +74,7 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
+        [Obsolete]
         public async Task<ApiResult<bool>> CreateProduct(ProductCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -102,8 +107,8 @@ namespace TechShopSolution.AdminApp.Service
             request.Code = await GenerateCode();
 
             requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
-            requestContent.Add(new StringContent("1"), "Brand_id");
-            requestContent.Add(new StringContent("1"), "CateID");
+            requestContent.Add(new StringContent(request.Brand_id.ToString()), "Brand_id");
+            requestContent.Add(new StringContent(request.CateID.ToString()), "CateID");
             requestContent.Add(new StringContent(request.Code.ToString()), "Code");
             requestContent.Add(new StringContent(request.Featured.ToString()), "Featured");
             requestContent.Add(new StringContent(request.Instock.ToString()), "Instock");
@@ -188,12 +193,15 @@ namespace TechShopSolution.AdminApp.Service
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var respone = await client.GetAsync($"/api/Product/paging?Keyword={request.Keyword}&CategoryID={request.CategoryID}&BrandID={request.BrandID}&pageIndex=" +
-                $"{request.PageIndex}&pageSize={request.PageSize}");
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/api/product/filter", httpContent);
             var body = await respone.Content.ReadAsStringAsync();
             var product = JsonConvert.DeserializeObject<PagedResult<ProductViewModel>>(body);
             return product;
         }
+        [Obsolete]
         public async Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -225,8 +233,8 @@ namespace TechShopSolution.AdminApp.Service
             }
 
             requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
-            requestContent.Add(new StringContent("1"), "Brand_id");
-            requestContent.Add(new StringContent("1"), "CateID");
+            requestContent.Add(new StringContent(request.Brand_id.ToString()), "Brand_id");
+            requestContent.Add(new StringContent(request.CateID.ToString()), "CateID");
             requestContent.Add(new StringContent(request.Code.ToString()), "Code");
             requestContent.Add(new StringContent(request.Id.ToString()), "Id");
             requestContent.Add(new StringContent(request.Featured.ToString()), "Featured");
@@ -287,6 +295,24 @@ namespace TechShopSolution.AdminApp.Service
             }
             else return null;
                
+        }
+        public async Task<List<CategoryViewModel>> GetAllCategory()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/category/all");
+            var body = await respone.Content.ReadAsStringAsync();
+            var category = JsonConvert.DeserializeObject<List<CategoryViewModel>>(body);
+            return category;
+        }
+        public async Task<List<BrandViewModel>> GetAllBrand()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/brand/all");
+            var body = await respone.Content.ReadAsStringAsync();
+            var brand = JsonConvert.DeserializeObject<List<BrandViewModel>>(body);
+            return brand;
         }
     }
 }

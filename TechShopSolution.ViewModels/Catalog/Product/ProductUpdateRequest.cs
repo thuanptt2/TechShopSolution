@@ -28,9 +28,9 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         [Display(Name = "Đơn giá")]
         public decimal Unit_price { get; set; }
         [Display(Name = "Giá khuyến mãi")]
-        public decimal Promotion_price { get; set; }
+        public decimal? Promotion_price { get; set; }
         [Display(Name = "Bảo hành")]
-        public int Warranty { get; set; }
+        public int? Warranty { get; set; }
         [Display(Name = "Trong kho")]
         public int? Instock { get; set; }
         [Display(Name = "Thông số kỹ thuật")]

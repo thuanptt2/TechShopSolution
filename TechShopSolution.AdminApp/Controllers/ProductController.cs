@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-
+using TechShopSolution.ViewModels.Catalog.Category;
+using System;
+using System.Linq;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
@@ -15,7 +17,10 @@ namespace TechShopSolution.AdminApp.Controllers
     public class ProductController : Controller
     {
         private readonly IProductApiClient _productApiClient;
+        [Obsolete]
         private readonly IHostingEnvironment _environment;
+
+        [Obsolete]
         public ProductController(IProductApiClient productApiClient, IHostingEnvironment environment)
         {
             _productApiClient = productApiClient;
@@ -23,25 +28,72 @@ namespace TechShopSolution.AdminApp.Controllers
         }
         public async Task<IActionResult> Index(string keyword, int? CategoryID, int? BrandID, int pageIndex = 1, int pageSize = 10)
         {
+            var categoryList = await _productApiClient.GetAllCategory();
+            List<int?> lstIDCate = await findChildCategory(categoryList, CategoryID);
             var request = new GetProductPagingRequest()
             {
                 Keyword = keyword,
                 BrandID = BrandID,
-                CategoryID = CategoryID,
+                CategoryID = lstIDCate,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
             };
             var data = await _productApiClient.GetProductPagings(request);
             ViewBag.Keyword = keyword;
+           
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            ViewBag.ListCate = await OrderCateToTree(categoryList);
+            ViewBag.ListBrand = await _productApiClient.GetAllBrand();
             return View(data);
         }
-        [HttpGet]
-        public IActionResult Create()
+        public async Task<List<CategoryViewModel>> OrderCateToTree(List<CategoryViewModel> lst, int parent_id = 0, int level = 0)
         {
+            if (lst != null)
+            {
+                List<CategoryViewModel> result = new List<CategoryViewModel>();
+                foreach (CategoryViewModel cate in lst)
+                {
+                    if (cate.parent_id == parent_id)
+                    {
+                        CategoryViewModel tree = new CategoryViewModel();
+                        tree = cate;
+                        tree.level = level;
+                        tree.cate_name = String.Concat(Enumerable.Repeat("|————", level)) + tree.cate_name;
+
+                        result.Add(tree);
+                        List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);
+                        result.AddRange(child);
+                    }
+                }
+                return result;
+            }
+            return null;
+        }
+        public async Task<List<int?>> findChildCategory(List<CategoryViewModel> lst, int? categoryID)
+        {
+            List<int?> CateIDs = new List<int?>();
+            if (categoryID != null)
+            {
+                CateIDs.Add(categoryID);
+                List<CategoryViewModel> lstCateChild = new List<CategoryViewModel>();
+                lstCateChild = await OrderCateToTree(lst, (int)categoryID);
+                foreach(var cate in lstCateChild)
+                {
+                    CateIDs.Add(cate.id);
+                }
+            }
+            return CateIDs;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var categoryList = await _productApiClient.GetAllCategory();
+            ViewBag.ListCate = await OrderCateToTree(categoryList);
+            ViewBag.ListBrand = await _productApiClient.GetAllBrand();
             return View();
         }
         [HttpPost]
@@ -75,6 +127,7 @@ namespace TechShopSolution.AdminApp.Controllers
                 Id = result.ResultObject.id,
                 Best_seller = result.ResultObject.best_seller,
                 Brand_id = result.ResultObject.brand_id,
+                CateID = result.ResultObject.CateID,
                 Code = result.ResultObject.code,
                 Descriptions = result.ResultObject.descriptions,
                 Featured = result.ResultObject.featured,
@@ -95,6 +148,9 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            var categoryList = await _productApiClient.GetAllCategory();
+            ViewBag.ListCate = await OrderCateToTree(categoryList);
+            ViewBag.ListBrand = await _productApiClient.GetAllBrand();
             return View(updateRequest);
         }
         [HttpPost]
@@ -102,7 +158,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return RedirectToAction("Update",request.Id);
             var result = await _productApiClient.UpdateProduct(request);
             if (result.IsSuccess)
             {
