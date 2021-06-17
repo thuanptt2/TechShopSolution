@@ -46,9 +46,8 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-4">
                                     <label asp-for="CateID" class="control-label lableFormField"></label>
-                                    <input asp-for="CateID" class="form-control" id="txtCateID" hidden />
-                                    <select class="custom-select custom-select-sm" asp-for="CateID" asp-items="@(new SelectList(ViewBag.ListCate, "id", "cate_name"))" id="cboCategory">
-                                        <option value="" selected>Chọn Danh mục sản phẩm</option>
+                                    <input asp-for="CateID" class="form-control" id="txtCateID" hidden/>
+                                    <select class="custom-select custom-select-sm" asp-items="@(new SelectList(ViewBag.ListCate, "id", "cate_name"))" id="cboCategory"> 
                                     </select>
                                     <div class="CateTag">
                                         @{
@@ -61,7 +60,7 @@
                                                     if (catelist[i] != "")
                                                     {
                                                         var cate = CateTree.FirstOrDefault(x => x.id == int.Parse(catelist[i]));
-                                                        <span class="badge badge-pill badge-info badge-cate-tag" data-id="@cate.id">@cate.cate_name<span class="deleteCateTag">x</span></span>
+                                                        <span class="badge badge-pill badge-info badge-cate-tag OldCate" data-id="@cate.id">@cate.cate_name<span class="deleteCateTag">x</span></span>
                                                     }
                                                 }
                                             }
@@ -73,7 +72,6 @@
                                     <label asp-for="Brand_id" class="control-label lableFormField"></label>
                                     <input asp-for="Brand_id" class="form-control" id="txtBrandID" hidden />
                                     <select class="custom-select custom-select-sm" asp-for="Brand_id" asp-items="@(new SelectList(ViewBag.ListBrand,"id","brand_name"))" id="cboBrand">
-                                        <option value="" selected>Chọn Danh mục sản phẩm</option>
                                     </select>
                                     <span asp-validation-for="Brand_id" class="text-danger"></span>
                                 </div>

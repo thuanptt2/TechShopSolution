@@ -128,10 +128,6 @@ $().ready(function () {
             console.error(err.stack);
         });
 
-    $('form').each(function () {
-        if ($(this).data('validator'))
-            $(this).data('validator').settings.ignore = ".note-editor *";
-    });
 
     function to_slug(str) {
         // Chuyển hết sang chữ thường
@@ -214,6 +210,30 @@ $().ready(function () {
         })
 
     });
+    $(".OldCate").click(function () {
+        var flag = false;
+        var id = $(this).attr("data-id");
+        var CateID = $('#txtCateID').val();
+        var arr = CateID.split(",");
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] != "")
+                if (arr[i] == id) {
+                    arr.splice(i, 1);
+                    flag = true;
+                    break;
+                }
+        }
+        if (flag == true) {
+            var string = ""
+            for (var j = 0; j < arr.length; j++) {
+                if (arr[j] != "")
+                    string += arr[j] + ",";
+            }
+            $('#txtCateID').val(string);
+            $(this).remove();
+        }
+    })
+
     $('#cboBrand').change(function () {
         var value = $(this).val();
         if (!isNaN(value)) {

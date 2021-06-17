@@ -158,7 +158,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return RedirectToAction("Update",request.Id);
             var result = await _productApiClient.UpdateProduct(request);
             if (result.IsSuccess)
             {

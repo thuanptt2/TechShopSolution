@@ -29,6 +29,10 @@ namespace TechShopSolution.Application.Catalog.Product
         }
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
+            if (request.Promotion_price == null)
+                request.Promotion_price = 0;
+            if (request.Warranty == null)
+                request.Warranty = 0;
             var product = new TechShopSolution.Data.Entities.Product
             {
                 name = request.Name,
@@ -42,14 +46,14 @@ namespace TechShopSolution.Application.Catalog.Product
                 meta_descriptions = request.Meta_descriptions,
                 meta_keywords = request.Meta_keywords,
                 meta_tittle = request.Meta_tittle,
-                promotion_price = request.Promotion_price,
+                promotion_price = (decimal)request.Promotion_price,
                 short_desc = request.Short_desc,
                 slug = request.Slug,
                 specifications = request.Specifications,
                 isActive = request.IsActive,
                 isDelete = false,
                 unit_price = request.Unit_price,
-                warranty = request.Warranty,
+                warranty = (int)request.Warranty,
             };
             if (request.Image != null)
             {
@@ -167,7 +171,7 @@ namespace TechShopSolution.Application.Catalog.Product
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join ct in _context.Categories on pic.cate_id equals ct.id
                             where p.isDelete == false
-                            select new { p, pic };
+                            select new { p, pic, ct};
 
                 if (!String.IsNullOrEmpty(request.Keyword))
                     query = query.Where(x => x.p.name.Contains(request.Keyword));
@@ -335,7 +339,10 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 product.name = request.Name;
                 product.slug = request.Slug;
-                product.warranty = request.Warranty;
+                if (request.Warranty == null)
+                    product.warranty = 0;
+                else product.warranty = (int)request.Warranty;
+                product.brand_id = request.Brand_id;
                 product.specifications = request.Specifications;
                 product.short_desc = request.Short_desc;
                 product.descriptions = request.Descriptions;
@@ -343,7 +350,9 @@ namespace TechShopSolution.Application.Catalog.Product
                 product.meta_descriptions = request.Meta_descriptions;
                 product.meta_keywords = request.Meta_keywords;
                 product.unit_price = request.Unit_price;
-                product.promotion_price = request.Promotion_price;
+                if (request.Promotion_price == null)
+                    product.promotion_price = 0;
+                else product.promotion_price = (decimal)request.Promotion_price;
                 product.best_seller = request.Best_seller;
                 product.featured = request.Featured;
                 product.instock = request.Instock;
@@ -361,6 +370,30 @@ namespace TechShopSolution.Application.Catalog.Product
                     for (int i = 0; i < request.More_images.Count(); i++)
                     {
                         product.more_images += await this.SaveFile(request.More_images[i]) + ",";
+                    }
+                }
+
+                var pic = await _context.CategoryProducts.Where(x => x.product_id == request.Id).ToListAsync();
+                if (pic != null)
+                {
+                    foreach (var cate in pic)
+                    {
+                        _context.CategoryProducts.Remove(cate);
+                    }
+                }
+
+                string[] cateIDs = request.CateID.Split(",");
+                foreach (string cateID in cateIDs)
+                {
+                    
+                    if (cateID != "")
+                    {
+                        var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct
+                        {
+                            cate_id = int.Parse(cateID),
+                            product_id = request.Id
+                        };
+                        _context.CategoryProducts.Add(productInCategory);
                     }
                 }
                 await _context.SaveChangesAsync();

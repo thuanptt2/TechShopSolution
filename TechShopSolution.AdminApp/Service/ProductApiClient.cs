@@ -74,7 +74,6 @@ namespace TechShopSolution.AdminApp.Service
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         [Obsolete]
         public async Task<ApiResult<bool>> CreateProduct(ProductCreateRequest request)
         {
@@ -234,8 +233,8 @@ namespace TechShopSolution.AdminApp.Service
             }
 
             requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
-            requestContent.Add(new StringContent("1"), "Brand_id");
-            requestContent.Add(new StringContent("1"), "CateID");
+            requestContent.Add(new StringContent(request.Brand_id.ToString()), "Brand_id");
+            requestContent.Add(new StringContent(request.CateID.ToString()), "CateID");
             requestContent.Add(new StringContent(request.Code.ToString()), "Code");
             requestContent.Add(new StringContent(request.Id.ToString()), "Id");
             requestContent.Add(new StringContent(request.Featured.ToString()), "Featured");
