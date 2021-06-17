@@ -70,15 +70,18 @@ namespace TechShopSolution.Application.Catalog.Product
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            string[] cateIDs = request.CateID.Split(" ");
+            string[] cateIDs = request.CateID.Split(",");
             foreach (string cateID in cateIDs)
             {
-                var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct
+               if(cateID!="")
                 {
-                    cate_id = int.Parse(cateID),
-                    product_id = product.id
-                };
-                _context.CategoryProducts.Add(productInCategory);
+                    var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct
+                    {
+                        cate_id = int.Parse(cateID),
+                        product_id = product.id
+                    };
+                    _context.CategoryProducts.Add(productInCategory);
+                }
             }
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();

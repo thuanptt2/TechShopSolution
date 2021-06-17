@@ -89,8 +89,11 @@ namespace TechShopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var categoryList = await _productApiClient.GetAllCategory();
+            ViewBag.ListCate = await OrderCateToTree(categoryList);
+            ViewBag.ListBrand = await _productApiClient.GetAllBrand();
             return View();
         }
         [HttpPost]

@@ -23,7 +23,6 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest("Không tồn tại sản phẩm này");
             return Ok(products);
         }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

@@ -37,11 +37,12 @@
                
                 <div class="form-group mr-3">
                     <select name="CategoryID" asp-items="@(new SelectList(ViewBag.ListCate,"id", "cate_name"))" class="form-control">
-                        <option class="font-italic">Lọc theo loại sản phẩm</option>
+                        <option value="" class="font-italic">Lọc theo loại sản phẩm</option>
                     </select>
-                </div> <div class="form-group mr-3">
+                </div> 
+                <div class="form-group mr-3">
                     <select name="BrandID" asp-items="@(new SelectList(ViewBag.ListBrand,"id","brand_name"))" class="form-control">
-                        <option class="font-italic">Lọc theo thương hiệu</option>
+                        <option value="" class="font-italic">Lọc theo thương hiệu</option>
                     </select>
                 </div>
                 <div class="form-group">

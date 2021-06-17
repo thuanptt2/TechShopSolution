@@ -9,6 +9,7 @@
     background: #f5f5f5 !important;
     -webkit-overflow-scrolling: touch;
     height: 100vh !important;
+    scroll-behavior: smooth;
 }
 
 .padding-container {
@@ -25,14 +26,17 @@
     padding: 20px;
     border-radius: 10px;
 }
+
 .wrapper-content-limit .wrapper-content {
     max-width: 900px;
 }
+
 .form-check-label {
     margin-bottom: 0;
     padding-top: 3px;
     margin-left: 5px;
 }
+
 hr {
     border: 0px;
     margin-top: 0px;
@@ -55,19 +59,20 @@ hr {
     margin-top: 40px;
 }
 
-#btnEdit:hover{
+#btnEdit:hover {
     cursor: pointer;
     color: #007bff;
 }
 
 .loaderbody {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     left: 0px;
     top: 0px;
-    position: absolute;
+    position: fixed;
     background-color: rgba(128,128,128,0.2);
     z-index: 2147483647;
+    overflow: hidden;
 }
 
 .loader {
@@ -95,15 +100,19 @@ hr {
 .hide {
     display: none;
 }
+
 .table td, .table th {
     vertical-align: middle;
 }
+
 .pagination {
     justify-content: center;
 }
+
 .sb-topnav .navbar-brand {
     width: 205px;
 }
+
 #snackbar {
     visibility: hidden; /* Hidden by default. Visible on click */
     min-width: 250px; /* Set a default minimum width */
@@ -120,12 +129,12 @@ hr {
 }
 
     /* Show the snackbar when clicking on a button (class added with JavaScript) */
-    #snackbar.show {
-        visibility: visible; /* Show the snackbar */
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
         /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-  However, delay the fade out process for 2.5 seconds */
-        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        However, delay the fade out process for 2.5 seconds */
+     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+     animation: fadein 0.5s, fadeout 0.5s 2.5s;
     }
 
 /* Animations to fade the snackbar in and out */
@@ -176,6 +185,7 @@ hr {
         opacity: 0;
     }
 }
+
 .ImageBoxMain {
     width: 100%;
     height: 100%;
@@ -188,22 +198,27 @@ hr {
     padding: 10px;
     display: block;
 }
+
 .fa-image {
     color: #c3c3c3;
 }
+
 .lableFormField {
     font-weight: 500;
     font-size: 1.0rem;
     color: #6c798f;
 }
+
 .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable, .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+    max-height: 600px;
     min-height: 250px;
-    max-height: 450px;
 }
+
 .SeoPadding {
     display: flex;
     justify-content: space-between;
 }
+
 .SlugUrl {
     align-self: center;
     flex: none;
@@ -216,6 +231,7 @@ hr {
     cursor: pointer;
     padding-left: 5px;
 }
+
 .SlugProduct {
     position: relative;
     display: flex;
@@ -226,10 +242,12 @@ hr {
     border: 1px solid #ced4da;
     border-radius: .25rem;
 }
+
 .InputSlug {
     border: 0;
     padding: 2px;
 }
+
 .middle {
     transition: .5s ease;
     opacity: 0;
@@ -240,6 +258,7 @@ hr {
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%)
 }
+
 .DeleteImageButton {
     transition: .5s ease;
     opacity: 0;
@@ -258,9 +277,11 @@ hr {
 .col-lg-3:hover .middle {
     opacity: 1;
 }
+
 .col-lg-3:hover .DeleteImageButton {
     opacity: 1;
 }
+
 .image {
     opacity: 1;
     display: block;
@@ -271,6 +292,7 @@ hr {
     display: block;
     object-fit: contain;
 }
+
 .ProductMoreImage {
     width: 100%;
     display: block;
@@ -278,8 +300,26 @@ hr {
     object-fit: contain;
     border: 1px solid #D0D0D0;
 }
+
 .btnSaveImage {
     position: absolute;
     bottom: 0;
 }
 
+.CateTag {
+    margin-top: 10px;
+}
+.badge-cate-tag {
+    height: 20px;
+    padding-top: 5px;
+    margin: 2px;
+    cursor: pointer;
+}
+.deleteCateTag {
+    visibility: hidden;
+    float: right;
+    margin-left: 3px;
+}
+.badge-cate-tag:hover .deleteCateTag {
+    visibility: visible;
+}
