@@ -202,7 +202,6 @@ namespace TechShopSolution.AdminApp.Service
             var product = JsonConvert.DeserializeObject<PagedResult<ProductViewModel>>(body);
             return product;
         }
-
         [Obsolete]
         public async Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
         {

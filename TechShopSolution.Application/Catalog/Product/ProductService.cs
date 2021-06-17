@@ -283,6 +283,15 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 return new ApiErrorResult<ProductViewModel>("Sản phẩm không tồn tại");
             }
+            string CateIds = "";
+            var pic = await _context.CategoryProducts.Where(x => x.product_id == productId).ToListAsync();
+            if(pic != null)
+            {
+                foreach(var cate in pic)
+                {
+                    CateIds += cate.cate_id + ","; 
+                }
+            }
 
             var productViewModel = new ProductViewModel
             {
@@ -290,6 +299,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 name = product.name,
                 best_seller = product.best_seller,
                 brand_id = product.brand_id,
+                CateID = CateIds,
                 code = product.code,
                 create_at = product.create_at,
                 descriptions = product.descriptions,

@@ -127,6 +127,7 @@ namespace TechShopSolution.AdminApp.Controllers
                 Id = result.ResultObject.id,
                 Best_seller = result.ResultObject.best_seller,
                 Brand_id = result.ResultObject.brand_id,
+                CateID = result.ResultObject.CateID,
                 Code = result.ResultObject.code,
                 Descriptions = result.ResultObject.descriptions,
                 Featured = result.ResultObject.featured,
@@ -147,6 +148,9 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            var categoryList = await _productApiClient.GetAllCategory();
+            ViewBag.ListCate = await OrderCateToTree(categoryList);
+            ViewBag.ListBrand = await _productApiClient.GetAllBrand();
             return View(updateRequest);
         }
         [HttpPost]
