@@ -32,7 +32,15 @@ namespace TechShopSolution.WebApp.Controllers
             };
             return View(viewModel);
         }
-        public async Task<IActionResult>
+        public async Task<IActionResult> Detail(int id)
+        {
+            var product = await _productApiClient.GetById(id);
+            return View(product);
+        }
+        public IActionResult Privacy()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

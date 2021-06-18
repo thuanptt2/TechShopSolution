@@ -69,11 +69,10 @@
                             <ul class="thumbnails">
                                 @foreach (var item in featuredProducts[index])
                                 {
-                                    var url = "#";
                                     <li class="span3">
                                         <div class="thumbnail">
                                             <i class="tag"></i>
-                                            <a href="@url"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                            <a href="@Url.Action("Detail", "Home", new { id = item.id })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
                                             <div class="caption">
                                                 <h5>@item.name</h5>
                                             </div>
@@ -137,11 +136,10 @@
                             <ul class="thumbnails">
                                 @foreach (var item in bestProducts[index])
                                 {
-                                    var url = "#";
                                     <li class="span3">
                                         <div class="thumbnail">
                                             <i class="tag"></i>
-                                            <a href="@url"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                            <a href="@Url.Action("Detail", "Home", new { id = item.id })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
                                             <div class="caption">
                                                 <h5>@item.name</h5>
                                             </div>
@@ -178,25 +176,87 @@
 
         </div>
     </div>
+</div>
 
 
-    <h3>CPU - Bộ vi xử lí</h3>
+
+<div class="span12">
+    <div class="title-index">
+        <h2>VGA - <b>Card màn hình</b></h2>
+        <a>Xem tất cả</a> (@Model.ProductWithCate2.Count Sản phẩm)
+
+    </div>
+
+
+    <ul class="thumbnails mt-2">
+        @{
+            foreach (var product in Model.ProductWithCate1)
+            {
+                <li class="span3">
+                    <div class="thumbnail">
+                        <a href="@Url.Action("Detail", "Home", new { id = product.id })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <div class="caption">
+                            <h5>@product.name</h5>
+                        </div>
+                        <div class="footer-thumbnail">
+                            @if (product.promotion_price > 1)
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                            else
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                        </div>
+                        <div class="product-short-desc">
+                            @Html.Raw(product.short_desc)
+                        </div>
+                        <h4 style="text-align:center">
+                            <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
+                            <a class="btn btn-danger" href="#">Mua ngay</a>
+                        </h4>
+                    </div>
+                </li>
+            }
+        }
+
+    </ul>
+
+
+
+    <div class="title-index">
+        <h2>CPU - <b>Bộ vi xử lí</b></h2>
+        <a>Xem tất cả</a> (@Model.ProductWithCate2.Count Sản phẩm)
+    </div>
+    
     <ul class="thumbnails">
         @{
             foreach (var product in Model.ProductWithCate2)
             {
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="product_details.html"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <a href="@Url.Action("Detail", "Home", new { id = product.id })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
                         <div class="caption">
                             <h5>@product.name</h5>
+                        </div>
+                        <div class="footer-thumbnail">
+                            @if (product.promotion_price > 1)
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                            else
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
                         </div>
                         <div class="product-short-desc">
                             @Html.Raw(product.short_desc)
                         </div>
                         <h4 style="text-align:center">
                             <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
-                            <a class="btn btn-primary" href="#">@String.Format(info, "{0:c}", product.unit_price)</a>
+                            <a class="btn btn-danger" href="#">Mua ngay</a>
                         </h4>
                     </div>
                 </li>
@@ -204,30 +264,4 @@
         }
 
     </ul>
-
-    <h3>VGA - Card Màn hình</h3>
-    <ul class="thumbnails">
-        @{
-            foreach (var product in Model.ProductWithCate1)
-            {
-                <li class="span3">
-                    <div class="thumbnail">
-                        <a href="product_details.html"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
-                        <div class="caption">
-                            <h5>@product.name</h5>
-                        </div>
-                        <div class="product-short-desc">
-                            @Html.Raw(product.short_desc)
-                        </div>
-                        <h4 style="text-align:center">
-                            <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
-                            <a class="btn btn-primary" href="#">@String.Format(info, "{0:c}", product.unit_price)</a>
-                        </h4>
-                    </div>
-                </li>
-            }
-        }
-
-    </ul>
-
-</div>s
+</div>
