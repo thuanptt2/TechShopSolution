@@ -344,6 +344,16 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
             return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
         }
+        public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/related?id={id}&take={take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+        }
 
     }
 }

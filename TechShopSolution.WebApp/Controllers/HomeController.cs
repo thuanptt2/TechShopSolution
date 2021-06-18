@@ -14,11 +14,13 @@ namespace TechShopSolution.WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductApiClient _productApiClient;
+        private readonly ICategoryApiClient _categorytApiClient;
 
-        public HomeController(ILogger<HomeController> logger, IProductApiClient productApiClient)
+        public HomeController(ILogger<HomeController> logger, IProductApiClient productApiClient, ICategoryApiClient categorytApiClient)
         {
             _logger = logger;
             _productApiClient = productApiClient;
+            _categorytApiClient = categorytApiClient;
         }
 
         public async Task<IActionResult> Index()
@@ -35,7 +37,15 @@ namespace TechShopSolution.WebApp.Controllers
         public async Task<IActionResult> Detail(int id)
         {
             var product = await _productApiClient.GetById(id);
-            return View(product);
+            string[] CateId = product.ResultObject.CateID.Split(",");
+            var Category = await _categorytApiClient.GetById(int.Parse(CateId[0]));
+            return View(new ProductDetailViewModel()
+            {
+                Product = product.ResultObject,
+                Category = Category.ResultObject,
+                ProductsRelated = await _productApiClient.GetProductsRelated(id, 6),
+                ImageList = await _productApiClient.GetImageByProductID(id),
+        });
         }
         public IActionResult Privacy()
         {

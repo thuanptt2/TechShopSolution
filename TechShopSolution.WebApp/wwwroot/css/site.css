@@ -21,7 +21,7 @@
     .product-price {
         font-size: 1rem;
         font-weight: 600;
-        color: #0F2895;
+        color: #ff0000;
     }
     .product-promotion-pirce {
         font-size: 0.9rem;
@@ -91,4 +91,21 @@ body {
 }
 .well {
     border: 0;
+}
+tr:nth-child(even) {
+    background: #CCC
+}
+
+tr:nth-child(odd) {
+    background: #FFF
+}
+.btnGroup {
+    margin-top: 20px;
+}
+.OutOfStock {
+    color: #ffc000;
+}
+.product-total-price {
+    font-size: 0.9rem;
+    color: #ff0000;
 }

@@ -1,5 +1,126 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ProductDetailViewModel
 @{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 }
+<ul class="breadcrumb">
+    <li><a href="/index">Trang chủ</a> <span class="divider">/</span></li>
+    <li><a href="/loai-san-pham/@Model.Category.id">@Model.Category.cate_name</a> <span class="divider">/</span></li>
+    <li class="active">@Model.Product.name</li>
+</ul>
+<div class="row">
+    <div id="gallery" class="span3">
+        @{
+            if (Model.ImageList.Count > 0)
+            {
+                <a href="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" title="@Model.Product.name">
+                    <img src="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" style="width:100%" alt="@Model.Product.name" />
+                </a>
+            }
+            else
+            {
+                <img src="none" style="width:100%" alt="Không có hình ảnh" />
+            }
+        }
+        @{
+            if (Model.ImageList.Count > 1)
+            {
+                <div id="differentview" class="moreOptopm carousel slide">
+                    <div class="carousel-inner">
+                        @{
+                            <div class="item active">
+                                @{
+                                    foreach (var image in Model.ImageList)
+                                    {
+                                        <a href="data:image/jpeg;base64,@image.FileAsBase64"> <img style="width:29%" src="data:image/jpeg;base64,@image.FileAsBase64" alt="" /></a>
+
+                                    }
+                                }
+
+                            </div>
+                        }
+                    </div>
+                    <a class="left carousel-control" href="#differentview" data-slide="prev">‹</a>
+                    <a class="right carousel-control" href="#differentview" data-slide="next">›</a>
+                </div>
+            }
+        }
+
+    </div>
+    <div class="span6">
+        <h3>@Model.Product.name</h3>
+        <div class="product-short-desc">
+            @Html.Raw(Model.Product.short_desc)
+        </div>
+        <div class="pull-right">
+            <a class="btn btn-small pull-right" href="#specifications">Xem chi tiết</a>
+        </div><br />
+        <hr class="soft" />
+        <form class="form-horizontal qtyFrm">
+            <div class="control-group">
+                @if (Model.Product.promotion_price > 1)
+                {
+                    var a = Model.Product.unit_price - Model.Product.promotion_price;
+                    <span class="product-price">@String.Format(info, "{0:c}", Model.Product.promotion_price)&nbsp;</span>
+                    <span class="product-promotion-pirce">@String.Format(info, "{0:c}", Model.Product.unit_price)&nbsp;</span>
+                    <span class="product-total-price">Tiết kiệm @String.Format(info, "{0:c}", a)</span>
+                }
+                else if (Model.Product.promotion_price == 0)
+                {
+                    <div class="btnGroup">
+                        <button type="button" class="btn btn-large btn-primary">Liên hệ<i class=" icon-shopping-cart"></i></button>
+                    </div>
+                }
+                else
+                {
+                    <span class="product-price">@String.Format(info, "{0:c}", Model.Product.unit_price)</span>
+                }
+                <br />
+                <div>
+                    @{
+                        if (Model.Product.instock > 1)
+                        {
+                            <h5 class="pull-left">
+                                Còn lại: @Model.Product.instock <small>sản phẩm</small>
+                            </h5><br /><br />
+                            <input type="number" class="span2" placeholder="Số lượng" min="0" />
+                            <div class="btnGroup">
+                                <button type="submit" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                                <button type="submit" class="btn btn-large btn-danger"> Mua ngay</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <h5 class="OutOfStock pull-left">
+                                Hết hàng
+                            </h5>
+                        }
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="span9">
+            <hr class="soft clr" />
+            <br class="clr" />
+            <a href="#" name="detail"></a>
+            <hr class="soft" />
+            <ul id="productDetail" class="nav nav-tabs">
+                <li class="active"><a href="#specifications" data-toggle="tab">Thông số kỹ thuật</a></li>
+                <li><a href="#descriptions" data-toggle="tab">Chi tiết sản phẩm</a></li>
+                <li><a href="#rating" data-toggle="tab">Đánh giá sản phẩm</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade active in Detail-Product" id="specifications">
+                    @Html.Raw(Model.Product.specifications)
+                </div>
+                <div class="tab-pane fade" id="descriptions">
+                    @Html.Raw(Model.Product.descriptions)
+                </div>
+                <div class="tab-pane fade" id="rating">
+                    Hello
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
