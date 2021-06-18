@@ -289,6 +289,60 @@ namespace TechShopSolution.Application.Catalog.Product
                 return null;
             }
         }
+        public async Task<List<ProductViewModel>> GetProductsByCategory(int id, int take)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                            join c in _context.Categories on pic.cate_id equals c.id
+                            where p.isDelete == false && c.id == id
+                            select new { p, pic, c};
+
+                var data = query.OrderByDescending(m => m.p.create_at)
+                    .Take(take)
+                    .Select(a => new ProductViewModel()
+                    {
+                        id = a.p.id,
+                        name = a.p.name,
+                        best_seller = a.p.best_seller,
+                        brand_id = a.p.brand_id,
+                        code = a.p.code,
+                        create_at = a.p.create_at,
+                        descriptions = a.p.descriptions,
+                        featured = a.p.featured,
+                        image = a.p.image,
+                        instock = a.p.instock,
+                        meta_descriptions = a.p.meta_descriptions,
+                        meta_keywords = a.p.meta_keywords,
+                        meta_tittle = a.p.meta_tittle,
+                        more_images = a.p.more_images,
+                        promotion_price = a.p.promotion_price,
+                        short_desc = a.p.short_desc,
+                        slug = a.p.slug,
+                        ProductInCategory = a.p.ProductInCategory,
+                        specifications = a.p.specifications,
+                        isActive = a.p.isActive,
+                        unit_price = a.p.unit_price,
+                        warranty = a.p.warranty,
+                    }).ToListAsync();
+
+                foreach (var pro in await data)
+                {
+                    if (pro.image != null)
+                    {
+                        ImageListResult image = new ImageListResult();
+                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
+                    }
+                }
+
+                return await data;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async Task<List<ProductViewModel>> GetBestSellerProduct(int take)
         {
             try

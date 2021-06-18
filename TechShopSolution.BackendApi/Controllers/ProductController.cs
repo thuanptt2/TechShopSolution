@@ -41,6 +41,12 @@ namespace TechShopSolution.BackendApi.Controllers
             var product = await _productService.GetBestSellerProduct(take);
             return Ok(product);
         }
+        [HttpGet("Category")]
+        public async Task<IActionResult> GetProductsByCategory(int i, int take)
+        {
+            var product = await _productService.GetBestSellerProduct(take);
+            return Ok(product);
+        }
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)

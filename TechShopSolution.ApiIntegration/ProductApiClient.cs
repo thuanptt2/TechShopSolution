@@ -324,5 +324,26 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
             return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
         }
+        public async Task<List<ProductViewModel>> GetBestSellerProducts(int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/bestseller/{take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+        }
+        public async Task<List<ProductViewModel>> GetProductsByCategory(int id, int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/Category?id={id}&take={take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+        }
+
     }
 }

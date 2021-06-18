@@ -25,7 +25,8 @@ namespace TechShopSolution.WebApp.Controllers
         {
             var viewModel = new HomeViewModel
             {
-                FeaturedProducts = await _productApiClient.GetFeaturedProducts(20)
+                FeaturedProducts = await _productApiClient.GetFeaturedProducts(20),
+                BestSellerProducts = await _productApiClient.GetBestSellerProducts(20),
             };
             return View(viewModel);
         }
