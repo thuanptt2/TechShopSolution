@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using TechShopSolution.AdminApp.Service;
 using TechShopSolution.ViewModels.Catalog.Product;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Category;
 using System;
 using System.Linq;

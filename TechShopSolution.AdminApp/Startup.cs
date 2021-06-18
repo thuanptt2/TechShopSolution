@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using TechShopSolution.AdminApp.Service;
+using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.AdminApp
