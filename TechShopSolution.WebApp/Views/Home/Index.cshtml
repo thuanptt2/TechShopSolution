@@ -38,7 +38,10 @@
         </div>
     </div>
 }
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
+}
 <div class="span9">
     <div class="well well-small">
         <h4>Sản phẩm nổi bật <small class="pull-right">@Model.FeaturedProducts.Count Sản phẩm</small></h4>
@@ -75,10 +78,7 @@
                                                 <h5>@item.name</h5>
                                             </div>
                                             <div class="footer-thumbnail">
-                                                @{
-                                                    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
-                                                }
                                                 @if (item.promotion_price > 1)
                                                 {
                                                     <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
@@ -146,10 +146,6 @@
                                                 <h5>@item.name</h5>
                                             </div>
                                             <div class="footer-thumbnail">
-                                                @{
-                                                    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-
-                                                }
                                                 @if (item.promotion_price > 1)
                                                 {
                                                     <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
@@ -184,81 +180,54 @@
     </div>
 
 
-    <h4>Latest Products </h4>
+    <h3>CPU - Bộ vi xử lí</h3>
     <ul class="thumbnails">
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/6.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
+        @{
+            foreach (var product in Model.ProductWithCate2)
+            {
+                <li class="span3">
+                    <div class="thumbnail">
+                        <a href="product_details.html"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <div class="caption">
+                            <h5>@product.name</h5>
+                        </div>
+                        <div class="product-short-desc">
+                            @Html.Raw(product.short_desc)
+                        </div>
+                        <h4 style="text-align:center">
+                            <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
+                            <a class="btn btn-primary" href="#">@String.Format(info, "{0:c}", product.unit_price)</a>
+                        </h4>
+                    </div>
+                </li>
+            }
+        }
 
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/7.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/8.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/9.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/10.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="product_details.html"><img src="/themes/images/products/11.jpg" alt="" /></a>
-                <div class="caption">
-                    <h5>Product name</h5>
-                    <p>
-                        Lorem Ipsum is simply dummy text.
-                    </p>
-                    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-                </div>
-            </div>
-        </li>
     </ul>
 
-</div>
+    <h3>VGA - Card Màn hình</h3>
+    <ul class="thumbnails">
+        @{
+            foreach (var product in Model.ProductWithCate1)
+            {
+                <li class="span3">
+                    <div class="thumbnail">
+                        <a href="product_details.html"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <div class="caption">
+                            <h5>@product.name</h5>
+                        </div>
+                        <div class="product-short-desc">
+                            @Html.Raw(product.short_desc)
+                        </div>
+                        <h4 style="text-align:center">
+                            <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
+                            <a class="btn btn-primary" href="#">@String.Format(info, "{0:c}", product.unit_price)</a>
+                        </h4>
+                    </div>
+                </li>
+            }
+        }
+
+    </ul>
+
+</div>s

@@ -27,13 +27,28 @@
 .caption {
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 60px;
+    height: 40px;
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-line-clamp: 2; /* number of lines to show */
     -webkit-box-orient: vertical;
 }
 .carousel-inner .item {
 }
 .item .container {
     display: block;
+}
+.product-short-desc {
+    margin-top: 10px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100px;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+.thumbnail img {
+    max-width: 100%;
+    height: 200px;
 }

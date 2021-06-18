@@ -23,6 +23,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<bool>> ChangeStatus(int id);
         Task<List<ProductViewModel>> GetFeaturedProduct(int take);
         Task<List<ProductViewModel>> GetBestSellerProduct(int take);
-        Task<List<ProductViewModel>> GetProductsByCategor(int id, int take);
+        Task<List<ProductViewModel>> GetProductsByCategory(int id, int take);
     }
 }

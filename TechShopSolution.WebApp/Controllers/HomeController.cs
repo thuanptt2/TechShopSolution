@@ -27,14 +27,12 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 FeaturedProducts = await _productApiClient.GetFeaturedProducts(20),
                 BestSellerProducts = await _productApiClient.GetBestSellerProducts(20),
+                ProductWithCate1 = await _productApiClient.GetProductsByCategory(1, 6),
+                ProductWithCate2 = await _productApiClient.GetProductsByCategory(2, 6),
             };
             return View(viewModel);
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public async Task<IActionResult>
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -11,7 +11,9 @@ namespace TechShopSolution.WebApp.Models
     {
         public List<ProductViewModel> FeaturedProducts { get; set; }
         public List<ProductViewModel> BestSellerProducts { get; set; }
-        public List<ProductViewModel> GetProductsByCategoryy { get; set; }
+        public List<ProductViewModel> ProductWithCate1 { get; set; }
+        public List<ProductViewModel> ProductWithCate2 { get; set; }
+        public List<ProductViewModel> ProductWithCate3 { get; set; }
 
     }
 }

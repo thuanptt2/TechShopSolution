@@ -42,9 +42,9 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(product);
         }
         [HttpGet("Category")]
-        public async Task<IActionResult> GetProductsByCategory(int i, int take)
+        public async Task<IActionResult> GetProductsByCategory(int id, int take)
         {
-            var product = await _productService.GetBestSellerProduct(take);
+            var product = await _productService.GetProductsByCategory(id, take);
             return Ok(product);
         }
         [HttpPost]
