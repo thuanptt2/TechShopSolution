@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using TechShopSolution.ApiIntegration;
 using TechShopSolution.WebApp.Models;
 
 namespace TechShopSolution.WebApp.Controllers
@@ -12,15 +13,21 @@ namespace TechShopSolution.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IProductApiClient _productApiClient;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IProductApiClient productApiClient)
         {
             _logger = logger;
+            _productApiClient = productApiClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var viewModel = new HomeViewModel
+            {
+                FeaturedProducts = await _productApiClient.GetFeaturedProducts(20)
+            };
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

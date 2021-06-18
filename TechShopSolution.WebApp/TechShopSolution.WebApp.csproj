@@ -8,4 +8,9 @@
     <Folder Include="wwwroot\themes\less\oregional\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TechShopSolution.ApiIntegration\TechShopSolution.ApiIntegration.csproj" />
+    <ProjectReference Include="..\TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

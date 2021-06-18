@@ -21,5 +21,7 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<bool>> OffFeatured(int id);
         Task<ApiResult<bool>> OffBestSeller(int id);
         Task<ApiResult<bool>> ChangeStatus(int id);
+        Task<List<ProductViewModel>> GetFeaturedProduct(int take);
+        Task<List<ProductViewModel>> GetBestSellerProduct(int take);
     }
 }
