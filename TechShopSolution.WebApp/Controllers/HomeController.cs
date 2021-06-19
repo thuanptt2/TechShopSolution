@@ -43,7 +43,7 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 Product = product.ResultObject,
                 Category = Category.ResultObject,
-                ProductsRelated = await _productApiClient.GetProductsRelated(id, 6),
+                ProductsRelated = await _productApiClient.GetProductsRelated(id, 4),
                 ImageList = await _productApiClient.GetImageByProductID(id),
         });
         }

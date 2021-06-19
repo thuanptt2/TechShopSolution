@@ -31,7 +31,7 @@
                                 @{
                                     for (int i = 1; i < Model.ImageList.Count; i++)
                                     {
-                                        <a href="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64"> <img style="width:29%" src="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" alt="" /></a>
+                                        <a href="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" title="@Model.Product.name"> <img style="width:29%" src="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" alt="" /></a>
 
                                     }
                                 }
@@ -122,14 +122,15 @@
         </div>
     </div>
 </div>
+<h4 class=" margin-top-20">Sản phẩm liên quan</h4>
 
-<ul class="thumbnails margin-top-20">
+<ul class="thumbnails">
     @{
         if (Model.ProductsRelated != null)
         {
             foreach (var product in Model.ProductsRelated)
             {
-                <li class="span4">
+                <li class="span3">
                     <div class="thumbnail">
                         <a href="@Url.Action("Detail", "Home", new { id = product.id })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
                         <div class="caption">
@@ -146,12 +147,8 @@
                                 <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
                             }
                         </div>
-                        <div class="product-short-desc">
-                            @Html.Raw(product.short_desc)
-                        </div>
                         <h4 style="text-align:center">
-                            <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
-                            <a class="btn btn-danger" href="#">Mua ngay</a>
+                            <a class="btn" href="#">Xem Chi tiết</a>
                         </h4>
                     </div>
                 </li>

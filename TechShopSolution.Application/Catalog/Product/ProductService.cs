@@ -215,7 +215,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         warranty = a.Key.warranty,
                     }).ToList();
 
-                int totalRow =data.Count();
+                int totalRow = data.Count();
 
                 var pageResult = new PagedResult<ProductViewModel>()
                 {
@@ -349,11 +349,18 @@ namespace TechShopSolution.Application.Catalog.Product
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && p.id != id && c.id == p.ProductInCategory.FirstOrDefault().Category.id
-                            select new { p, pic, c };
+                            where p.isDelete == false && p.id == id
+                            select new { pic };
+                var first = await query.FirstAsync();
+
+               var query2 = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                             join c in _context.Categories on pic.cate_id equals c.id
+                             where p.isDelete == false && p.id != first.pic.product_id && c.id == first.pic.cate_id
+                             select new { p };
 
 
-                var data = query.OrderByDescending(m => m.p.create_at)
+                var data = query2.OrderByDescending(m => m.p.create_at)
                     .Take(take)
                     .Select(a => new ProductViewModel()
                     {
