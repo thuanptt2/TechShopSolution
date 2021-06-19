@@ -77,7 +77,7 @@ namespace TechShopSolution.Application.Catalog.Product
             string[] cateIDs = request.CateID.Split(",");
             foreach (string cateID in cateIDs)
             {
-               if(cateID!="")
+                if (cateID != "")
                 {
                     var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct
                     {
@@ -169,9 +169,8 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
-                            join ct in _context.Categories on pic.cate_id equals ct.id
                             where p.isDelete == false
-                            select new { p, pic, ct};
+                            select new { p, pic };
 
                 if (!String.IsNullOrEmpty(request.Keyword))
                     query = query.Where(x => x.p.name.Contains(request.Keyword));
@@ -187,41 +186,42 @@ namespace TechShopSolution.Application.Catalog.Product
                 }
                 int totalRow = await query.CountAsync();
 
-                var data = query.OrderByDescending(m => m.p.create_at)
+                var data = query.AsEnumerable()
+                    .OrderByDescending(m => m.p.create_at)
+                    .GroupBy(g => g.p)
                     .Skip((request.PageIndex - 1) * request.PageSize)
                     .Take(request.PageSize)
                     .Select(a => new ProductViewModel()
                     {
-                        id = a.p.id,
-                        name = a.p.name,
-                        best_seller = a.p.best_seller,
-                        brand_id = a.p.brand_id,
-                        code = a.p.code,
-                        create_at = a.p.create_at,
-                        descriptions = a.p.descriptions,
-                        featured = a.p.featured,
-                        image = a.p.image,
-                        instock = a.p.instock,
-                        meta_descriptions = a.p.meta_descriptions,
-                        meta_keywords = a.p.meta_keywords,
-                        meta_tittle = a.p.meta_tittle,
-                        more_images = a.p.more_images,
-                        promotion_price = a.p.promotion_price,
-                        short_desc = a.p.short_desc,
-                        slug = a.p.slug,
-                        ProductInCategory = a.p.ProductInCategory,
-                        specifications = a.p.specifications,
-                        isActive = a.p.isActive,
-                        unit_price = a.p.unit_price,
-                        warranty = a.p.warranty,
-                    }).ToListAsync();
+                        id = a.Key.id,
+                        name = a.Key.name,
+                        best_seller = a.Key.best_seller,
+                        brand_id = a.Key.brand_id,
+                        code = a.Key.code,
+                        create_at = a.Key.create_at,
+                        descriptions = a.Key.descriptions,
+                        featured = a.Key.featured,
+                        image = a.Key.image,
+                        instock = a.Key.instock,
+                        meta_descriptions = a.Key.meta_descriptions,
+                        meta_keywords = a.Key.meta_keywords,
+                        meta_tittle = a.Key.meta_tittle,
+                        more_images = a.Key.more_images,
+                        promotion_price = a.Key.promotion_price,
+                        short_desc = a.Key.short_desc,
+                        slug = a.Key.slug,
+                        specifications = a.Key.specifications,
+                        isActive = a.Key.isActive,
+                        unit_price = a.Key.unit_price,
+                        warranty = a.Key.warranty,
+                    }).ToList();
 
                 var pageResult = new PagedResult<ProductViewModel>()
                 {
                     TotalRecords = totalRow,
                     PageSize = request.PageSize,
                     PageIndex = request.PageIndex,
-                    Items = await data,
+                    Items = data,
                 };
                 return pageResult;
             }
@@ -266,14 +266,13 @@ namespace TechShopSolution.Application.Catalog.Product
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
                         slug = a.p.slug,
-                        ProductInCategory = a.p.ProductInCategory,
                         specifications = a.p.specifications,
                         isActive = a.p.isActive,
                         unit_price = a.p.unit_price,
                         warranty = a.p.warranty,
                     }).ToListAsync();
 
-                foreach(var pro in await data)
+                foreach (var pro in await data)
                 {
                     if (pro.image != null)
                     {
@@ -297,7 +296,7 @@ namespace TechShopSolution.Application.Catalog.Product
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
                             where p.isDelete == false && c.id == id
-                            select new { p, pic, c};
+                            select new { p, pic, c };
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
@@ -320,7 +319,6 @@ namespace TechShopSolution.Application.Catalog.Product
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
                         slug = a.p.slug,
-                        ProductInCategory = a.p.ProductInCategory,
                         specifications = a.p.specifications,
                         isActive = a.p.isActive,
                         unit_price = a.p.unit_price,
@@ -350,8 +348,9 @@ namespace TechShopSolution.Application.Catalog.Product
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && c.id == id && p.id != id
+                            where p.isDelete == false && p.id != id && c.id == p.ProductInCategory.FirstOrDefault().Category.id
                             select new { p, pic, c };
+
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
@@ -374,7 +373,6 @@ namespace TechShopSolution.Application.Catalog.Product
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
                         slug = a.p.slug,
-                        ProductInCategory = a.p.ProductInCategory,
                         specifications = a.p.specifications,
                         isActive = a.p.isActive,
                         unit_price = a.p.unit_price,
@@ -426,7 +424,6 @@ namespace TechShopSolution.Application.Catalog.Product
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
                         slug = a.p.slug,
-                        ProductInCategory = a.p.ProductInCategory,
                         specifications = a.p.specifications,
                         isActive = a.p.isActive,
                         unit_price = a.p.unit_price,
@@ -501,11 +498,11 @@ namespace TechShopSolution.Application.Catalog.Product
             }
             string CateIds = "";
             var pic = await _context.CategoryProducts.Where(x => x.product_id == productId).ToListAsync();
-            if(pic != null)
+            if (pic != null)
             {
-                foreach(var cate in pic)
+                foreach (var cate in pic)
                 {
-                    CateIds += cate.cate_id + ","; 
+                    CateIds += cate.cate_id + ",";
                 }
             }
 
@@ -597,7 +594,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 string[] cateIDs = request.CateID.Split(",");
                 foreach (string cateID in cateIDs)
                 {
-                    
+
                     if (cateID != "")
                     {
                         var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct

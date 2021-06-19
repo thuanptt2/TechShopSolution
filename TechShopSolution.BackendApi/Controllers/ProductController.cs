@@ -50,7 +50,7 @@ namespace TechShopSolution.BackendApi.Controllers
         [HttpGet("Related")]
         public async Task<IActionResult> GetProductsRelated(int id, int take)
         {
-            var product = await _productService.GetProductsByCategory(id, take);
+            var product = await _productService.GetProductsRelated(id, take);
             return Ok(product);
         }
         [HttpPost]

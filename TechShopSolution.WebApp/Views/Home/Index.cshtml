@@ -183,12 +183,11 @@
 <div class="span12">
     <div class="title-index">
         <h2>VGA - <b>Card màn hình</b></h2>
-        <a>Xem tất cả</a> (@Model.ProductWithCate2.Count Sản phẩm)
-
+        <a class="pull-right" href="#">Xem tất cả <small>(@Model.ProductWithCate1.Count Sản phẩm)</small></a> 
     </div>
 
 
-    <ul class="thumbnails mt-2">
+    <ul class="thumbnails margin-top-20">
         @{
             foreach (var product in Model.ProductWithCate1)
             {
@@ -227,10 +226,10 @@
 
     <div class="title-index">
         <h2>CPU - <b>Bộ vi xử lí</b></h2>
-        <a>Xem tất cả</a> (@Model.ProductWithCate2.Count Sản phẩm)
+        <a class="pull-right">Xem tất cả <small>(@Model.ProductWithCate2.Count Sản phẩm)</small></a>
     </div>
     
-    <ul class="thumbnails">
+    <ul class="thumbnails margin-top-20">
         @{
             foreach (var product in Model.ProductWithCate2)
             {
