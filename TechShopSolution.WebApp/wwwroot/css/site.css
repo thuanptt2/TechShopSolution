@@ -61,7 +61,7 @@
 }
 .thumbnail img {
     max-width: 100%;
-    height: 200px;
+    height: 180px;
 }
 body {
 	font-family: "Open Sans", sans-serif;
@@ -114,4 +114,11 @@ tr:nth-child(odd) {
 }
 table {
     width: 100%;
+}
+.pull-right-text {
+    text-align: right;
+    display: block;
+}
+.padding-left {
+    padding-left: 20px;
 }
