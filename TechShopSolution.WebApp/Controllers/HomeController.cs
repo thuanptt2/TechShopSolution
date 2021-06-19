@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.WebApp.Models;
@@ -22,7 +20,6 @@ namespace TechShopSolution.WebApp.Controllers
             _productApiClient = productApiClient;
             _categorytApiClient = categorytApiClient;
         }
-
         public async Task<IActionResult> Index()
         {
             var viewModel = new HomeViewModel
@@ -33,19 +30,6 @@ namespace TechShopSolution.WebApp.Controllers
                 ProductWithCate2 = await _productApiClient.GetProductsByCategory(2, 6),
             };
             return View(viewModel);
-        }
-        public async Task<IActionResult> Detail(int id)
-        {
-            var product = await _productApiClient.GetById(id);
-            string[] CateId = product.ResultObject.CateID.Split(",");
-            var Category = await _categorytApiClient.GetById(int.Parse(CateId[0]));
-            return View(new ProductDetailViewModel()
-            {
-                Product = product.ResultObject,
-                Category = Category.ResultObject,
-                ProductsRelated = await _productApiClient.GetProductsRelated(id, 4),
-                ImageList = await _productApiClient.GetImageByProductID(id),
-        });
         }
         public IActionResult Privacy()
         {
