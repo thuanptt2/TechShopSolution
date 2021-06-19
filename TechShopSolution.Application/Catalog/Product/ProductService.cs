@@ -184,7 +184,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 {
                     query = query.Where(x => x.p.brand_id == request.BrandID);
                 }
-                int totalRow = await query.CountAsync();
 
                 var data = query.AsEnumerable()
                     .OrderByDescending(m => m.p.create_at)
@@ -215,6 +214,8 @@ namespace TechShopSolution.Application.Catalog.Product
                         unit_price = a.Key.unit_price,
                         warranty = a.Key.warranty,
                     }).ToList();
+
+                int totalRow =data.Count();
 
                 var pageResult = new PagedResult<ProductViewModel>()
                 {

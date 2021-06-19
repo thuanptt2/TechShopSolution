@@ -58,6 +58,9 @@ $().ready(function () {
                 }
             );
         }
+        else {
+            alert("Vui lòng điền đầy đủ thông tin");
+        }
     })
     $(".DeleteImageButton").click(function (e) {
         if (confirm("Bạn có chắc muốn xóa hình ảnh này, hành động này không thể hoàn tác ?")) {
