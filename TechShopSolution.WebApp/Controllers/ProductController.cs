@@ -56,5 +56,43 @@ namespace TechShopSolution.WebApp.Controllers
                 Products = products
             });
         }
+        public async Task<IActionResult> SearchProducts(string Keyword, string cateSlug, int pageIndex = 1)
+        {
+            if(cateSlug != null)
+            {
+                var Category = await _categorytApiClient.GetBySlug(cateSlug);
+                List<int?> CateID = new List<int?>();
+                CateID.Add(Category.ResultObject.id);
+                var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+                {
+                    CategoryID = CateID,
+                    Keyword = Keyword,
+                    PageIndex = pageIndex,
+                    PageSize = 9,
+                });
+                ViewBag.PageResult = products;
+                return View(new ProductCategoryViewModel()
+                {
+                    Category = Category.ResultObject,
+                    Products = products
+                });
+            }
+            else
+            {
+                var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+                {
+                    Keyword = Keyword,
+                    PageIndex = pageIndex,
+                    PageSize = 9,
+                    
+                });
+                ViewBag.PageResult = products;
+                return View(new ProductCategoryViewModel()
+                {
+                    Category = null,
+                    Products = products
+                });
+            }
+        }
     }
 }

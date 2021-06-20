@@ -6,7 +6,7 @@
 {
     <div class="span9">
         <ul class="breadcrumb">
-            <li><a href="/trang-chu">Trang chủ</a> <span class="divider">/</span></li>
+            <li><a href="@Url.Action("Index", "Home")">Trang chủ</a> <span class="divider">/</span></li>
             <li class="active">@Model.Category.cate_name</li>
         </ul>
         <h3> @Model.Category.cate_name</h3>
@@ -48,7 +48,7 @@
                                 }
                                 else
                                 {
-                                    <h4>Hết hàng</h4>
+                                    <h4 class="OutOfStock">Hết hàng</h4>
                                 }
                             }
                             <hr class="soft" />

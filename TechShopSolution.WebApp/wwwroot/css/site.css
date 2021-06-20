@@ -183,3 +183,18 @@ table {
 .margin-left-30 {
     margin-left: 30px;
 }
+.slider-image {
+    width: 450px;
+    max-width: 100%;
+    height: auto !important;
+    object-fit: contain;
+}
+
+.srchTxt:focus-within {
+    background-image: none;
+}
+.srchTxt:focus {
+    background-image: none;
+}
+
+

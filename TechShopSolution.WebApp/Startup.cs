@@ -64,7 +64,7 @@ namespace TechShopSolution.WebApp
 
             app.UseEndpoints(endpoints =>
             {
-                
+
 
                 endpoints.MapControllerRoute(
                    name: "Chi Tiet san pham",
@@ -83,11 +83,7 @@ namespace TechShopSolution.WebApp
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "/{trang-chu}", new
-                    {
-                        controller = "Home",
-                        action = "Index"
-                    });
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

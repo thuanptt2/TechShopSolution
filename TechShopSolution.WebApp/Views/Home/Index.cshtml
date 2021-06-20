@@ -1,12 +1,13 @@
 ﻿@using TechShopSolution.ViewModels.Catalog.Product;
 @model HomeViewModel
+
 @section Slider {
     <div id="carouselBlk">
         <div id="myCarousel" class="carousel slide">
             <div class="carousel-inner">
                 <div class="item active">
                     <div class="container">
-                        <a href="register.html"><img style="width:100%" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/06/Banner-Web-Tong-hop-Nvidia-Geforce-RTX%E2%84%A2.jpg.webp" alt="special offers" /></a>
+                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/06/Banner-Web-Tong-hop-Nvidia-Geforce-RTX%E2%84%A2.jpg.webp" alt="special offers" /></a>
                         <div class="carousel-caption">
                             <h4>Second Thumbnail label</h4>
                             <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
@@ -15,7 +16,7 @@
                 </div>
                 <div class="item">
                     <div class="container">
-                        <a href="register.html"><img style="width:100%" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-May-bo-Thuong-Hieu-Gia-Vi-Dieu-1000x633-1.jpg.webp" alt="" /></a>
+                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-May-bo-Thuong-Hieu-Gia-Vi-Dieu-1000x633-1.jpg.webp" alt="" /></a>
                         <div class="carousel-caption">
                             <h4>Second Thumbnail label</h4>
                             <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
@@ -24,7 +25,7 @@
                 </div>
                 <div class="item">
                     <div class="container">
-                        <a href="register.html"><img style="width:100%" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-EVGA-RTX-Series-Summer-2021.jpg.webp" alt="" /></a>
+                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-EVGA-RTX-Series-Summer-2021.jpg.webp" alt="" /></a>
                         <div class="carousel-caption">
                             <h4>Second Thumbnail label</h4>
                             <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
@@ -38,10 +39,11 @@
         </div>
     </div>
 }
+
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-
 }
+
 <div class="span9">
     <div class="well well-small">
         <h4>
@@ -182,13 +184,11 @@
     </div>
 </div>
 
-
-
 <div class="span12">
     <div class="title-index">
         <h2>VGA - <b>Card màn hình</b></h2>
     </div>
-    <h4><a class="pull-right-text" href="#">Xem tất cả <small>(@Model.ProductWithCate1.Count Sản phẩm)</small></a></h4>
+    <h4><a class="pull-right-text" href="@Url.Action("Category", "Product", new { slug = ViewBag.Cate1 })">Xem tất cả <small>(@Model.ProductWithCate1.Count Sản phẩm)</small></a></h4>
 
 
     <ul class="thumbnails margin-top-20">
@@ -249,7 +249,7 @@
             <h2>CPU - <b>Bộ vi xử lí</b></h2>
         </div>
     </div>
-    <h4><a class="pull-right-text" href="#">Xem tất cả <small>(@Model.ProductWithCate2.Count Sản phẩm)</small></a></h4>
+    <h4><a class="pull-right-text" href="@Url.Action("Category", "Product", new { slug = ViewBag.Cate2 })">Xem tất cả <small>(@Model.ProductWithCate2.Count Sản phẩm)</small></a></h4>
 
 
 
@@ -272,7 +272,7 @@
                         {
                             <i class="tag-sale"></i>
                         }
-                        else if (days.TotalDays == 7)
+                        else if (days.TotalDays < 7)
                         {
                             <i class="tag"></i>
                         }

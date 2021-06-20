@@ -186,9 +186,12 @@ namespace TechShopSolution.Application.Catalog.Product
                 }
 
                 var data = query.AsEnumerable()
-                    .OrderByDescending(m => m.p.create_at)
-                    .GroupBy(g => g.p)
-                    .Skip((request.PageIndex - 1) * request.PageSize)
+                   .OrderByDescending(m => m.p.create_at)
+                   .GroupBy(g => g.p);
+
+                int totalRow = data.Count();
+
+                List<ProductViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
                     .Take(request.PageSize)
                     .Select(a => new ProductViewModel()
                     {
@@ -215,14 +218,12 @@ namespace TechShopSolution.Application.Catalog.Product
                         warranty = a.Key.warranty,
                     }).ToList();
 
-                int totalRow = data.Count();
-
                 var pageResult = new PagedResult<ProductViewModel>()
                 {
                     TotalRecords = totalRow,
                     PageSize = request.PageSize,
                     PageIndex = request.PageIndex,
-                    Items = data,
+                    Items = result,
                 };
                 return pageResult;
             }
@@ -250,10 +251,9 @@ namespace TechShopSolution.Application.Catalog.Product
                 if (!String.IsNullOrEmpty(request.Keyword))
                     query = query.Where(x => x.p.name.Contains(request.Keyword));
 
-                if (request.CategoryID.Count() != 0)
-                {
-                    query = query.Where(x => x.pic.cate_id == (request.CategoryID[0]));
-                }
+                if (request.CategoryID != null)
+                    if (request.CategoryID.Count != 0)
+                        query = query.Where(x => x.pic.cate_id == (request.CategoryID[0]));
 
                 if (request.BrandID != null)
                 {
@@ -262,8 +262,11 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 var data = query.AsEnumerable()
                     .OrderByDescending(m => m.p.create_at)
-                    .GroupBy(g => g.p)
-                    .Skip((request.PageIndex - 1) * request.PageSize)
+                    .GroupBy(g => g.p);
+
+                int totalRow = data.Count();
+
+                List<ProductViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
                     .Take(request.PageSize)
                     .Select(a => new ProductViewModel()
                     {
@@ -290,9 +293,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         warranty = a.Key.warranty,
                     }).ToList();
 
-                int totalRow = data.Count();
-
-                foreach (var pro in data)
+                foreach (var pro in result)
                 {
                     if (pro.image != null)
                     {
@@ -306,7 +307,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     TotalRecords = totalRow,
                     PageSize = request.PageSize,
                     PageIndex = request.PageIndex,
-                    Items = data,
+                    Items = result,
                 };
                 return pageResult;
             }

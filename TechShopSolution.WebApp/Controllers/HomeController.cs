@@ -20,7 +20,6 @@ namespace TechShopSolution.WebApp.Controllers
             _productApiClient = productApiClient;
             _categorytApiClient = categorytApiClient;
         }
-        [Route("trang-chu")]
         public async Task<IActionResult> Index()
         {
             var viewModel = new HomeViewModel
@@ -30,6 +29,10 @@ namespace TechShopSolution.WebApp.Controllers
                 ProductWithCate1 = await _productApiClient.GetProductsByCategory(1, 6),
                 ProductWithCate2 = await _productApiClient.GetProductsByCategory(2, 6),
             };
+            var cate1 = await _categorytApiClient.GetById(1);
+            var cate2 = await _categorytApiClient.GetById(2);
+            ViewBag.Cate1 = cate1.ResultObject.cate_slug;
+            ViewBag.Cate2 = cate2.ResultObject.cate_slug;
             return View(viewModel);
         }
         public IActionResult Privacy()

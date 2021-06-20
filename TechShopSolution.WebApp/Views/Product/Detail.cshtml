@@ -3,7 +3,7 @@
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 }
 <ul class="breadcrumb">
-    <li><a href="/trang-chu">Trang chủ</a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index", "Home")">Trang chủ</a> <span class="divider">/</span></li>
     <li><a href="@Url.Action("Category", "Product", new { slug = Model.Category.cate_slug })">@Model.Category.cate_name</a> <span class="divider">/</span></li>
     <li class="active">@Model.Product.name</li>
 </ul>
