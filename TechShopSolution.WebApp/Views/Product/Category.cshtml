@@ -114,8 +114,8 @@
                             </div>
                         </li>
                     }
-
                 </ul>
+                @await Component.InvokeAsync("Pager", ViewBag.PageResult)
                 <hr class="soft" />
             </div>
         </div>

@@ -14,7 +14,7 @@
 .footer-thumbnail {
     width: 100%;
     padding: 5px;
-    height: 53px;
+    height: 45px;
     margin-top: 15px;
     text-align: center;
 }
@@ -161,4 +161,7 @@ table {
 }
 .tab-content {
     overflow: hidden;
+}
+.pagination {
+    text-align: center;
 }

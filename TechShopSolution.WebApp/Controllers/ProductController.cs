@@ -45,6 +45,7 @@ namespace TechShopSolution.WebApp.Controllers
                 PageIndex = page,
                 PageSize = 9,
             });
+            ViewBag.PageResult = products;
             return View(new ProductCategoryViewModel() { 
                 Category = Category.ResultObject,
                 Products = products
