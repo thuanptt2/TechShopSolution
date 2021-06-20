@@ -15,6 +15,7 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<bool>> Delete(int productID);
         Task<ApiResult<bool>> DeleteImage(int id, string fileName);
         Task<ApiResult<ProductViewModel>> GetById(int id);
+        Task<ApiResult<ProductViewModel>> GetBySlug(string slug);
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
         Task<PagedResult<ProductViewModel>> GetAllPagingWithMainImage(GetProductPagingRequest request);
         Task<bool> isValidSlug(string Code, string slug);

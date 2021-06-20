@@ -186,6 +186,16 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
         }
+        public async Task<ApiResult<ProductViewModel>> GetBySlug(string slug)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/slug?slug={slug}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
+        }
         public async Task<PagedResult<ProductViewModel>> GetProductPagings(GetProductPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();

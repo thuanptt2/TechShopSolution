@@ -20,17 +20,17 @@ namespace TechShopSolution.WebApp.Controllers
             _categorytApiClient = categorytApiClient;
         }
         [Route("san-pham/{slug}")]
-        public async Task<IActionResult> Detail(int id, string slug)
+        public async Task<IActionResult> Detail(string slug)
         {
-            var product = await _productApiClient.GetById(id);
+            var product = await _productApiClient.GetBySlug(slug);
             string[] CateId = product.ResultObject.CateID.Split(",");
             var Category = await _categorytApiClient.GetById(int.Parse(CateId[0]));
             return View(new ProductDetailViewModel()
             {
                 Product = product.ResultObject,
                 Category = Category.ResultObject,
-                ProductsRelated = await _productApiClient.GetProductsRelated(id, 4),
-                ImageList = await _productApiClient.GetImageByProductID(id),
+                ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.id, 4),
+                ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.id),
             });
         }
         [Route("{slug}")]

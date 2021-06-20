@@ -21,6 +21,7 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<bool>> Delete(int cusID);
         Task<ApiResult<bool>> DeleteImage(int id, string fileName);
         Task<ApiResult<ProductViewModel>> GetById(int id);
+        Task<ApiResult<ProductViewModel>> GetBySlug(string slug);
         Task<bool> isValidSlug(string Code, string slug);
         Task<List<ImageListResult>> GetImageByProductID(int id);
         Task<List<CategoryViewModel>> GetAllCategory();

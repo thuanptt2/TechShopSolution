@@ -76,7 +76,7 @@
                                 <br class="clr" />
                                 <div class="margin-top-20">
                                     <a href="product_details.html" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></a>
-                                    <a href="@Url.Action("Detail", "Product", new { id = Model.Products.Items[i].id, slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+                                    <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
                                 </div>
                             </form>
                         </div>
@@ -92,7 +92,7 @@
                     {
                         <li class="span3">
                             <div class="thumbnail">
-                                <a href="@Url.Action("Detail", "Product", new { id = Model.Products.Items[i].id, slug = Model.Products.Items[i].slug })"><img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" /></a>
+                                <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })"><img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" /></a>
                                 <div class="caption">
                                     <h5>@Model.Products.Items[i].name</h5>
                                 </div>
@@ -109,7 +109,7 @@
                                 </div>
                                 <h4 style="text-align:center">
                                     <a href="product_details.html" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></a>
-                                    <a href="@Url.Action("Detail", "Product", new { id = Model.Products.Items[i].id, slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+                                    <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
                                 </h4>
                             </div>
                         </li>

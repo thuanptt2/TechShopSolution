@@ -76,7 +76,7 @@
                                     <li class="span3">
                                         <div class="thumbnail">
                                             <i class="tag"></i>
-                                            <a href="@Url.Action("Detail", "Product", new { id = item.id, slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                            <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
                                             <div class="caption">
                                                 <h5>@item.name</h5>
                                             </div>
@@ -142,7 +142,7 @@
                                     <li class="span3">
                                         <div class="thumbnail">
                                             <i class="tag"></i>
-                                            <a href="@Url.Action("Detail", "Product", new { id = item.id, slug = item.slug})"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                            <a href="@Url.Action("Detail", "Product", new { slug = item.slug})"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
                                             <div class="caption">
                                                 <h5>@item.name</h5>
                                             </div>
@@ -196,7 +196,7 @@
             {
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="@Url.Action("Detail", "Product", new { id = product.id, slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
                         <div class="caption">
                             <h5>@product.name</h5>
                         </div>
@@ -241,7 +241,7 @@
             {
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="@Url.Action("Detail", "Product", new { id = product.id, slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
                         <div class="caption">
                             <h5>@product.name</h5>
                         </div>

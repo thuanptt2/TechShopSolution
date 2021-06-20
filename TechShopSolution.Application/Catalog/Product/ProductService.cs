@@ -625,6 +625,50 @@ namespace TechShopSolution.Application.Catalog.Product
             };
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
+        public async Task<ApiResult<ProductViewModel>> GetBySlug(string slug)
+        {
+            var product = await _context.Products.Where(x=> x.slug.Equals(slug)).FirstOrDefaultAsync();
+            if (product == null || product.isDelete)
+            {
+                return new ApiErrorResult<ProductViewModel>("Sản phẩm không tồn tại");
+            }
+            string CateIds = "";
+            var pic = await _context.CategoryProducts.Where(x => x.product_id == product.id).ToListAsync();
+            if (pic != null)
+            {
+                foreach (var cate in pic)
+                {
+                    CateIds += cate.cate_id + ",";
+                }
+            }
+
+            var productViewModel = new ProductViewModel
+            {
+                id = product.id,
+                name = product.name,
+                best_seller = product.best_seller,
+                brand_id = product.brand_id,
+                CateID = CateIds,
+                code = product.code,
+                create_at = product.create_at,
+                descriptions = product.descriptions,
+                featured = product.featured,
+                image = product.image,
+                instock = product.instock,
+                meta_descriptions = product.meta_descriptions,
+                meta_keywords = product.meta_keywords,
+                meta_tittle = product.meta_tittle,
+                more_images = product.more_images,
+                promotion_price = product.promotion_price,
+                short_desc = product.short_desc,
+                slug = product.slug,
+                specifications = product.specifications,
+                isActive = product.isActive,
+                unit_price = product.unit_price,
+                warranty = product.warranty,
+            };
+            return new ApiSuccessResult<ProductViewModel>(productViewModel);
+        }
         public async Task<bool> isValidSlug(string Code, string slug)
         {
             if (await _context.Products.AnyAsync(x => x.slug.Equals(slug) && !x.code.Equals(Code) && x.isDelete == false))
