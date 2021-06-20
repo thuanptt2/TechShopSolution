@@ -20,13 +20,51 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             var products = await _productService.GetAllPaging(requet);
             if (products == null)
-                return BadRequest("Không tồn tại sản phẩm này");
+                return BadRequest("Không có sản phẩm nào");
+            return Ok(products);
+        }
+        [HttpPost("filterr")]
+        public async Task<IActionResult> GetPagingProductsWithMainImage(GetProductPagingRequest requet)
+        {
+            var products = await _productService.GetAllPagingWithMainImage(requet);
+            if (products == null)
+                return BadRequest("Không có sản phẩm nào");
             return Ok(products);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var product = await _productService.GetById(id);
+            return Ok(product);
+        }
+        [HttpGet("slug")]
+        public async Task<IActionResult> GetBySlug(string slug)
+        {
+            var product = await _productService.GetBySlug(slug);
+            return Ok(product);
+        }
+        [HttpGet("featured/{take}")]
+        public async Task<IActionResult> GetFeaturedProduct(int take)
+        {
+            var product = await _productService.GetFeaturedProduct(take);
+            return Ok(product);
+        }
+        [HttpGet("bestseller/{take}")]
+        public async Task<IActionResult> GetBestSellerProduct(int take)
+        {
+            var product = await _productService.GetBestSellerProduct(take);
+            return Ok(product);
+        }
+        [HttpGet("Category")]
+        public async Task<IActionResult> GetProductsByCategory(int id, int take)
+        {
+            var product = await _productService.GetProductsByCategory(id, take);
+            return Ok(product);
+        }
+        [HttpGet("Related")]
+        public async Task<IActionResult> GetProductsRelated(int id, int take)
+        {
+            var product = await _productService.GetProductsRelated(id, take);
             return Ok(product);
         }
         [HttpPost]

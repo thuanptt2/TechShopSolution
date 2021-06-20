@@ -1,0 +1,69 @@
+﻿@model TechShopSolution.ViewModels.Common.PagedResultBase
+@if (Model != null)
+{
+
+    var urlTemplate = Url.Action() + "?pageIndex={0}";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "pageIndex")
+        {
+            continue;
+        }
+        if (request.Query[key].Count > 1)
+        {
+            foreach (var item in (string[])request.Query[key])
+            {
+                urlTemplate += "&" + key + "=" + item;
+            }
+        }
+        else
+        {
+            urlTemplate += "&" + key + "=" + request.Query[key];
+        }
+    }
+
+    var startIndex = Math.Max(Model.PageIndex - 5, 1);
+    var finishIndex = Math.Min(Model.PageIndex + 5, Model.PageCount);
+  
+    <br class="clr" />
+    @if (Model.PageCount >= 1)
+    {
+        <div class="pagination">
+            <ul>
+                @if (Model.PageIndex != startIndex)
+                {
+
+                    <li>
+                        <a title="1" href="@urlTemplate.Replace("{0}", "1")">Đầu</a>
+                    </li>
+                    <li>
+                        <a href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())">Trước</a>
+                    </li>
+                }
+                @for (var i = startIndex; i <= finishIndex; i++)
+                {
+                    if (i == Model.PageIndex)
+                    {
+                        <li class="active">
+                            <a href="#">@i <span class="sr-only">(current)</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li><a title="Trang @i.ToString()" href="@urlTemplate.Replace("{0}", i.ToString())">@i</a></li>
+                    }
+                }
+                @if (Model.PageIndex != finishIndex)
+                {
+                    <li>
+                        <a title="@Model.PageCount.ToString()" href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())">Sau</a>
+                    </li>
+                    <li>
+                        <a href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())">Cuối</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+}

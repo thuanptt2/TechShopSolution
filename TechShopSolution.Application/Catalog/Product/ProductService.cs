@@ -77,7 +77,7 @@ namespace TechShopSolution.Application.Catalog.Product
             string[] cateIDs = request.CateID.Split(",");
             foreach (string cateID in cateIDs)
             {
-               if(cateID!="")
+                if (cateID != "")
                 {
                     var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct
                     {
@@ -169,9 +169,8 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
-                            join ct in _context.Categories on pic.cate_id equals ct.id
                             where p.isDelete == false
-                            select new { p, pic, ct};
+                            select new { p, pic };
 
                 if (!String.IsNullOrEmpty(request.Keyword))
                     query = query.Where(x => x.p.name.Contains(request.Keyword));
@@ -185,11 +184,155 @@ namespace TechShopSolution.Application.Catalog.Product
                 {
                     query = query.Where(x => x.p.brand_id == request.BrandID);
                 }
-                int totalRow = await query.CountAsync();
+
+                var data = query.AsEnumerable()
+                   .OrderByDescending(m => m.p.create_at)
+                   .GroupBy(g => g.p);
+
+                int totalRow = data.Count();
+
+                List<ProductViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(a => new ProductViewModel()
+                    {
+                        id = a.Key.id,
+                        name = a.Key.name,
+                        best_seller = a.Key.best_seller,
+                        brand_id = a.Key.brand_id,
+                        code = a.Key.code,
+                        create_at = a.Key.create_at,
+                        descriptions = a.Key.descriptions,
+                        featured = a.Key.featured,
+                        image = a.Key.image,
+                        instock = a.Key.instock,
+                        meta_descriptions = a.Key.meta_descriptions,
+                        meta_keywords = a.Key.meta_keywords,
+                        meta_tittle = a.Key.meta_tittle,
+                        more_images = a.Key.more_images,
+                        promotion_price = a.Key.promotion_price,
+                        short_desc = a.Key.short_desc,
+                        slug = a.Key.slug,
+                        specifications = a.Key.specifications,
+                        isActive = a.Key.isActive,
+                        unit_price = a.Key.unit_price,
+                        warranty = a.Key.warranty,
+                    }).ToList();
+
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecords = totalRow,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = result,
+                };
+                return pageResult;
+            }
+            catch
+            {
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecords = 0,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = null,
+                };
+                return pageResult;
+            }
+        }
+        public async Task<PagedResult<ProductViewModel>> GetAllPagingWithMainImage(GetProductPagingRequest request)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                            where p.isDelete == false
+                            select new { p, pic };
+
+                if (!String.IsNullOrEmpty(request.Keyword))
+                    query = query.Where(x => x.p.name.Contains(request.Keyword));
+
+                if (request.CategoryID != null)
+                    if (request.CategoryID.Count != 0)
+                        query = query.Where(x => x.pic.cate_id == (request.CategoryID[0]));
+
+                if (request.BrandID != null)
+                {
+                    query = query.Where(x => x.p.brand_id == request.BrandID);
+                }
+
+                var data = query.AsEnumerable()
+                    .OrderByDescending(m => m.p.create_at)
+                    .GroupBy(g => g.p);
+
+                int totalRow = data.Count();
+
+                List<ProductViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(a => new ProductViewModel()
+                    {
+                        id = a.Key.id,
+                        name = a.Key.name,
+                        best_seller = a.Key.best_seller,
+                        brand_id = a.Key.brand_id,
+                        code = a.Key.code,
+                        create_at = a.Key.create_at,
+                        descriptions = a.Key.descriptions,
+                        featured = a.Key.featured,
+                        image = a.Key.image,
+                        instock = a.Key.instock,
+                        meta_descriptions = a.Key.meta_descriptions,
+                        meta_keywords = a.Key.meta_keywords,
+                        meta_tittle = a.Key.meta_tittle,
+                        more_images = a.Key.more_images,
+                        promotion_price = a.Key.promotion_price,
+                        short_desc = a.Key.short_desc,
+                        slug = a.Key.slug,
+                        specifications = a.Key.specifications,
+                        isActive = a.Key.isActive,
+                        unit_price = a.Key.unit_price,
+                        warranty = a.Key.warranty,
+                    }).ToList();
+
+                foreach (var pro in result)
+                {
+                    if (pro.image != null)
+                    {
+                        ImageListResult image = new ImageListResult();
+                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
+                    }
+                }
+
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecords = totalRow,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = result,
+                };
+                return pageResult;
+            }
+            catch
+            {
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecords = 0,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = null,
+                };
+                return pageResult;
+            }
+        }
+        public async Task<List<ProductViewModel>> GetFeaturedProduct(int take)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            where p.isDelete == false && p.featured == true
+                            select new { p };
 
                 var data = query.OrderByDescending(m => m.p.create_at)
-                    .Skip((request.PageIndex - 1) * request.PageSize)
-                    .Take(request.PageSize)
+                    .Take(take)
                     .Select(a => new ProductViewModel()
                     {
                         id = a.p.id,
@@ -209,32 +352,191 @@ namespace TechShopSolution.Application.Catalog.Product
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
                         slug = a.p.slug,
-                        ProductInCategory = a.p.ProductInCategory,
                         specifications = a.p.specifications,
                         isActive = a.p.isActive,
                         unit_price = a.p.unit_price,
                         warranty = a.p.warranty,
                     }).ToListAsync();
 
-                var pageResult = new PagedResult<ProductViewModel>()
+                foreach (var pro in await data)
                 {
-                    TotalRecords = totalRow,
-                    PageSize = request.PageSize,
-                    PageIndex = request.PageIndex,
-                    Items = await data,
-                };
-                return pageResult;
+                    if (pro.image != null)
+                    {
+                        ImageListResult image = new ImageListResult();
+                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
+                    }
+                }
+
+                return await data;
             }
             catch
             {
-                var pageResult = new PagedResult<ProductViewModel>()
+                return null;
+            }
+        }
+        public async Task<List<ProductViewModel>> GetProductsByCategory(int id, int take)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                            join c in _context.Categories on pic.cate_id equals c.id
+                            where p.isDelete == false && c.id == id
+                            select new { p, pic, c };
+
+                var data = query.OrderByDescending(m => m.p.create_at)
+                    .Take(take)
+                    .Select(a => new ProductViewModel()
+                    {
+                        id = a.p.id,
+                        name = a.p.name,
+                        best_seller = a.p.best_seller,
+                        brand_id = a.p.brand_id,
+                        code = a.p.code,
+                        create_at = a.p.create_at,
+                        descriptions = a.p.descriptions,
+                        featured = a.p.featured,
+                        image = a.p.image,
+                        instock = a.p.instock,
+                        meta_descriptions = a.p.meta_descriptions,
+                        meta_keywords = a.p.meta_keywords,
+                        meta_tittle = a.p.meta_tittle,
+                        more_images = a.p.more_images,
+                        promotion_price = a.p.promotion_price,
+                        short_desc = a.p.short_desc,
+                        slug = a.p.slug,
+                        specifications = a.p.specifications,
+                        isActive = a.p.isActive,
+                        unit_price = a.p.unit_price,
+                        warranty = a.p.warranty,
+                    }).ToListAsync();
+
+                foreach (var pro in await data)
                 {
-                    TotalRecords = 0,
-                    PageSize = request.PageSize,
-                    PageIndex = request.PageIndex,
-                    Items = null,
-                };
-                return pageResult;
+                    if (pro.image != null)
+                    {
+                        ImageListResult image = new ImageListResult();
+                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
+                    }
+                }
+
+                return await data;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                            join c in _context.Categories on pic.cate_id equals c.id
+                            where p.isDelete == false && p.id == id
+                            select new { pic };
+                var first = await query.FirstAsync();
+
+               var query2 = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                             join c in _context.Categories on pic.cate_id equals c.id
+                             where p.isDelete == false && p.id != first.pic.product_id && c.id == first.pic.cate_id
+                             select new { p };
+
+
+                var data = query2.OrderByDescending(m => m.p.create_at)
+                    .Take(take)
+                    .Select(a => new ProductViewModel()
+                    {
+                        id = a.p.id,
+                        name = a.p.name,
+                        best_seller = a.p.best_seller,
+                        brand_id = a.p.brand_id,
+                        code = a.p.code,
+                        create_at = a.p.create_at,
+                        descriptions = a.p.descriptions,
+                        featured = a.p.featured,
+                        image = a.p.image,
+                        instock = a.p.instock,
+                        meta_descriptions = a.p.meta_descriptions,
+                        meta_keywords = a.p.meta_keywords,
+                        meta_tittle = a.p.meta_tittle,
+                        more_images = a.p.more_images,
+                        promotion_price = a.p.promotion_price,
+                        short_desc = a.p.short_desc,
+                        slug = a.p.slug,
+                        specifications = a.p.specifications,
+                        isActive = a.p.isActive,
+                        unit_price = a.p.unit_price,
+                        warranty = a.p.warranty,
+                    }).ToListAsync();
+
+                foreach (var pro in await data)
+                {
+                    if (pro.image != null)
+                    {
+                        ImageListResult image = new ImageListResult();
+                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
+                    }
+                }
+
+                return await data;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<List<ProductViewModel>> GetBestSellerProduct(int take)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            where p.isDelete == false && p.best_seller == true
+                            select new { p };
+
+                var data = query.OrderByDescending(m => m.p.create_at)
+                    .Take(take)
+                    .Select(a => new ProductViewModel()
+                    {
+                        id = a.p.id,
+                        name = a.p.name,
+                        best_seller = a.p.best_seller,
+                        brand_id = a.p.brand_id,
+                        code = a.p.code,
+                        create_at = a.p.create_at,
+                        descriptions = a.p.descriptions,
+                        featured = a.p.featured,
+                        image = a.p.image,
+                        instock = a.p.instock,
+                        meta_descriptions = a.p.meta_descriptions,
+                        meta_keywords = a.p.meta_keywords,
+                        meta_tittle = a.p.meta_tittle,
+                        more_images = a.p.more_images,
+                        promotion_price = a.p.promotion_price,
+                        short_desc = a.p.short_desc,
+                        slug = a.p.slug,
+                        specifications = a.p.specifications,
+                        isActive = a.p.isActive,
+                        unit_price = a.p.unit_price,
+                        warranty = a.p.warranty,
+                    }).ToListAsync();
+
+                foreach (var pro in await data)
+                {
+                    if (pro.image != null)
+                    {
+                        ImageListResult image = new ImageListResult();
+                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
+                    }
+                }
+
+                return await data;
+            }
+            catch
+            {
+                return null;
             }
         }
         public async Task<List<ImageListResult>> GetImagesByProductID(int id)
@@ -289,11 +591,55 @@ namespace TechShopSolution.Application.Catalog.Product
             }
             string CateIds = "";
             var pic = await _context.CategoryProducts.Where(x => x.product_id == productId).ToListAsync();
-            if(pic != null)
+            if (pic != null)
             {
-                foreach(var cate in pic)
+                foreach (var cate in pic)
                 {
-                    CateIds += cate.cate_id + ","; 
+                    CateIds += cate.cate_id + ",";
+                }
+            }
+
+            var productViewModel = new ProductViewModel
+            {
+                id = product.id,
+                name = product.name,
+                best_seller = product.best_seller,
+                brand_id = product.brand_id,
+                CateID = CateIds,
+                code = product.code,
+                create_at = product.create_at,
+                descriptions = product.descriptions,
+                featured = product.featured,
+                image = product.image,
+                instock = product.instock,
+                meta_descriptions = product.meta_descriptions,
+                meta_keywords = product.meta_keywords,
+                meta_tittle = product.meta_tittle,
+                more_images = product.more_images,
+                promotion_price = product.promotion_price,
+                short_desc = product.short_desc,
+                slug = product.slug,
+                specifications = product.specifications,
+                isActive = product.isActive,
+                unit_price = product.unit_price,
+                warranty = product.warranty,
+            };
+            return new ApiSuccessResult<ProductViewModel>(productViewModel);
+        }
+        public async Task<ApiResult<ProductViewModel>> GetBySlug(string slug)
+        {
+            var product = await _context.Products.Where(x=> x.slug.Equals(slug)).FirstOrDefaultAsync();
+            if (product == null || product.isDelete)
+            {
+                return new ApiErrorResult<ProductViewModel>("Sản phẩm không tồn tại");
+            }
+            string CateIds = "";
+            var pic = await _context.CategoryProducts.Where(x => x.product_id == product.id).ToListAsync();
+            if (pic != null)
+            {
+                foreach (var cate in pic)
+                {
+                    CateIds += cate.cate_id + ",";
                 }
             }
 
@@ -385,7 +731,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 string[] cateIDs = request.CateID.Split(",");
                 foreach (string cateID in cateIDs)
                 {
-                    
+
                     if (cateID != "")
                     {
                         var productInCategory = new TechShopSolution.Data.Entities.CategoryProduct

@@ -15,11 +15,17 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<bool>> Delete(int productID);
         Task<ApiResult<bool>> DeleteImage(int id, string fileName);
         Task<ApiResult<ProductViewModel>> GetById(int id);
+        Task<ApiResult<ProductViewModel>> GetBySlug(string slug);
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
+        Task<PagedResult<ProductViewModel>> GetAllPagingWithMainImage(GetProductPagingRequest request);
         Task<bool> isValidSlug(string Code, string slug);
         Task<List<ImageListResult>> GetImagesByProductID(int id);
         Task<ApiResult<bool>> OffFeatured(int id);
         Task<ApiResult<bool>> OffBestSeller(int id);
         Task<ApiResult<bool>> ChangeStatus(int id);
+        Task<List<ProductViewModel>> GetFeaturedProduct(int take);
+        Task<List<ProductViewModel>> GetBestSellerProduct(int take);
+        Task<List<ProductViewModel>> GetProductsByCategory(int id, int take);
+        Task<List<ProductViewModel>> GetProductsRelated(int id, int take);
     }
 }
