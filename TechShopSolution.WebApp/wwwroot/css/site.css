@@ -159,3 +159,6 @@ table {
     font-weight: 700;
     color: #ff0000;
 }
+.tab-content {
+    overflow: hidden;
+}

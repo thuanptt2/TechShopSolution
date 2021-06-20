@@ -33,18 +33,18 @@ namespace TechShopSolution.WebApp.Controllers
                 ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.id),
             });
         }
-        [Route("{slug}")]
-        public async Task<IActionResult> Category(int id, string slug, int page = 1)
+        [Route("danh-muc/{slug}")]
+        public async Task<IActionResult> Category(string slug, int page = 1)
         {
+            var Category = await _categorytApiClient.GetBySlug(slug);
             List<int?> CateID = new List<int?>();
-            CateID.Add(id);
+            CateID.Add(Category.ResultObject.id);
             var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
             {
                 CategoryID = CateID,
                 PageIndex = page,
-                PageSize = 16,
+                PageSize = 9,
             });
-            var Category = await _categorytApiClient.GetById(id);
             return View(new ProductCategoryViewModel() { 
                 Category = Category.ResultObject,
                 Products = products

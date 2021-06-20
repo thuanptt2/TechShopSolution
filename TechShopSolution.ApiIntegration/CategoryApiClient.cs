@@ -83,6 +83,16 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<CategoryViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<CategoryViewModel>>(body);
         }
+        public async Task<ApiResult<CategoryViewModel>> GetBySlug(string slug)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/category/slug?slug={slug}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<CategoryViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<CategoryViewModel>>(body);
+        }
         public async Task<bool> isValidSlug(int id, string slug)
         {
             var client = _httpClientFactory.CreateClient();

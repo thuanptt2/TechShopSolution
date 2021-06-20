@@ -15,7 +15,7 @@
                     if (i == 0)
                     {
                         <li class="subMenu open">
-                            <a class="active" href="@Url.Action("Category", "Product", new { id = parent.id, slug = parent.cate_slug })">@parent.cate_name</a>
+                            <a class="active" href="@Url.Action("Category", "Product", new { slug = parent.cate_slug })">@parent.cate_name</a>
 
                             @{
                                 Cates.Remove(parent);
@@ -24,8 +24,7 @@
                                 @foreach (var item in children.ToList())
                                 {
                                     <li>
-                                        @{ string url1 = @parent.cate_slug + "/" + @item.cate_slug;}
-                                        <a class="active" href="@Url.Action("Category", "Product", new { id = item.id, slug = url1 })"><i class="icon-chevron-right"></i>@item.cate_name</a>
+                                        <a class="active" href="@Url.Action("Category", "Product", new { slug = item.cate_slug })"><i class="icon-chevron-right"></i>@item.cate_name</a>
                                         @{
                                             Cates.Remove(item);
                                         }
@@ -33,8 +32,7 @@
                                             var childItems = Cates.Where(x => x.parent_id == item.id).OrderBy(x => x.cate_name);
                                             @foreach (var itemChild in childItems.ToList())
                                             {
-                                                string url = @item.cate_slug + "/" + @itemChild.cate_slug;
-                                                <a href="@Url.Action("Category", "Product", new { id = itemChild.id, slug = url })">
+                                                <a href="@Url.Action("Category", "Product", new { slug = itemChild.cate_slug })">
                                                     <span class="padding-left">
                                                         <i class="icon-chevron-right"></i>
                                                         @itemChild.cate_name
@@ -52,7 +50,7 @@
                     else
                     {
                         <li class="subMenu">
-                            <a class="cate-parent-name" href="@Url.Action("Category", "Product", new { id = parent.id, slug = parent.cate_slug })">@parent.cate_name</a>
+                            <a class="cate-parent-name" href="@Url.Action("Category", "Product", new { slug = parent.cate_slug })">@parent.cate_name</a>
                             @{
                                 Cates.Remove(parent);
                             }
@@ -60,8 +58,7 @@
                                 @foreach (var item in children.ToList())
                                 {
                                     <li>
-                                        @{ string url1 = @parent.cate_slug + "/" + @item.cate_slug;}
-                                        <a class="active" href="@Url.Action("Category", "Product", new { id = item.id, slug = url1 })"><i class="icon-chevron-right"></i>@item.cate_name</a>
+                                        <a class="active" href="@Url.Action("Category", "Product", new { slug = item.cate_slug })"><i class="icon-chevron-right"></i>@item.cate_name</a>
                                         @{
                                             Cates.Remove(item);
                                         }
@@ -69,8 +66,7 @@
                                             var childItems = Cates.Where(x => x.parent_id == item.id).OrderBy(x => x.cate_name);
                                             @foreach (var itemChild in childItems.ToList())
                                             {
-                                                string url = @item.cate_slug + "/" + @itemChild.cate_slug;
-                                                <a href="@Url.Action("Category", "Product", new { id = itemChild.id, slug = url })">
+                                                <a href="@Url.Action("Category", "Product", new { slug = itemChild.cate_slug })">
                                                     <span class="padding-left">
                                                         <i class="icon-chevron-right"></i>
                                                         @itemChild.cate_name

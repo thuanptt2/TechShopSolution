@@ -74,7 +74,7 @@ namespace TechShopSolution.WebApp
                    });
                 endpoints.MapControllerRoute(
                    name: "Danh sach san pham",
-                   pattern: "/{slug}", new
+                   pattern: "/danh-muc/{slug}", new
                    {
                        controller = "Product",
                        action = "Category"

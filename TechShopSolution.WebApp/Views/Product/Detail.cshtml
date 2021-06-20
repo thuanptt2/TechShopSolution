@@ -4,7 +4,7 @@
 }
 <ul class="breadcrumb">
     <li><a href="/trang-chu">Trang chủ</a> <span class="divider">/</span></li>
-    <li><a href="/loai-san-pham/@Model.Category.id">@Model.Category.cate_name</a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Category", "Product", new { slug = Model.Category.cate_slug })">@Model.Category.cate_name</a> <span class="divider">/</span></li>
     <li class="active">@Model.Product.name</li>
 </ul>
 <div class="row">
