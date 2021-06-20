@@ -13,11 +13,13 @@ namespace TechShopSolution.WebApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
         private readonly ICategoryApiClient _categorytApiClient;
+        private readonly IBrandApiClient _brandApiClient;
 
-        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categorytApiClient)
+        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categorytApiClient, IBrandApiClient brandApiClient)
         {
             _productApiClient = productApiClient;
             _categorytApiClient = categorytApiClient;
+            _brandApiClient = brandApiClient;
         }
         [Route("san-pham/{slug}")]
         public async Task<IActionResult> Detail(string slug)
@@ -25,10 +27,13 @@ namespace TechShopSolution.WebApp.Controllers
             var product = await _productApiClient.GetBySlug(slug);
             string[] CateId = product.ResultObject.CateID.Split(",");
             var Category = await _categorytApiClient.GetById(int.Parse(CateId[0]));
+            var Brand = await _brandApiClient.GetById(product.ResultObject.brand_id);
+            
             return View(new ProductDetailViewModel()
             {
                 Product = product.ResultObject,
                 Category = Category.ResultObject,
+                Brand = Brand.ResultObject,
                 ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.id, 4),
                 ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.id),
             });

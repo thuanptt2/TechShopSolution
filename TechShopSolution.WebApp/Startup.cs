@@ -36,6 +36,7 @@ namespace TechShopSolution.WebApp
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+            services.AddTransient<IBrandApiClient, BrandApiClient>();
 
 
         }

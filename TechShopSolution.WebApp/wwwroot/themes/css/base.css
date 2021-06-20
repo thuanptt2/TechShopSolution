@@ -2,6 +2,9 @@
 #carouselBlk,#header{background: url(../images/headerRepeat.png) repeat-x 0 0 #f7f7f7;}
 #srchFld {background: url(../images/search.png) no-repeat 4px center #fff;}
 .tag {background:url(../images/new.png) no-repeat 0 0; position: absolute; display:block; top: -4px;right: -18px; height:48px; width:48px;}
+.tag-featured{background:url(../images/featured.png) no-repeat 0 0;position:absolute;display:block;top:-4px;right:0;height:48px;width:48px}
+.tag-best-seller{background:url(../images/bestseller.png) no-repeat 0 0;position:absolute;display:block;top:-4px;right:-18px;height:48px;width:48px}
+.tag-sale{background:url(../images/sale.png) no-repeat 0 0;position:absolute;display:block;top:-4px;right:-18px;height:48px;width:48px}
 .clr{clear:both;}
 .cntr{text-align:center}
 .marginLess{margin:0}

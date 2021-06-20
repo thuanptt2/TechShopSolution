@@ -165,3 +165,21 @@ table {
 .pagination {
     text-align: center;
 }
+.css-5nimvs {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    color: rgb(132, 135, 136);
+}
+.css-1meclnb {
+    color: rgb(20, 53, 195);
+    font-weight: 500;
+    margin-left: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.margin-left-30 {
+    margin-left: 30px;
+}

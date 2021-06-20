@@ -92,6 +92,23 @@
                     {
                         <li class="span3">
                             <div class="thumbnail">
+                                @{ TimeSpan days = DateTime.Now.Subtract(@Model.Products.Items[i].create_at); }
+                                @if (@Model.Products.Items[i].featured)
+                                {
+                                    <i class="tag-featured"></i>
+                                }
+                                else if (@Model.Products.Items[i].best_seller)
+                                {
+                                    <i class="tag-best-seller"></i>
+                                }
+                                else if (@Model.Products.Items[i].promotion_price > 1)
+                                {
+                                    <i class="tag-sale"></i>
+                                }
+                                else if (days.TotalDays == 7)
+                                {
+                                    <i class="tag"></i>
+                                }
                                 <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })"><img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" /></a>
                                 <div class="caption">
                                     <h5>@Model.Products.Items[i].name</h5>

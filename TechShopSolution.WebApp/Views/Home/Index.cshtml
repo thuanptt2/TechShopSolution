@@ -44,7 +44,8 @@
 }
 <div class="span9">
     <div class="well well-small">
-        <h4>Sản phẩm nổi bật 
+        <h4>
+            Sản phẩm nổi bật
             <small class="pull-right">
                 @Model.FeaturedProducts.Count Sản phẩm
             </small>
@@ -75,7 +76,7 @@
                                 {
                                     <li class="span3">
                                         <div class="thumbnail">
-                                            <i class="tag"></i>
+                                            <i class="tag-featured"></i>
                                             <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
                                             <div class="caption">
                                                 <h5>@item.name</h5>
@@ -141,7 +142,7 @@
                                 {
                                     <li class="span3">
                                         <div class="thumbnail">
-                                            <i class="tag"></i>
+                                            <i class="tag-best-seller"></i>
                                             <a href="@Url.Action("Detail", "Product", new { slug = item.slug})"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
                                             <div class="caption">
                                                 <h5>@item.name</h5>
@@ -196,6 +197,23 @@
             {
                 <li class="span3">
                     <div class="thumbnail">
+                        @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
+                        @if (product.featured)
+                        {
+                            <i class="tag-featured"></i>
+                        }
+                        else if (product.best_seller)
+                        {
+                            <i class="tag-best-seller"></i>
+                        }
+                        else if (product.promotion_price > 1)
+                        {
+                            <i class="tag-sale"></i>
+                        }
+                        else if (days.TotalDays == 7)
+                        {
+                            <i class="tag"></i>
+                        }
                         <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
                         <div class="caption">
                             <h5>@product.name</h5>
@@ -241,6 +259,23 @@
             {
                 <li class="span3">
                     <div class="thumbnail">
+                        @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
+                        @if (product.featured)
+                        {
+                            <i class="tag-featured"></i>
+                        }
+                        else if (product.best_seller)
+                        {
+                            <i class="tag-best-seller"></i>
+                        }
+                        else if (product.promotion_price > 1)
+                        {
+                            <i class="tag-sale"></i>
+                        }
+                        else if (days.TotalDays == 7)
+                        {
+                            <i class="tag"></i>
+                        }
                         <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
                         <div class="caption">
                             <h5>@product.name</h5>
