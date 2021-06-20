@@ -20,7 +20,15 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             var products = await _productService.GetAllPaging(requet);
             if (products == null)
-                return BadRequest("Không tồn tại sản phẩm này");
+                return BadRequest("Không có sản phẩm nào");
+            return Ok(products);
+        }
+        [HttpPost("filterr")]
+        public async Task<IActionResult> GetPagingProductsWithMainImage(GetProductPagingRequest requet)
+        {
+            var products = await _productService.GetAllPagingWithMainImage(requet);
+            if (products == null)
+                return BadRequest("Không có sản phẩm nào");
             return Ok(products);
         }
         [HttpGet("{id}")]

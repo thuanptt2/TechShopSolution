@@ -63,9 +63,30 @@ namespace TechShopSolution.WebApp
 
             app.UseEndpoints(endpoints =>
             {
+                
+
+                endpoints.MapControllerRoute(
+                   name: "Chi Tiet san pham",
+                   pattern: "/{san-pham}/{slug}", new
+                   {
+                       controller = "Product",
+                       action = "Detail"
+                   });
+                endpoints.MapControllerRoute(
+                   name: "Danh sach san pham",
+                   pattern: "/{slug}", new
+                   {
+                       controller = "Product",
+                       action = "Category"
+                   });
+
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "/{trang-chu}", new
+                    {
+                        controller = "Home",
+                        action = "Index"
+                    });
             });
         }
     }

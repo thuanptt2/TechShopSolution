@@ -20,6 +20,7 @@ namespace TechShopSolution.WebApp.Controllers
             _productApiClient = productApiClient;
             _categorytApiClient = categorytApiClient;
         }
+        [Route("trang-chu")]
         public async Task<IActionResult> Index()
         {
             var viewModel = new HomeViewModel

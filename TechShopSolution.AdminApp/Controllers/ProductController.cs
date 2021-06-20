@@ -87,7 +87,6 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return CateIDs;
         }
-
         [HttpGet]
         public async Task<IActionResult> Create()
         {
