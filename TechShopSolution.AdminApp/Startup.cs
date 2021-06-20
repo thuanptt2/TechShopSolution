@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using TechShopSolution.AdminApp.Service;
+using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.AdminApp
@@ -37,7 +37,7 @@ namespace TechShopSolution.AdminApp
             services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.IdleTimeout = TimeSpan.FromMinutes(120);
             });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();

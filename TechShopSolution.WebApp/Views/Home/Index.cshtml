@@ -1,8 +1,306 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using TechShopSolution.ViewModels.Catalog.Product;
+@model HomeViewModel
+
+@section Slider {
+    <div id="carouselBlk">
+        <div id="myCarousel" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="container">
+                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/06/Banner-Web-Tong-hop-Nvidia-Geforce-RTX%E2%84%A2.jpg.webp" alt="special offers" /></a>
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-May-bo-Thuong-Hieu-Gia-Vi-Dieu-1000x633-1.jpg.webp" alt="" /></a>
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-EVGA-RTX-Series-Summer-2021.jpg.webp" alt="" /></a>
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+        </div>
+    </div>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<div class="span9">
+    <div class="well well-small">
+        <h4>
+            Sản phẩm nổi bật
+            <small class="pull-right">
+                @Model.FeaturedProducts.Count Sản phẩm
+            </small>
+        </h4>
+        <div class="row-fluid">
+            <div id="featured" class="carousel slide">
+                <div class="carousel-inner">
+                    @{
+                        List<List<ProductViewModel>> featuredProducts = new List<List<ProductViewModel>>();
+                        List<ProductViewModel> featuredPart = new List<ProductViewModel>();
+                    }
+
+                    @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
+                    {
+                        featuredPart.Add(Model.FeaturedProducts[index]);
+                        if (featuredPart.Count == 4 || Model.FeaturedProducts.Count < 4)
+                        {
+                            featuredProducts.Add(featuredPart);
+                            featuredPart = new List<ProductViewModel>();
+                        }
+
+                    }
+                    @for (int index = 0; index < featuredProducts.Count; index++)
+                    {
+                        <div class="item @(index == 0?"active":"")">
+                            <ul class="thumbnails">
+                                @foreach (var item in featuredProducts[index])
+                                {
+                                    <li class="span3">
+                                        <div class="thumbnail">
+                                            <i class="tag-featured"></i>
+                                            <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                            <div class="caption">
+                                                <h5>@item.name</h5>
+                                            </div>
+                                            <div class="footer-thumbnail">
+                                                @if (item.promotion_price > 1)
+                                                {
+                                                    <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
+                                                    <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                }
+
+                                            </div>
+                                            <div class="product-btn">
+                                                <a class="btn-View btn btn-danger" href="" localize-content>
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                    Mua ngay
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+
+                <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
+                <a class="right carousel-control" href="#featured" data-slide="next">›</a>
+            </div>
+
+        </div>
+    </div>
+    <div class="well well-small mb-5">
+        <h4>Sản phẩm bán chạy <small class="pull-right">@Model.BestSellerProducts.Count Sản phẩm</small></h4>
+        <div class="row-fluid">
+            <div id="bestseller" class="carousel slide">
+                <div class="carousel-inner">
+                    @{
+                        List<List<ProductViewModel>> bestProducts = new List<List<ProductViewModel>>();
+                        List<ProductViewModel> bestSellerPart = new List<ProductViewModel>();
+                    }
+
+                    @for (int index = 0; index < Model.BestSellerProducts.Count; index++)
+                    {
+                        bestSellerPart.Add(Model.BestSellerProducts[index]);
+                        if (bestSellerPart.Count == 4 || Model.BestSellerProducts.Count < 4)
+                        {
+                            bestProducts.Add(bestSellerPart);
+                            bestSellerPart = new List<ProductViewModel>();
+                        }
+
+                    }
+                    @for (int index = 0; index < bestProducts.Count; index++)
+                    {
+                        <div class="item @(index == 0?"active":"")">
+                            <ul class="thumbnails">
+                                @foreach (var item in bestProducts[index])
+                                {
+                                    <li class="span3">
+                                        <div class="thumbnail">
+                                            <i class="tag-best-seller"></i>
+                                            <a href="@Url.Action("Detail", "Product", new { slug = item.slug})"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                            <div class="caption">
+                                                <h5>@item.name</h5>
+                                            </div>
+                                            <div class="footer-thumbnail">
+                                                @if (item.promotion_price > 1)
+                                                {
+                                                    <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
+                                                    <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                }
+
+                                            </div>
+                                            <div class="product-btn">
+                                                <a class="btn-View btn btn-danger" href="" localize-content>
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                    Mua ngay
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+
+                <a class="left carousel-control" href="#bestseller" data-slide="prev">‹</a>
+                <a class="right carousel-control" href="#bestseller" data-slide="next">›</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="span12">
+    <div class="title-index">
+        <h2>VGA - <b>Card màn hình</b></h2>
+    </div>
+    <h4><a class="pull-right-text" href="@Url.Action("Category", "Product", new { slug = ViewBag.Cate1 })">Xem tất cả <small>(@Model.ProductWithCate1.Count Sản phẩm)</small></a></h4>
+
+
+    <ul class="thumbnails margin-top-20">
+        @{
+            foreach (var product in Model.ProductWithCate1)
+            {
+                <li class="span3">
+                    <div class="thumbnail">
+                        @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
+                        @if (product.featured)
+                        {
+                            <i class="tag-featured"></i>
+                        }
+                        else if (product.best_seller)
+                        {
+                            <i class="tag-best-seller"></i>
+                        }
+                        else if (product.promotion_price > 1)
+                        {
+                            <i class="tag-sale"></i>
+                        }
+                        else if (days.TotalDays == 7)
+                        {
+                            <i class="tag"></i>
+                        }
+                        <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <div class="caption">
+                            <h5>@product.name</h5>
+                        </div>
+                        <div class="footer-thumbnail">
+                            @if (product.promotion_price > 1)
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                            else
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                        </div>
+                        <div class="product-short-desc">
+                            @Html.Raw(product.short_desc)
+                        </div>
+                        <h4 style="text-align:center">
+                            <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
+                            <a class="btn btn-danger" href="#">Mua ngay</a>
+                        </h4>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+
+
+
+    <div>
+        <div class="title-index">
+            <h2>CPU - <b>Bộ vi xử lí</b></h2>
+        </div>
+    </div>
+    <h4><a class="pull-right-text" href="@Url.Action("Category", "Product", new { slug = ViewBag.Cate2 })">Xem tất cả <small>(@Model.ProductWithCate2.Count Sản phẩm)</small></a></h4>
+
+
+
+    <ul class="thumbnails margin-top-20">
+        @{
+            foreach (var product in Model.ProductWithCate2)
+            {
+                <li class="span3">
+                    <div class="thumbnail">
+                        @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
+                        @if (product.featured)
+                        {
+                            <i class="tag-featured"></i>
+                        }
+                        else if (product.best_seller)
+                        {
+                            <i class="tag-best-seller"></i>
+                        }
+                        else if (product.promotion_price > 1)
+                        {
+                            <i class="tag-sale"></i>
+                        }
+                        else if (days.TotalDays < 7)
+                        {
+                            <i class="tag"></i>
+                        }
+                        <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <div class="caption">
+                            <h5>@product.name</h5>
+                        </div>
+                        <div class="footer-thumbnail">
+                            @if (product.promotion_price > 1)
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                            else
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                        </div>
+                        <div class="product-short-desc">
+                            @Html.Raw(product.short_desc)
+                        </div>
+                        <h4 style="text-align:center">
+                            <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
+                            <a class="btn btn-danger" href="#">Mua ngay</a>
+                        </h4>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
 </div>

@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewData["Title"] = "Kết quả tìm kiếm";
+}
+
+@model ProductCategoryViewModel
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home")">Trang chủ</a> <span class="divider">/</span></li>
+        <li class="active">Sản phẩm</li>
+    </ul>
+    <h3>Kết quả tìm kiếm</h3>
+    <hr class="soft" />
+    <p>
+        Tìm thấy @Model.Products.TotalRecords sản phẩm
+    </p>
+    <hr class="soft" />
+    <form class="form-horizontal span6">
+        <div class="control-group">
+            <label class="alignL margin-right-20">Sắp xếp</label>
+            <select>
+                <option>Sắp xếp tên từ A - Z</option>
+                <option>Sắp xếp tên Z - A</option>
+                <option>Giá tăng dần</option>
+                <option>Giá giảm dần</option>
+            </select>
+        </div>
+    </form>
+
+    <div id="myTab" class="pull-right">
+        <a href="#listView" data-toggle="tab"><span class="btn btn-large"><i class="icon-list"></i></span></a>
+        <a href="#blockView" data-toggle="tab"><span class="btn btn-large btn-primary"><i class="icon-th-large"></i></span></a>
+    </div>
+    <br class="clr" />
+    <div class="tab-content">
+        <div class="tab-pane" id="listView">
+            @for (int i = 0; i < Model.Products.Items.Count; i++)
+            {
+                <div class="row">
+                    <div class="span2">
+                        <img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" />
+                    </div>
+                    <div class="span4">
+                        @{
+                            if (Model.Products.Items[i].instock > 0)
+                            {
+                                <h4>Có sẵn</h4>
+                            }
+                            else
+                            {
+                                <h4 class="OutOfStock">Hết hàng</h4>
+                            }
+                        }
+                        <hr class="soft" />
+                        <h4 class="product-category-name">@Model.Products.Items[i].name</h4>
+                        <p class="product-category-description">
+                            @Model.Products.Items[i].meta_descriptions
+                        </p>
+                        <br class="clr" />
+                    </div>
+                    <div class="span3 alignR">
+                        <form class="form-horizontal qtyFrm">
+                            @if (Model.Products.Items[i].promotion_price > 1)
+                            {
+
+                                string percent = (1 - (Model.Products.Items[i].promotion_price / Model.Products.Items[i].unit_price)).ToString("0.00%");
+                                <i class="icon-tags"></i><span class="product-category-percent-price-promotion">&nbsp; Khuyến mãi @percent</span>
+                                <br class="clr">
+                                <span class="product-category-promotion-pirce">@String.Format(info, "{0:c}", Model.Products.Items[i].unit_price)</span>
+                                <span class="product-category-price">@String.Format(info, "{0:c}", Model.Products.Items[i].promotion_price)</span>
+                            }
+                            else
+                            {
+                                <span class="product-category-price">@String.Format(info, "{0:c}", Model.Products.Items[i].unit_price)</span>
+                            }
+                            <br class="clr" />
+                            <div class="margin-top-20">
+                                <a href="product_details.html" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr class="soft" />
+            }
+            <hr class="soft" />
+        </div>
+
+        <div class="tab-pane active" id="blockView">
+            <ul class="thumbnails">
+                @for (int i = 0; i < Model.Products.Items.Count; i++)
+                {
+                    <li class="span3">
+                        <div class="thumbnail">
+                            @{ TimeSpan days = DateTime.Now.Subtract(@Model.Products.Items[i].create_at); }
+                            @if (@Model.Products.Items[i].featured)
+                            {
+                                <i class="tag-featured"></i>
+                            }
+                            else if (@Model.Products.Items[i].best_seller)
+                            {
+                                <i class="tag-best-seller"></i>
+                            }
+                            else if (@Model.Products.Items[i].promotion_price > 1)
+                            {
+                                <i class="tag-sale"></i>
+                            }
+                            else if (days.TotalDays == 7)
+                            {
+                                <i class="tag"></i>
+                            }
+                            <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })"><img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" /></a>
+                            <div class="caption">
+                                <h5>@Model.Products.Items[i].name</h5>
+                            </div>
+                            <div class="footer-thumbnail">
+                                @if (Model.Products.Items[i].promotion_price > 1)
+                                {
+                                    <span class="product-price">@String.Format(info, "{0:c}", Model.Products.Items[i].promotion_price)</span><br />
+                                    <span class="product-promotion-pirce">@String.Format(info, "{0:c}", Model.Products.Items[i].unit_price)</span>
+                                }
+                                else
+                                {
+                                    <span class="product-price">@String.Format(info, "{0:c}", Model.Products.Items[i].unit_price)</span>
+                                }
+                            </div>
+                            <h4 style="text-align:center">
+                                <a href="product_details.html" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+                            </h4>
+                        </div>
+                    </li>
+                }
+            </ul>
+            @await Component.InvokeAsync("Pager", ViewBag.PageResult)
+            <hr class="soft" />
+        </div>
+    </div>
+</div>
+

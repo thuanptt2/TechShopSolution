@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using TechShopSolution.AdminApp.Service;
+using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Location;
 

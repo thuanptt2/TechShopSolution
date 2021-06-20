@@ -4,4 +4,17 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\themes\less\oregional\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TechShopSolution.ApiIntegration\TechShopSolution.ApiIntegration.csproj" />
+    <ProjectReference Include="..\TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

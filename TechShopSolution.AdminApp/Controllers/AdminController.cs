@@ -12,7 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TechShopSolution.AdminApp.Service;
+using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.AdminApp.Controllers

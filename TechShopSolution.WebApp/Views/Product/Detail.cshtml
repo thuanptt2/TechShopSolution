@@ -1,0 +1,176 @@
+﻿@model ProductDetailViewModel
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")">Trang chủ</a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Category", "Product", new { slug = Model.Category.cate_slug })">@Model.Category.cate_name</a> <span class="divider">/</span></li>
+    <li class="active">@Model.Product.name</li>
+</ul>
+<div class="row">
+    <div id="gallery" class="span3">
+        @{
+            if (Model.ImageList.Count > 0)
+            {
+                <a href="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" title="@Model.Product.name">
+                    <img src="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" style="width:100%" alt="@Model.Product.name" />
+                </a>
+            }
+            else
+            {
+                <img src="none" style="width:100%" alt="Không có hình ảnh" />
+            }
+        }
+        @{
+            if (Model.ImageList.Count > 1)
+            {
+                <div id="differentview" class="moreOptopm carousel slide">
+                    <div class="carousel-inner">
+                        @{
+                            <div class="item active">
+                                @{
+                                    for (int i = 1; i < Model.ImageList.Count; i++)
+                                    {
+                                        <a href="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" title="@Model.Product.name"> <img style="width:29%" src="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" alt="" /></a>
+
+                                    }
+                                }
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+    <div class="span6">
+        <h3>@Model.Product.name</h3>
+        <div class="product-code">
+            <div class="css-5nimvs">
+                Thương hiệu: <span class="css-1meclnb">@Model.Brand.brand_name</span> | Mã SP: @Model.Product.code
+            </div>
+        </div><br />
+        <div class="product-short-desc">
+            @Html.Raw(Model.Product.short_desc)
+        </div><br />
+        @if (Model.Product.promotion_price > 1)
+        {
+            var a = Model.Product.unit_price - Model.Product.promotion_price;
+            <span class="product-price">@String.Format(info, "{0:c}", Model.Product.promotion_price)&nbsp;&nbsp;</span>
+            <span class="product-promotion-pirce">@String.Format(info, "{0:c}", Model.Product.unit_price)&nbsp;&nbsp;</span>
+            <span class="product-total-price">Tiết kiệm @String.Format(info, "{0:c}", a)</span>
+        }
+        else if (Model.Product.unit_price == 0)
+        {
+            <div class="btnGroup">
+                <button type="button" class="btn btn-large btn-primary">Liên hệ<i class=" icon-shopping-cart"></i></button>
+            </div>
+        }
+        else
+        {
+            <span class="product-price">@String.Format(info, "{0:c}", Model.Product.unit_price)</span>
+        }
+        <br />
+        <a class="btn btn-small pull-right" href="#specifications">Xem chi tiết</a><br />
+        <hr class="soft" />
+        <form class="form-horizontal qtyFrm">
+            <div class="control-group">
+                <div>
+                    @{
+                        if (Model.Product.instock > 1)
+                        {
+                            <h5>
+                                Còn lại: @Model.Product.instock <small>sản phẩm</small>
+                            </h5><br />
+                            <input type="number" class="span2" placeholder="Số lượng" min="0" />
+                            <div class="btnGroup">
+                                <button type="submit" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                                <button type="submit" class="btn btn-large btn-danger"> Mua ngay</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <h5 class="OutOfStock pull-left">
+                                Hết hàng
+                            </h5>
+                        }
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="span9">
+            <a href="#" name="detail"></a>
+            <hr class="soft" />
+            <ul id="productDetail" class="nav nav-tabs">
+                <li class="active"><a href="#specifications" data-toggle="tab">Thông số kỹ thuật</a></li>
+                <li><a href="#descriptions" data-toggle="tab">Chi tiết sản phẩm</a></li>
+                <li><a href="#rating" data-toggle="tab">Đánh giá sản phẩm</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade active in Detail-Product" id="specifications">
+                    @Html.Raw(Model.Product.specifications)
+                </div>
+                <div class="tab-pane fade" id="descriptions">
+                    @Html.Raw(Model.Product.descriptions)
+                </div>
+                <div class="tab-pane fade" id="rating">
+                    Hello
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class=" margin-top-20">Sản phẩm tương tự</h4>
+<ul class="thumbnails">
+    @{
+        if (Model.ProductsRelated != null)
+        {
+            foreach (var product in Model.ProductsRelated)
+            {
+                <li class="span3">
+                        <div class="thumbnail">
+                            @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
+                            @if (product.featured)
+                            {
+                                <i class="tag-featured"></i>
+                            }
+                            else if (product.best_seller)
+                            {
+                                <i class="tag-best-seller"></i>
+                            }
+                            else if (product.promotion_price > 1)
+                            {
+                                <i class="tag-sale"></i>
+                            }
+                            else if (days.TotalDays == 7)
+                            {
+                                <i class="tag"></i>
+                            }
+                            <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                            <div class="caption">
+                                <h5>@product.name</h5>
+                            </div>
+                            <div class="footer-thumbnail">
+                                @if (product.promotion_price > 1)
+                                {
+                                    <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                    <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                }
+                                else
+                                {
+                                    <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                }
+                            </div>
+                            <h4 style="text-align:center">
+                                <a class="btn" href="@Url.Action("Detail", "Product", new { slug = product.slug })">Xem Chi tiết</a>
+                            </h4>
+                        </div>
+                </li>
+            }
+        }
+    }
+</ul>

@@ -17,5 +17,6 @@ namespace TechShopSolution.Application.Catalog.Category
         Task<bool> isValidSlug(int id, string slug);
         Task<ApiResult<bool>> ChangeStatus(int id);
         Task<ApiResult<CategoryViewModel>> GetById(int brandId);
+        Task<ApiResult<CategoryViewModel>> GetBySlug(string slug);
     }
 }

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TechShopSolution.ApiIntegration\TechShopSolution.ApiIntegration.csproj" />
     <ProjectReference Include="..\TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj" />
   </ItemGroup>
 

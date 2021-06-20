@@ -198,5 +198,27 @@ namespace TechShopSolution.Application.Catalog.Category
             };
             return new ApiSuccessResult<CategoryViewModel>(cate);
         }
+        public async Task<ApiResult<CategoryViewModel>> GetBySlug(string slug)
+        {
+            var cateExist = await _context.Categories.Where(x=> x.cate_slug.Equals(slug)).FirstOrDefaultAsync();
+            if (cateExist == null || cateExist.isDelete)
+            {
+                return new ApiErrorResult<CategoryViewModel>("Loại sản phẩm không tồn tại");
+            }
+            var cate = new CategoryViewModel()
+            {
+                id = cateExist.id,
+                cate_name = cateExist.cate_name,
+                cate_slug = cateExist.cate_slug,
+                create_at = cateExist.create_at,
+                isActive = cateExist.isActive,
+                parent_id = cateExist.parent_id,
+                meta_descriptions = cateExist.meta_descriptions,
+                meta_keywords = cateExist.meta_keywords,
+                meta_title = cateExist.meta_title
+            };
+            return new ApiSuccessResult<CategoryViewModel>(cate);
+        }
+
     }
 }

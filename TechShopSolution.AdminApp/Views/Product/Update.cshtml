@@ -46,8 +46,7 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-4">
                                     <label asp-for="CateID" class="control-label lableFormField"></label>
-                                    <input asp-for="CateID" class="form-control" id="txtCateID" hidden/>
-                                    <select class="custom-select custom-select-sm" asp-items="@(new SelectList(ViewBag.ListCate, "id", "cate_name"))" id="cboCategory"> 
+                                    <select class="custom-select custom-select-sm" asp-items="@(new SelectList(ViewBag.ListCate, "id", "cate_name"))" id="cboCategory">
                                     </select>
                                     <div class="CateTag">
                                         @{
@@ -242,8 +241,8 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="mt-3 text-right">
+                    <input asp-for="CateID" class="form-control" id="txtCateID" style="visibility:hidden" />
+                    <div class="text-right">
                         <a class="btn btn-primary" href="/product/index">
                             <i class="fa fa-chevron-left"></i>  Trở về
                         </a>
@@ -272,6 +271,7 @@
                                 <div class="form-group">
                                     <label asp-for="Instock" class="control-label lableFormField"></label>
                                     <input asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
+                                    <span asp-validation-for="Instock" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

@@ -80,5 +80,12 @@ namespace TechShopSolution.BackendApi.Controllers
             var result = await _categoryService.GetById(id);
             return Ok(result);
         }
+        [HttpGet("slug")]
+        public async Task<IActionResult> GetBySlug(string slug)
+        {
+            var result = await _categoryService.GetBySlug(slug);
+            return Ok(result);
+        }
+
     }
 }
