@@ -15,7 +15,8 @@
                     if (i == 0)
                     {
                         <li class="subMenu open">
-                            <a class="cate-parent-name" href="@Url.Action("Category", "Product", new { id = parent.id, slug = parent.cate_slug })">@parent.cate_name</a>
+                            <a class="active" href="@Url.Action("Category", "Product", new { id = parent.id, slug = parent.cate_slug })">@parent.cate_name</a>
+
                             @{
                                 Cates.Remove(parent);
                             }

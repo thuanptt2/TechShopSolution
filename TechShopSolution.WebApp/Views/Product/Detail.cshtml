@@ -122,8 +122,8 @@
         </div>
     </div>
 </div>
-<h4 class=" margin-top-20">Sản phẩm liên quan</h4>
 
+<h4 class=" margin-top-20">Sản phẩm tương tự</h4>
 <ul class="thumbnails">
     @{
         if (Model.ProductsRelated != null)
@@ -132,7 +132,7 @@
             {
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="@Url.Action("Detail", "Home", new { id = product.id })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                        <a href="@Url.Action("Detail", "Home", new { id = product.id, slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
                         <div class="caption">
                             <h5>@product.name</h5>
                         </div>
@@ -148,7 +148,7 @@
                             }
                         </div>
                         <h4 style="text-align:center">
-                            <a class="btn" href="#">Xem Chi tiết</a>
+                            <a class="btn" href="@Url.Action("Detail", "Home", new { id = product.id, slug = product.slug })">Xem Chi tiết</a>
                         </h4>
                     </div>
                 </li>

@@ -44,7 +44,11 @@
 }
 <div class="span9">
     <div class="well well-small">
-        <h4>Sản phẩm nổi bật <small class="pull-right">@Model.FeaturedProducts.Count Sản phẩm</small></h4>
+        <h4>Sản phẩm nổi bật 
+            <small class="pull-right">
+                @Model.FeaturedProducts.Count Sản phẩm
+            </small>
+        </h4>
         <div class="row-fluid">
             <div id="featured" class="carousel slide">
                 <div class="carousel-inner">
@@ -77,7 +81,6 @@
                                                 <h5>@item.name</h5>
                                             </div>
                                             <div class="footer-thumbnail">
-
                                                 @if (item.promotion_price > 1)
                                                 {
                                                     <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
@@ -228,7 +231,7 @@
             <h2>CPU - <b>Bộ vi xử lí</b></h2>
         </div>
     </div>
-    <a class="pull-right"><h4>Xem tất cả <small>(@Model.ProductWithCate2.Count Sản phẩm)</small></h4></a>
+    <h4><a class="pull-right-text" href="#">Xem tất cả <small>(@Model.ProductWithCate2.Count Sản phẩm)</small></a></h4>
 
 
 
