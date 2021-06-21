@@ -41,18 +41,23 @@ namespace TechShopSolution.WebApp.Controllers
             });
         }
         [Route("danh-muc/{slug}")]
-        public async Task<IActionResult> Category(string slug, int page = 1)
+        public async Task<IActionResult> Category(string slug, decimal? giathapnhat = null, decimal? giacaonhat = null, int sortid = 1, int page = 1)
         {
             var Category = await _categorytApiClient.GetBySlug(slug);
-            List<int?> CateID = new List<int?>();
-            CateID.Add(Category.ResultObject.id);
-            var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+            var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
             {
-                CategoryID = CateID,
+                CategorySlug = slug,
+                Highestprice = giacaonhat,
+                idSortType = sortid,
+                Lowestprice = giathapnhat,
                 PageIndex = page,
                 PageSize = 9,
+                
             });
             ViewBag.PageResult = products;
+            ViewBag.LowestPrice = giathapnhat;
+            ViewBag.HighestPrice = giacaonhat;
+            ViewBag.SortID = sortid;
             return View(new ProductCategoryViewModel() { 
                 Category = Category.ResultObject,
                 Products = products
