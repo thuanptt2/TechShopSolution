@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
+using TechShopSolution.ViewModels.Catalog.Category;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.WebApp.Models;
 
@@ -56,19 +57,21 @@ namespace TechShopSolution.WebApp.Controllers
                 Products = products
             });
         }
-        public async Task<IActionResult> SearchProducts(string Keyword, string cateSlug, int pageIndex = 1)
+        public async Task<IActionResult> SearchProducts(string tukhoa, string danhmuc, string thuonghieu, int idsort = 1, decimal? giathapnhat = null, decimal? giacaonhat = null, bool tinhtrang = true, int pageIndex = 1)
         {
-            if(cateSlug != null)
+            var Category = await _categorytApiClient.GetBySlug(danhmuc);
+            if (danhmuc != null)
             {
-                var Category = await _categorytApiClient.GetBySlug(cateSlug);
-                List<int?> CateID = new List<int?>();
-                CateID.Add(Category.ResultObject.id);
-                var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+                var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
                 {
-                    CategoryID = CateID,
-                    Keyword = Keyword,
+                    CategorySlug = danhmuc,
+                    Keyword = tukhoa,
                     PageIndex = pageIndex,
                     PageSize = 9,
+                    BrandSlug = thuonghieu,
+                    Highestprice = giacaonhat,
+                    Lowestprice = giathapnhat,
+                    idSortType = idsort
                 });
                 ViewBag.PageResult = products;
                 return View(new ProductCategoryViewModel()
@@ -79,12 +82,16 @@ namespace TechShopSolution.WebApp.Controllers
             }
             else
             {
-                var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+                var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
                 {
-                    Keyword = Keyword,
+                    CategorySlug = danhmuc,
+                    Keyword = tukhoa,
                     PageIndex = pageIndex,
                     PageSize = 9,
-                    
+                    BrandSlug = thuonghieu,
+                    Highestprice = giacaonhat,
+                    Lowestprice = giathapnhat,
+                    idSortType = idsort
                 });
                 ViewBag.PageResult = products;
                 return View(new ProductCategoryViewModel()
@@ -94,6 +101,30 @@ namespace TechShopSolution.WebApp.Controllers
                 });
             }
         }
+        public async Task<List<CategoryViewModel>> OrderCateToTree(List<CategoryViewModel> lst, int parent_id = 0, int level = 0)
+        {
+            if (lst != null)
+            {
+                List<CategoryViewModel> result = new List<CategoryViewModel>();
+                foreach (CategoryViewModel cate in lst)
+                {
+                    if (cate.parent_id == parent_id)
+                    {
+                        CategoryViewModel tree = new CategoryViewModel();
+                        tree = cate;
+                        tree.level = level;
+                        tree.cate_name = String.Concat(Enumerable.Repeat("|————", level)) + tree.cate_name;
+
+                        result.Add(tree);
+                        List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);
+                        result.AddRange(child);
+                    }
+                }
+                return result;
+            }
+            return null;
+        }
+
         //public async Task<IActionResult> SortProducts(string idType, string slug)
         //{
         //    var Category = await _categorytApiClient.GetBySlug(slug);

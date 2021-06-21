@@ -13,6 +13,7 @@ namespace TechShopSolution.ApiIntegration
     {
         Task<PagedResult<ProductViewModel>> GetProductPagings(GetProductPagingRequest request);
         Task<PagedResult<ProductViewModel>> GetProductPagingsWithMainImage(GetProductPagingRequest request);
+        Task<PagedResult<ProductViewModel>> GetPublicProducts(GetPublicProductPagingRequest request);
         Task<ApiResult<bool>> CreateProduct(ProductCreateRequest request);
         Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request);
         Task<ApiResult<bool>> ChangeStatus(int Id);

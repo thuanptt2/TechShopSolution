@@ -86,7 +86,7 @@ namespace TechShopSolution.WebApp
                        controller = "Product",
                        action = "Category"
                    });
-
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

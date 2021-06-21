@@ -88,7 +88,7 @@
                     </div>
                     <hr class="soft" />
                 }
-                <hr class="soft" />
+                @await Component.InvokeAsync("Pager", ViewBag.PageResult)
             </div>
 
             <div class="tab-pane active" id="blockView">
