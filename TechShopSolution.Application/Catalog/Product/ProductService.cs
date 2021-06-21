@@ -341,7 +341,7 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 if (!String.IsNullOrEmpty(request.BrandSlug))
                 {
-                    query = query.Where(x => x.pic.cate_id.Equals(request.BrandSlug));
+                    query = query.Where(x => x.p.Brand.brand_slug.Equals(request.BrandSlug));
                 }
                 switch(request.idSortType)
                 {
@@ -410,6 +410,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
                     }
                 }
+               
 
                 var pageResult = new PagedResult<ProductViewModel>()
                 {
@@ -432,7 +433,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 return pageResult;
             }
         }
-
         public async Task<List<ProductViewModel>> GetFeaturedProduct(int take)
         {
             try

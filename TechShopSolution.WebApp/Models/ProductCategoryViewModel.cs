@@ -13,8 +13,5 @@ namespace TechShopSolution.WebApp.Models
     {
         public CategoryViewModel Category { get; set; }
         public PagedResult<ProductViewModel> Products { get; set; }
-        public List<CategoryViewModel> Categorys { get; set; }
-        public List<BrandViewModel> Brands { get; set; }
-
     }
 }

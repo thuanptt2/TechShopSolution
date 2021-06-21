@@ -242,3 +242,33 @@ a:hover {
     text-decoration: none;
     font-weight: bold;
 }
+.thumbnail:hover {
+    transform: scale(1.05);
+}
+.row-zoom-hover {
+    transform: scale(1.05);
+}
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+#inputSortPriceLow {
+    width: 82px;
+    font-size: 0.8rem;
+}
+#inputSortPriceHigh {
+    width: 82px;
+    font-size: 0.8rem;
+}
+#btnSortPrice {
+    visibility: hidden;
+}
