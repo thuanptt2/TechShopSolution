@@ -94,5 +94,23 @@ namespace TechShopSolution.WebApp.Controllers
                 });
             }
         }
+        //public async Task<IActionResult> SortProducts(string idType, string slug)
+        //{
+        //    var Category = await _categorytApiClient.GetBySlug(slug);
+        //    List<int?> CateID = new List<int?>();
+        //    CateID.Add(Category.ResultObject.id);
+        //    var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+        //    {
+        //        CategoryID = CateID,
+        //        PageIndex = page,
+        //        PageSize = 9,
+        //    });
+        //    ViewBag.PageResult = products;
+        //    return View(new ProductCategoryViewModel()
+        //    {
+        //        Category = Category.ResultObject,
+        //        Products = products
+        //    });
+        //}
     }
 }

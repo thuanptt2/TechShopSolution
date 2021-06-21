@@ -1,12 +1,17 @@
 ﻿@model ProductCategoryViewModel
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+    ViewData["Title"] = Model.Category.meta_title;
+    ViewData["Description"] = Model.Category.meta_descriptions;
+    ViewData["Keywords"] = Model.Category.meta_keywords;
+
 }
 @if (Model.Category != null)
 {
     <div class="span9">
         <ul class="breadcrumb">
-            <li><a href="@Url.Action("Index", "Home")">Trang chủ</a> <span class="divider">/</span></li>
+            <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
             <li class="active">@Model.Category.cate_name</li>
         </ul>
         <h3> @Model.Category.cate_name</h3>
@@ -15,14 +20,14 @@
             @Model.Category.meta_descriptions
         </p>
         <hr class="soft" />
-        <form class="form-horizontal span6">
+        <form class="form-horizontal span6" asp-action="SortProducts" asp-controller="Product">
             <div class="control-group">
                 <label class="alignL margin-right-20">Sắp xếp</label>
-                <select>
-                    <option>Sắp xếp tên từ A - Z</option>
-                    <option>Sắp xếp tên Z - A</option>
-                    <option>Giá tăng dần</option>
-                    <option>Giá giảm dần</option>
+                <select value="idTypes" onchange="location.href='@Url.Action("SortProducts", "Product")">
+                    <option value="1">Sắp xếp tên từ A - Z</option>
+                    <option value="2">Sắp xếp tên từ Z - A</option>
+                    <option value="3">Giá tăng dần</option>
+                    <option value="4">Giá giảm dần</option>
                 </select>
             </div>
         </form>

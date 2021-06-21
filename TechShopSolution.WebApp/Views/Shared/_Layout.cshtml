@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Bootshop online Shopping cart</title>
+    <title>@ViewData["Title"] - TechShop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="@ViewData["Desciption"]">
+    <meta name="author" content="TechShop">
+    <meta name="keywords" content="@ViewData["Keywords"]">
+
     <!--Less styles -->
     <!-- Other Less css file //different less files has different color scheam
      <link rel="stylesheet/less" type="text/css" href="/themes/less/simplex.less">
@@ -45,7 +47,7 @@
                     <span class="icon-bar"></span>
                 </a>
                 <div class="navbar-inner">
-                    <a class="brand" href="/trang-chu"><img src="/themes/images/logo.png" alt="TechShop" /></a>
+                    <a class="brand" href="@Url.Action("Index", "Home", new { area = "" })"><img src="/themes/images/logo.png" alt="TechShop" /></a>
                     @await Component.InvokeAsync("Category")
                     <ul id="topMenu" class="nav pull-right">
                         <li class=""><a href="#">Giới thiệu</a></li>
