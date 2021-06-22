@@ -32,6 +32,16 @@ namespace TechShopSolution.WebApp.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        //[HttpPost]
+        //public IActionResult Register()
+        //{
+        //    return View();
+        //}
         [HttpPost]
         [Route("dang-nhap")]
         public async Task<IActionResult> Login(LoginRequest request)

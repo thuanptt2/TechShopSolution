@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "Đăng ký thành viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+        <li class="active">Đăng ký thành viên</li>
+    </ul>
+    <h3>Đăng ký</h3>
+    <div class="well shadow">
+        <form class="form-horizontal">
+            <h4>Điền thông tin cá nhân</h4>
+            <div class="control-group">
+                <label class="control-label" for="inputFname1">Họ<sup>*</sup></label>
+                <div class="controls">
+                    <input type="text" id="inputFname1" placeholder="First Name">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputFname1">Tên<sup>*</sup></label>
+                <div class="controls">
+                    <input type="text" id="inputFname1" placeholder="First Name">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Ngày sinh <sup>*</sup></label>
+                <div class="controls">
+                    <select class="span1" name="days">
+                        <option value="true">Nam</option>
+                        <option value="false">Nữ</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input_email">Email <sup>*</sup></label>
+                <div class="controls">
+                    <input type="text" id="input_email" placeholder="Địa chỉ Email">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPassword1">Mật khẩu <sup>*</sup></label>
+                <div class="controls">
+                    <input type="password" id="inputPassword1" placeholder="Mật khẩu">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Ngày sinh <sup>*</sup></label>
+                <div class="controls">
+                   <input type="date"/>
+                </div>
+            </div>
+
+            <div class="alert alert-block alert-error fade in">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>Note:</strong> * Các trường bắt buộc phải nhập. Quý khách hàng vui lòng điền đầy đủ thông tin xin cảm ơn.
+            </div>
+        </form>
+    </div>
+</div>
+
