@@ -50,7 +50,7 @@ namespace TechShopSolution.Application.Catalog.Customer
             {
                 var customer = new TechShopSolution.Data.Entities.Customer
                 {
-                    name = request.lastname + request.firstname,
+                    name = request.lastname +" " + request.firstname,
                     birthday = request.birthday,
                     email = request.email,
                     password = request.password,

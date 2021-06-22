@@ -48,7 +48,20 @@ namespace TechShopSolution.WebApp.Controllers
             var result = await _customerApiClient.Register(request);
             if (result.IsSuccess)
             {
-                await Login(new LoginRequest { Email = request.email, Password = request.password, Remeber_me = true });
+                var token = await _adminApiClient.AuthenticateCustomer(new LoginRequest { Email = request.email, Password = request.password, Remeber_me = true });
+
+                var adminPrincipal = this.ValidateToken(token);
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    IsPersistent = false
+                };
+                HttpContext.Session.SetString("Token", token);
+                await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            adminPrincipal,
+                            authProperties);
+                return RedirectToAction("Index", "Home");
 
             }
             ModelState.AddModelError("", result.Message);
