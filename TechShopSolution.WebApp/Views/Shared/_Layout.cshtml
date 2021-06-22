@@ -41,7 +41,6 @@
         <div class="loader"></div>
     </div>
     <div id="header">
-     
         <div class="container">
             <!-- Navbar ================================================== -->
             <div id="logoArea" class="navbar">
@@ -77,7 +76,9 @@
                     }
                     else
                     {
-                        <a href="@Url.Action("Login", "Account")" role="button" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
+                        <div class="btn-group btnDropdownAccount">
+                            <a href="@Url.Action("Login", "Account")" role="button" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
+                        </div>
                     }
                 </div>
 
