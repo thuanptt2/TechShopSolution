@@ -9,5 +9,6 @@ namespace TechShopSolution.Application.System
     public interface IAdminService
     {
         string Authenticate(LoginRequest request);
+        string AuthenticateCustomer(LoginRequest request);
     }
 }
