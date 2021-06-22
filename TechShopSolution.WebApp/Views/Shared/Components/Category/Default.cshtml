@@ -2,10 +2,10 @@
 @model List<TechShopSolution.ViewModels.Catalog.Category.CategoryViewModel>
 
     <form class="form-inline navbar-search" asp-controller="Product" asp-action="SearchProducts" method="get" >
-        <input placeholder="Nhập từ khóa..." type="text" name="Keyword"/>
-        <select class="srchTxt" name="CateSlug" asp-items="@(new SelectList(ViewBag.Parents,"cate_slug","cate_name"))">
+        <input placeholder="Nhập từ khóa..." type="text" name="tukhoa"/>
+        <select class="srchTxt" name="danhmuc" asp-items="@(new SelectList(ViewBag.Parents,"cate_slug","cate_name"))">
             <option value="">Tất cả</option>
         </select>
-        <button asp-controller="Product" asp-action="SearchProducts" type="submit" class="btn btn-primary">Tìm kiếm</button>
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
     </form>
     

@@ -226,6 +226,21 @@ namespace TechShopSolution.ApiIntegration
             var product = JsonConvert.DeserializeObject<PagedResult<ProductViewModel>>(body);
             return product;
         }
+        public async Task<PagedResult<ProductViewModel>> GetPublicProducts(GetPublicProductPagingRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/api/product/publicfilter", httpContent);
+            var body = await respone.Content.ReadAsStringAsync();
+            var product = JsonConvert.DeserializeObject<PagedResult<ProductViewModel>>(body);
+            return product;
+        }
         [Obsolete]
         public async Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
         {

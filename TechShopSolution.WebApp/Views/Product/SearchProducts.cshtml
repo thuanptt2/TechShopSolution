@@ -12,21 +12,69 @@
         <li><a href="@Url.Action("Index", "Home")">Trang chủ</a> <span class="divider">/</span></li>
         <li class="active">Sản phẩm</li>
     </ul>
-    <h3>Kết quả tìm kiếm</h3>
+    <div class="d-flex align-item-center">
+        <h3>Kết quả tìm kiếm</h3>
+        <span class="margin-left-20">Tìm thấy @Model.Products.TotalRecords sản phẩm</span>
+    </div>
     <hr class="soft" />
-    <p>
-        Tìm thấy @Model.Products.TotalRecords sản phẩm
-    </p>
-    <hr class="soft" />
-    <form class="form-horizontal span6">
-        <div class="control-group">
-            <label class="alignL margin-right-20">Sắp xếp</label>
-            <select>
-                <option>Sắp xếp tên từ A - Z</option>
-                <option>Sắp xếp tên Z - A</option>
-                <option>Giá tăng dần</option>
-                <option>Giá giảm dần</option>
+    <h4>Bộ lọc</h4>
+    <form class="form-horizontal span6" asp-controller="Product" asp-action="SearchProducts" method="get">
+        <div class="d-flex align-item-center margin-bottom-20">
+            <label style="width: 85px;">Danh mục</label>
+            <select name="danhmuc" class="margin-left-20" onchange="this.form.submit()" asp-items="ViewBag.Categories">
+                <option value="">Lọc theo danh mục</option>
             </select>
+        </div>
+        <div class="d-flex align-item-center margin-bottom-20">
+            <label style="width: 85px;">Thương hiệu</label>
+            <select name="thuonghieu" class="margin-left-20" onchange="this.form.submit()" asp-items="ViewBag.Brands">
+                <option value="">Lọc theo thương hiệu</option>
+            </select>
+        </div>
+
+        <div class="d-flex align-item-center margin-bottom-20">
+            <label style="width: 85px;">Sắp xếp</label>
+            <select name="idsort" class="margin-left-20" onchange="this.form.submit()">
+                @if (ViewBag.IdSort == 1)
+                {
+                    <option value="1" selected>Sắp xếp tên từ A - Z</option>
+                    <option value="2">Sắp xếp tên Z - A</option>
+                    <option value="3">Giá tăng dần</option>
+                    <option value="4">Giá giảm dần</option>
+                }
+                else if (ViewBag.IdSort == 2)
+                {
+                    <option value="1">Sắp xếp tên từ A - Z</option>
+                    <option value="2" selected>Sắp xếp tên Z - A</option>
+                    <option value="3">Giá tăng dần</option>
+                    <option value="4">Giá giảm dần</option>
+                }
+                else if (ViewBag.IdSort == 3)
+                {
+                    <option value="1">Sắp xếp tên từ A - Z</option>
+                    <option value="2">Sắp xếp tên Z - A</option>
+                    <option value="3" selected>Giá tăng dần</option>
+                    <option value="4">Giá giảm dần</option>
+                }
+                else if (ViewBag.IdSort == 4)
+                {
+                    <option value="1">Sắp xếp tên từ A - Z</option>
+                    <option value="2">Sắp xếp tên Z - A</option>
+                    <option value="3">Giá tăng dần</option>
+                    <option value="4" selected>Giá giảm dần</option>
+                }
+            </select>
+        </div>
+        <div class="d-flex align-item-center margin-bottom-20">
+            <input id="inputSortPriceLow" name="giathapnhat" type="number" min="0" placeholder="Giá thấp nhất" value="@ViewBag.LowestPrice" /><span class="margin-left-20">-</span>
+            <input id="inputSortPriceHigh" name="giacaonhat" type="number" min="0" class="margin-left-20" placeholder="Giá cao nhất" value="@ViewBag.HighestPrice" />
+            <button type="submit" id="btnSortPrice" class="btn btn-primary margin-left-20">Tìm kiếm</button>
+        </div>
+
+
+        <div class="d-flex align-item-center">
+            <input name="tukhoa" type="hidden" placeholder="Nhập từ khóa..." value="@ViewBag.Keyword" />
+            <input name="danhmuccha" type="hidden" placeholder="Nhập từ khóa..." value="@ViewBag.CateParent" />
         </div>
     </form>
 
@@ -86,6 +134,8 @@
                 </div>
                 <hr class="soft" />
             }
+            @await Component.InvokeAsync("Pager", ViewBag.PageResult)
+
             <hr class="soft" />
         </div>
 

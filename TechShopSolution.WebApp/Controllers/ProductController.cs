@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
+using TechShopSolution.ViewModels.Catalog.Category;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.WebApp.Models;
 
@@ -39,60 +41,147 @@ namespace TechShopSolution.WebApp.Controllers
             });
         }
         [Route("danh-muc/{slug}")]
-        public async Task<IActionResult> Category(string slug, int page = 1)
+        public async Task<IActionResult> Category(string slug, decimal? giathapnhat = null, decimal? giacaonhat = null, int sortid = 1, int page = 1)
         {
             var Category = await _categorytApiClient.GetBySlug(slug);
-            List<int?> CateID = new List<int?>();
-            CateID.Add(Category.ResultObject.id);
-            var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+            var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
             {
-                CategoryID = CateID,
+                CategorySlug = slug,
+                Highestprice = giacaonhat,
+                idSortType = sortid,
+                Lowestprice = giathapnhat,
                 PageIndex = page,
                 PageSize = 9,
+                
             });
             ViewBag.PageResult = products;
+            ViewBag.LowestPrice = giathapnhat;
+            ViewBag.HighestPrice = giacaonhat;
+            ViewBag.SortID = sortid;
             return View(new ProductCategoryViewModel() { 
                 Category = Category.ResultObject,
                 Products = products
             });
         }
-        public async Task<IActionResult> SearchProducts(string Keyword, string cateSlug, int pageIndex = 1)
+        public async Task<IActionResult> SearchProducts(string tukhoa, string danhmuc, int? danhmuccha, string thuonghieu, int idsort = 1, decimal? giathapnhat = null, decimal? giacaonhat = null, bool tinhtrang = true, int pageIndex = 1)
         {
-            if(cateSlug != null)
+            var Category = await _categorytApiClient.GetBySlug(danhmuc);
+            var Brands = await _productApiClient.GetAllBrand();
+            var Categories = await _categorytApiClient.GetAllCategory();
+
+            if (danhmuc != null)
             {
-                var Category = await _categorytApiClient.GetBySlug(cateSlug);
-                List<int?> CateID = new List<int?>();
-                CateID.Add(Category.ResultObject.id);
-                var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+                if (danhmuccha != null)
                 {
-                    CategoryID = CateID,
-                    Keyword = Keyword,
+                    var Categogyy = await _categorytApiClient.GetById((int)danhmuccha);
+                    Categories = await OrderCateToTree(Categories, (int)danhmuccha);
+                    Categories.Add(Categogyy.ResultObject);
+                }
+                else
+                {
+                    Categories = await OrderCateToTree(Categories, Category.ResultObject.id);
+                    Categories.Add(Category.ResultObject);
+                    danhmuccha = Category.ResultObject.id;
+                }
+                var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
+                {
+                    CategorySlug = danhmuc,
+                    Keyword = tukhoa,
                     PageIndex = pageIndex,
                     PageSize = 9,
+                    BrandSlug = thuonghieu,
+                    Highestprice = giacaonhat,
+                    Lowestprice = giathapnhat,
+                    idSortType = idsort
+                });
+
+
+                ViewBag.Keyword = tukhoa;
+                ViewBag.CateParent = danhmuccha;
+                ViewBag.Brands = Brands.OrderBy(x=> x.brand_name).Select(x => new SelectListItem()
+                {
+                    Text = x.brand_name,
+                    Value = x.brand_slug,
+                    Selected = thuonghieu!=null && thuonghieu.Equals(x.brand_slug)
+                });
+                ViewBag.Categories = Categories.Select(x => new SelectListItem()
+                {
+                    Text = x.cate_name,
+                    Value = x.cate_slug,
+                    Selected = danhmuc != null && danhmuc.Equals(x.cate_slug)
                 });
                 ViewBag.PageResult = products;
+                ViewBag.IdSort = idsort;
+                ViewBag.LowestPrice = giathapnhat;
+                ViewBag.HighestPrice = giacaonhat;
+
+
                 return View(new ProductCategoryViewModel()
                 {
                     Category = Category.ResultObject,
-                    Products = products
+                    Products = products,
                 });
             }
             else
             {
-                var products = await _productApiClient.GetProductPagingsWithMainImage(new GetProductPagingRequest()
+                Categories = await OrderCateToTree(await _categorytApiClient.GetAllCategory());
+                var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
                 {
-                    Keyword = Keyword,
+                    CategorySlug = danhmuc,
+                    Keyword = tukhoa,
                     PageIndex = pageIndex,
                     PageSize = 9,
-                    
+                    BrandSlug = thuonghieu,
+                    Highestprice = giacaonhat,
+                    Lowestprice = giathapnhat,
+                    idSortType = idsort
+                });
+                ViewBag.Keyword = tukhoa;
+                ViewBag.Brands = Brands.Select(x => new SelectListItem()
+                {
+                    Text = x.brand_name,
+                    Value = x.brand_slug,
+                    Selected = thuonghieu != null && thuonghieu.Equals(x.brand_slug)
+                });
+                ViewBag.Categories = Categories.Select(x => new SelectListItem()
+                {
+                    Text = x.cate_name,
+                    Value = x.cate_slug,
+                    Selected = danhmuc != null && danhmuc.Equals(x.cate_slug)
                 });
                 ViewBag.PageResult = products;
+                ViewBag.IdSort = idsort;
+                ViewBag.LowestPrice = giathapnhat;
+                ViewBag.HighestPrice = giacaonhat;
                 return View(new ProductCategoryViewModel()
                 {
                     Category = null,
                     Products = products
                 });
             }
+        }
+        public async Task<List<CategoryViewModel>> OrderCateToTree(List<CategoryViewModel> lst, int parent_id = 0, int level = 0)
+        {
+            if (lst != null)
+            {
+                List<CategoryViewModel> result = new List<CategoryViewModel>();
+                foreach (CategoryViewModel cate in lst)
+                {
+                    if (cate.parent_id == parent_id)
+                    {
+                        CategoryViewModel tree = new CategoryViewModel();
+                        tree = cate;
+                        tree.level = level;
+                        tree.cate_name = String.Concat(Enumerable.Repeat("    ", level)) + tree.cate_name;
+
+                        result.Add(tree);
+                        List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);
+                        result.AddRange(child);
+                    }
+                }
+                return result;
+            }
+            return null;
         }
     }
 }
