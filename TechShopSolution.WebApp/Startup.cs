@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
+using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Customer.Validator;
 
 namespace TechShopSolution.WebApp
 {
@@ -33,7 +37,7 @@ namespace TechShopSolution.WebApp
                   options.LoginPath = "/dang-nhap";
                   options.AccessDeniedPath = "/User/Forbidden/";
               });
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CustomerRegisterValidator>());
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(180);
@@ -45,6 +49,8 @@ namespace TechShopSolution.WebApp
             services.AddTransient<IBrandApiClient, BrandApiClient>();
             services.AddTransient<IAdminApiClient, AdminApiClient>();
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();
+            services.AddTransient<IValidator<CustomerRegisterRequest>, CustomerRegisterValidator>();
+
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG   
