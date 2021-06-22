@@ -49,5 +49,32 @@ namespace TechShopSolution.Application.System
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        public string AuthenticateCustomer(LoginRequest request)
+        {
+            Customer customer = _context.Customers.FirstOrDefault(x => x.email == request.Email);
+            if (customer == null)
+            {
+                return null;
+            }
+            if (customer.password != request.Password)
+            {
+                return null;
+            }
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Email,customer.email),
+                new Claim(ClaimTypes.Name,customer.name),
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_config["Tokens:Issuer"],
+                _config["Tokens:Issuer"],
+                claims,
+                expires: DateTime.Now.AddHours(3),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }
