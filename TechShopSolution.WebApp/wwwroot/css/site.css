@@ -272,3 +272,8 @@ input[type=number] {
 #btnSortPrice {
     visibility: hidden;
 }
+.btnDropdownAccount {
+    justify-content: right;
+    display: grid;
+    padding-top: 5px;
+}
