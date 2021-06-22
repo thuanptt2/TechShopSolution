@@ -433,13 +433,15 @@ namespace TechShopSolution.Application.Catalog.Product
                 return pageResult;
             }
         }
-        public async Task<List<ProductViewModel>> GetFeaturedProduct(int take)
+        public async Task<PublicProductsViewModel> GetFeaturedProduct(int take)
         {
             try
             {
                 var query = from p in _context.Products
                             where p.isDelete == false && p.featured == true
                             select new { p };
+
+                int Count = await query.CountAsync();
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
@@ -477,14 +479,14 @@ namespace TechShopSolution.Application.Catalog.Product
                     }
                 }
 
-                return await data;
+                return new PublicProductsViewModel { Count = Count, Products = await data };
             }
             catch
             {
-                return null;
+                return new PublicProductsViewModel { Count = 0, Products = null };
             }
         }
-        public async Task<List<ProductViewModel>> GetProductsByCategory(int id, int take)
+        public async Task<PublicProductsViewModel> GetProductsByCategory(int id, int take)
         {
             try
             {
@@ -494,6 +496,8 @@ namespace TechShopSolution.Application.Catalog.Product
                             where p.isDelete == false && c.id == id
                             select new { p, pic, c };
 
+                int Count = await query.CountAsync();
+
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
                     .Select(a => new ProductViewModel()
@@ -530,11 +534,11 @@ namespace TechShopSolution.Application.Catalog.Product
                     }
                 }
 
-                return await data;
+                return new PublicProductsViewModel { Count = Count, Products = await data };
             }
             catch
             {
-                return null;
+                return new PublicProductsViewModel { Count = 0, Products = null };
             }
         }
         public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
@@ -546,6 +550,7 @@ namespace TechShopSolution.Application.Catalog.Product
                             join c in _context.Categories on pic.cate_id equals c.id
                             where p.isDelete == false && p.id == id
                             select new { pic };
+
                 var first = await query.FirstAsync();
 
                var query2 = from p in _context.Products
@@ -598,13 +603,15 @@ namespace TechShopSolution.Application.Catalog.Product
                 return null;
             }
         }
-        public async Task<List<ProductViewModel>> GetBestSellerProduct(int take)
+        public async Task<PublicProductsViewModel> GetBestSellerProduct(int take)
         {
             try
             {
                 var query = from p in _context.Products
                             where p.isDelete == false && p.best_seller == true
                             select new { p };
+
+                int Count = await query.CountAsync();
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
@@ -642,11 +649,12 @@ namespace TechShopSolution.Application.Catalog.Product
                     }
                 }
 
-                return await data;
+                return new PublicProductsViewModel { Count = Count, Products = await data };
+
             }
             catch
             {
-                return null;
+                return new PublicProductsViewModel { Count = 0, Products = null };
             }
         }
         public async Task<List<ImageListResult>> GetImagesByProductID(int id)
