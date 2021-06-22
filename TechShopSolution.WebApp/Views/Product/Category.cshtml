@@ -5,8 +5,10 @@
     ViewData["Title"] = Model.Category.meta_title;
     ViewData["Description"] = Model.Category.meta_descriptions;
     ViewData["Keywords"] = Model.Category.meta_keywords;
-
 }
+@section Script {
+    <script src="~/js/FilterPrice.js"></script>
+} 
 @if (Model.Category != null)
 {
     <div class="span9">

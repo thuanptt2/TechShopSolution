@@ -44,6 +44,33 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return new ApiErrorResult<bool>("Thêm thất bại");
             }
         }
+        public async Task<ApiResult<bool>> Register(CustomerRegisterRequest request)
+        {
+            try
+            {
+                var customer = new TechShopSolution.Data.Entities.Customer
+                {
+                    name = request.lastname + request.firstname,
+                    birthday = request.birthday,
+                    email = request.email,
+                    password = request.password,
+                    phone = request.phone,
+                    address = "",
+                    sex = request.sex,
+                    isActive = true,
+                    isDelete = false,
+                    create_at = DateTime.Now
+                };
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Đăng ký thất bại");
+            }
+        }
+
         public async Task<ApiResult<bool>> Delete(int cusID)
         {
             try

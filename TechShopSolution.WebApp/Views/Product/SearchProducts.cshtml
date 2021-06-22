@@ -2,7 +2,9 @@
 @{
     ViewData["Title"] = "Kết quả tìm kiếm";
 }
-
+@section Script {
+    <script src="~/js/FilterPrice.js"></script>
+}
 @model ProductCategoryViewModel
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");

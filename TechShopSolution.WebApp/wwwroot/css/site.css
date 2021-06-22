@@ -291,6 +291,25 @@ input[type=number] {
     -moz-box-shadow: 1px 1px 3px 3px #ccc; /* Firefox 3.5 - 3.6 */
     box-shadow: 1px 1px 3px 3px #ccc; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
-.btnDropdownAccount btn-group {
-    hei
+.field-validation-error {
+    color: #e80c4d;
+    font-weight: bold;
 }
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #e80c4d;
+}
+
+.validation-summary-errors {
+    color: #e80c4d;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.validation-summary-valid {
+    display: none;
+}  

@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
+using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.WebApp.Controllers
@@ -20,11 +21,13 @@ namespace TechShopSolution.WebApp.Controllers
     public class AccountController : Controller
     {
         private readonly IAdminApiClient _adminApiClient;
+        private readonly ICustomerApiClient _customerApiClient;
         private readonly IConfiguration _configuration;
-        public AccountController(IAdminApiClient adminApiClient, IConfiguration configuration)
+        public AccountController(IAdminApiClient adminApiClient, IConfiguration configuration, ICustomerApiClient customerApiClient)
         {
             _adminApiClient = adminApiClient;
             _configuration = configuration;
+            _customerApiClient = customerApiClient;
         }
         [Route("dang-nhap")]
         [HttpGet]
@@ -37,11 +40,35 @@ namespace TechShopSolution.WebApp.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Register(CustomerRegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _customerApiClient.Register(request);
+            if (result.IsSuccess)
+            {
+                await Login(new LoginRequest { Email = request.email, Password = request.password, Remeber_me = true });
+
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
         //[HttpPost]
         //public IActionResult Register()
         //{
         //    return View();
         //}
+ 
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> VerifyEmail(string email, int Id)
+        {
+            if (await _customerApiClient.VerifyEmail(email) == false)
+            {
+                return Json($"Email {email} đã được sử dụng.");
+            }
+            return Json(true);
+        }
         [HttpPost]
         [Route("dang-nhap")]
         public async Task<IActionResult> Login(LoginRequest request)
