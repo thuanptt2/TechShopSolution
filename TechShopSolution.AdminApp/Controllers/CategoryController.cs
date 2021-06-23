@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TechShopSolution.ViewModels.Catalog.Category;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryApiClient _categoryApiClient;

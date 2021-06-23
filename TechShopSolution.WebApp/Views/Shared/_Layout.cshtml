@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -7,7 +8,6 @@
     <meta name="description" content="@ViewData["Desciption"]">
     <meta name="author" content="TechShop">
     <meta name="keywords" content="@ViewData["Keywords"]">
-
     <!--Less styles -->
     <!-- Other Less css file //different less files has different color scheam
      <link rel="stylesheet/less" type="text/css" href="/themes/less/simplex.less">
@@ -66,7 +66,7 @@
                                 <button class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> Tài khoản</button>
                                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="@Url.Action("Detail", "Account")"@Url.Action("Logout", "Account")""><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
+                                    <li><a href="@Url.Action("Detail", "Account", new { id = User.FindFirst(ClaimTypes.Sid).Value })"><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
                                     <li><a href="#"><i class="icon-file"></i> Kiểm tra đơn hàng</a></li>
                                     <li class="divider"></li>
                                     <li><a href="@Url.Action("Logout", "Account")"><i class="i"></i> Đăng xuất</a></li>

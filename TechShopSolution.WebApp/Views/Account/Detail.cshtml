@@ -3,7 +3,7 @@
     ViewData["Title"] = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model TechShopSolution.ViewModels.Catalog.Customer.CustomerUpdateRequest
+@model TechShopSolution.ViewModels.Catalog.Customer.CustomerPublicUpdateRequest
 
 
 <div class="row">
@@ -41,6 +41,12 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label" asp-for="phone">Email</label>
+                        <div class="controls">
+                            <input type="text" asp-for="email" readonly="readonly" placeholder="Email" class="margin-right-20">
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label" asp-for="phone">Số điện thoại<sup style="color: #C74A6D">*</sup></label>
                         <div class="controls">
                             <input type="text" asp-for="phone" placeholder="Số điện thoại" class="margin-right-20">
@@ -52,13 +58,6 @@
                         <div class="controls">
                             <input type="email" id="input_email" placeholder="Địa chỉ Email" asp-for="email" class="margin-right-20">
                             <span asp-validation-for="email" class="text-error"></span>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" asp-for="password" for="inputPassword1">Mật khẩu<sup style="color: #C74A6D">*</sup></label>
-                        <div class="controls">
-                            <input type="password" asp-for="password" id="inputPassword1" placeholder="Mật khẩu" class="margin-right-20">
-                            <span asp-validation-for="password" class="text-error"></span>
                         </div>
                     </div>
                     <div class="control-group">

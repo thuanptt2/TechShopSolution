@@ -55,6 +55,14 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpPut("public/{id}")]
+        public async Task<IActionResult> UpdatePublic([FromBody] CustomerUpdateRequest request)
+        {
+            var result = await _customerService.Update(request.Id, request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
         [HttpPut("UpdateAddress/{id}")]
         public async Task<IActionResult> UpdateAddress(int id, [FromBody] CustomerUpdateAddressRequest request)
         {

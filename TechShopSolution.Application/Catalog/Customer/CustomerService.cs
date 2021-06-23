@@ -185,7 +185,7 @@ namespace TechShopSolution.Application.Catalog.Customer
                 if (cusExist != null || cusExist.isDelete)
                 {
                     cusExist.email = request.email;
-                    cusExist.name = request.lastname + request.firstname;
+                    cusExist.name = request.name;
                     cusExist.phone = request.phone;
                     cusExist.birthday = request.birthday;
                     cusExist.sex = request.sex;

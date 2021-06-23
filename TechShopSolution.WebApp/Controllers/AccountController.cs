@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.WebApp.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IAdminApiClient _adminApiClient;
@@ -30,17 +32,20 @@ namespace TechShopSolution.WebApp.Controllers
             _customerApiClient = customerApiClient;
         }
         [Route("dang-nhap")]
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(CustomerRegisterRequest request)
         {
             if (!ModelState.IsValid)
@@ -68,9 +73,29 @@ namespace TechShopSolution.WebApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public IActionResult Detail()
+        public async Task<IActionResult> Detail(string id)
         {
-            return View();
+            int ID = int.Parse(id);
+            var result = await _customerApiClient.GetById(ID);
+            if (!result.IsSuccess || result.ResultObject == null)
+            {
+                ModelState.AddModelError("", result.Message);
+                return RedirectToAction("Index", "Home");
+            }
+            var updateRequest = new CustomerPublicUpdateRequest()
+            {
+                Id = ID,
+                name = result.ResultObject.name,
+                birthday = result.ResultObject.birthday,
+                email = result.ResultObject.email,
+                sex = result.ResultObject.sex,
+                phone = result.ResultObject.phone,
+            };
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            return View(updateRequest);
         }
 
         [AcceptVerbs("GET", "POST")]
@@ -84,6 +109,7 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [HttpPost]
         [Route("dang-nhap")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginRequest request)
         {
             try
@@ -95,7 +121,7 @@ namespace TechShopSolution.WebApp.Controllers
                 var adminPrincipal = this.ValidateToken(token);
                 var authProperties = new AuthenticationProperties
                 {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(180),
                     IsPersistent = false
                 };
                 HttpContext.Session.SetString("Token", token);
