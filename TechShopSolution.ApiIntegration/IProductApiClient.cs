@@ -27,9 +27,9 @@ namespace TechShopSolution.ApiIntegration
         Task<List<ImageListResult>> GetImageByProductID(int id);
         Task<List<CategoryViewModel>> GetAllCategory();
         Task<List<BrandViewModel>> GetAllBrand();
-        Task<List<ProductViewModel>> GetFeaturedProducts(int take);
-        Task<List<ProductViewModel>> GetBestSellerProducts(int take);
-        Task<List<ProductViewModel>> GetProductsByCategory(int id, int take);
+        Task<PublicProductsViewModel> GetFeaturedProducts(int take);
+        Task<PublicProductsViewModel> GetBestSellerProducts(int take);
+        Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
         Task<List<ProductViewModel>> GetProductsRelated(int id, int take);
     }
 }

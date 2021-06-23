@@ -12,6 +12,7 @@ namespace TechShopSolution.ApiIntegration
     {
         Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request);
         Task<ApiResult<bool>> CreateCustomer(CustomerCreateRequest request);
+        Task<ApiResult<bool>> Register(CustomerRegisterRequest request);
         Task<bool> VerifyEmail(string email);
         Task<ApiResult<bool>> UpdateCustomer(CustomerUpdateRequest request);
         Task<ApiResult<bool>> UpdateAddress(CustomerUpdateAddressRequest request);

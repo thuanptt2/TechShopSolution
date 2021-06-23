@@ -67,7 +67,7 @@
 
                     @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
                     {
-                        featuredPart.Add(Model.FeaturedProducts[index]);
+                        featuredPart.Add(Model.FeaturedProducts.Products[index]);
                         if (featuredPart.Count == 4 || Model.FeaturedProducts.Count < 4)
                         {
                             featuredProducts.Add(featuredPart);
@@ -133,7 +133,7 @@
 
                     @for (int index = 0; index < Model.BestSellerProducts.Count; index++)
                     {
-                        bestSellerPart.Add(Model.BestSellerProducts[index]);
+                        bestSellerPart.Add(Model.BestSellerProducts.Products[index]);
                         if (bestSellerPart.Count == 4 || Model.BestSellerProducts.Count < 4)
                         {
                             bestProducts.Add(bestSellerPart);
@@ -198,7 +198,7 @@
 
     <ul class="thumbnails margin-top-20">
         @{
-            foreach (var product in Model.ProductWithCate1)
+            foreach (var product in Model.ProductWithCate1.Products)
             {
                 <li class="span3">
                     <div class="thumbnail">
@@ -260,7 +260,7 @@
 
     <ul class="thumbnails margin-top-20">
         @{
-            foreach (var product in Model.ProductWithCate2)
+            foreach (var product in Model.ProductWithCate2.Products)
             {
                 <li class="span3">
                     <div class="thumbnail">

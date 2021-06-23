@@ -1,3 +1,6 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
+using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Customer.Validator;
 
 namespace TechShopSolution.WebApp
 {
@@ -26,17 +31,26 @@ namespace TechShopSolution.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
-
-            services.AddControllersWithViews();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+              .AddCookie(options =>
+              {
+                  options.LoginPath = "/dang-nhap";
+                  options.AccessDeniedPath = "/User/Forbidden/";
+              });
+            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CustomerRegisterValidator>());
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.IdleTimeout = TimeSpan.FromMinutes(180);
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IBrandApiClient, BrandApiClient>();
+            services.AddTransient<IAdminApiClient, AdminApiClient>();
+            services.AddTransient<ICustomerApiClient, CustomerApiClient>();
+            services.AddTransient<IValidator<CustomerRegisterRequest>, CustomerRegisterValidator>();
+
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG   
@@ -62,7 +76,7 @@ namespace TechShopSolution.WebApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();
@@ -86,7 +100,14 @@ namespace TechShopSolution.WebApp
                        controller = "Product",
                        action = "Category"
                    });
-                
+                endpoints.MapControllerRoute(
+                  name: "Dang nhap",
+                  pattern: "/dang-nhap", new
+                  {
+                      controller = "Product",
+                      action = "Category"
+                  });
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

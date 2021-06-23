@@ -5,8 +5,10 @@
     ViewData["Title"] = Model.Category.meta_title;
     ViewData["Description"] = Model.Category.meta_descriptions;
     ViewData["Keywords"] = Model.Category.meta_keywords;
-
 }
+@section Script {
+    <script src="~/js/FilterPrice.js"></script>
+} 
 @if (Model.Category != null)
 {
     <div class="span9">
@@ -23,7 +25,7 @@
         <form class="form-horizontal span6" asp-action="Category" asp-controller="Product" method="get">
             <div class="d-flex align-item-center margin-bottom-20">
                 <label style="width: 85px;">Sắp xếp</label>
-                <select name="idsort" class="margin-left-20" onchange="this.form.submit()">
+                <select name="sortid" class="margin-left-20" onchange="this.form.submit()">
                     @if (ViewBag.SortID == 1)
                     {
                         <option value="1" selected>Sắp xếp tên từ A - Z</option>

@@ -65,6 +65,7 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IValidator<UpdateCategoryRequest>, UpdateCategoryValidator>();
             services.AddTransient<IValidator<BrandCreateRequest>, BrandCreateValidator>();
             services.AddTransient<IValidator<BrandUpdateRequest>, BrandUpdateValidator>();
+            services.AddTransient<IValidator<CustomerRegisterRequest>, CustomerRegisterValidator>();
 
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());

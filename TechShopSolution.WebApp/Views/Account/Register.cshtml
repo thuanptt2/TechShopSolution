@@ -1,59 +1,91 @@
-﻿
+﻿@model TechShopSolution.ViewModels.Catalog.Customer.CustomerRegisterRequest
 @{
-    ViewData["Title"] = "Đăng kí tài khoản";
+    ViewData["Title"] = "Đăng ký thành viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section Script {
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+}
 <div class="span9">
     <ul class="breadcrumb">
-        <li><a href="index.html">Trang chủ</a> <span class="divider">/</span></li>
-        <li class="active">Đăng kí tài khoản</li>
+        <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+        <li class="active">Đăng ký thành viên</li>
     </ul>
-    <h3> Login</h3>
-    <hr class="soft" />
-
-    <div class="row">
-        <div class="span4">
-            <div class="well">
-                <h5>CREATE YOUR ACCOUNT</h5><br />
-                Enter your e-mail address to create an account.<br /><br /><br />
-                <form action="register.html">
-                    <div class="control-group">
-                        <label class="control-label" for="inputEmail0">E-mail address</label>
-                        <div class="controls">
-                            <input class="span3" type="text" id="inputEmail0" placeholder="Email">
-                        </div>
-                    </div>
-                    <div class="controls">
-                        <button type="submit" class="btn block">Create Your Account</button>
-                    </div>
-                </form>
+    <h3>Đăng ký</h3>
+    <div class="well shadow">
+        <form class="form-horizontal" asp-controller="Account" asp-action="Register" method="post">
+            <h4>Điền thông tin cá nhân</h4>
+            <div asp-validation-summary="ModelOnly" class="text-error"></div>
+            <div class="control-group">
+                <label class="control-label" asp-for="lastname">Họ<sup style="color: #C74A6D">*</sup></label>
+                <div class="controls">
+                    <input type="text" placeholder="Last Name" class="margin-right-20" asp-for="lastname">
+                    <span asp-validation-for="lastname" class="text-error"></span>
+                </div>
             </div>
-        </div>
-        <div class="span1"> &nbsp;</div>
-        <div class="span4">
-            <div class="well">
-                <h5>Đã có tài khoản ?</h5>
-                <form asp-action="Login" asp-controller="Account" method="post">
-                    <div class="control-group">
-                        <label class="control-label" for="inputEmail1">Email</label>
-                        <div class="controls">
-                            <input class="span3" type="text" id="inputEmail1" placeholder="Địa chỉ Email...">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" name="Email" for="inputPassword1">Password</label>
-                        <div class="controls">
-                            <input type="password" name="Password" class="span3" id="inputPassword1" placeholder="Mật khẩu">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" class="btn">Đăng nhập</button> <a href="#">Bạn quên mật khẩu?</a>
-                        </div>
-                    </div>
-                </form>
+            <div class="control-group">
+                <label class="control-label" asp-for="firstname">Tên<sup style="color: #C74A6D">*</sup></label>
+                <div class="controls">
+                    <input type="text" asp-for="firstname" class="margin-right-20" placeholder="First Name">
+                    <span asp-validation-for="firstname" class="text-error"></span>
+                </div>
             </div>
-        </div>
+            <div class="control-group">
+                <label class="control-label" asp-for="sex">Giới tính <sup style="color: #C74A6D">*</sup></label>
+                <div class="controls">
+                    <select class="span1" asp-for="sex">
+                        <option name="sex" value="true">Nam</option>
+                        <option name="sex" value="false">Nữ</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" asp-for="phone">Số điện thoại<sup style="color: #C74A6D">*</sup></label>
+                <div class="controls">
+                    <input type="text" asp-for="phone" placeholder="Số điện thoại" class="margin-right-20">
+                    <span asp-validation-for="phone" class="text-error"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input_email" asp-for="email">Email <sup style="color: #C74A6D">*</sup></label>
+                <div class="controls">
+                    <input type="email" id="input_email" placeholder="Địa chỉ Email" asp-for="email" class="margin-right-20">
+                    <span asp-validation-for="email" class="text-error"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" asp-for="password" for="inputPassword1">Mật khẩu<sup style="color: #C74A6D">*</sup></label>
+                <div class="controls">
+                    <input type="password" asp-for="password" id="inputPassword1" placeholder="Mật khẩu" class="margin-right-20">
+                    <span asp-validation-for="password" class="text-error"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" asp-for="confirmpassword" for="inputPassword2">Nhập lại mật khẩu<sup style="color: #C74A6D">*</sup></label>
+                <div class="controls">
+                    <input type="password" asp-for="confirmpassword" id="inputPassword2" placeholder="Nhập lại mật khẩu" class="margin-right-20">
+                    <span asp-validation-for="confirmpassword" class="text-error"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" asp-for="birthday">Ngày sinh <sup style="color: #C74A6D">*</sup></label>
+                <div class="controls">
+                    <input type="date" asp-for="birthday" class="margin-right-20"/>
+                    <span asp-validation-for="birthday" class="text-error"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input class="btn btn-large btn-success" type="submit" value="Đăng ký" />
+                </div>
+            </div>
+            <div class="alert alert-block alert-error fade in">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>Note:</strong> * Các trường bắt buộc phải nhập. Quý khách hàng vui lòng điền đầy đủ thông tin xin cảm ơn.
+            </div>
+        </form>
     </div>
 </div>
+

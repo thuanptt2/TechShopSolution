@@ -9,11 +9,11 @@ namespace TechShopSolution.WebApp.Models
 {
     public class HomeViewModel
     {
-        public List<ProductViewModel> FeaturedProducts { get; set; }
-        public List<ProductViewModel> BestSellerProducts { get; set; }
-        public List<ProductViewModel> ProductWithCate1 { get; set; }
-        public List<ProductViewModel> ProductWithCate2 { get; set; }
-        public List<ProductViewModel> ProductWithCate3 { get; set; }
+        public PublicProductsViewModel FeaturedProducts { get; set; }
+        public PublicProductsViewModel BestSellerProducts { get; set; }
+        public PublicProductsViewModel ProductWithCate1 { get; set; }
+        public PublicProductsViewModel ProductWithCate2 { get; set; }
+        public PublicProductsViewModel ProductWithCate3 { get; set; }
 
     }
 }

@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewData["Title"] = "Đăng kí tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+        <li class="active">Đăng kí tài khoản</li>
+    </ul>
+    <h3>Đăng nhập tài khoản</h3>
+    <hr class="soft" />
+
+    <div class="row">
+        <div class="span6">
+            <div class="well shadow">
+                <h5>Nhập thông tin tài khoản</h5>
+                <div asp-validation-summary="ModelOnly" class="text-error"></div>
+                <form asp-action="Login" asp-controller="Account" method="post">
+                    <div class="control-group">
+                        <label class="control-label" for="inputEmail1">Email</label>
+                        <div class="controls">
+                            <input class="span3" name="Email" type="text" id="inputEmail1" placeholder="Địa chỉ Email...">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword1">Password</label>
+                        <div class="controls">
+                            <input type="password" name="Password" class="span3" id="inputPassword1" placeholder="Mật khẩu">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn">Đăng nhập</button> <a href="#">Quên mật khẩu?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="span3">
+            <div class="well shadow">
+                <h5>Chưa có tài khoản?</h5><br />
+                <h6>Đăng ký thành viên tại đây</h6><br />
+                <a class="btn block" asp-action="Register" asp-controller="Account">Tạo tài khoản</a>
+
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -2,7 +2,9 @@
 @{
     ViewData["Title"] = "Kết quả tìm kiếm";
 }
-
+@section Script {
+    <script src="~/js/FilterPrice.js"></script>
+}
 @model ProductCategoryViewModel
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
@@ -10,7 +12,7 @@
 <div class="span9">
     <ul class="breadcrumb">
         <li><a href="@Url.Action("Index", "Home")">Trang chủ</a> <span class="divider">/</span></li>
-        <li class="active">Sản phẩm</li>
+        <li class="active">Tìm kiếm sản phẩm</li>
     </ul>
     <div class="d-flex align-item-center">
         <h3>Kết quả tìm kiếm</h3>

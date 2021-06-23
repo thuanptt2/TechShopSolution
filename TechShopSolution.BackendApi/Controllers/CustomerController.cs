@@ -39,6 +39,14 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] CustomerRegisterRequest request)
+        {
+            var result = await _customerService.Register(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] CustomerUpdateRequest request)
         {

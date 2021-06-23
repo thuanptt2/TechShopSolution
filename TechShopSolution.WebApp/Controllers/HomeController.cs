@@ -26,8 +26,8 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 FeaturedProducts = await _productApiClient.GetFeaturedProducts(20),
                 BestSellerProducts = await _productApiClient.GetBestSellerProducts(20),
-                ProductWithCate1 = await _productApiClient.GetProductsByCategory(1, 6),
-                ProductWithCate2 = await _productApiClient.GetProductsByCategory(2, 6),
+                ProductWithCate1 = await _productApiClient.GetProductsByCategory(1, 8),
+                ProductWithCate2 = await _productApiClient.GetProductsByCategory(2, 8),
             };
             var cate1 = await _categorytApiClient.GetById(1);
             var cate2 = await _categorytApiClient.GetById(2);
