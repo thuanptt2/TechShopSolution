@@ -12,8 +12,8 @@ namespace TechShopSolution.ViewModels.Catalog.Customer.Validator
             RuleFor(x => x.name).NotEmpty().WithMessage("Tên không được để trống")
                   .MaximumLength(255).WithMessage("Tên không thể vượt quá 255 kí tự");
             RuleFor(x => x.phone).NotEmpty().WithMessage("Số điện thoại không được để trống")
-                  .MinimumLength(10).WithMessage("Số điện thoại phải ít nhất 10 kí tự")
-                  .MaximumLength(11).WithMessage("Số điện thoại không vượt quá 11 kí tự")
+                  .MinimumLength(10).WithMessage("Số điện thoại phải đủ 10 kí tự")
+                  .MaximumLength(10).WithMessage("Số điện thoại không vượt quá 10 kí tự")
                   .Must(BeAValidPhone).WithMessage("Vui lòng nhập số điện thoại hợp lệ, VD: 0965349315.")
                   .Must(BeAValidPhone2).WithMessage("Số điện thoại phải bắt đầu bằng số 0");
             RuleFor(x => x.birthday).NotEmpty().WithMessage("Ngày sinh không được để trống")

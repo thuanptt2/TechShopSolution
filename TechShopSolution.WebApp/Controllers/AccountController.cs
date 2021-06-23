@@ -103,7 +103,7 @@ namespace TechShopSolution.WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(); 
+                return View(request); 
             }
             var result = await _customerApiClient.UpdateCustomerPublic(request);
             if (result.IsSuccess)
