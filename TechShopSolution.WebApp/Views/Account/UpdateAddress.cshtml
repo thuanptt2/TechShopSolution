@@ -5,12 +5,16 @@
 }
 
 <script src="~/js/Location.js"></script>
-<form asp-action="UpdateAddress" class="form-horizontal" asp-controller="customer" method="post" onsubmit="return SubmitForm(this);">
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+
+<form asp-action="UpdateAddress" class="form-horizontal" asp-controller="Account" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="control-group">
         <label class="control-label" asp-for="City">Tỉnh/Thành phố <sup style="color: #C74A6D">*</sup></label>
         <div class="controls">
-            <input asp-for="City" type="hidden" id="txtCity"/>
+            <input asp-for="City" type="hidden" id="txtCity" />
             <select id="ddlCity" asp-for="City" class="form-control margin-right-20">
                 <option value="">--Chọn quận huyện--</option>
             </select>
@@ -34,7 +38,7 @@
         <label class="control-label" asp-for="Ward">Xã/Phường <sup style="color: #C74A6D">*</sup></label>
         <div class="controls">
             <input type="hidden" asp-for="Ward" id="txtWard" />
-            <select id="ddlWard" asp-for="Ward" class="form-control margin-right-20" >
+            <select id="ddlWard" asp-for="Ward" class="form-control margin-right-20">
                 <option value="">--Chọn quận huyện--</option>
             </select>
             <span asp-validation-for="Ward" class="text-error"></span>

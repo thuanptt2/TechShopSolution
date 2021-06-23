@@ -133,15 +133,15 @@ namespace TechShopSolution.WebApp.Controllers
         public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
             var result = await _customerApiClient.UpdateAddress(request);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Cập nhật địa chỉ thành công";
                 return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
             }
-            ModelState.AddModelError("", result.Message);
-            return View(request);
+            TempData["result"] = "Cập nhật địa chỉ thất bại";
+            return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
         }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
