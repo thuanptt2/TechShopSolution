@@ -29,5 +29,15 @@ namespace TechShopSolution.ApiIntegration
             var token = await respone.Content.ReadAsStringAsync();
             return token;
         }
+        public async Task<string> AuthenticateCustomer(LoginRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.PostAsync("https://localhost:5001/api/admin/authenticatecustomer", httpContent);
+            var token = await respone.Content.ReadAsStringAsync();
+            return token;
+        }
     }
 }

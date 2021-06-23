@@ -323,13 +323,125 @@ namespace TechShopSolution.Application.Catalog.Product
                 return pageResult;
             }
         }
-        public async Task<List<ProductViewModel>> GetFeaturedProduct(int take)
+        public async Task<PagedResult<ProductViewModel>> GetPublicProducts(GetPublicProductPagingRequest request)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                            join c in _context.Categories on pic.cate_id equals c.id
+                            where p.isDelete == false
+                            select new { p, pic, c};
+
+                if (!String.IsNullOrEmpty(request.Keyword))
+                    query = query.Where(x => x.p.name.Contains(request.Keyword));
+
+                if (!String.IsNullOrEmpty(request.CategorySlug))
+                    query = query.Where(x => x.c.cate_slug.Equals(request.CategorySlug));
+
+                if (!String.IsNullOrEmpty(request.BrandSlug))
+                {
+                    query = query.Where(x => x.p.Brand.brand_slug.Equals(request.BrandSlug));
+                }
+                switch(request.idSortType)
+                {
+                    case 1:
+                        query = query.OrderBy(x=>x.p.name);
+                        break;
+                    case 2:
+                        query = query.OrderByDescending(x => x.p.name);
+                        break;
+                    case 3:
+                        query = query.OrderBy(x => x.p.unit_price);
+                        break;
+                    case 4:
+                        query = query.OrderByDescending(x => x.p.unit_price);
+                        break;
+                }
+                if (request.Lowestprice != null && request.Highestprice != null)
+                {
+                    query = query.Where(x => x.p.unit_price >= request.Lowestprice && x.p.unit_price <= request.Highestprice);
+                } else if(request.Lowestprice != null && request.Highestprice == null)
+                {
+                    query = query.Where(x => x.p.unit_price >= request.Lowestprice);
+                }else if(request.Lowestprice == null && request.Highestprice != null)
+                {
+                    query = query.Where(x => x.p.unit_price <= request.Highestprice);
+                }
+
+
+                var data = query.AsEnumerable()
+                    .GroupBy(g => g.p);
+
+                int totalRow = data.Count();
+
+                List<ProductViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(a => new ProductViewModel()
+                    {
+                        id = a.Key.id,
+                        name = a.Key.name,
+                        best_seller = a.Key.best_seller,
+                        brand_id = a.Key.brand_id,
+                        code = a.Key.code,
+                        create_at = a.Key.create_at,
+                        descriptions = a.Key.descriptions,
+                        featured = a.Key.featured,
+                        image = a.Key.image,
+                        instock = a.Key.instock,
+                        meta_descriptions = a.Key.meta_descriptions,
+                        meta_keywords = a.Key.meta_keywords,
+                        meta_tittle = a.Key.meta_tittle,
+                        more_images = a.Key.more_images,
+                        promotion_price = a.Key.promotion_price,
+                        short_desc = a.Key.short_desc,
+                        slug = a.Key.slug,
+                        specifications = a.Key.specifications,
+                        isActive = a.Key.isActive,
+                        unit_price = a.Key.unit_price,
+                        warranty = a.Key.warranty,
+                    }).ToList();
+
+                foreach (var pro in result)
+                {
+                    if (pro.image != null)
+                    {
+                        ImageListResult image = new ImageListResult();
+                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
+                    }
+                }
+               
+
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecords = totalRow,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = result,
+                };
+                return pageResult;
+            }
+            catch
+            {
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecords = 0,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = null,
+                };
+                return pageResult;
+            }
+        }
+        public async Task<PublicProductsViewModel> GetFeaturedProduct(int take)
         {
             try
             {
                 var query = from p in _context.Products
                             where p.isDelete == false && p.featured == true
                             select new { p };
+
+                int Count = await query.CountAsync();
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
@@ -367,14 +479,14 @@ namespace TechShopSolution.Application.Catalog.Product
                     }
                 }
 
-                return await data;
+                return new PublicProductsViewModel { Count = Count, Products = await data };
             }
             catch
             {
-                return null;
+                return new PublicProductsViewModel { Count = 0, Products = null };
             }
         }
-        public async Task<List<ProductViewModel>> GetProductsByCategory(int id, int take)
+        public async Task<PublicProductsViewModel> GetProductsByCategory(int id, int take)
         {
             try
             {
@@ -384,6 +496,8 @@ namespace TechShopSolution.Application.Catalog.Product
                             where p.isDelete == false && c.id == id
                             select new { p, pic, c };
 
+                int Count = await query.CountAsync();
+
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
                     .Select(a => new ProductViewModel()
@@ -420,11 +534,11 @@ namespace TechShopSolution.Application.Catalog.Product
                     }
                 }
 
-                return await data;
+                return new PublicProductsViewModel { Count = Count, Products = await data };
             }
             catch
             {
-                return null;
+                return new PublicProductsViewModel { Count = 0, Products = null };
             }
         }
         public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
@@ -436,6 +550,7 @@ namespace TechShopSolution.Application.Catalog.Product
                             join c in _context.Categories on pic.cate_id equals c.id
                             where p.isDelete == false && p.id == id
                             select new { pic };
+
                 var first = await query.FirstAsync();
 
                var query2 = from p in _context.Products
@@ -488,13 +603,15 @@ namespace TechShopSolution.Application.Catalog.Product
                 return null;
             }
         }
-        public async Task<List<ProductViewModel>> GetBestSellerProduct(int take)
+        public async Task<PublicProductsViewModel> GetBestSellerProduct(int take)
         {
             try
             {
                 var query = from p in _context.Products
                             where p.isDelete == false && p.best_seller == true
                             select new { p };
+
+                int Count = await query.CountAsync();
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
@@ -532,11 +649,12 @@ namespace TechShopSolution.Application.Catalog.Product
                     }
                 }
 
-                return await data;
+                return new PublicProductsViewModel { Count = Count, Products = await data };
+
             }
             catch
             {
-                return null;
+                return new PublicProductsViewModel { Count = 0, Products = null };
             }
         }
         public async Task<List<ImageListResult>> GetImagesByProductID(int id)

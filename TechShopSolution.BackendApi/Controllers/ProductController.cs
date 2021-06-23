@@ -31,6 +31,14 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest("Không có sản phẩm nào");
             return Ok(products);
         }
+        [HttpPost("publicfilter")]
+        public async Task<IActionResult> GetPublicProducts(GetPublicProductPagingRequest requet)
+        {
+            var products = await _productService.GetPublicProducts(requet);
+            if (products == null)
+                return BadRequest("Không có sản phẩm nào");
+            return Ok(products);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

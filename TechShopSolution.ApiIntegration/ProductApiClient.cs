@@ -226,6 +226,21 @@ namespace TechShopSolution.ApiIntegration
             var product = JsonConvert.DeserializeObject<PagedResult<ProductViewModel>>(body);
             return product;
         }
+        public async Task<PagedResult<ProductViewModel>> GetPublicProducts(GetPublicProductPagingRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/api/product/publicfilter", httpContent);
+            var body = await respone.Content.ReadAsStringAsync();
+            var product = JsonConvert.DeserializeObject<PagedResult<ProductViewModel>>(body);
+            return product;
+        }
         [Obsolete]
         public async Task<ApiResult<bool>> UpdateProduct(ProductUpdateRequest request)
         {
@@ -339,35 +354,35 @@ namespace TechShopSolution.ApiIntegration
             var brand = JsonConvert.DeserializeObject<List<BrandViewModel>>(body);
             return brand;
         }
-        public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
+        public async Task<PublicProductsViewModel> GetFeaturedProducts(int take)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/product/featured/{take}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
-            return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+                return JsonConvert.DeserializeObject<PublicProductsViewModel>(body);
+            return JsonConvert.DeserializeObject<PublicProductsViewModel>(body);
         }
-        public async Task<List<ProductViewModel>> GetBestSellerProducts(int take)
+        public async Task<PublicProductsViewModel> GetBestSellerProducts(int take)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/product/bestseller/{take}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
-            return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+                return JsonConvert.DeserializeObject<PublicProductsViewModel>(body);
+            return JsonConvert.DeserializeObject<PublicProductsViewModel>(body);
         }
-        public async Task<List<ProductViewModel>> GetProductsByCategory(int id, int take)
+        public async Task<PublicProductsViewModel> GetProductsByCategory(int id, int take)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/product/Category?id={id}&take={take}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
-            return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+                return JsonConvert.DeserializeObject<PublicProductsViewModel>(body);
+            return JsonConvert.DeserializeObject<PublicProductsViewModel>(body);
         }
         public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
         {

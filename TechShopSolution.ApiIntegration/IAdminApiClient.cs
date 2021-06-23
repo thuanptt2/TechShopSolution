@@ -9,5 +9,6 @@ namespace TechShopSolution.ApiIntegration
     public interface IAdminApiClient
     {
         Task<string> Authenticate(LoginRequest request);
+        Task<string> AuthenticateCustomer(LoginRequest request);
     }
 }
