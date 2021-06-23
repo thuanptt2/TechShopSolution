@@ -4,14 +4,14 @@
     Layout = null;
 }
 
-
+<script src="~/js/Location.js"></script>
 <form asp-action="UpdateAddress" class="form-horizontal" asp-controller="customer" method="post" onsubmit="return SubmitForm(this);">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="control-group">
         <label class="control-label" asp-for="City">Tỉnh/Thành phố <sup style="color: #C74A6D">*</sup></label>
         <div class="controls">
-            <input asp-for="City" type="hidden" />
-            <select id="ddlDistrict" asp-for="City" class="form-control margin-right-20">
+            <input asp-for="City" type="hidden" id="txtCity"/>
+            <select id="ddlCity" asp-for="City" class="form-control margin-right-20">
                 <option value="">--Chọn quận huyện--</option>
             </select>
             <span asp-validation-for="City" class="text-error"></span>
@@ -21,7 +21,7 @@
     <div class="control-group">
         <label class="control-label" asp-for="District">Quận/Huyện <sup style="color: #C74A6D">*</sup></label>
         <div class="controls">
-            <input type="hidden" asp-for="District" class="margin-right-20" />
+            <input type="hidden" asp-for="District" class="margin-right-20" id="txtDistrict" />
             <select id="ddlDistrict" asp-for="District" class="form-control margin-right-20">
                 <option value="">--Chọn quận huyện--</option>
             </select>
@@ -33,8 +33,8 @@
     <div class="control-group">
         <label class="control-label" asp-for="Ward">Xã/Phường <sup style="color: #C74A6D">*</sup></label>
         <div class="controls">
-            <input type="hidden" asp-for="Ward" />
-            <select id="ddlDistrict" asp-for="Ward" class="form-control margin-right-20" >
+            <input type="hidden" asp-for="Ward" id="txtWard" />
+            <select id="ddlWard" asp-for="Ward" class="form-control margin-right-20" >
                 <option value="">--Chọn quận huyện--</option>
             </select>
             <span asp-validation-for="Ward" class="text-error"></span>

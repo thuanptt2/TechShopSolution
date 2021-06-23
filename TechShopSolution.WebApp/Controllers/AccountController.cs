@@ -183,6 +183,66 @@ namespace TechShopSolution.WebApp.Controllers
                 return View(request);
             }
         }
+        public async Task<JsonResult> LoadProvince()
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadProvince();
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<JsonResult> LoadDistrict(int provinceID)
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadDistrict(provinceID);
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<JsonResult> LoadWard(int districtID)
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadWard(districtID);
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
+        }
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
