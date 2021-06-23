@@ -56,9 +56,9 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(result);
         }
         [HttpPut("public/{id}")]
-        public async Task<IActionResult> UpdatePublic([FromBody] CustomerUpdateRequest request)
+        public async Task<IActionResult> UpdatePublic([FromBody] CustomerPublicUpdateRequest request)
         {
-            var result = await _customerService.Update(request.Id, request);
+            var result = await _customerService.UpdatePublic(request.Id, request);
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);

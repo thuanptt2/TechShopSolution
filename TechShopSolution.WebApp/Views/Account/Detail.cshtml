@@ -4,7 +4,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model TechShopSolution.ViewModels.Catalog.Customer.CustomerPublicUpdateRequest
+@section Script {
+    <script>
+        window.onload = function () {
+            var x = document.getElementById("snackbar");
 
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        };
+    </script>
+}
 
 <div class="row">
     <div class="span9">
@@ -12,6 +24,13 @@
             <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
             <li class="active">Thông tin cá nhân</li>
         </ul>
+        @if (ViewBag.SuccessMsg != null)
+        {
+            <div class="alert alert-success" id="snackbar" role="alert">
+                <b>@ViewBag.SuccessMsg</b>
+            </div>
+
+        }
         <a href="#" name="detail"></a>
         <hr class="soft" />
         <ul id="infoDetail" class="nav padding-container nav-tabs">
@@ -21,13 +40,14 @@
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in wrapper-content" id="info">
-                <form class="form-horizontal" asp-controller="Account" asp-action="Register" method="post">
+                <form class="form-horizontal" asp-controller="Account" asp-action="Update" method="post">
                     <h4>Điền thông tin cá nhân</h4>
                     <div asp-validation-summary="ModelOnly" class="text-error"></div>
                     <div class="control-group">
                         <label class="control-label" asp-for="name">Họ và tên<sup style="color: #C74A6D">*</sup></label>
                         <div class="controls">
                             <input type="text" placeholder="Họ và tên" class="margin-right-20" asp-for="name">
+                            <input type="hidden" class="margin-right-20" asp-for="Id">
                             <span asp-validation-for="name" class="text-error"></span>
                         </div>
                     </div>
@@ -69,7 +89,7 @@
                     </div>
                     <div class="control-group">
                         <div class="controls">
-                            <input class="btn btn-large btn-success" type="submit" value="Đăng ký" />
+                            <input class="btn btn-large btn-success" type="submit" value="Cập nhật" />
                         </div>
                     </div>
                     <div class="alert alert-block alert-error fade in">
