@@ -742,6 +742,13 @@ namespace TechShopSolution.Application.Catalog.Product
                 unit_price = product.unit_price,
                 warranty = product.warranty,
             };
+
+            if(productViewModel.image != null)
+            {
+                ImageListResult image = new ImageListResult();
+                productViewModel.image = GetBase64StringForImage(_storageService.GetFileUrl(productViewModel.image));
+            }
+
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
         public async Task<ApiResult<ProductViewModel>> GetBySlug(string slug)
