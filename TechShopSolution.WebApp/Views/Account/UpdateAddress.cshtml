@@ -1,0 +1,60 @@
+﻿@model TechShopSolution.ViewModels.Catalog.Customer.CustomerUpdateAddressRequest
+
+@{
+    Layout = null;
+}
+
+
+<form asp-action="UpdateAddress" class="form-horizontal" asp-controller="customer" method="post" onsubmit="return SubmitForm(this);">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="control-group">
+        <label class="control-label" asp-for="City">Tỉnh/Thành phố <sup style="color: #C74A6D">*</sup></label>
+        <div class="controls">
+            <input asp-for="City" type="hidden" />
+            <select id="ddlDistrict" asp-for="City" class="form-control margin-right-20">
+                <option value="">--Chọn quận huyện--</option>
+            </select>
+            <span asp-validation-for="City" class="text-error"></span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" asp-for="District">Quận/Huyện <sup style="color: #C74A6D">*</sup></label>
+        <div class="controls">
+            <input type="hidden" asp-for="District" class="margin-right-20" />
+            <select id="ddlDistrict" asp-for="District" class="form-control margin-right-20">
+                <option value="">--Chọn quận huyện--</option>
+            </select>
+            <span asp-validation-for="District" class="text-error"></span>
+        </div>
+    </div>
+
+
+    <div class="control-group">
+        <label class="control-label" asp-for="Ward">Xã/Phường <sup style="color: #C74A6D">*</sup></label>
+        <div class="controls">
+            <input type="hidden" asp-for="Ward" />
+            <select id="ddlDistrict" asp-for="Ward" class="form-control margin-right-20" >
+                <option value="">--Chọn quận huyện--</option>
+            </select>
+            <span asp-validation-for="Ward" class="text-error"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" asp-for="House">Số nhà, tên đường<sup style="color: #C74A6D">*</sup></label>
+        <div class="controls">
+            <input type="text" asp-for="House" class="margin-right-20" />
+            <span asp-validation-for="House" class="text-error"></span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <input class="btn btn-large btn-success" type="submit" value="Cập nhật" />
+        </div>
+    </div>
+    <div class="alert alert-block alert-error fade in">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Note:</strong> * Các trường bắt buộc phải nhập. Quý khách hàng vui lòng điền đầy đủ thông tin xin cảm ơn.
+    </div>
+</form>

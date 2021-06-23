@@ -187,6 +187,7 @@ namespace TechShopSolution.Application.Catalog.Customer
                     cusExist.email = request.email;
                     cusExist.name = request.name;
                     cusExist.phone = request.phone;
+                    cusExist.address = request.address;
                     cusExist.birthday = request.birthday;
                     cusExist.sex = request.sex;
                     cusExist.update_at = DateTime.Now;

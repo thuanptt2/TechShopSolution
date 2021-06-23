@@ -87,6 +87,7 @@ namespace TechShopSolution.WebApp.Controllers
                 Id = ID,
                 name = result.ResultObject.name,
                 birthday = result.ResultObject.birthday,
+                address = result.ResultObject.address,
                 email = result.ResultObject.email,
                 sex = result.ResultObject.sex,
                 phone = result.ResultObject.phone,
@@ -111,6 +112,35 @@ namespace TechShopSolution.WebApp.Controllers
                 return RedirectToAction("Detail","Account", new { id = request.Id.ToString()});
             }
             ModelState.AddModelError("", "Cập nhật thất bại");
+            return View(request);
+        }
+        public async Task<IActionResult> UpdateAddress(int id)
+        {
+            var result = await _customerApiClient.GetById(id);
+            if (!result.IsSuccess || result.ResultObject == null)
+                ModelState.AddModelError("", result.Message);
+            var updateAddressRequest = new CustomerUpdateAddressRequest()
+            {
+                Id = id,
+                City = null,
+                District = null,
+                House = null,
+                Ward = null
+            };
+            return View(updateAddressRequest);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _customerApiClient.UpdateAddress(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật địa chỉ thành công";
+                return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+            }
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
         [AcceptVerbs("GET", "POST")]

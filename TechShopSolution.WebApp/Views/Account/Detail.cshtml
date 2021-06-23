@@ -11,14 +11,15 @@
 
             // Add the "show" class to DIV
             x.className = "show";
-
             // After 3 seconds, remove the show class from DIV
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+
         };
     </script>
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/AddressUpdate.js"></script>
 }
 
 <div class="row">
@@ -38,13 +39,13 @@
         <hr class="soft" />
         <ul id="infoDetail" class="nav padding-container nav-tabs">
             <li class="active"><a href="#info" data-toggle="tab">Thông tin tài khoản</a></li>
-            <li><a href="#address" data-toggle="tab">Sổ địa chỉ</a></li>
+            <li><a href="#address" onclick="showInPopup('@Url.Action("UpdateAddress","Account",new { id = Model.Id })')" data-toggle="tab">Sổ địa chỉ</a></li>
             <li><a href="#orders" data-toggle="tab">Xem đơn hàng</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in wrapper-content" id="info">
                 <form class="form-horizontal" asp-controller="Account" asp-action="Detail" method="post">
-                    <h4>Điền thông tin cá nhân</h4>
+                    <h4>Thông tin cá nhân</h4>
                     <div asp-validation-summary="ModelOnly" class="text-error"></div>
                     <div class="control-group">
                         <label class="control-label" asp-for="name">Họ và tên<sup style="color: #C74A6D">*</sup></label>
@@ -95,7 +96,17 @@
                 </form>
             </div>
             <div class="tab-pane fade wrapper-content" id="address">
-                2
+                <div>
+                    <div class="form-group" style="font-size: 15px;">
+                        <i class="icon-map-marker"></i>&nbsp; Địa chỉ hiện tại:
+                        <span>@Model.address</span>
+                    </div>
+                    <a class="btn btn-primary margin-top-20" id="btnEditInfo">Chỉnh sửa </a>
+                </div>
+                <div id="formAddress" class="hide margin-top-20" >
+
+                </div>
+
             </div>
             <div class="tab-pane fade wrapper-content" id="orders">
                 Hello
