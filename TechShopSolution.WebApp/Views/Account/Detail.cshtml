@@ -16,6 +16,9 @@
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
         };
     </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
 }
 
 <div class="row">
@@ -40,7 +43,7 @@
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in wrapper-content" id="info">
-                <form class="form-horizontal" asp-controller="Account" asp-action="Update" method="post">
+                <form class="form-horizontal" asp-controller="Account" asp-action="Detail" method="post">
                     <h4>Điền thông tin cá nhân</h4>
                     <div asp-validation-summary="ModelOnly" class="text-error"></div>
                     <div class="control-group">
@@ -71,13 +74,6 @@
                         <div class="controls">
                             <input type="text" asp-for="phone" placeholder="Số điện thoại" class="margin-right-20">
                             <span asp-validation-for="phone" class="text-error"></span>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="input_email" asp-for="email">Email <sup style="color: #C74A6D">*</sup></label>
-                        <div class="controls">
-                            <input type="email" id="input_email" placeholder="Địa chỉ Email" asp-for="email" class="margin-right-20">
-                            <span asp-validation-for="email" class="text-error"></span>
                         </div>
                     </div>
                     <div class="control-group">

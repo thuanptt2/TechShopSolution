@@ -98,17 +98,19 @@ namespace TechShopSolution.WebApp.Controllers
             return View(updateRequest);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(CustomerPublicUpdateRequest request)
+        public async Task<IActionResult> Detail(CustomerPublicUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+            {
+                return View(); 
+            }
             var result = await _customerApiClient.UpdateCustomerPublic(request);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Cập nhật tài khoản thành công";
                 return RedirectToAction("Detail","Account", new { id = request.Id.ToString()});
             }
-            ModelState.AddModelError("", result.Message);
+            ModelState.AddModelError("", "Cập nhật thất bại");
             return View(request);
         }
         [AcceptVerbs("GET", "POST")]

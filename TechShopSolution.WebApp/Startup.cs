@@ -49,7 +49,9 @@ namespace TechShopSolution.WebApp
             services.AddTransient<IBrandApiClient, BrandApiClient>();
             services.AddTransient<IAdminApiClient, AdminApiClient>();
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();
-            services.AddTransient<IValidator<CustomerRegisterRequest>, CustomerRegisterValidator>();
+            services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
+            services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
+
 
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
