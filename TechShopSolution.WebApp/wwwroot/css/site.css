@@ -312,4 +312,15 @@ input.input-validation-error {
 
 .validation-summary-valid {
     display: none;
-}  
+}
+.padding-container {
+    margin: 0 auto !important;
+    width: auto;
+    height: auto;
+}
+
+.wrapper-content {
+    background: #fff;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    padding: 30px;
+}

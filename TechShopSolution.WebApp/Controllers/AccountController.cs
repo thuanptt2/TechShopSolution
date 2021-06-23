@@ -67,12 +67,12 @@ namespace TechShopSolution.WebApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-        //[HttpPost]
-        //public IActionResult Register()
-        //{
-        //    return View();
-        //}
- 
+        [HttpGet]
+        public IActionResult Detail()
+        {
+            return View();
+        }
+
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {

@@ -9,7 +9,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer.Validator
     {
         public CustomerRegisterValidator()
         {
-            RuleFor(x => x.firstname).NotEmpty().WithMessage("Tên không được để trống")
+            RuleFor(x => x.name).NotEmpty().WithMessage("Tên không được để trống")
                   .MaximumLength(255).WithMessage("Tên không thể vượt quá 255 kí tự");
             RuleFor(x => x.email).NotEmpty().WithMessage("Email không được để trống")
                   .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").WithMessage("Email không hợp lệ");
@@ -21,7 +21,6 @@ namespace TechShopSolution.ViewModels.Catalog.Customer.Validator
                   .Must(BeAValidPhone).WithMessage("Vui lòng nhập số điện thoại hợp lệ, VD: 0965349315.");
             RuleFor(x => x.birthday).NotEmpty().WithMessage("Ngày sinh không được để trống")
                   .Must(BeAValidAge).WithMessage("Ngày sinh không hợp lệ");
-            RuleFor(x => x.lastname).NotEmpty().WithMessage("Họ không được để trống");
             RuleFor(x => x.confirmpassword).NotEmpty().WithMessage("Vui lòng Nhập lại mật khẩu");
         }
         protected bool BeAValidAge(DateTime date)

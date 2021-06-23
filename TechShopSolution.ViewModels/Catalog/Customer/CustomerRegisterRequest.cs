@@ -8,8 +8,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
 {
     public class CustomerRegisterRequest
     {
-        public string lastname { get; set; }
-        public string firstname { get; set; }
+        public string name { get; set; }
         [Remote(action: "VerifyEmail", controller: "Account")]
         public string email { get; set; }
         public string password { get; set; }
