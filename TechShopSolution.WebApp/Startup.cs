@@ -111,6 +111,14 @@ namespace TechShopSolution.WebApp
                   });
 
                 endpoints.MapControllerRoute(
+                  name: "Dang Ky",
+                  pattern: "/dang-ky", new
+                  {
+                      controller = "Account",
+                      action = "Register"
+                  });
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });

@@ -38,6 +38,7 @@ namespace TechShopSolution.WebApp.Controllers
         {
             return View();
         }
+        [Route("dang-ky")]
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
@@ -46,6 +47,7 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
+        [Route("dang-ky")]
         public async Task<IActionResult> Register(CustomerRegisterRequest request)
         {
             if (!ModelState.IsValid)
@@ -73,6 +75,7 @@ namespace TechShopSolution.WebApp.Controllers
             return View(request);
         }
         [HttpGet]
+
         public async Task<IActionResult> Detail(string id)
         {
             int ID = int.Parse(id);
@@ -144,6 +147,7 @@ namespace TechShopSolution.WebApp.Controllers
             return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
         }
         [AcceptVerbs("GET", "POST")]
+        [AllowAnonymous]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {
             if (await _customerApiClient.VerifyEmail(email) == false)
