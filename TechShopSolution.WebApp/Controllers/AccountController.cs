@@ -74,8 +74,7 @@ namespace TechShopSolution.WebApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-        [HttpGet]
-
+        [Route("tai-khoan")]
         public async Task<IActionResult> Detail(string id)
         {
             int ID = int.Parse(id);
@@ -102,6 +101,7 @@ namespace TechShopSolution.WebApp.Controllers
             return View(updateRequest);
         }
         [HttpPost]
+        [Route("tai-khoan")]
         public async Task<IActionResult> Detail(CustomerPublicUpdateRequest request)
         {
             if (!ModelState.IsValid)

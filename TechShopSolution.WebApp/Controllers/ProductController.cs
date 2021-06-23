@@ -63,6 +63,7 @@ namespace TechShopSolution.WebApp.Controllers
                 Products = products
             });
         }
+        [Route("san-pham")]
         public async Task<IActionResult> SearchProducts(string tukhoa, string danhmuc, int? danhmuccha, string thuonghieu, int idsort = 1, decimal? giathapnhat = null, decimal? giacaonhat = null, bool tinhtrang = true, int pageIndex = 1)
         {
             var Category = await _categorytApiClient.GetBySlug(danhmuc);
@@ -79,9 +80,12 @@ namespace TechShopSolution.WebApp.Controllers
                 }
                 else
                 {
-                    Categories = await OrderCateToTree(Categories, Category.ResultObject.id);
-                    Categories.Add(Category.ResultObject);
-                    danhmuccha = Category.ResultObject.id;
+                    if(Category.ResultObject != null)
+                    {
+                        Categories = await OrderCateToTree(Categories, Category.ResultObject.id);
+                        Categories.Add(Category.ResultObject);
+                        danhmuccha = Category.ResultObject.id;
+                    }
                 }
                 var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
                 {

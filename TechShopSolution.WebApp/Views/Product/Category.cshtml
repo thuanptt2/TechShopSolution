@@ -2,10 +2,13 @@
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
-    ViewData["Title"] = Model.Category.meta_title;
-    ViewData["Description"] = Model.Category.meta_descriptions;
-    ViewData["Keywords"] = Model.Category.meta_keywords;
-}
+    if(Model.Category!= null)
+    {
+        ViewData["Title"] = Model.Category.meta_title;
+        ViewData["Description"] = Model.Category.meta_descriptions;
+        ViewData["Keywords"] = Model.Category.meta_keywords;
+    }
+            }
 @section Script {
     <script src="~/js/FilterPrice.js"></script>
 } 
