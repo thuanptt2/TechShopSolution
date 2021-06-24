@@ -94,6 +94,14 @@
                                     <button type="submit" class="btn btn-large btn-danger"> Mua ngay</button>
                                 </div>
                             }
+                            else if (Model.Product.instock == null)
+                            {
+                                <input type="number" class="span2" placeholder="Số lượng" min="0" />
+                                <div class="btnGroup">
+                                    <button type="submit" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                                    <button type="submit" class="btn btn-large btn-danger"> Mua ngay</button>
+                                </div>
+                            }
                             else
                             {
                                 <h5 class="OutOfStock pull-left">

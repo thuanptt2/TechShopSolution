@@ -51,6 +51,7 @@ namespace TechShopSolution.WebApp.Controllers
                 var cartItem = new CartItemViewModel()
                 {
                     Id = id,
+                    Instock = (int)product.ResultObject.instock,
                     Code = product.ResultObject.code,
                     Slug = product.ResultObject.slug,
                     Price = product.ResultObject.unit_price,

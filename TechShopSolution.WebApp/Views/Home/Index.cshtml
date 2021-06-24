@@ -82,7 +82,7 @@
                             <ul class="thumbnails">
                                 @foreach (var item in featuredProducts[index])
                                 {
-                                    if (item.instock > 0)
+                                    if (item.instock > 0 || item.instock == null)
                                     {
                                         <li class="span3">
                                             <div class="thumbnail">
@@ -151,7 +151,7 @@
                             <ul class="thumbnails">
                                 @foreach (var item in bestProducts[index])
                                 {
-                                    if (item.instock > 0)
+                                    if (item.instock > 0 || item.instock == null)
                                     {
                                         <li class="span3">
                                             <div class="thumbnail">
@@ -235,7 +235,7 @@
         @{
             foreach (var product in Model.ProductWithCate1.Products)
             {
-                if (product.instock > 0)
+                if (product.instock > 0 || product.instock == null)
                 {
                     <li class="span3">
                         <div class="thumbnail">
@@ -300,7 +300,7 @@
         @{
             foreach (var product in Model.ProductWithCate2.Products)
             {
-                if (product.instock > 0)
+                if (product.instock > 0 || product.instock == null)
                 {
                     <li class="span3">
                         <div class="thumbnail">
