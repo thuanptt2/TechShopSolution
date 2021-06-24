@@ -168,7 +168,19 @@
         var site = new SiteController();
         site.initialize();
     </script>
+    <script src="~/js/Spinner.js"></script>
     @RenderSection("Script", required: false)
+    <script>
+        $(function () {
+            $("#loaderbody").addClass('hide');
+
+            $(document).bind('ajaxStart', function () {
+                $("#loaderbody").removeClass('hide');
+            }).bind('ajaxStop', function () {
+                $("#loaderbody").addClass('hide');
+            });
+        });
+    </script>
     <!-- Themes switcher section ============================================================================================= -->
     <div id="secectionBox">
         <link rel="stylesheet" href="/themes/switch/themeswitch.css" type="text/css" media="screen" />
