@@ -33,6 +33,7 @@
         $('body').on('change', '.txtQuantity', function (e) {
             e.preventDefault();
             const id = $(this).data('id');
+            const instock = $(this).data('instock');
             var idInput = '#txt_quantity_' + id;
             const quantity = parseInt($(this).val());
             if (quantity < 0) {
@@ -42,6 +43,13 @@
             {
                 alert("Số lượng phải là chữ số, mời quý khách nhập lại");
                 $(this).val($(this).data('count'));
+            } else if (instock != null)
+            {
+                if (quantity > instock) {
+                    alert("Sản phẩm này chỉ còn " + instock + " sản phẩm, quý khách chỉ được mua tối đa " + instock + " sản phẩm.")
+                    $(this).val(instock);
+                    updateCart(id, instock);
+                }
             }
             else if (quantity > 100) {
                 alert("Bạn muốn mua số lượng lớn đấy, hãy liên hệ với chúng tôi để nhận được ưu đãi nhé!");
@@ -49,8 +57,6 @@
                 updateCart(id, 100);
             }
             else updateCart(id, quantity);
-
-            
         });
 
     }
@@ -96,7 +102,7 @@
                     html += "<tr>"
                         + "<td> <img width=\"60\" height=\"60\" src=\"data:image/jpeg;base64," + item.images + "\" alt=\"\" /></td>"
                         + "<td class='cart-item-name'><a href=\/san-pham\/" + item.slug + ">" + item.name + "\"</a></td>"
-                        + "<td><div class=\"input-append\"><input class=\"span1 txtQuantity\" style=\"max-width: 34px\" data-id=\"" + item.id + "\" placeholder=\"1\" id=\"txt_quantity_" + item.id + "\" data-count=\"" + item.quantity + "\" value=\"" + item.quantity + "\" size=\"16\" type=\"text\">"
+                        + "<td><div class=\"input-append\"><input class=\"span1 txtQuantity\" style=\"max-width: 34px\" data-id=\"" + item.id + "\" placeholder=\"1\" id=\"txt_quantity_" + item.id + "\" data-count=\"" + item.quantity + "\" value=\"" + item.quantity + "\"  data-instock=\"" + item.instock + "\" size=\"16\" type=\"text\">"
                         + "<button class=\"btn btn-minus\" data-id=\"" + item.id + "\" type =\"button\"> <i class=\"icon-minus\"></i></button>"
                         + "<button class=\"btn btn-plus\" type=\"button\" data-id=\"" + item.id + "\"><i class=\"icon-plus\"></i></button>"
                         + "<button class=\"btn btn-danger btn-remove\" type=\"button\" data-id=\"" + item.id + "\"><i class=\"icon-remove icon-white\"></i></button>"

@@ -8,7 +8,7 @@ namespace TechShopSolution.WebApp.Models
     public class CartItemViewModel
     {
         public int Id { get; set; }
-        public int Instock { get; set; }
+        public int? Instock { get; set; }
         public string Code { get; set; }
         public string Slug { get; set; }
         public decimal Price { get; set; }
