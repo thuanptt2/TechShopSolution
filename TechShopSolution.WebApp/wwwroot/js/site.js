@@ -37,7 +37,7 @@ var SiteController = function () {
                 url: '/Cart/AddToCart/' + idProduct,
                 success: function (res) {
                     $('#lbl_number_items_header').text(res.length);
-                    window.location = "/cart";
+                    window.location = "/gio-hang";
                 },
                 error: function (err) {
                     console.log(err);

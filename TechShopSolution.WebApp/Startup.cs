@@ -131,6 +131,13 @@ namespace TechShopSolution.WebApp
                      controller = "Account",
                      action = "Detail"
                  });
+                endpoints.MapControllerRoute(
+                name: "Chi tiet gio hang",
+                pattern: "/gio-hang", new
+                {
+                    controller = "Cart",
+                    action = "Index"
+                });
 
                 endpoints.MapControllerRoute(
                     name: "default",

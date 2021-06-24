@@ -19,6 +19,7 @@ namespace TechShopSolution.WebApp.Controllers
         {
             _productApiClient = productApiClient;
         }
+        [Route("/gio-hang")]
         public IActionResult Index()
         {
             return View();
