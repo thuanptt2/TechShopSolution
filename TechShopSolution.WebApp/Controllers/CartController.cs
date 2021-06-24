@@ -47,13 +47,14 @@ namespace TechShopSolution.WebApp.Controllers
         public async Task<IActionResult> AddToCart(int id)
         {
             var product = await _productApiClient.GetById(id);
-
+            if (product.ResultObject == null)
+                return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm không tồn tại hoặc đã bị xóa.");
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             var currentCart = new List<CartItemViewModel>();
-            if(session != null)
+            if (session != null)
                 currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
             int quantity = 1;
-            if(currentCart.Any(x => x.Id == product.ResultObject.id))
+            if (currentCart.Any(x => x.Id == product.ResultObject.id))
             {
                 var item = currentCart.First(x => x.Id == id);
                 item.Quantity++;
@@ -77,6 +78,7 @@ namespace TechShopSolution.WebApp.Controllers
                 currentCart.Add(cartItem);
             }
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+
             return Ok(currentCart);
         }
         public IActionResult UpdateCart(int id, int quantity)

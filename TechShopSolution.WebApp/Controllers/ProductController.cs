@@ -27,10 +27,12 @@ namespace TechShopSolution.WebApp.Controllers
         public async Task<IActionResult> Detail(string slug)
         {
             var product = await _productApiClient.GetBySlug(slug);
+            if (product.ResultObject == null)
+                return View();
             string[] CateId = product.ResultObject.CateID.Split(",");
             var Category = await _categorytApiClient.GetById(int.Parse(CateId[0]));
             var Brand = await _brandApiClient.GetById(product.ResultObject.brand_id);
-            
+
             return View(new ProductDetailViewModel()
             {
                 Product = product.ResultObject,

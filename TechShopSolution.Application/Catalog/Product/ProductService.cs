@@ -101,20 +101,20 @@ namespace TechShopSolution.Application.Catalog.Product
                     product.delete_at = DateTime.Now;
 
                     //Xóa hình ảnh sản phẩm
-                    if (product.image != null)
-                    {
-                        await _storageService.DeleteFileAsync(product.image);
-                        product.image = "";
-                    }
-                    if (product.more_images != null)
-                    {
-                        List<string> moreImages = product.more_images.Split(",").ToList();
-                        foreach (string img in moreImages)
-                        {
-                            await _storageService.DeleteFileAsync(img);
-                        }
-                        product.more_images = "";
-                    }
+                    //if (product.image != null)
+                    //{
+                    //    await _storageService.DeleteFileAsync(product.image);
+                    //    product.image = "";
+                    //}
+                    //if (product.more_images != null)
+                    //{
+                    //    List<string> moreImages = product.more_images.Split(",").ToList();
+                    //    foreach (string img in moreImages)
+                    //    {
+                    //        await _storageService.DeleteFileAsync(img);
+                    //    }
+                    //    product.more_images = "";
+                    //}
 
                     var result = await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();

@@ -6,5 +6,6 @@ namespace TechShopSolution.ViewModels.Sales
 {
     public class CheckoutRequest
     {
+
     }
 }

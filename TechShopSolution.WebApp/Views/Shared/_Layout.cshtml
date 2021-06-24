@@ -40,9 +40,18 @@
     <div class="loaderbody" id="loaderbody">
         <div class="loader"></div>
     </div>
+
     <div class="alert alert-success" id="snackbar" role="alert">
-        <b class="ReultMessage"></b>
+        <b class="ReultMessage">@ViewBag.SuccessMsg</b>
     </div>
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <div class="alert alert-success" id="snackbarAccount" role="alert">
+            <b>@ViewBag.SuccessMsg</b>
+        </div>
+
+    }
+
 
     <div id="header">
         <div class="container">

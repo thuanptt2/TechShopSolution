@@ -32,8 +32,16 @@ var SiteController = function () {
                     // After 3 seconds, remove the show class from DIV
                     setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
                 },
-                error: function (err) {
-                    console.log(err);
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#snackbar").addClass("snackbarDanger");
+                    var x = document.getElementById("snackbar");
+                    $('.ReultMessage').text(jqXHR.responseText);
+
+                    // Add the "show" class to DIV
+                    x.className = "show";
+
+                    // After 3 seconds, remove the show class from DIV
+                    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
                 }
             })
         });
@@ -47,8 +55,16 @@ var SiteController = function () {
                     $('#lbl_number_items_header').text(res.length);
                     window.location = "/gio-hang";
                 },
-                error: function (err) {
-                    console.log(err);
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#snackbar").addClass("snackbarDanger");
+                    var x = document.getElementById("snackbar");
+                    $('.ReultMessage').text(jqXHR.responseText);
+
+                    // Add the "show" class to DIV
+                    x.className = "show";
+
+                    // After 3 seconds, remove the show class from DIV
+                    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
                 }
             })
         });

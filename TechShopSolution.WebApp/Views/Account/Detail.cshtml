@@ -7,13 +7,12 @@
 @section Script {
     <script>
         window.onload = function () {
-            var x = document.getElementById("snackbar");
+            var x = document.getElementById("snackbarAccount");
 
             // Add the "show" class to DIV
             x.className = "show";
             // After 3 seconds, remove the show class from DIV
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-
         };
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -29,13 +28,7 @@
             <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
             <li class="active">Thông tin cá nhân</li>
         </ul>
-        @if (ViewBag.SuccessMsg != null)
-        {
-            <div class="alert alert-success" id="snackbar" role="alert">
-                <b>@ViewBag.SuccessMsg</b>
-            </div>
 
-        }
         <a href="#" name="detail"></a>
         <hr class="soft" />
         <ul id="infoDetail" class="nav padding-container nav-tabs">
