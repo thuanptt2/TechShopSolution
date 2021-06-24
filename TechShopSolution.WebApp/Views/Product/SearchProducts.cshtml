@@ -130,7 +130,7 @@
                             <div class="margin-top-20">
                                 @if (Model.Products.Items[i].instock > 0 || Model.Products.Items[i].instock == null)
                                 {
-                                    <a href="product_details.html" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                    <a href="#" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Products.Items[i].id"> Thêm vào <i class=" icon-shopping-cart"></i></a>
                                 }
                                 <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
                             </div>
@@ -185,7 +185,7 @@
                             <h4 style="text-align:center">
                                 @if (Model.Products.Items[i].instock > 0 || Model.Products.Items[i].instock == null)
                                 {
-                                    <a href="product_details.html" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                    <a href="product_details.html" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Products.Items[i].id"> Thêm vào <i class=" icon-shopping-cart"></i></a>
                                 }
                                 <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
                             </h4>
