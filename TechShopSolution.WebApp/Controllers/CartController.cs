@@ -37,29 +37,34 @@ namespace TechShopSolution.WebApp.Controllers
             var product = await _productApiClient.GetById(id);
 
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
-            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+            var currentCart = new List<CartItemViewModel>();
             if(session != null)
                 currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
-
             int quantity = 1;
             if(currentCart.Any(x => x.Id == product.ResultObject.id))
             {
-                quantity = currentCart.First(x => x.Id == id).Quantity + 1;
+                var item = currentCart.First(x => x.Id == id);
+                item.Quantity++;
             }
-            var cartItem = new CartItemViewModel()
+            else
             {
-                Id = id,
-                Code = product.ResultObject.code,
-                Images = product.ResultObject.image,
-                Name = product.ResultObject.name,
-                Quantity = quantity
-            };
-            if (currentCart == null) currentCart = new List<CartItemViewModel>();
+                var cartItem = new CartItemViewModel()
+                {
+                    Id = id,
+                    Code = product.ResultObject.code,
+                    Slug = product.ResultObject.slug,
+                    Price = product.ResultObject.unit_price,
+                    PromotionPrice = product.ResultObject.promotion_price,
+                    Images = product.ResultObject.image,
+                    Name = product.ResultObject.name,
+                    Quantity = quantity
+                };
+                if (currentCart == null) currentCart = new List<CartItemViewModel>();
 
-            currentCart.Add(cartItem);
-
-            HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(cartItem));
-            return Ok();
+                currentCart.Add(cartItem);
+            }
+            HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+            return Ok(currentCart);
         }
     }
 }

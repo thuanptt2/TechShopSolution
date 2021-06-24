@@ -1,57 +1,50 @@
-﻿
+﻿@section Script{
+    <script src="~/js/Cart.js"></script>
+    <script>
+        var cartController = new CartController();
+        cartController.initialize();
+    </script>
+}
 
 <div class="span9">
     <ul class="breadcrumb">
         <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
         <li class="active"> Giỏ hàng</li>
     </ul>
-    <h3>  GIỎ HÀNG <small>3 sản phẩm </small>
+    <h3>
+        GIỎ HÀNG <small><span id="lbl_number_of_items"><span></span></span> sản phẩm </small>
         <a href="products.html" class="btn btn-large pull-right">
             <i class="icon-arrow-left"></i> Tiếp tục mua hàng
         </a>
     </h3>
     <hr class="soft" />
- 
+
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Sản phẩm</th>
-                <th>Tên</th>
+                <th>Ảnh</th>
+                <th>Tên sản phẩm</th>
                 <th>Sớ lượng/Cập nhật</th>
                 <th>Giá</th>
-                <th>Giảm giá</th>
+                <th>Khuyến mãi</th>
                 <th>Tổng</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td> <img width="60" src="themes/images/products/4.jpg" alt="" /></td>
-                <td>MASSA ASTaaaaa<br />Color : black, Material : metal</td>
-                <td>
-                    <div class="input-append"><input class="span1" style="max-width:34px" placeholder="1" id="appendedInputButtons" size="16" type="text"><button class="btn" type="button"><i class="icon-minus"></i></button><button class="btn" type="button"><i class="icon-plus"></i></button><button class="btn btn-danger" type="button"><i class="icon-remove icon-white"></i></button>				</div>
-                </td>
-                <td>$120.00</td>
-                <td>$25.00</td>
-                <td>$110.00</td>
-            </tr>
+        <tbody id="cart_body">
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="5" style="text-align:right">Tổng tạm tính:	</td>
-                <td> $228.00</td>
+                <td id="lbl_total"></td>
             </tr>
             <tr>
-                <td colspan="5" style="text-align:right">Phí vận chuyển:	</td>
-                <td> $50.00</td>
+                <td colspan="5" style="text-align:right">Mã giảm giá:	</td>
+                <td> 0đ</td>
             </tr>
             <tr>
-                <td colspan="5" style="text-align:right">Giảm giá:	</td>
-                <td> $31.00</td>
-            </tr>
-            <tr>
-                <td colspan="5" style="text-align:right"><strong>Thành tiền ($228 - $50 + $31) =</strong></td>
-                <td class="label label-important" style="display:block"> <strong> $155.00 </strong></td>
+                <td colspan="5" style="text-align:right"><strong>Thành tiền </strong></td>
+                <td class="label label-important" style="display:block"> <strong><span id="lbl_maintotal"></span></strong></td>
             </tr>
         </tfoot>
     </table>

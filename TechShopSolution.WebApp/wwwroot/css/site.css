@@ -93,11 +93,11 @@ body {
     border: 0;
 }
 tr:nth-child(even) {
-    background: #CCC
+    background: #F1F0F1;
 }
 
 tr:nth-child(odd) {
-    background: #FFF
+    background: #FFF;
 }
 .btnGroup {
     margin-top: 20px;
@@ -396,4 +396,20 @@ input.input-validation-error {
         top: 0;
         opacity: 0;
     }
+}
+.cart-item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 35px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+#cart_body td {
+    vertical-align: middle;
+    text-align: center;
+}
+.table thead th {
+    vertical-align: middle !important;
+    text-align: center !important;
 }
