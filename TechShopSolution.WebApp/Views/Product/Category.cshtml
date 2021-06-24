@@ -2,10 +2,13 @@
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
-    ViewData["Title"] = Model.Category.meta_title;
-    ViewData["Description"] = Model.Category.meta_descriptions;
-    ViewData["Keywords"] = Model.Category.meta_keywords;
-}
+    if(Model.Category!= null)
+    {
+        ViewData["Title"] = Model.Category.meta_title;
+        ViewData["Description"] = Model.Category.meta_descriptions;
+        ViewData["Keywords"] = Model.Category.meta_keywords;
+    }
+            }
 @section Script {
     <script src="~/js/FilterPrice.js"></script>
 } 
@@ -111,7 +114,10 @@
                                 }
                                 <br class="clr" />
                                 <div class="margin-top-20">
-                                    <a href="product_details.html" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                    @if (Model.Products.Items[i].instock > 0 || Model.Products.Items[i].instock == null)
+                                    {
+                                        <a href="product_details.html" class="btn btn-large btn-primary" data-id="@Model.Products.Items[i].id"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                    }
                                     <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
                                 </div>
                             </form>
@@ -161,7 +167,10 @@
                                     }
                                 </div>
                                 <h4 style="text-align:center">
-                                    <a href="product_details.html" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                    @if (Model.Products.Items[i].instock > 0 || Model.Products.Items[i].instock == null)
+                                    {
+                                        <a href="product_details.html" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Products.Items[i].id"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                    }
                                     <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
                                 </h4>
                             </div>

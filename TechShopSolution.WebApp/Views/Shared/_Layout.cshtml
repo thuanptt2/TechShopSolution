@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -7,7 +8,6 @@
     <meta name="description" content="@ViewData["Desciption"]">
     <meta name="author" content="TechShop">
     <meta name="keywords" content="@ViewData["Keywords"]">
-
     <!--Less styles -->
     <!-- Other Less css file //different less files has different color scheam
      <link rel="stylesheet/less" type="text/css" href="/themes/less/simplex.less">
@@ -40,6 +40,19 @@
     <div class="loaderbody" id="loaderbody">
         <div class="loader"></div>
     </div>
+
+    <div class="alert alert-success" id="snackbar" role="alert">
+        <b class="ReultMessage">@ViewBag.SuccessMsg</b>
+    </div>
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <div class="alert alert-success" id="snackbarAccount" role="alert">
+            <b>@ViewBag.SuccessMsg</b>
+        </div>
+
+    }
+
+
     <div id="header">
         <div class="container">
             <!-- Navbar ================================================== -->
@@ -56,7 +69,6 @@
                         <li class=""><a href="#">Giới thiệu</a></li>
                         <li class=""><a href="#">Tin tức</a></li>
                         <li class=""><a href="#">Liên hệ</a></li>
-
                     </ul>
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -66,7 +78,7 @@
                                 <button class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> Tài khoản</button>
                                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#"><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
+                                    <li><a href="@Url.Action("Detail", "Account", new { id = User.FindFirst(ClaimTypes.Sid).Value })"><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
                                     <li><a href="#"><i class="icon-file"></i> Kiểm tra đơn hàng</a></li>
                                     <li class="divider"></li>
                                     <li><a href="@Url.Action("Logout", "Account")"><i class="i"></i> Đăng xuất</a></li>
@@ -81,17 +93,32 @@
                         </div>
                     }
                 </div>
-
             </div>
         </div>
     </div>
+
     <!-- Header End====================================================================== -->
     @RenderSection("Slider", required: false)
     <div id="mainBody">
         <div class="container">
             <div class="row">
                 <!-- Sidebar ================================================== -->
-                @await Component.InvokeAsync("SlideBar")
+                <div id="sidebar" class="span3">
+                    <div class="well well-small shadow">
+                        <a id="myCart" href="@Url.Action("Index", "Cart")">
+                            <img src="/themes/images/ico-cart.png" alt="cart">
+                            <span id="lbl_number_items_header">0</span> Sản phẩm trong giỏ hàng
+                        </a>
+                    </div>
+                    @await Component.InvokeAsync("SlideBar")
+                    <br />
+                    <div class="thumbnail">
+                        <img src="/themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
+                        <div class="caption">
+                            <h5>Payment Methods</h5>
+                        </div>
+                    </div>
+                </div>
                 <!-- Sidebar end=============================================== -->
                 @RenderBody()
             </div>
@@ -139,10 +166,25 @@
     <script src="/themes/js/jquery.js" type="text/javascript"></script>
     <script src="/themes/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/themes/js/google-code-prettify/prettify.js"></script>
-    <script src="~/js/site.js"></script>
     <script src="/themes/js/bootshop.js"></script>
     <script src="/themes/js/jquery.lightbox-0.5.js"></script>
+    <script src="~/js/site.js"></script>
+    <script>
+        var site = new SiteController();
+        site.initialize();
+    </script>
     @RenderSection("Script", required: false)
+    <script>
+        $(function () {
+            $("#loaderbody").addClass('hide');
+
+            $(document).bind('ajaxStart', function () {
+                $("#loaderbody").removeClass('hide');
+            }).bind('ajaxStop', function () {
+                $("#loaderbody").addClass('hide');
+            });
+        });
+    </script>
     <!-- Themes switcher section ============================================================================================= -->
     <div id="secectionBox">
         <link rel="stylesheet" href="/themes/switch/themeswitch.css" type="text/css" media="screen" />

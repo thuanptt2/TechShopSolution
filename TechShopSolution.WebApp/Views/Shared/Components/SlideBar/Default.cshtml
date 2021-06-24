@@ -1,102 +1,88 @@
 ﻿@using TechShopSolution.ViewModels.Catalog.Category
 @model List<TechShopSolution.ViewModels.Catalog.Category.CategoryViewModel>
-<div id="sidebar" class="span3">
-    <div class="well well-small shadow"><a id="myCart" href="product_summary.html"><img src="/themes/images/ico-cart.png" alt="cart">3 Items in your cart  <span class="badge badge-warning pull-right">$155.00</span></a></div>
-    <ul id="sideManu" class="nav nav-tabs nav-stacked">
-        @if (Model.Count > 0)
+
+
+<ul id="sideManu" class="nav nav-tabs nav-stacked">
+    @if (Model.Count > 0)
+    {
+        List<CategoryViewModel> Cates = Model.ToList();
+        List<CategoryViewModel> parents = Model.Where(x => x.parent_id == 0).OrderBy(x => x.cate_name).ToList();
+        int i = 0;
+        @foreach (var parent in parents.ToList())
         {
-            List<CategoryViewModel> Cates = Model.ToList();
-            List<CategoryViewModel> parents = Model.Where(x => x.parent_id == 0).OrderBy(x => x.cate_name).ToList();
-            int i = 0;
-            @foreach (var parent in parents.ToList())
+            var children = Cates.Where(x => x.parent_id == parent.id).OrderBy(x => x.cate_name);
             {
-                var children = Cates.Where(x => x.parent_id == parent.id).OrderBy(x => x.cate_name);
+                if (i == 0)
                 {
-                    if (i == 0)
-                    {
-                        <li class="subMenu open">
-                            <a class="active" href="@Url.Action("Category", "Product", new { slug = parent.cate_slug })">@parent.cate_name</a>
+                    <li class="subMenu open">
+                        <a class="active" href="@Url.Action("Category", "Product", new { slug = parent.cate_slug })">@parent.cate_name</a>
 
-                            @{
-                                Cates.Remove(parent);
+                        @{
+                            Cates.Remove(parent);
+                        }
+                        <ul>
+                            @foreach (var item in children.ToList())
+                            {
+                                <li>
+                                    <a class="active" href="@Url.Action("Category", "Product", new { slug = item.cate_slug })"><i class="icon-chevron-right"></i>@item.cate_name</a>
+                                    @{
+                                        Cates.Remove(item);
+                                    }
+                                    @{
+                                        var childItems = Cates.Where(x => x.parent_id == item.id).OrderBy(x => x.cate_name);
+                                        @foreach (var itemChild in childItems.ToList())
+                                        {
+                                            <a href="@Url.Action("Category", "Product", new { slug = itemChild.cate_slug })">
+                                                <span class="padding-left">
+                                                    <i class="icon-chevron-right"></i>
+                                                    @itemChild.cate_name
+                                                </span>
+                                            </a>
+                                            Cates.Remove(itemChild);
+                                        }
+                                    }
+                                </li>
                             }
-                            <ul>
-                                @foreach (var item in children.ToList())
-                                {
-                                    <li>
-                                        <a class="active" href="@Url.Action("Category", "Product", new { slug = item.cate_slug })"><i class="icon-chevron-right"></i>@item.cate_name</a>
-                                        @{
-                                            Cates.Remove(item);
-                                        }
-                                        @{
-                                            var childItems = Cates.Where(x => x.parent_id == item.id).OrderBy(x => x.cate_name);
-                                            @foreach (var itemChild in childItems.ToList())
-                                            {
-                                                <a href="@Url.Action("Category", "Product", new { slug = itemChild.cate_slug })">
-                                                    <span class="padding-left">
-                                                        <i class="icon-chevron-right"></i>
-                                                        @itemChild.cate_name
-                                                    </span>
-                                                </a>
-                                                Cates.Remove(itemChild);
-                                            }
-                                        }
-                                    </li>
-                                }
-                            </ul>
-                        </li>
-                        i = 1;
-                    }
-                    else
-                    {
-                        <li class="subMenu">
-                            <a class="cate-parent-name" href="@Url.Action("Category", "Product", new { slug = parent.cate_slug })">@parent.cate_name</a>
-                            @{
-                                Cates.Remove(parent);
-                            }
-                            <ul>
-                                @foreach (var item in children.ToList())
-                                {
-                                    <li>
-                                        <a class="active" href="@Url.Action("Category", "Product", new { slug = item.cate_slug })"><i class="icon-chevron-right"></i>@item.cate_name</a>
-                                        @{
-                                            Cates.Remove(item);
-                                        }
-                                        @{
-                                            var childItems = Cates.Where(x => x.parent_id == item.id).OrderBy(x => x.cate_name);
-                                            @foreach (var itemChild in childItems.ToList())
-                                            {
-                                                <a href="@Url.Action("Category", "Product", new { slug = itemChild.cate_slug })">
-                                                    <span class="padding-left">
-                                                        <i class="icon-chevron-right"></i>
-                                                        @itemChild.cate_name
-                                                    </span>
-                                                </a>
-                                                Cates.Remove(itemChild);
-                                            }
-                                        }
-                                    </li>
-                                }
-                            </ul>
-                        </li>
-                    }
+                        </ul>
+                    </li>
+                    i = 1;
                 }
-
+                else
+                {
+                    <li class="subMenu">
+                        <a class="cate-parent-name" href="@Url.Action("Category", "Product", new { slug = parent.cate_slug })">@parent.cate_name</a>
+                        @{
+                            Cates.Remove(parent);
+                        }
+                        <ul>
+                            @foreach (var item in children.ToList())
+                            {
+                                <li>
+                                    <a class="active" href="@Url.Action("Category", "Product", new { slug = item.cate_slug })"><i class="icon-chevron-right"></i>@item.cate_name</a>
+                                    @{
+                                        Cates.Remove(item);
+                                    }
+                                    @{
+                                        var childItems = Cates.Where(x => x.parent_id == item.id).OrderBy(x => x.cate_name);
+                                        @foreach (var itemChild in childItems.ToList())
+                                        {
+                                            <a href="@Url.Action("Category", "Product", new { slug = itemChild.cate_slug })">
+                                                <span class="padding-left">
+                                                    <i class="icon-chevron-right"></i>
+                                                    @itemChild.cate_name
+                                                </span>
+                                            </a>
+                                            Cates.Remove(itemChild);
+                                        }
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
             }
+
         }
-    </ul>
-    <br />
-    <div class="thumbnail">
-        <img src="/themes/images/products/kindle.png" title="Bootshop New Kindel" alt="Bootshop Kindel">
-        <div class="caption">
-            <h5>Kindle</h5>
-            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-        </div>
-    </div><br />
-    <div class="thumbnail">
-        <img src="/themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
-        <div class="caption">
-            <h5>Payment Methods</h5>
-        </div>
-    </div>
-</div>
+    }
+</ul>
+

@@ -388,7 +388,7 @@ namespace TechShopSolution.ApiIntegration
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/product/related?id={id}&take={take}");
+            var respone = await client.GetAsync($"/api/product/related?idBrand={id}&take={take}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);

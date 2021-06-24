@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.WebApp.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IAdminApiClient _adminApiClient;
@@ -30,17 +32,22 @@ namespace TechShopSolution.WebApp.Controllers
             _customerApiClient = customerApiClient;
         }
         [Route("dang-nhap")]
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
+        [Route("dang-ky")]
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
+        [Route("dang-ky")]
         public async Task<IActionResult> Register(CustomerRegisterRequest request)
         {
             if (!ModelState.IsValid)
@@ -67,13 +74,80 @@ namespace TechShopSolution.WebApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-        //[HttpPost]
-        //public IActionResult Register()
-        //{
-        //    return View();
-        //}
- 
+        [Route("tai-khoan")]
+        public async Task<IActionResult> Detail(string id)
+        {
+            int ID = int.Parse(id);
+            var result = await _customerApiClient.GetById(ID);
+            if (!result.IsSuccess || result.ResultObject == null)
+            {
+                ModelState.AddModelError("", result.Message);
+                return RedirectToAction("Index", "Home");
+            }
+            var updateRequest = new CustomerPublicUpdateRequest()
+            {
+                Id = ID,
+                name = result.ResultObject.name,
+                birthday = result.ResultObject.birthday,
+                address = result.ResultObject.address,
+                email = result.ResultObject.email,
+                sex = result.ResultObject.sex,
+                phone = result.ResultObject.phone,
+            };
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            return View(updateRequest);
+        }
+        [HttpPost]
+        [Route("tai-khoan")]
+        public async Task<IActionResult> Detail(CustomerPublicUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request); 
+            }
+            var result = await _customerApiClient.UpdateCustomerPublic(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật tài khoản thành công";
+                return RedirectToAction("Detail","Account", new { id = request.Id.ToString()});
+            }
+            ModelState.AddModelError("", "Cập nhật thất bại");
+            return View(request);
+        }
+        public async Task<IActionResult> UpdateAddress(int id)
+        {
+            var result = await _customerApiClient.GetById(id);
+            if (!result.IsSuccess || result.ResultObject == null)
+                ModelState.AddModelError("", result.Message);
+            var updateAddressRequest = new CustomerUpdateAddressRequest()
+            {
+                Id = id,
+                City = null,
+                District = null,
+                House = null,
+                Ward = null
+            };
+            return View(updateAddressRequest);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+            var result = await _customerApiClient.UpdateAddress(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật địa chỉ thành công";
+                return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+            }
+            TempData["result"] = "Cập nhật địa chỉ thất bại";
+            return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+        }
         [AcceptVerbs("GET", "POST")]
+        [AllowAnonymous]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {
             if (await _customerApiClient.VerifyEmail(email) == false)
@@ -84,6 +158,7 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [HttpPost]
         [Route("dang-nhap")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginRequest request)
         {
             try
@@ -95,7 +170,7 @@ namespace TechShopSolution.WebApp.Controllers
                 var adminPrincipal = this.ValidateToken(token);
                 var authProperties = new AuthenticationProperties
                 {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(180),
                     IsPersistent = false
                 };
                 HttpContext.Session.SetString("Token", token);
@@ -110,6 +185,66 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 ModelState.AddModelError("", "Sai thông tin đăng nhập");
                 return View(request);
+            }
+        }
+        public async Task<JsonResult> LoadProvince()
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadProvince();
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<JsonResult> LoadDistrict(int provinceID)
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadDistrict(provinceID);
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<JsonResult> LoadWard(int districtID)
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadWard(districtID);
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
             }
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)

@@ -13,6 +13,7 @@ namespace TechShopSolution.Application.Catalog.Customer
         Task<ApiResult<bool>> Create(CustomerCreateRequest request);
         Task<ApiResult<bool>> Register(CustomerRegisterRequest request);
         Task<ApiResult<bool>> Update(int id, CustomerUpdateRequest request);
+        Task<ApiResult<bool>> UpdatePublic(int id, CustomerPublicUpdateRequest request);
         Task<ApiResult<bool>> UpdateAddress(int id, CustomerUpdateAddressRequest request);
         Task<ApiResult<bool>> ChangeStatus(int id);
         Task<ApiResult<bool>> Delete(int cusID);

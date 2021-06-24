@@ -16,25 +16,25 @@ namespace TechShopSolution.BackendApi.Controllers
             _productService = productService;
         }
         [HttpPost("filter")]
-        public async Task<IActionResult> GetManagerProductByFilter(GetProductPagingRequest requet)
+        public IActionResult GetManagerProductByFilter(GetProductPagingRequest requet)
         {
-            var products = await _productService.GetAllPaging(requet);
+            var products = _productService.GetAllPaging(requet);
             if (products == null)
                 return BadRequest("Không có sản phẩm nào");
             return Ok(products);
         }
         [HttpPost("filterr")]
-        public async Task<IActionResult> GetPagingProductsWithMainImage(GetProductPagingRequest requet)
+        public IActionResult GetPagingProductsWithMainImage(GetProductPagingRequest requet)
         {
-            var products = await _productService.GetAllPagingWithMainImage(requet);
+            var products = _productService.GetAllPagingWithMainImage(requet);
             if (products == null)
                 return BadRequest("Không có sản phẩm nào");
             return Ok(products);
         }
         [HttpPost("publicfilter")]
-        public async Task<IActionResult> GetPublicProducts(GetPublicProductPagingRequest requet)
+        public IActionResult GetPublicProducts(GetPublicProductPagingRequest requet)
         {
-            var products = await _productService.GetPublicProducts(requet);
+            var products = _productService.GetPublicProducts(requet);
             if (products == null)
                 return BadRequest("Không có sản phẩm nào");
             return Ok(products);
@@ -70,9 +70,9 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(product);
         }
         [HttpGet("Related")]
-        public async Task<IActionResult> GetProductsRelated(int id, int take)
+        public async Task<IActionResult> GetProductsRelated(int idBrand, int take)
         {
-            var product = await _productService.GetProductsRelated(id, take);
+            var product = await _productService.GetProductsRelated(idBrand, take);
             return Ok(product);
         }
         [HttpPost]

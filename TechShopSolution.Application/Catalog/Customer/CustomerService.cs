@@ -50,7 +50,7 @@ namespace TechShopSolution.Application.Catalog.Customer
             {
                 var customer = new TechShopSolution.Data.Entities.Customer
                 {
-                    name = request.lastname +" " + request.firstname,
+                    name = request.name,
                     birthday = request.birthday,
                     email = request.email,
                     password = request.password,
@@ -70,7 +70,6 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return new ApiErrorResult<bool>("Đăng ký thất bại");
             }
         }
-
         public async Task<ApiResult<bool>> Delete(int cusID)
         {
             try
@@ -172,6 +171,29 @@ namespace TechShopSolution.Application.Catalog.Customer
                     return new ApiSuccessResult<bool>();
                 }
                 else return new ApiErrorResult<bool>("Không tìm thấy khách hàng này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+        public async Task<ApiResult<bool>> UpdatePublic(int id, CustomerPublicUpdateRequest request)
+        {
+            try
+            {
+                var cusExist = await _context.Customers.FindAsync(request.Id);
+                if (cusExist != null || cusExist.isDelete)
+                {
+                    cusExist.email = request.email;
+                    cusExist.name = request.name;
+                    cusExist.phone = request.phone;
+                    cusExist.birthday = request.birthday;
+                    cusExist.sex = request.sex;
+                    cusExist.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy tài khoản này");
             }
             catch
             {
