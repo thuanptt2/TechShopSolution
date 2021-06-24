@@ -44,6 +44,12 @@
         </div>
     </div>
 }
+@section Script{
+    <script>
+        var cartController = new CartController();
+        cartController.initialize();
+    </script>
+}
 
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
