@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.Utilities.Constants;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.WebApp.Models;
 
 namespace TechShopSolution.WebApp.Controllers
@@ -21,6 +22,16 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [Route("/gio-hang")]
         public IActionResult Index()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Checkout(CheckoutRequest request)
         {
             return View();
         }

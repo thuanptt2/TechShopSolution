@@ -23,6 +23,14 @@ var SiteController = function () {
                 url: '/Cart/AddToCart/' + idProduct,
                 success: function (res) {
                     $('#lbl_number_items_header').text(res.length);
+                    var x = document.getElementById("snackbar");
+                    $('.ReultMessage').text("Thêm vào giỏ hàng thành công");
+
+                    // Add the "show" class to DIV
+                    x.className = "show";
+
+                    // After 3 seconds, remove the show class from DIV
+                    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
                 },
                 error: function (err) {
                     console.log(err);

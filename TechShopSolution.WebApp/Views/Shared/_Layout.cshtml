@@ -40,6 +40,9 @@
     <div class="loaderbody" id="loaderbody">
         <div class="loader"></div>
     </div>
+    <div class="alert alert-success" id="snackbar" role="alert">
+        <b class="ReultMessage"></b>
+    </div>
 
     <div id="header">
         <div class="container">
@@ -161,7 +164,6 @@
         var site = new SiteController();
         site.initialize();
     </script>
-    <script src="~/js/Spinner.js"></script>
     @RenderSection("Script", required: false)
     <script>
         $(function () {
