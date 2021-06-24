@@ -90,16 +90,16 @@
                                 </h5><br />
                                 <input type="number" class="span2" placeholder="Số lượng" min="0" />
                                 <div class="btnGroup">
-                                    <button type="submit" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></button>
-                                    <button type="submit" class="btn btn-large btn-danger"> Mua ngay</button>
+                                    <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                                    <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
                                 </div>
                             }
                             else if (Model.Product.instock == null)
                             {
                                 <input type="number" class="span2" placeholder="Số lượng" min="0" />
                                 <div class="btnGroup">
-                                    <button type="submit" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></button>
-                                    <button type="submit" class="btn btn-large btn-danger"> Mua ngay</button>
+                                    <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                                    <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
                                 </div>
                             }
                             else

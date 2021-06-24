@@ -29,6 +29,21 @@ var SiteController = function () {
                 }
             })
         });
+        $('body').on('click', '.btn-buy-now', function (e) {
+            e.preventDefault();
+            const idProduct = $(this).data('id');
+            $.ajax({
+                type: "POST",
+                url: '/Cart/AddToCart/' + idProduct,
+                success: function (res) {
+                    $('#lbl_number_items_header').text(res.length);
+                    window.location = "/cart";
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
     }
     
 }
