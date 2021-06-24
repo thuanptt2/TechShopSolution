@@ -49,7 +49,9 @@ namespace TechShopSolution.WebApp
             services.AddTransient<IBrandApiClient, BrandApiClient>();
             services.AddTransient<IAdminApiClient, AdminApiClient>();
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();
-            services.AddTransient<IValidator<CustomerRegisterRequest>, CustomerRegisterValidator>();
+            services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
+            services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
+
 
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -107,6 +109,35 @@ namespace TechShopSolution.WebApp
                       controller = "Product",
                       action = "Category"
                   });
+
+                endpoints.MapControllerRoute(
+                  name: "Dang Ky",
+                  pattern: "/dang-ky", new
+                  {
+                      controller = "Account",
+                      action = "Register"
+                  });
+                endpoints.MapControllerRoute(
+                  name: "Tim kiem",
+                  pattern: "/san-pham", new
+                  {
+                      controller = "Product",
+                      action = "SearchProducts"
+                  });
+                endpoints.MapControllerRoute(
+                 name: "Chi tiet tai khoan",
+                 pattern: "/tai-khoan", new
+                 {
+                     controller = "Account",
+                     action = "Detail"
+                 });
+                endpoints.MapControllerRoute(
+                name: "Chi tiet gio hang",
+                pattern: "/gio-hang", new
+                {
+                    controller = "Cart",
+                    action = "Index"
+                });
 
                 endpoints.MapControllerRoute(
                     name: "default",

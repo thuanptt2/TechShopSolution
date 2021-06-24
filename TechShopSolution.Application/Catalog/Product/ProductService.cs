@@ -101,20 +101,20 @@ namespace TechShopSolution.Application.Catalog.Product
                     product.delete_at = DateTime.Now;
 
                     //Xóa hình ảnh sản phẩm
-                    if (product.image != null)
-                    {
-                        await _storageService.DeleteFileAsync(product.image);
-                        product.image = "";
-                    }
-                    if (product.more_images != null)
-                    {
-                        List<string> moreImages = product.more_images.Split(",").ToList();
-                        foreach (string img in moreImages)
-                        {
-                            await _storageService.DeleteFileAsync(img);
-                        }
-                        product.more_images = "";
-                    }
+                    //if (product.image != null)
+                    //{
+                    //    await _storageService.DeleteFileAsync(product.image);
+                    //    product.image = "";
+                    //}
+                    //if (product.more_images != null)
+                    //{
+                    //    List<string> moreImages = product.more_images.Split(",").ToList();
+                    //    foreach (string img in moreImages)
+                    //    {
+                    //        await _storageService.DeleteFileAsync(img);
+                    //    }
+                    //    product.more_images = "";
+                    //}
 
                     var result = await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
@@ -163,7 +163,7 @@ namespace TechShopSolution.Application.Catalog.Product
             }
             return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
         }
-        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
+        public PagedResult<ProductViewModel> GetAllPaging(GetProductPagingRequest request)
         {
             try
             {
@@ -239,7 +239,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 return pageResult;
             }
         }
-        public async Task<PagedResult<ProductViewModel>> GetAllPagingWithMainImage(GetProductPagingRequest request)
+        public PagedResult<ProductViewModel> GetAllPagingWithMainImage(GetProductPagingRequest request)
         {
             try
             {
@@ -323,7 +323,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 return pageResult;
             }
         }
-        public async Task<PagedResult<ProductViewModel>> GetPublicProducts(GetPublicProductPagingRequest request)
+        public PagedResult<ProductViewModel> GetPublicProducts(GetPublicProductPagingRequest request)
         {
             try
             {
@@ -541,26 +541,18 @@ namespace TechShopSolution.Application.Catalog.Product
                 return new PublicProductsViewModel { Count = 0, Products = null };
             }
         }
-        public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
+        public async Task<List<ProductViewModel>> GetProductsRelated(int idBrand, int take)
         {
             try
             {
-                var query = from p in _context.Products
-                            join pic in _context.CategoryProducts on p.id equals pic.product_id
-                            join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && p.id == id
-                            select new { pic };
-
-                var first = await query.FirstAsync();
-
-               var query2 = from p in _context.Products
+               var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                              join c in _context.Categories on pic.cate_id equals c.id
-                             where p.isDelete == false && p.id != first.pic.product_id && c.id == first.pic.cate_id
+                             where p.isDelete == false && p.brand_id == idBrand
                              select new { p };
 
 
-                var data = query2.OrderByDescending(m => m.p.create_at)
+                var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
                     .Select(a => new ProductViewModel()
                     {
@@ -742,6 +734,13 @@ namespace TechShopSolution.Application.Catalog.Product
                 unit_price = product.unit_price,
                 warranty = product.warranty,
             };
+
+            if(productViewModel.image != null)
+            {
+                ImageListResult image = new ImageListResult();
+                productViewModel.image = GetBase64StringForImage(_storageService.GetFileUrl(productViewModel.image));
+            }
+
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
         public async Task<ApiResult<ProductViewModel>> GetBySlug(string slug)

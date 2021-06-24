@@ -1,111 +1,125 @@
 ﻿@model ProductDetailViewModel
-@{
+
+@if (Model == null)
+{
+<div class="span9">
+    <h3>Sản phẩm không tồn tại hoặc đã bị xóa !</h3>
+</div>
+}
+else
+{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
     ViewData["Title"] = Model.Product.meta_tittle;
     ViewData["Description"] = Model.Product.meta_descriptions;
-    ViewData["Keywords"] = Model.Product.meta_keywords;
-}
+    ViewData["Keywords"] = Model.Product.meta_keywords; 
 
-<div class="span9">
-    <ul class="breadcrumb">
-        <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
-        <li><a href="@Url.Action("Category", "Product", new { slug = Model.Category.cate_slug })">@Model.Category.cate_name</a> <span class="divider">/</span></li>
-        <li class="active">@Model.Product.name</li>
-    </ul>
-    <div class="row">
-        <div id="gallery" class="span3">
-            @{
-                if (Model.ImageList.Count > 0)
+    <div class="span9">
+        <ul class="breadcrumb">
+            <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+            <li><a href="@Url.Action("Category", "Product", new { slug = Model.Category.cate_slug })">@Model.Category.cate_name</a> <span class="divider">/</span></li>
+            <li class="active">@Model.Product.name</li>
+        </ul>
+        <div class="row">
+            <div id="gallery" class="span3">
+                @{
+                    if (Model.ImageList.Count > 0)
+                    {
+                        <a href="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" title="@Model.Product.name">
+                            <img src="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" style="width:100%" alt="@Model.Product.name" />
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="none" style="width:100%" alt="Không có hình ảnh" />
+                    }
+                }
+                @{
+                    if (Model.ImageList.Count > 1)
+                    {
+                        <div id="differentview" class="moreOptopm carousel slide">
+                            <div class="carousel-inner">
+                                @{
+                                    <div class="item active">
+                                        @{
+                                            for (int i = 1; i < Model.ImageList.Count; i++)
+                                            {
+                                                <a href="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" title="@Model.Product.name"> <img style="width:29%" src="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" alt="" /></a>
+
+                                            }
+                                        }
+
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+            <div class="span6">
+                <h3>@Model.Product.name</h3>
+                <div class="product-code">
+                    <div class="css-5nimvs">
+                        Thương hiệu: <span class="css-1meclnb">@Model.Brand.brand_name</span> | Mã SP: @Model.Product.code
+                    </div>
+                </div><br />
+                <div class="product-short-desc">
+                    @Html.Raw(Model.Product.short_desc)
+                </div><br />
+                @if (Model.Product.promotion_price > 1)
                 {
-                    <a href="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" title="@Model.Product.name">
-                        <img src="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" style="width:100%" alt="@Model.Product.name" />
-                    </a>
+                    var a = Model.Product.unit_price - Model.Product.promotion_price;
+                    <span class="product-price">@String.Format(info, "{0:c}", Model.Product.promotion_price)&nbsp;&nbsp;</span>
+                    <span class="product-promotion-pirce">@String.Format(info, "{0:c}", Model.Product.unit_price)&nbsp;&nbsp;</span>
+                    <span class="product-total-price">Tiết kiệm @String.Format(info, "{0:c}", a)</span>
+                }
+                else if (Model.Product.unit_price == 0)
+                {
+                    <div class="btnGroup">
+                        <button type="button" class="btn btn-large btn-primary">Liên hệ<i class=" icon-shopping-cart"></i></button>
+                    </div>
                 }
                 else
                 {
-                    <img src="none" style="width:100%" alt="Không có hình ảnh" />
+                    <span class="product-price">@String.Format(info, "{0:c}", Model.Product.unit_price)</span>
                 }
-            }
-            @{
-                if (Model.ImageList.Count > 1)
-                {
-                    <div id="differentview" class="moreOptopm carousel slide">
-                        <div class="carousel-inner">
+                <br />
+                <a class="btn btn-small pull-right" href="#specifications">Xem chi tiết</a><br />
+                <hr class="soft" />
+                <form class="form-horizontal qtyFrm">
+                    <div class="control-group">
+                        <div>
                             @{
-                                <div class="item active">
-                                    @{
-                                        for (int i = 1; i < Model.ImageList.Count; i++)
-                                        {
-                                            <a href="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" title="@Model.Product.name"> <img style="width:29%" src="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" alt="" /></a>
-
-                                        }
-                                    }
-
-                                </div>
+                                if (Model.Product.instock > 1)
+                                {
+                                    <h5>
+                                        Còn lại: @Model.Product.instock <small>sản phẩm</small>
+                                    </h5><br />
+                                    <input type="number" class="span2" placeholder="Số lượng" min="0" />
+                                    <div class="btnGroup">
+                                        <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                                        <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
+                                    </div>
+                                }
+                                else if (Model.Product.instock == null)
+                                {
+                                    <input type="number" class="span2" placeholder="Số lượng" min="0" />
+                                    <div class="btnGroup">
+                                        <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                                        <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <h5 class="OutOfStock pull-left">
+                                        Hết hàng
+                                    </h5>
+                                }
                             }
                         </div>
                     </div>
-                }
-            }
-
-        </div>
-        <div class="span6">
-            <h3>@Model.Product.name</h3>
-            <div class="product-code">
-                <div class="css-5nimvs">
-                    Thương hiệu: <span class="css-1meclnb">@Model.Brand.brand_name</span> | Mã SP: @Model.Product.code
-                </div>
-            </div><br />
-            <div class="product-short-desc">
-                @Html.Raw(Model.Product.short_desc)
-            </div><br />
-            @if (Model.Product.promotion_price > 1)
-            {
-                var a = Model.Product.unit_price - Model.Product.promotion_price;
-                <span class="product-price">@String.Format(info, "{0:c}", Model.Product.promotion_price)&nbsp;&nbsp;</span>
-                <span class="product-promotion-pirce">@String.Format(info, "{0:c}", Model.Product.unit_price)&nbsp;&nbsp;</span>
-                <span class="product-total-price">Tiết kiệm @String.Format(info, "{0:c}", a)</span>
-            }
-            else if (Model.Product.unit_price == 0)
-            {
-                <div class="btnGroup">
-                    <button type="button" class="btn btn-large btn-primary">Liên hệ<i class=" icon-shopping-cart"></i></button>
-                </div>
-            }
-            else
-            {
-                <span class="product-price">@String.Format(info, "{0:c}", Model.Product.unit_price)</span>
-            }
-            <br />
-            <a class="btn btn-small pull-right" href="#specifications">Xem chi tiết</a><br />
-            <hr class="soft" />
-            <form class="form-horizontal qtyFrm">
-                <div class="control-group">
-                    <div>
-                        @{
-                            if (Model.Product.instock > 1)
-                            {
-                                <h5>
-                                    Còn lại: @Model.Product.instock <small>sản phẩm</small>
-                                </h5><br />
-                                <input type="number" class="span2" placeholder="Số lượng" min="0" />
-                                <div class="btnGroup">
-                                    <button type="submit" class="btn btn-large btn-primary"> Thêm vào <i class=" icon-shopping-cart"></i></button>
-                                    <button type="submit" class="btn btn-large btn-danger"> Mua ngay</button>
-                                </div>
-                            }
-                            else
-                            {
-                                <h5 class="OutOfStock pull-left">
-                                    Hết hàng
-                                </h5>
-                            }
-                        }
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="row">
+                </form>
+            </div>
             <div class="span9">
                 <a href="#" name="detail"></a>
                 <hr class="soft" />
@@ -128,8 +142,7 @@
             </div>
         </div>
     </div>
-
-    <h4 class=" margin-top-20">Sản phẩm tương tự</h4>
+    <h4 class=" margin-top-20">Cùng thương hiệu  @Model.Brand.brand_name</h4>
     <ul class="thumbnails">
         @{
             if (Model.ProductsRelated != null)
@@ -179,4 +192,4 @@
             }
         }
     </ul>
-</div>
+}

@@ -1,0 +1,74 @@
+﻿@section Script{
+    <script src="~/js/Cart.js"></script>
+    <script>
+        var cartController = new CartController();
+        cartController.initialize();
+    </script>
+}
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+        <li class="active"> Giỏ hàng</li>
+    </ul>
+    <h3>
+        GIỎ HÀNG <small><span id="lbl_number_of_items"><span></span></span> sản phẩm </small>
+        <a href="products.html" class="btn btn-large pull-right">
+            <i class="icon-arrow-left"></i> Tiếp tục mua hàng
+        </a>
+    </h3>
+    <hr class="soft" />
+
+
+    <table class="table table-bordered table-cart">
+        <thead>
+            <tr>
+                <th>Ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Sớ lượng/Cập nhật</th>
+                <th>Giá</th>
+                <th>Khuyến mãi</th>
+                <th>Tổng</th>
+            </tr>
+        </thead>
+        <tbody id="cart_body">
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" style="text-align:right">Tổng tạm tính:	</td>
+                <td id="lbl_total"></td>
+            </tr>
+            <tr>
+                <td colspan="5" style="text-align:right">Mã giảm giá:	</td>
+                <td> 0đ</td>
+            </tr>
+            <tr>
+                <td colspan="5" style="text-align:right"><strong>Thành tiền </strong></td>
+                <td class="label label-important" style="display:block"> <strong><span id="lbl_maintotal"></span></strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+
+    <table class="table table-bordered table-cart">
+        <tbody>
+            <tr>
+                <td>
+                    <form class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
+                            <div class="controls">
+                                <input type="text" class="input-medium" placeholder="CODE">
+                                <button type="submit" class="btn"> Áp dụng </button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large table-cart"><i class="icon-arrow-left"></i> Tiệp tục mua hàng </a>
+    <a href="login.html" class="btn btn-large pull-right table-cart">Tiếp theo <i class="icon-arrow-right"></i></a>
+</div>

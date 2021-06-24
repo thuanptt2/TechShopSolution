@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model TechShopSolution.ViewModels.Catalog.Customer.CustomerPublicUpdateRequest
+@section Script {
+    <script>
+        window.onload = function () {
+            var x = document.getElementById("snackbarAccount");
+
+            // Add the "show" class to DIV
+            x.className = "show";
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        };
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/AddressUpdate.js"></script>
+    <script src="~/js/Location.js"></script>
+}
+
+<div class="row">
+    <div class="span9">
+        <ul class="breadcrumb">
+            <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+            <li class="active">Thông tin cá nhân</li>
+        </ul>
+
+        <a href="#" name="detail"></a>
+        <hr class="soft" />
+        <ul id="infoDetail" class="nav padding-container nav-tabs">
+            <li class="active"><a href="#info" data-toggle="tab">Thông tin tài khoản</a></li>
+            <li><a href="#address" onclick="showInPopup('@Url.Action("UpdateAddress","Account",new { id = Model.Id })')" data-toggle="tab">Sổ địa chỉ</a></li>
+            <li><a href="#orders" data-toggle="tab">Xem đơn hàng</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in wrapper-content" id="info">
+                <form class="form-horizontal" asp-controller="Account" asp-action="Detail" method="post">
+                    <h4>Thông tin cá nhân</h4>
+                    <div asp-validation-summary="ModelOnly" class="text-error"></div>
+                    <div class="control-group">
+                        <label class="control-label" asp-for="name">Họ và tên<sup style="color: #C74A6D">*</sup></label>
+                        <div class="controls">
+                            <input type="text" placeholder="Họ và tên" class="margin-right-20" asp-for="name">
+                            <input type="hidden" class="margin-right-20" asp-for="Id">
+                            <span asp-validation-for="name" class="text-error"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" asp-for="sex">Giới tính <sup style="color: #C74A6D">*</sup></label>
+                        <div class="controls">
+                            <select class="span1" asp-for="sex">
+                                <option name="sex" value="true">Nam</option>
+                                <option name="sex" value="false">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" asp-for="phone">Email</label>
+                        <div class="controls">
+                            <input type="text" asp-for="email" readonly="readonly" placeholder="Email" class="margin-right-20">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" asp-for="phone">Số điện thoại<sup style="color: #C74A6D">*</sup></label>
+                        <div class="controls">
+                            <input type="text" asp-for="phone" placeholder="Số điện thoại" class="margin-right-20">
+                            <span asp-validation-for="phone" class="text-error"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" asp-for="birthday">Ngày sinh <sup style="color: #C74A6D">*</sup></label>
+                        <div class="controls">
+                            <input type="date" asp-for="birthday" class="margin-right-20" />
+                            <span asp-validation-for="birthday" class="text-error"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input class="btn btn-large btn-success" type="submit" value="Cập nhật" />
+                        </div>
+                    </div>
+                    <div class="alert alert-block alert-error fade in">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong>Note:</strong> * Các trường bắt buộc phải nhập. Quý khách hàng vui lòng điền đầy đủ thông tin xin cảm ơn.
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade wrapper-content" id="address">
+                <div>
+                    <div class="form-group" style="font-size: 15px;">
+                        <i class="icon-map-marker"></i>&nbsp; Địa chỉ hiện tại:
+                        <span>@Model.address</span>
+                    </div>
+                    <a class="btn btn-primary margin-top-20" id="btnEditInfo">Chỉnh sửa </a>
+                </div>
+                <div id="formAddress" class="hide margin-top-20">
+
+                </div>
+
+            </div>
+            <div class="tab-pane fade wrapper-content" id="orders">
+                Hello
+            </div>
+        </div>
+    </div>
+</div>

@@ -27,16 +27,18 @@ namespace TechShopSolution.WebApp.Controllers
         public async Task<IActionResult> Detail(string slug)
         {
             var product = await _productApiClient.GetBySlug(slug);
+            if (product.ResultObject == null)
+                return View();
             string[] CateId = product.ResultObject.CateID.Split(",");
             var Category = await _categorytApiClient.GetById(int.Parse(CateId[0]));
             var Brand = await _brandApiClient.GetById(product.ResultObject.brand_id);
-            
+
             return View(new ProductDetailViewModel()
             {
                 Product = product.ResultObject,
                 Category = Category.ResultObject,
                 Brand = Brand.ResultObject,
-                ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.id, 4),
+                ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.brand_id, 4),
                 ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.id),
             });
         }
@@ -63,6 +65,7 @@ namespace TechShopSolution.WebApp.Controllers
                 Products = products
             });
         }
+        [Route("san-pham")]
         public async Task<IActionResult> SearchProducts(string tukhoa, string danhmuc, int? danhmuccha, string thuonghieu, int idsort = 1, decimal? giathapnhat = null, decimal? giacaonhat = null, bool tinhtrang = true, int pageIndex = 1)
         {
             var Category = await _categorytApiClient.GetBySlug(danhmuc);
@@ -79,9 +82,12 @@ namespace TechShopSolution.WebApp.Controllers
                 }
                 else
                 {
-                    Categories = await OrderCateToTree(Categories, Category.ResultObject.id);
-                    Categories.Add(Category.ResultObject);
-                    danhmuccha = Category.ResultObject.id;
+                    if(Category.ResultObject != null)
+                    {
+                        Categories = await OrderCateToTree(Categories, Category.ResultObject.id);
+                        Categories.Add(Category.ResultObject);
+                        danhmuccha = Category.ResultObject.id;
+                    }
                 }
                 var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
                 {
