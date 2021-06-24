@@ -16,9 +16,9 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<bool>> DeleteImage(int id, string fileName);
         Task<ApiResult<ProductViewModel>> GetById(int id);
         Task<ApiResult<ProductViewModel>> GetBySlug(string slug);
-        Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
-        Task<PagedResult<ProductViewModel>> GetAllPagingWithMainImage(GetProductPagingRequest request);
-        Task<PagedResult<ProductViewModel>> GetPublicProducts(GetPublicProductPagingRequest request);
+        PagedResult<ProductViewModel> GetAllPaging(GetProductPagingRequest request);
+        PagedResult<ProductViewModel> GetAllPagingWithMainImage(GetProductPagingRequest request);
+        PagedResult<ProductViewModel> GetPublicProducts(GetPublicProductPagingRequest request);
         Task<bool> isValidSlug(string Code, string slug);
         Task<List<ImageListResult>> GetImagesByProductID(int id);
         Task<ApiResult<bool>> OffFeatured(int id);
@@ -27,6 +27,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<PublicProductsViewModel> GetFeaturedProduct(int take);
         Task<PublicProductsViewModel> GetBestSellerProduct(int take);
         Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
-        Task<List<ProductViewModel>> GetProductsRelated(int id, int take);
+        Task<List<ProductViewModel>> GetProductsRelated(int idBrand, int take);
     }
 }
