@@ -70,9 +70,9 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(product);
         }
         [HttpGet("Related")]
-        public async Task<IActionResult> GetProductsRelated(int idBrand, int take)
+        public IActionResult GetProductsRelated(int idBrand, int take)
         {
-            var product = await _productService.GetProductsRelated(idBrand, take);
+            var product = _productService.GetProductsRelated(idBrand, take);
             return Ok(product);
         }
         [HttpPost]

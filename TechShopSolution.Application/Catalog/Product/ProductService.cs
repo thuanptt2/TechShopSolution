@@ -541,45 +541,46 @@ namespace TechShopSolution.Application.Catalog.Product
                 return new PublicProductsViewModel { Count = 0, Products = null };
             }
         }
-        public async Task<List<ProductViewModel>> GetProductsRelated(int idBrand, int take)
+        public List<ProductViewModel> GetProductsRelated(int idBrand, int take)
         {
             try
             {
                var query = from p in _context.Products
-                            join pic in _context.CategoryProducts on p.id equals pic.product_id
-                             join c in _context.Categories on pic.cate_id equals c.id
-                             where p.isDelete == false && p.brand_id == idBrand && p.isActive == true
+                           join pic in _context.CategoryProducts on p.id equals pic.product_id
+                           where p.isDelete == false && p.brand_id == idBrand && p.isActive == true
                            select new { p };
 
+                var group = query.AsEnumerable()
+                   .GroupBy(g => g.p);
 
-                var data = query.OrderByDescending(m => m.p.create_at)
+                var data = group.OrderByDescending(m => m.Key.create_at)
                     .Take(take)
                     .Select(a => new ProductViewModel()
                     {
-                        id = a.p.id,
-                        name = a.p.name,
-                        best_seller = a.p.best_seller,
-                        brand_id = a.p.brand_id,
-                        code = a.p.code,
-                        create_at = a.p.create_at,
-                        descriptions = a.p.descriptions,
-                        featured = a.p.featured,
-                        image = a.p.image,
-                        instock = a.p.instock,
-                        meta_descriptions = a.p.meta_descriptions,
-                        meta_keywords = a.p.meta_keywords,
-                        meta_tittle = a.p.meta_tittle,
-                        more_images = a.p.more_images,
-                        promotion_price = a.p.promotion_price,
-                        short_desc = a.p.short_desc,
-                        slug = a.p.slug,
-                        specifications = a.p.specifications,
-                        isActive = a.p.isActive,
-                        unit_price = a.p.unit_price,
-                        warranty = a.p.warranty,
-                    }).ToListAsync();
+                        id = a.Key.id,
+                        name = a.Key.name,
+                        best_seller = a.Key.best_seller,
+                        brand_id = a.Key.brand_id,
+                        code = a.Key.code,
+                        create_at = a.Key.create_at,
+                        descriptions = a.Key.descriptions,
+                        featured = a.Key.featured,
+                        image = a.Key.image,
+                        instock = a.Key.instock,
+                        meta_descriptions = a.Key.meta_descriptions,
+                        meta_keywords = a.Key.meta_keywords,
+                        meta_tittle = a.Key.meta_tittle,
+                        more_images = a.Key.more_images,
+                        promotion_price = a.Key.promotion_price,
+                        short_desc = a.Key.short_desc,
+                        slug = a.Key.slug,
+                        specifications = a.Key.specifications,
+                        isActive = a.Key.isActive,
+                        unit_price = a.Key.unit_price,
+                        warranty = a.Key.warranty,
+                    }).ToList();
 
-                foreach (var pro in await data)
+                foreach (var pro in data)
                 {
                     if (pro.image != null)
                     {
@@ -588,7 +589,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     }
                 }
 
-                return await data;
+                return data;
             }
             catch
             {
