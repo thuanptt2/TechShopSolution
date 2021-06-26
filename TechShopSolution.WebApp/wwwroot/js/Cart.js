@@ -11,11 +11,14 @@
             const id = $(this).data('id');
             const instock = $(".txtQuantity").data('instock');
             const quantity = parseInt($('#txt_quantity_' + id).val()) + 1;
-            if (quantity > instock) {
-                alert("Sản phẩm này chỉ còn " + instock + " sản phẩm, quý khách chỉ được mua tối đa " + instock + " sản phẩm.")
-                $(this).val(instock);
-                updateCart(id, instock);
-            }  
+            if (instock != null)
+            {
+                if (quantity > instock) {
+                    alert("Sản phẩm này chỉ còn " + instock + " sản phẩm, quý khách chỉ được mua tối đa " + instock + " sản phẩm.")
+                    $(this).val(instock);
+                    updateCart(id, instock);
+                }  
+            }
             else if (quantity > 100) {
                 alert("Bạn muốn mua số lượng lớn đấy, hãy liên hệ với chúng tôi để nhận được ưu đãi nhé!");
             } else {

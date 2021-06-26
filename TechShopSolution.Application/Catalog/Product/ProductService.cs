@@ -245,7 +245,7 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
-                            where p.isDelete == false
+                            where p.isDelete == false && p.isActive == true
                             select new { p, pic };
 
                 if (!String.IsNullOrEmpty(request.Keyword))
@@ -330,7 +330,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false
+                            where p.isDelete == false && p.isActive == true
                             select new { p, pic, c};
 
                 if (!String.IsNullOrEmpty(request.Keyword))
@@ -438,7 +438,7 @@ namespace TechShopSolution.Application.Catalog.Product
             try
             {
                 var query = from p in _context.Products
-                            where p.isDelete == false && p.featured == true
+                            where p.isDelete == false && p.featured == true && p.isActive == true
                             select new { p };
 
                 int Count = await query.CountAsync();
@@ -493,7 +493,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && c.id == id
+                            where p.isDelete == false && c.id == id && p.isActive == true
                             select new { p, pic, c };
 
                 int Count = await query.CountAsync();
@@ -548,8 +548,8 @@ namespace TechShopSolution.Application.Catalog.Product
                var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                              join c in _context.Categories on pic.cate_id equals c.id
-                             where p.isDelete == false && p.brand_id == idBrand
-                             select new { p };
+                             where p.isDelete == false && p.brand_id == idBrand && p.isActive == true
+                           select new { p };
 
 
                 var data = query.OrderByDescending(m => m.p.create_at)
@@ -600,7 +600,7 @@ namespace TechShopSolution.Application.Catalog.Product
             try
             {
                 var query = from p in _context.Products
-                            where p.isDelete == false && p.best_seller == true
+                            where p.isDelete == false && p.best_seller == true && p.isActive == true && p.isActive == true
                             select new { p };
 
                 int Count = await query.CountAsync();
