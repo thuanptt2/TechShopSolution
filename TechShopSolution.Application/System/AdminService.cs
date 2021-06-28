@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Data.Entities;
+using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.Application.System
@@ -49,16 +50,27 @@ namespace TechShopSolution.Application.System
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public string AuthenticateCustomer(LoginRequest request)
+        public ApiResult<string> AuthenticateCustomer(LoginRequest request)
         {
             Customer customer = _context.Customers.FirstOrDefault(x => x.email == request.Email);
-            if (customer == null)
+            if(customer == null)
             {
-                return null;
+                return new ApiErrorResult<string>("Tài khoản này không tồn tại");
             }
-            if (customer.password != request.Password)
+            else
             {
-                return null;
+                if (customer.isDelete == true)
+                {
+                    return new ApiErrorResult<string>("Tài khoản này đã bị xóa. Quý khách vui lòng liên hệ với QTV để biết thêm thông tin.");
+                }
+                if (customer.isActive == false)
+                {
+                    return new ApiErrorResult<string>("Tài khoản này đang bị khóa. Quý khách vui lòng liên hệ với QTV để biết thêm thông tin.");
+                }
+                if (customer.password != request.Password)
+                {
+                    return new ApiErrorResult<string>("Sai mật khẩu.");
+                }
             }
             var claims = new[]
             {
@@ -74,8 +86,8 @@ namespace TechShopSolution.Application.System
                 claims,
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            string resulToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return new ApiSuccessResult<string>(resulToken);
         }
     }
 }
