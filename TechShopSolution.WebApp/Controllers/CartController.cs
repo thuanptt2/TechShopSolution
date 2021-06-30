@@ -98,6 +98,8 @@ namespace TechShopSolution.WebApp.Controllers
                         break;
                     }
                     item.Quantity = quantity;
+                    break;
+
                 }
             }
 
