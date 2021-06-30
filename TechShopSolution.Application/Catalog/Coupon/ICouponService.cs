@@ -12,9 +12,9 @@ namespace TechShopSolution.Application.Catalog.Coupon
         Task<ApiResult<bool>> Create(CouponCreateRequest request);
         Task<ApiResult<bool>> Update(CouponUpdateRequest request);
         Task<ApiResult<bool>> ChangeStatus(int id);
-        Task<ApiResult<bool>> Delete(int brandID);
-        Task<ApiResult<CouponViewModel>> GetById(int brandId);
+        Task<ApiResult<bool>> Delete(int id);
+        Task<ApiResult<CouponViewModel>> GetById(int id);
         Task<PagedResult<CouponViewModel>> GetAllPaging(GetCouponPagingRequest request);
-        Task<bool> isValidSlug(int id, string code);
+        Task<bool> isValidCode(int id, string code);
     }
 }

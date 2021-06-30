@@ -154,7 +154,7 @@ namespace TechShopSolution.Application.Catalog.Coupon
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-        public async Task<bool> isValidSlug(int id, string code)
+        public async Task<bool> isValidCode(int id, string code)
         {
             if (await _context.Coupons.AnyAsync(x => x.code.Equals(code) && x.id != id))
                 return false;
