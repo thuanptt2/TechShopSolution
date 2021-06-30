@@ -81,7 +81,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Create(UpdateCategoryRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _categoryApiClient.CreateCategory(request);
             if (result.IsSuccess)
             {
@@ -128,7 +128,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(UpdateCategoryRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _categoryApiClient.UpdateCategory(request);
             if (result.IsSuccess)
             {

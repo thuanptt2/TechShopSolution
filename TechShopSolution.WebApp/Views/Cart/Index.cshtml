@@ -13,7 +13,7 @@
     </ul>
     <h3>
         GIỎ HÀNG <small><span id="lbl_number_of_items"><span></span></span> sản phẩm </small>
-        <a href="products.html" class="btn btn-large pull-right">
+        <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large pull-right">
             <i class="icon-arrow-left"></i> Tiếp tục mua hàng
         </a>
     </h3>
@@ -69,6 +69,6 @@
         </tbody>
     </table>
 
-    <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large table-cart"><i class="icon-arrow-left"></i> Tiệp tục mua hàng </a>
+    <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large table-cart"><i class="icon-arrow-left"></i> Tiếp tục mua hàng </a>
     <a href="login.html" class="btn btn-large pull-right table-cart">Tiếp theo <i class="icon-arrow-right"></i></a>
 </div>

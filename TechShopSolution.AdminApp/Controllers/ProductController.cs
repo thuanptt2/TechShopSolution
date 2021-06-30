@@ -100,7 +100,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _productApiClient.CreateProduct(request);
             if (result.IsSuccess)
             {

@@ -1,17 +1,21 @@
 ﻿@model ProductDetailViewModel
 
+@section FacebookComments{
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0&appId=846669762547678&autoLogAppEvents=1" nonce="xvuFE9SJ"></script>
+}
 @if (Model == null)
 {
-<div class="span9">
-    <h3>Sản phẩm không tồn tại hoặc đã bị xóa !</h3>
-</div>
+    <div class="span9">
+        <h3>Sản phẩm không tồn tại hoặc đã bị xóa !</h3>
+    </div>
 }
 else
 {
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
     ViewData["Title"] = Model.Product.meta_tittle;
     ViewData["Description"] = Model.Product.meta_descriptions;
-    ViewData["Keywords"] = Model.Product.meta_keywords; 
+    ViewData["Keywords"] = Model.Product.meta_keywords;
 
     <div class="span9">
         <ul class="breadcrumb">
@@ -139,10 +143,16 @@ else
                         Hello
                     </div>
                 </div>
+                <h4 class="margin-top-20">
+                    Bình luận sản phẩm
+                </h4>
+                <div class="comments-facebook">
+                    <div class="fb-comments" data-href="https://techshop.io/san-pham/@Model.Product.slug" data-width="100%" data-numposts="5"></div>
+                </div>
             </div>
         </div>
     </div>
-    <h4 class=" margin-top-20">Cùng thương hiệu  @Model.Brand.brand_name</h4>
+    <h3 class=" margin-top-20">Cùng thương hiệu  @Model.Brand.brand_name</h3>
     <ul class="thumbnails">
         @{
             if (Model.ProductsRelated != null)

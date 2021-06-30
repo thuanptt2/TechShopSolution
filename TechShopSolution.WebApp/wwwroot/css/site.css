@@ -440,3 +440,6 @@ input.input-validation-error {
     vertical-align: middle !important;
     text-align: center !important;
 }
+.comments-facebook {
+    border: 1px solid #ccc;
+}

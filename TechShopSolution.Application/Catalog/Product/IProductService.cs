@@ -27,6 +27,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<PublicProductsViewModel> GetFeaturedProduct(int take);
         Task<PublicProductsViewModel> GetBestSellerProduct(int take);
         Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
-        Task<List<ProductViewModel>> GetProductsRelated(int idBrand, int take);
+        List<ProductViewModel> GetProductsRelated(int idBrand, int take);
     }
 }

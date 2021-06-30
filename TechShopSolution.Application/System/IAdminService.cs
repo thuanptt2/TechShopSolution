@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.Application.System
@@ -9,6 +10,6 @@ namespace TechShopSolution.Application.System
     public interface IAdminService
     {
         string Authenticate(LoginRequest request);
-        string AuthenticateCustomer(LoginRequest request);
+        ApiResult<string> AuthenticateCustomer(LoginRequest request);
     }
 }

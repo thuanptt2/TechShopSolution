@@ -38,17 +38,10 @@ namespace TechShopSolution.BackendApi.Controllers
         [AllowAnonymous]
         public IActionResult AuthenticateCustomer([FromBody] LoginRequest request)
         {
-            if (ModelState.IsValid)
-            {
-                string resultToken = _adminService.AuthenticateCustomer(request);
-                if (!string.IsNullOrEmpty(resultToken))
-                {
-                    return Ok(resultToken);
-                }
-                else return BadRequest("Sai thông tin đăng nhập");
-            }
-            return BadRequest(ModelState);
+            var result = _adminService.AuthenticateCustomer(request);
+            if (result.IsSuccess)
+                return Ok(result.ResultObject);
+            else return BadRequest(result.Message);
         }
-
     }
 }
