@@ -10,7 +10,7 @@ using TechShopSolution.ViewModels.Common;
 
 namespace TechShopSolution.ApiIntegration
 {
-    public class CouponApiClient
+    public class CouponApiClient : ICouponApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
@@ -67,7 +67,7 @@ namespace TechShopSolution.ApiIntegration
             return JsonConvert.DeserializeObject<ApiErrorResult<CouponViewModel>>(body);
         }
 
-        public async Task<PagedResult<CouponViewModel>> GetCoupondPagings(GetCouponPagingRequest request)
+        public async Task<PagedResult<CouponViewModel>> GetCouponPagings(GetCouponPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -77,7 +77,6 @@ namespace TechShopSolution.ApiIntegration
             var coupon = JsonConvert.DeserializeObject<PagedResult<CouponViewModel>>(body);
             return coupon;
         }
-
         public async Task<bool> isValidCode(int id, string slug)
         {
             var client = _httpClientFactory.CreateClient();
@@ -85,7 +84,6 @@ namespace TechShopSolution.ApiIntegration
             var respone = await client.GetAsync($"/api/coupon?code={slug}&id={id}");
             return respone.IsSuccessStatusCode;
         }
-
         public async Task<ApiResult<bool>> UpdateCoupon(CouponUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();

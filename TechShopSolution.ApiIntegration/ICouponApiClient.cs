@@ -13,8 +13,8 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<bool>> CreateCoupon(CouponCreateRequest request);
         Task<ApiResult<bool>> UpdateCoupon(CouponUpdateRequest request);
         Task<ApiResult<bool>> ChangeStatus(int Id);
-        Task<ApiResult<bool>> Delete(int cusID);
+        Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<CouponViewModel>> GetById(int id);
-        Task<bool> isValidSlug(int id, string code);
+        Task<bool> isValidCode(int id, string code);
     }
 }
