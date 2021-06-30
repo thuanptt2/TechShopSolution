@@ -66,6 +66,16 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<CouponViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<CouponViewModel>>(body);
         }
+        public async Task<ApiResult<CouponViewModel>> GetByCode(string code)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/coupon/code?code={code}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<CouponViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<CouponViewModel>>(body);
+        }
 
         public async Task<PagedResult<CouponViewModel>> GetCouponPagings(GetCouponPagingRequest request)
         {

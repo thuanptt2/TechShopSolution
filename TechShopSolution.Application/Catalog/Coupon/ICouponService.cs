@@ -14,6 +14,7 @@ namespace TechShopSolution.Application.Catalog.Coupon
         Task<ApiResult<bool>> ChangeStatus(int id);
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<CouponViewModel>> GetById(int id);
+        ApiResult<CouponViewModel> GetByCode(string code);
         Task<PagedResult<CouponViewModel>> GetAllPaging(GetCouponPagingRequest request);
         Task<bool> isValidCode(int id, string code);
     }

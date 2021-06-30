@@ -137,6 +137,28 @@ namespace TechShopSolution.Application.Catalog.Coupon
             };
             return new ApiSuccessResult<CouponViewModel>(couponn);
         }
+        public ApiResult<CouponViewModel> GetByCode(string code)
+        {
+            var coupon = _context.Coupons.Where(x=> x.code.Equals(code)).FirstOrDefault();
+            if (coupon == null)
+            {
+                return new ApiErrorResult<CouponViewModel>("Mã giảm giá không tồn tại");
+            }
+            var couponn = new CouponViewModel()
+            {
+                code = coupon.code,
+                end_at = coupon.end_at,
+                start_at = coupon.start_at,
+                type = coupon.type,
+                value = coupon.value,
+                quantity = coupon.quantity,
+                name = coupon.name,
+                id = coupon.id,
+                isActive = coupon.isActive
+            };
+            return new ApiSuccessResult<CouponViewModel>(couponn);
+        }
+
         public async Task<ApiResult<bool>> Update(CouponUpdateRequest request)
         {
             try

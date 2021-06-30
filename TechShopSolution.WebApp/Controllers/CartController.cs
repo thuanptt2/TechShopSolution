@@ -15,10 +15,12 @@ namespace TechShopSolution.WebApp.Controllers
     public class CartController : Controller
     {
         private readonly IProductApiClient _productApiClient;
+        private readonly ICouponApiClient _couponApiClient;
 
-        public CartController(IProductApiClient productApiClient)
+        public CartController(IProductApiClient productApiClient, ICouponApiClient couponApiClient)
         {
             _productApiClient = productApiClient;
+            _couponApiClient = couponApiClient;
         }
         [Route("/gio-hang")]
         public IActionResult Index()
@@ -39,9 +41,9 @@ namespace TechShopSolution.WebApp.Controllers
         public IActionResult GetListItems()
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
-            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+            CartViewModel currentCart = new CartViewModel();
             if (session != null)
-                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
             return Ok(currentCart);
         }
         public async Task<IActionResult> AddToCart(int id)
@@ -50,14 +52,17 @@ namespace TechShopSolution.WebApp.Controllers
             if (product.ResultObject == null)
                 return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm không tồn tại hoặc đã bị xóa.");
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
-            var currentCart = new List<CartItemViewModel>();
+            var currentCart = new CartViewModel();
+            currentCart.items = new List<CartItemViewModel>();
             if (session != null)
-                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
             int quantity = 1;
-            if (currentCart.Any(x => x.Id == product.ResultObject.id))
+            if (currentCart.items.Any(x => x.Id == product.ResultObject.id))
             {
-                var item = currentCart.First(x => x.Id == id);
-                item.Quantity++;
+                var item = currentCart.items.First(x => x.Id == id);
+                if (item.Quantity >= 5)
+                    return BadRequest("Bạn chỉ được mua tối đa 5 sản phẩm, sản phẩm này đã có trong giỏ hàng của bạn.");
+                else item.Quantity++;
             }
             else
             {
@@ -73,9 +78,9 @@ namespace TechShopSolution.WebApp.Controllers
                     Name = product.ResultObject.name,
                     Quantity = quantity
                 };
-                if (currentCart == null) currentCart = new List<CartItemViewModel>();
+                if (currentCart.items == null) currentCart.items = new List<CartItemViewModel>();
 
-                currentCart.Add(cartItem);
+                currentCart.items.Add(cartItem);
             }
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
 
@@ -84,17 +89,17 @@ namespace TechShopSolution.WebApp.Controllers
         public IActionResult UpdateCart(int id, int quantity)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
-            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+            CartViewModel currentCart = new CartViewModel();
             if (session != null)
-                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
 
-            foreach (var item in currentCart)
+            foreach (var item in currentCart.items)
             {
                 if (item.Id == id)
                 {
                     if (quantity == 0)
                     {
-                        currentCart.Remove(item);
+                        currentCart.items.Remove(item);
                         break;
                     }
                     item.Quantity = quantity;
@@ -103,6 +108,45 @@ namespace TechShopSolution.WebApp.Controllers
 
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
+        }
+        public async Task<IActionResult> UseCoupon(string code)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+            if(session == null || session == "")
+            {
+                return BadRequest("Chưa có sản phẩm nào trong giỏ hàng.");
+            }
+            else
+            {
+                var result = await _couponApiClient.GetByCode(code);
+                if (result.ResultObject == null)
+                    return BadRequest(result.Message);
+                if (result.ResultObject.start_at > DateTime.Today)
+                {
+                    return BadRequest("Mã này sẽ có hiệu lực lúc " + result.ResultObject.start_at + ". Hãy thử lại sau bạn nhé");
+                }
+                if (result.ResultObject.end_at < DateTime.Today)
+                {
+                    return BadRequest("Mã này đã hết hạn");
+                }
+                if (!result.ResultObject.isActive)
+                    return BadRequest("Mã này đã bị vô hiệu hóa");
+
+
+                CartViewModel currentCart = new CartViewModel();
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+                currentCart.coupon = new CouponViewModel
+                {
+                    code = result.ResultObject.code,
+                    type = result.ResultObject.type,
+                    value = result.ResultObject.value,
+                };
+
+                HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+
+                return Ok(currentCart);
+            }
+         
         }
     }
 }

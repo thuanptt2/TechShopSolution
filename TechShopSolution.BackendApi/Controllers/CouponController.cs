@@ -31,6 +31,12 @@ namespace TechShopSolution.BackendApi.Controllers
             var result = await _couponService.GetById(id);
             return Ok(result);
         }
+        [HttpGet("code")]
+        public IActionResult GetByCode(string code)
+        {
+            var result = _couponService.GetByCode(code);
+            return Ok(result);
+        }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CouponCreateRequest request)
         {

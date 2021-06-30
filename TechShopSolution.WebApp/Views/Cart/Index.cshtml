@@ -13,7 +13,7 @@
     </ul>
     <h3>
         GIỎ HÀNG <small><span id="lbl_number_of_items"><span></span></span> sản phẩm </small>
-        <a href="products.html" class="btn btn-large pull-right">
+        <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large pull-right">
             <i class="icon-arrow-left"></i> Tiếp tục mua hàng
         </a>
     </h3>
@@ -40,7 +40,7 @@
             </tr>
             <tr>
                 <td colspan="5" style="text-align:right">Mã giảm giá:	</td>
-                <td> 0đ</td>
+                <td> <span id="lbl_couponprice"></span></td>
             </tr>
             <tr>
                 <td colspan="5" style="text-align:right"><strong>Thành tiền </strong></td>
@@ -54,15 +54,13 @@
         <tbody>
             <tr>
                 <td>
-                    <form class="form-horizontal">
-                        <div class="control-group">
-                            <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
-                            <div class="controls">
-                                <input type="text" class="input-medium" placeholder="CODE">
-                                <button type="submit" class="btn"> Áp dụng </button>
-                            </div>
+                    <div class="control-group">
+                        <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
+                        <div class="controls">
+                            <input type="text" class="input-medium" id="codeCoupon" placeholder="CODE">
+                            <button type="button" class="btn" id="btnApplyCoupon"> Áp dụng </button>
                         </div>
-                    </form>
+                    </div>
                 </td>
             </tr>
 

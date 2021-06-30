@@ -48,6 +48,7 @@ namespace TechShopSolution.WebApp
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IBrandApiClient, BrandApiClient>();
             services.AddTransient<IAdminApiClient, AdminApiClient>();
+            services.AddTransient<ICouponApiClient, CouponApiClient>();
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();
             services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
             services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
