@@ -10,7 +10,7 @@ namespace TechShopSolution.Application.Catalog.Coupon
     public interface ICouponService
     {
         Task<ApiResult<bool>> Create(CouponCreateRequest request);
-        Task<ApiResult<bool>> Update(int id, CouponUpdateRequest request);
+        Task<ApiResult<bool>> Update(CouponUpdateRequest request);
         Task<ApiResult<bool>> ChangeStatus(int id);
         Task<ApiResult<bool>> Delete(int brandID);
         Task<ApiResult<CouponViewModel>> GetById(int brandId);
