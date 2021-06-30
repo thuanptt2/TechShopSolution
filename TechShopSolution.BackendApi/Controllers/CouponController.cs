@@ -66,9 +66,9 @@ namespace TechShopSolution.BackendApi.Controllers
             return BadRequest(result);
         }
         [HttpGet]
-        public async Task<IActionResult> isValidCode(int id, string slug)
+        public async Task<IActionResult> isValidCode(int id, string code)
         {
-            if (await _couponService.isValidCode(id, slug))
+            if (await _couponService.isValidCode(id, code))
             {
                 return Ok();
             }

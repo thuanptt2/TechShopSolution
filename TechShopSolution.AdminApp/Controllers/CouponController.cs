@@ -108,5 +108,14 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> isValidCode(int id, string code)
+        {
+            if (await _couponApiClient.isValidCode(id, code) == false)
+            {
+                return Json($"Mã {code} đã được sử dụng.");
+            }
+            return Json(true);
+        }
     }
 }
