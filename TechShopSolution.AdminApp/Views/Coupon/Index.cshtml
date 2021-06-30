@@ -79,64 +79,76 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model.Items == null)
+                    @if (Model == null)
                     {
                         <tr>
                             <td>
-                                Không có mã giảm giá nào.
-                            </td>
-                        </tr>
-                    }
-                    else if (Model.TotalRecords == 0)
-                    {
-                        <tr>
-                            <td>
-                                Không tìm thấy mã giảm giá nào.
+                                Không tìm thấy mã giảm giá.
                             </td>
                         </tr>
                     }
                     else
                     {
-                        @foreach (var item in Model.Items)
+                        @if (Model.Items == null)
                         {
-                <tr>
-                    <td>
-                        @Html.ActionLink(item.name, "Update", new { id = item.id })
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.code)
-                    </td>
+                            <tr>
+                                <td>
+                                    Không có mã giảm giá nào.
+                                </td>
+                            </tr>
+                        }
+                        else if (Model.TotalRecords == 0)
+                        {
+                            <tr>
+                                <td>
+                                    Không tìm thấy mã giảm giá nào.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.name, "Update", new { id = item.id })
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.code)
+                                    </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.quantity)
-                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.quantity)
+                                    </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.start_at)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.end_at)
-                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.start_at)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.end_at)
+                                    </td>
 
 
-                    @if (item.isActive)
-                    {
-                        <td align="center">
-                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Coupon", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
-                        </td>
-                    }
-                    else
-                    {
-                        <td align="center">
-                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Coupon", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
-                        </td>
-                    }
-                    <td align="center">
-                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa mã giảm giả này? thao tác này không thể hoàn tác?')">Xóa</a>
-                    </td>
-                </tr>
+                                    @if (item.isActive)
+                                    {
+                                        <td align="center">
+                                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Coupon", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td align="center">
+                                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Coupon", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        </td>
+                                    }
+                                    <td align="center">
+                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa mã giảm giả này? thao tác này không thể hoàn tác?')">Xóa</a>
+                                    </td>
+                                </tr>
+                            }
                         }
                     }
+
                 </tbody>
             </table>
             @await Component.InvokeAsync("Pager", Model)
