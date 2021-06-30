@@ -1,0 +1,86 @@
+﻿@model TechShopSolution.ViewModels.Catalog.Coupon.CouponUpdateRequest
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section jsFooter {
+    <script src="~/js/ChangeNameToSlug.js"></script>
+}
+<div class="container-fluid">
+    <h2 class="mt-4">Cập nhật mã giảm giá</h2>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/coupon/index">Chi tiết mã giảm giá</a></li>
+        <li class="breadcrumb-item active">Chi tiết mã giảm giá</li>
+    </ol>
+    <form asp-action="Update" asp-controller="Coupon" method="post">
+        <div class="padding-container">
+            <div class="row">
+                <div class="col-lg-12 col-12 wrapper-content-limit">
+                    <div class="wrapper-content mb-3 shadow">
+                        <label class="title-fill">Thông tin chung</label>
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="id" class="form-control" hidden />
+                        <div class="form-group">
+                            <label asp-for="name" class="control-label lableFormField"></label>
+                            <input asp-for="name" class="form-control" />
+                            <span asp-validation-for="name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="code" class="control-label lableFormField"></label>
+                            <input asp-for="code" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="code" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="quantity" class="control-label lableFormField"></label>
+                            <input asp-for="quantity" class="form-control" />
+                            <span asp-validation-for="quantity" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="type" class="control-label lableFormField"></label>
+                            <select class="custom-select custom-select-sm" asp-for="type">
+                                <option value="Phần trăm" selected>Giảm theo phần trăm</option>
+                                <option value="Số tiền">Giảm theo số tiền</option>
+                            </select>
+                            <span asp-validation-for="type" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="value" class="control-label lableFormField"></label>
+                            <input asp-for="value" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="value" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="start_at" class="control-label lableFormField"></label>
+                            <input asp-for="start_at" type="date" class="form-control" />
+                            <span asp-validation-for="start_at" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="end_at" class="control-label lableFormField"></label>
+                            <input asp-for="end_at" type="date" class="form-control" />
+                            <span asp-validation-for="end_at" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="isActive" class="control-label lableFormField"></label>
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="isActive" type="radio" value="true" id="flexRadioDefault1" checked>
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Hiển thị
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="isActive" type="radio" value="false" id="flexRadioDefault2">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Ẩn đi
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

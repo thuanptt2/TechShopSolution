@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TechShopSolution.ViewModels.Catalog.Coupon;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
+    [Authorize]
     public class CouponController : Controller
     {
         private readonly ICouponApiClient _couponApiClient;
@@ -45,6 +47,33 @@ namespace TechShopSolution.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
             return View("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var result = await _couponApiClient.GetById(id);
+            if (!result.IsSuccess || result.ResultObject == null)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View("Index");
+            }
+            var updateRequest = new CouponUpdateRequest()
+            {
+                id = id,
+                value = result.ResultObject.value,
+                type = result.ResultObject.type,
+                code = result.ResultObject.code,
+                end_at = result.ResultObject.end_at,
+                isActive = result.ResultObject.isActive,
+                name = result.ResultObject.name,
+                quantity = result.ResultObject.quantity,
+                start_at = result.ResultObject.start_at,
+            };
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            return View(updateRequest);
         }
     }
 }
