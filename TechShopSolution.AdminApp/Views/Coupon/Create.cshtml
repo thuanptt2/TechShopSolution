@@ -1,4 +1,4 @@
-﻿@model TechShopSolution.ViewModels.Catalog.Coupon.CouponUpdateRequest
+﻿@model TechShopSolution.ViewModels.Catalog.Coupon.CouponCreateRequest
 
 @{
     ViewData["Title"] = "Update";
@@ -8,13 +8,13 @@
     <script src="~/js/ChangeNameToSlug.js"></script>
 }
 <div class="container-fluid">
-    <h2 class="mt-4">Cập nhật mã giảm giá</h2>
+    <h2 class="mt-4">Thêm mã giảm giá</h2>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-        <li class="breadcrumb-item"><a href="/coupon/index">Chi tiết mã giảm giá</a></li>
-        <li class="breadcrumb-item active">Chi tiết mã giảm giá</li>
+        <li class="breadcrumb-item"><a href="/coupon/index">Mã giảm giá</a></li>
+        <li class="breadcrumb-item active">Thêm mới mã giảm giá</li>
     </ol>
-    <form asp-action="Update" asp-controller="Coupon" method="post">
+    <form asp-action="Create" asp-controller="Coupon" method="post">
         <div class="padding-container">
             <div class="row">
                 <div class="col-lg-12 col-12 wrapper-content-limit">
@@ -22,7 +22,6 @@
                         <label class="title-fill">Thông tin chung</label>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input asp-for="id" class="form-control" hidden />
                         <div class="form-group">
                             <label asp-for="name" class="control-label lableFormField"></label>
                             <input asp-for="name" class="form-control" />
@@ -30,7 +29,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="code" class="control-label lableFormField"></label>
-                            <input asp-for="code" class="form-control" readonly="readonly" />
+                            <input asp-for="code" class="form-control"/>
                             <span asp-validation-for="code" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -40,7 +39,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="type" class="control-label lableFormField"></label>
-                            <select class="custom-select custom-select-sm" asp-for="type" disabled>
+                            <select class="custom-select custom-select-sm" asp-for="type">
                                 <option value="Phần trăm" selected>Giảm theo phần trăm</option>
                                 <option value="Số tiền">Giảm theo số tiền</option>
                             </select>
@@ -48,7 +47,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="value" class="control-label lableFormField"></label>
-                            <input asp-for="value" class="form-control" readonly="readonly" />
+                            <input asp-for="value" class="form-control"/>
                             <span asp-validation-for="value" class="text-danger"></span>
                         </div>
                         <div class="form-group">
