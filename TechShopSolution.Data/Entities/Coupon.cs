@@ -9,6 +9,8 @@ namespace TechShopSolution.Data.Entities
         public int id { get; set; }
         public string code { get; set; }
         public string name { get; set; }
+        public string type { get; set; }
+        public double value { get; set; }
         public int? quantity { get; set; }
         public bool isActive { get; set; }
         public DateTime start_at { get; set; }
