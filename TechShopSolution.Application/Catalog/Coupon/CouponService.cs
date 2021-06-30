@@ -44,6 +44,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                 var coupon = new TechShopSolution.Data.Entities.Coupon
                 {
                     code = request.code,
+                    value = request.value,
+                    type = request.type,
                     name = request.name,
                     end_at = request.end_at,
                     start_at = request.start_at,
@@ -97,6 +99,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                     id = a.id,
                     code = a.code,
                     name = a.name,
+                    type = a.type,
+                    value = a.value,
                     quantity = a.quantity,
                     start_at = a.start_at,
                     end_at = a.end_at,
@@ -124,6 +128,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                 code = coupon.code,
                 end_at = coupon.end_at,
                 start_at = coupon.start_at,
+                type = coupon.type,
+                value = coupon.value,
                 quantity = coupon.quantity,
                 name = coupon.name,
                 id = coupon.id,
