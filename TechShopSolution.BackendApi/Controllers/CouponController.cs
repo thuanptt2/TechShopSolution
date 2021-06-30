@@ -39,7 +39,7 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody] CouponUpdateRequest request)
         {
             var result = await _couponService.Update(request);

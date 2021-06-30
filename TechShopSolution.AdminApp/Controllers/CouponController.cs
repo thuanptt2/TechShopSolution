@@ -75,5 +75,19 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View(updateRequest);
         }
+        [HttpPost]
+        public async Task<IActionResult> Update(CouponUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _couponApiClient.UpdateCoupon(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật mã giảm giá thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }
