@@ -23,7 +23,7 @@ namespace TechShopSolution.ApiIntegration
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/brand/changestatus/{Id}");
+            var respone = await client.GetAsync($"/api/coupon/changestatus/{Id}");
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);

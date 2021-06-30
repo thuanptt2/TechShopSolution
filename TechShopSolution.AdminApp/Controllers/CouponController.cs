@@ -31,5 +31,20 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View(data);
         }
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _couponApiClient.ChangeStatus(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Thay đổi trạng thái thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
     }
 }
