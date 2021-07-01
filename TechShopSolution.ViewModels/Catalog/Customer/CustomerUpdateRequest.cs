@@ -13,8 +13,6 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
         public string name { get; set; }
         [Display(Name = "Số điện thoại")]
         public string phone { get; set; }
-        [Display(Name = "Mật khẩu")]
-        public string password { get; set; }
         [Display(Name = "Trạng thái")]
         public bool isActive { get; set; }
         [Display(Name = "Ngày sinh")]
@@ -25,6 +23,5 @@ namespace TechShopSolution.ViewModels.Catalog.Customer
         [Display(Name = "Giới tính")]
         public bool sex { get; set; }
         public string address { get; set; }
-
     }
 }

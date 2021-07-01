@@ -463,3 +463,6 @@ input.input-validation-error {
 #CouponMessage {
     color: #ff0000;
 }
+.comments-facebook {
+    border: 1px solid #ccc;
+}

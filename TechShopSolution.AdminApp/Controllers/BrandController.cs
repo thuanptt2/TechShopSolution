@@ -42,7 +42,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Create(BrandCreateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _brandApiClient.CreateBrand(request);
             if (result.IsSuccess)
             {
@@ -82,7 +82,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(BrandUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _brandApiClient.UpdateBrand(request);
             if (result.IsSuccess)
             {

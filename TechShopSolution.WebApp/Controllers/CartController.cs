@@ -102,6 +102,8 @@ namespace TechShopSolution.WebApp.Controllers
                         break;
                     }
                     item.Quantity = quantity;
+                    break;
+
                 }
             }
             if(currentCart.coupon != null)

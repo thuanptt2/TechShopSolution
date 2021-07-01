@@ -159,7 +159,6 @@ namespace TechShopSolution.Application.Catalog.Customer
                 var cusExist = await _context.Customers.FindAsync(request.Id);
                 if(cusExist!=null || cusExist.isDelete)
                 {
-                    cusExist.password = request.password;
                     cusExist.email = request.email;
                     cusExist.name = request.name;
                     cusExist.phone = request.phone;

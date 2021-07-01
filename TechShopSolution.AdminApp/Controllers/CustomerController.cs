@@ -70,7 +70,6 @@ namespace TechShopSolution.AdminApp.Controllers
                 address = result.ResultObject.address,
                 birthday = result.ResultObject.birthday,
                 email = result.ResultObject.email,
-                password = result.ResultObject.password,
                 sex = result.ResultObject.sex,
                 phone = result.ResultObject.phone,
                 isActive = result.ResultObject.isActive
@@ -86,7 +85,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(CustomerUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _customerApiClient.UpdateCustomer(request);
             if (result.IsSuccess)
             {

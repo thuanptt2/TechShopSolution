@@ -57,13 +57,13 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 var token = await _adminApiClient.AuthenticateCustomer(new LoginRequest { Email = request.email, Password = request.password, Remeber_me = true });
 
-                var adminPrincipal = this.ValidateToken(token);
+                var adminPrincipal = this.ValidateToken(token.Message);
                 var authProperties = new AuthenticationProperties
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                     IsPersistent = false
                 };
-                HttpContext.Session.SetString("Token", token);
+                HttpContext.Session.SetString("Token", token.Message);
                 await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
@@ -161,19 +161,18 @@ namespace TechShopSolution.WebApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            try
+            if (!ModelState.IsValid)
+                return View(request);
+            var result = await _adminApiClient.AuthenticateCustomer(request);
+            if (result.IsSuccess)
             {
-                if (!ModelState.IsValid)
-                    return View(request);
-                var token = await _adminApiClient.AuthenticateCustomer(request);
-
-                var adminPrincipal = this.ValidateToken(token);
+                var adminPrincipal = this.ValidateToken(result.ResultObject);
                 var authProperties = new AuthenticationProperties
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(180),
                     IsPersistent = false
                 };
-                HttpContext.Session.SetString("Token", token);
+                HttpContext.Session.SetString("Tokenuser", result.ResultObject);
                 await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
@@ -181,11 +180,9 @@ namespace TechShopSolution.WebApp.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
-            catch
-            {
-                ModelState.AddModelError("", "Sai thông tin đăng nhập");
-                return View(request);
-            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+
         }
         public async Task<JsonResult> LoadProvince()
         {
