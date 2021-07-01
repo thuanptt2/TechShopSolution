@@ -33,9 +33,8 @@ var SiteController = function () {
                     setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    $("#snackbar").addClass("snackbarDanger");
-                    var x = document.getElementById("snackbar");
-                    $('.ReultMessage').text(jqXHR.responseText);
+                    var x = document.getElementById("snackbarDanger");
+                    $('#ErrorMessage').text(jqXHR.responseText);
 
                     // Add the "show" class to DIV
                     x.className = "show";
@@ -58,10 +57,8 @@ var SiteController = function () {
                 error: function (jqXHR, textStatus, errorThrown) {
                     window.location = "/gio-hang";
 
-                    $("#snackbar").addClass("snackbarDanger");
-
-                    var x = document.getElementById("snackbar");
-                    $('.ReultMessage').text(jqXHR.responseText);
+                    var x = document.getElementById("snackbarDanger");
+                    $('#ErrorMessage').text(jqXHR.responseText);
 
                     // Add the "show" class to DIV
                     x.className = "show";

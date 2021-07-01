@@ -120,7 +120,7 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 var result = await _couponApiClient.GetByCode(code);
                 if (result.ResultObject == null)
-                    return BadRequest(result.Message);
+                    return BadRequest("Mã giảm giá không tồn tại");
                 if (result.ResultObject.start_at > DateTime.Today)
                 {
                     return BadRequest("Mã này sẽ có hiệu lực lúc " + result.ResultObject.start_at + ". Hãy thử lại sau bạn nhé");
@@ -131,7 +131,8 @@ namespace TechShopSolution.WebApp.Controllers
                 }
                 if (!result.ResultObject.isActive)
                     return BadRequest("Mã này đã bị vô hiệu hóa");
-
+                if(result.ResultObject.quantity == 0)
+                    return BadRequest("Mã này đã được sử dụng hết");
 
                 CartViewModel currentCart = new CartViewModel();
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);

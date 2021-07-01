@@ -115,13 +115,13 @@
                 });
                 if (res.coupon.type == "Phần trăm")
                     couponPrice = total * (res.coupon.value / 100);
+                else if (res.coupon.type == "Số tiền")
+                    couponPrice = total - res.coupon.value;
 
-                $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
+                $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
 
-                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
+                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
 
-
-                $("#snackbar").addClass("snackbarDanger");
 
                 var x = document.getElementById("snackbar");
                 $('.ReultMessage').text("Sử dụng mã giảm giá thành công");
@@ -134,10 +134,8 @@
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
-                $("#snackbar").addClass("snackbarDanger");
-
-                var x = document.getElementById("snackbar");
-                $('.ReultMessage').text(jqXHR.responseText);
+                var x = document.getElementById("snackbarDanger");
+                $('#ErrorMessage').text(jqXHR.responseText);
 
                 // Add the "show" class to DIV
                 x.className = "show";
@@ -201,10 +199,26 @@
                         + "</tr>";
                     total += amount;
                 });
-                $('#cart_body').html(html);
-                $('#lbl_number_of_items').text(res.items.length);
-                $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
-                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                if (res.coupon != null) {
+                    if (res.coupon.type == "Phần trăm")
+                        couponPrice = total * (res.coupon.value / 100);
+                    else if (res.coupon.type == "Số tiền")
+                        couponPrice = total - res.coupon.value;
+
+                    $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
+                    $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                    $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
+                    $('#cart_body').html(html);
+                    $('#lbl_number_of_items').text(res.items.length);
+                    $('#codeCoupon').val(res.coupon.code);
+
+                }
+                else {
+                    $('#cart_body').html(html);
+                    $('#lbl_number_of_items').text(res.items.length);
+                    $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                    $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                }
             },
         })
     }
