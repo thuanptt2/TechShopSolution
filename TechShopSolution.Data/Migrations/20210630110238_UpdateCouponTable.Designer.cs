@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechShopSolution.Data.EF;
 
 namespace TechShopSolution.Data.Migrations
 {
     [DbContext(typeof(TechShopDBContext))]
-    partial class TechShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210630110238_UpdateCouponTable")]
+    partial class UpdateCouponTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -368,12 +370,6 @@ namespace TechShopSolution.Data.Migrations
 
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
-
-                    b.Property<double?>("max_price")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("min_order_value")
-                        .HasColumnType("float");
 
                     b.Property<string>("name")
                         .IsRequired()

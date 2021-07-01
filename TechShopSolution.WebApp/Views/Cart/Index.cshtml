@@ -13,7 +13,7 @@
     </ul>
     <h3>
         GIỎ HÀNG <small><span id="lbl_number_of_items"><span></span></span> sản phẩm </small>
-        <a href="products.html" class="btn btn-large pull-right">
+        <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large pull-right">
             <i class="icon-arrow-left"></i> Tiếp tục mua hàng
         </a>
     </h3>
@@ -36,15 +36,15 @@
         <tfoot>
             <tr>
                 <td colspan="5" style="text-align:right">Tổng tạm tính:	</td>
-                <td id="lbl_total"></td>
+                <td id="lbl_total">0đ</td>
             </tr>
             <tr>
                 <td colspan="5" style="text-align:right">Mã giảm giá:	</td>
-                <td> 0đ</td>
+                <td>- <span id="lbl_couponprice">0đ</span></td>
             </tr>
             <tr>
                 <td colspan="5" style="text-align:right"><strong>Thành tiền </strong></td>
-                <td class="label label-important" style="display:block"> <strong><span id="lbl_maintotal"></span></strong></td>
+                <td class="label label-important" style="display:block"> <strong><span id="lbl_maintotal">0đ</span></strong></td>
             </tr>
         </tfoot>
     </table>
@@ -54,15 +54,14 @@
         <tbody>
             <tr>
                 <td>
-                    <form class="form-horizontal">
-                        <div class="control-group">
-                            <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
-                            <div class="controls">
-                                <input type="text" class="input-medium" placeholder="CODE">
-                                <button type="submit" class="btn"> Áp dụng </button>
-                            </div>
+                    <div class="control-group">
+                        <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
+                        <div class="controls">
+                            <input type="text" class="input-medium" id="codeCoupon" style="text-transform:uppercase" placeholder="CODE">
+                            <button type="button" class="btn" id="btnApplyCoupon"> Áp dụng </button><br />
+                            <span id="CouponMessage"></span>
                         </div>
-                    </form>
+                    </div>
                 </td>
             </tr>
 

@@ -9,7 +9,7 @@ var SiteController = function () {
             type: "GET",
             url: "/Cart/GetListItems",
             success: function (res) {
-                $('#lbl_number_items_header').text(res.length);
+                $('#lbl_number_items_header').text(res.items.length);
             }
         });
     }
@@ -22,7 +22,7 @@ var SiteController = function () {
                 type: "POST",
                 url: '/Cart/AddToCart/' + idProduct,
                 success: function (res) {
-                    $('#lbl_number_items_header').text(res.length);
+                    $('#lbl_number_items_header').text(res.items.length);
                     var x = document.getElementById("snackbar");
                     $('.ReultMessage').text("Thêm vào giỏ hàng thành công");
 
@@ -33,9 +33,8 @@ var SiteController = function () {
                     setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    $("#snackbar").addClass("snackbarDanger");
-                    var x = document.getElementById("snackbar");
-                    $('.ReultMessage').text(jqXHR.responseText);
+                    var x = document.getElementById("snackbarDanger");
+                    $('#ErrorMessage').text(jqXHR.responseText);
 
                     // Add the "show" class to DIV
                     x.className = "show";
@@ -52,13 +51,14 @@ var SiteController = function () {
                 type: "POST",
                 url: '/Cart/AddToCart/' + idProduct,
                 success: function (res) {
-                    $('#lbl_number_items_header').text(res.length);
+                    $('#lbl_number_items_header').text(res.items.length);
                     window.location = "/gio-hang";
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    $("#snackbar").addClass("snackbarDanger");
-                    var x = document.getElementById("snackbar");
-                    $('.ReultMessage').text(jqXHR.responseText);
+                    window.location = "/gio-hang";
+
+                    var x = document.getElementById("snackbarDanger");
+                    $('#ErrorMessage').text(jqXHR.responseText);
 
                     // Add the "show" class to DIV
                     x.className = "show";

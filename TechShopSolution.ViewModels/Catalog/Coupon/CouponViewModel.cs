@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TechShopSolution.Data.Entities
+namespace TechShopSolution.ViewModels.Catalog.Coupon
 {
-    public class Coupon
+    public class CouponViewModel
     {
         public int id { get; set; }
         public string code { get; set; }
         public string name { get; set; }
-        public string type { get; set; }
         public double? min_order_value { get; set; }
         public double? max_price { get; set; }
+        public string type { get; set; }
         public double value { get; set; }
         public int? quantity { get; set; }
         public bool isActive { get; set; }
