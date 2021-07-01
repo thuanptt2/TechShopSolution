@@ -38,12 +38,25 @@ namespace TechShopSolution.WebApp.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult GetListItems()
+        public async Task<IActionResult> GetListItems()
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             CartViewModel currentCart = new CartViewModel();
             if (session != null)
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+            if (currentCart.coupon != null)
+            {
+                var result = await _couponApiClient.GetByCode(currentCart.coupon.code);
+                currentCart.coupon = new CouponViewModel
+                {
+                    code = result.ResultObject.code,
+                    type = result.ResultObject.type,
+                    value = result.ResultObject.value,
+                    max_value = result.ResultObject.max_price,
+                    min_order_value = result.ResultObject.min_order_value,
+                    quantity = result.ResultObject.quantity
+                };
+            }
             return Ok(currentCart);
         }
         public async Task<IActionResult> AddToCart(int id)

@@ -17,5 +17,6 @@ namespace TechShopSolution.Data.Entities
         public bool isActive { get; set; }
         public DateTime start_at { get; set; }
         public DateTime end_at { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

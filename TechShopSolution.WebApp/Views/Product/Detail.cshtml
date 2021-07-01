@@ -99,7 +99,6 @@ else
                                     <h5>
                                         Còn lại: @Model.Product.instock <small>sản phẩm</small>
                                     </h5><br />
-                                    <input type="number" class="span2" placeholder="Số lượng" min="0" />
                                     <div class="btnGroup">
                                         <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
                                         <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
@@ -107,7 +106,6 @@ else
                                 }
                                 else if (Model.Product.instock == null)
                                 {
-                                    <input type="number" class="span2" placeholder="Số lượng" min="0" />
                                     <div class="btnGroup">
                                         <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
                                         <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
