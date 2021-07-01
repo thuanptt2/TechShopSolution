@@ -113,14 +113,20 @@
                     }
                     total += amount;
                 });
-                if (res.coupon.type == "Phần trăm")
+                if (res.coupon.type == "Phần trăm") {
                     couponPrice = total * (res.coupon.value / 100);
+                    if (res.coupon.max_value != null) {
+                        if (res.coupon.max_value < couponPrice) {
+                            couponPrice = res.coupon.max_value;
+                        }
+                    }
+                }
                 else if (res.coupon.type == "Số tiền")
-                    couponPrice = total - res.coupon.value;
+                    couponPrice = res.coupon.value;
 
-                $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
+                $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
 
-                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
+                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice ));
 
 
                 var x = document.getElementById("snackbar");
@@ -200,18 +206,59 @@
                     total += amount;
                 });
                 if (res.coupon != null) {
-                    if (res.coupon.type == "Phần trăm")
-                        couponPrice = total * (res.coupon.value / 100);
-                    else if (res.coupon.type == "Số tiền")
-                        couponPrice = total - res.coupon.value;
+                    if (res.coupon.min_order_value != null) {
+                        if (res.coupon.min_order_value > total) {
+                            $("#codeCoupon").val(res.coupon.code);
+                            $("#CouponMessage").text("Chưa đạt giá trị tối thiểu");
+                            document.getElementById("CouponMessage").style.visibility = "visible";
+                            $('#cart_body').html(html);
+                            $('#lbl_number_of_items').text(res.items.length);
+                            $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                            $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0));
+                            $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                        }
+                        else {
+                            $("#codeCoupon").val(res.coupon.code);
+                            document.getElementById("CouponMessage").style.visibility = "hidden";
+                            var couponPrice = 0;
+                            if (res.coupon.type == "Phần trăm") {
+                                couponPrice = total * (res.coupon.value / 100);
+                                if (res.coupon.max_value != null) {
+                                    if (res.coupon.max_value < couponPrice) {
+                                        couponPrice = res.coupon.max_value;
+                                    }
+                                }
+                            }
+                            else if (res.coupon.type == "Số tiền")
+                                couponPrice = res.coupon.value;
 
-                    $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
-                    $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
-                    $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
-                    $('#cart_body').html(html);
-                    $('#lbl_number_of_items').text(res.items.length);
-                    $('#codeCoupon').val(res.coupon.code);
+                            $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
+                            $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                            $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
+                            $('#cart_body').html(html);
+                            $('#lbl_number_of_items').text(res.items.length);
+                        }
+                    } else {
+                        $("#codeCoupon").val(res.coupon.code);
+                        document.getElementById("CouponMessage").style.visibility = "hidden";
+                        var couponPrice = 0;
+                        if (res.coupon.type == "Phần trăm") {
+                            couponPrice = total * (res.coupon.value / 100);
+                            if (res.coupon.max_value != null) {
+                                if (res.coupon.max_value < couponPrice) {
+                                    couponPrice = res.coupon.max_value;
+                                }
+                            }
+                        }
+                        else if (res.coupon.type == "Số tiền")
+                            couponPrice = res.coupon.value;
 
+                        $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
+                        $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                        $('#lbl_maintotal').text(new Instl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
+                        $('#cart_body').html(html);
+                        $('#lbl_number_of_items').text(res.items.length);
+                    }
                 }
                 else {
                     $('#cart_body').html(html);

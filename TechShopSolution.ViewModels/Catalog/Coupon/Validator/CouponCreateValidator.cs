@@ -16,11 +16,17 @@ namespace TechShopSolution.ViewModels.Catalog.Coupon.Validator
             RuleFor(x => x.value).NotEmpty().WithMessage("Giá trị không được để trống")
                     .Must((o, value) => { return BeAValidValuePercent(value, o.type); }).WithMessage("Giá trị giảm phải thuộc trong khoảng từ 1%-100%")
                     .Must((o, value) => { return BeAValidValueAmount(value, o.type); }).WithMessage("Giá trị phải lớn hơn 0");
+            RuleFor(x => x.min_order_value)
+                   .GreaterThan(0).WithMessage("Giá trị đơn hàng tối thiểu không hợp lệ");
+            RuleFor(x => x.quantity)
+                   .GreaterThan(0).WithMessage("Số lượng không hợp lệ");
+            RuleFor(x => x.max_price)
+                  .GreaterThan(0).WithMessage("Giá giảm tối đa không hợp lệ");
+            RuleFor(x => x.min_order_value)
+                   .GreaterThan(0).WithMessage("Đơn hàng tối thiểu không hợp lệ");
             RuleFor(x => x.start_at).NotEmpty().WithMessage("Vui lòng chọn ngày bắt đầu")
-                .GreaterThanOrEqualTo(m => DateTime.Today).WithMessage("Ngày bắt đầu phải lớn hơn hoặc bằng hôm nay")
                 .LessThan(m => m.end_at).WithMessage("Ngày bắt đầu phải nhỏ hơn ngày kết thúc");
             RuleFor(x => x.end_at).NotEmpty().WithMessage("Vui lòng chọn ngày kết thúc")
-                .GreaterThan(m => DateTime.Now).WithMessage("Ngày kết thúc phải lớn hơn hôm nay")
                 .GreaterThan(m => m.start_at).WithMessage("Ngày kết thúc phải lớn hơn ngày bắt đầu");
         }
         protected bool BeAValidValuePercent(double value, string type)

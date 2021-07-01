@@ -47,6 +47,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                     value = request.value,
                     type = request.type,
                     name = request.name,
+                    max_price = request.max_price,
+                    min_order_value = request.min_order_value,
                     end_at = request.end_at,
                     start_at = request.start_at,
                     isActive = request.isActive,
@@ -99,6 +101,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                     id = a.id,
                     code = a.code,
                     name = a.name,
+                    max_price = a.max_price,
+                    min_order_value = a.min_order_value,
                     type = a.type,
                     value = a.value,
                     quantity = a.quantity,
@@ -129,6 +133,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                 end_at = coupon.end_at,
                 start_at = coupon.start_at,
                 type = coupon.type,
+                max_price = coupon.max_price,
+                min_order_value = coupon.min_order_value,
                 value = coupon.value,
                 quantity = coupon.quantity,
                 name = coupon.name,
@@ -151,6 +157,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                 start_at = coupon.start_at,
                 type = coupon.type,
                 value = coupon.value,
+                max_price = coupon.max_price,
+                min_order_value = coupon.min_order_value,
                 quantity = coupon.quantity,
                 name = coupon.name,
                 id = coupon.id,
@@ -158,7 +166,6 @@ namespace TechShopSolution.Application.Catalog.Coupon
             };
             return new ApiSuccessResult<CouponViewModel>(couponn);
         }
-
         public async Task<ApiResult<bool>> Update(CouponUpdateRequest request)
         {
             try
@@ -169,6 +176,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                     Coupon.name = request.name;
                     Coupon.isActive = request.isActive;
                     Coupon.quantity = request.quantity;
+                    Coupon.max_price = request.max_price;
+                    Coupon.min_order_value = request.min_order_value;
                     Coupon.start_at = request.start_at;
                     Coupon.end_at = request.end_at;
                   

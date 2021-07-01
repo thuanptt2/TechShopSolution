@@ -63,6 +63,8 @@ namespace TechShopSolution.AdminApp.Controllers
                 value = result.ResultObject.value,
                 type = result.ResultObject.type,
                 code = result.ResultObject.code,
+                max_price = result.ResultObject.max_price,
+                min_order_value = result.ResultObject.min_order_value,
                 end_at = result.ResultObject.end_at,
                 isActive = result.ResultObject.isActive,
                 name = result.ResultObject.name,

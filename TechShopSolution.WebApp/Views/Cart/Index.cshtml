@@ -40,7 +40,7 @@
             </tr>
             <tr>
                 <td colspan="5" style="text-align:right">Mã giảm giá:	</td>
-                <td> <span id="lbl_couponprice">0đ</span></td>
+                <td>- <span id="lbl_couponprice">0đ</span></td>
             </tr>
             <tr>
                 <td colspan="5" style="text-align:right"><strong>Thành tiền </strong></td>
@@ -57,8 +57,9 @@
                     <div class="control-group">
                         <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
                         <div class="controls">
-                            <input type="text" class="input-medium" id="codeCoupon" placeholder="CODE">
-                            <button type="button" class="btn" id="btnApplyCoupon"> Áp dụng </button>
+                            <input type="text" class="input-medium" id="codeCoupon" style="text-transform:uppercase" placeholder="CODE">
+                            <button type="button" class="btn" id="btnApplyCoupon"> Áp dụng </button><br />
+                            <span id="CouponMessage"></span>
                         </div>
                     </div>
                 </td>

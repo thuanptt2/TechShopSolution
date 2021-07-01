@@ -79,20 +79,19 @@ namespace TechShopSolution.WebApp.Controllers
                     Quantity = quantity
                 };
                 if (currentCart.items == null) currentCart.items = new List<CartItemViewModel>();
-
                 currentCart.items.Add(cartItem);
+                
             }
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
 
             return Ok(currentCart);
         }
-        public IActionResult UpdateCart(int id, int quantity)
+        public async Task<IActionResult> UpdateCart(int id, int quantity)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             CartViewModel currentCart = new CartViewModel();
             if (session != null)
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
-
             foreach (var item in currentCart.items)
             {
                 if (item.Id == id)
@@ -105,14 +104,26 @@ namespace TechShopSolution.WebApp.Controllers
                     item.Quantity = quantity;
                 }
             }
-
+            if(currentCart.coupon != null)
+            {
+                var result = await _couponApiClient.GetByCode(currentCart.coupon.code);
+                currentCart.coupon = new CouponViewModel
+                {
+                    code = result.ResultObject.code,
+                    type = result.ResultObject.type,
+                    value = result.ResultObject.value,
+                    max_value = result.ResultObject.max_price,
+                    min_order_value = result.ResultObject.min_order_value,
+                    quantity = result.ResultObject.quantity
+                };
+            }
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
         }
         public async Task<IActionResult> UseCoupon(string code)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
-            if(session == null || session == "")
+            if (session == null || session == "")
             {
                 return BadRequest("Chưa có sản phẩm nào trong giỏ hàng.");
             }
@@ -131,23 +142,50 @@ namespace TechShopSolution.WebApp.Controllers
                 }
                 if (!result.ResultObject.isActive)
                     return BadRequest("Mã này đã bị vô hiệu hóa");
-                if(result.ResultObject.quantity == 0)
+                if (result.ResultObject.quantity == 0)
                     return BadRequest("Mã này đã được sử dụng hết");
 
                 CartViewModel currentCart = new CartViewModel();
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+                if (result.ResultObject.min_order_value != null)
+                {
+                    decimal total = 0;
+                    decimal amount = 0;
+                    foreach(var item in currentCart.items)
+                    {
+                        if (item.PromotionPrice > 0)
+                        {
+                            amount = item.PromotionPrice * item.Quantity;
+                        }
+                        else
+                        {
+                            amount = item.Price * item.Quantity;
+                        }
+                        total += amount;
+                    }
+                    if (total < (decimal)result.ResultObject.min_order_value)
+                    {
+                        var value = (decimal)result.ResultObject.min_order_value - total;
+                        var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                        return BadRequest("Chưa đạt giá trị đơn hàng tối thiểu. Cần mua thêm " + String.Format(info, "{0:c}", value) + " để sử dụng mã này");
+                    }
+                }
+
                 currentCart.coupon = new CouponViewModel
                 {
                     code = result.ResultObject.code,
                     type = result.ResultObject.type,
                     value = result.ResultObject.value,
+                    max_value = result.ResultObject.max_price,
+                    min_order_value = result.ResultObject.min_order_value,
+                    quantity = result.ResultObject.quantity
                 };
 
                 HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
 
                 return Ok(currentCart);
             }
-         
+
         }
     }
 }

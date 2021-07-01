@@ -460,3 +460,6 @@ input.input-validation-error {
     vertical-align: middle !important;
     text-align: center !important;
 }
+#CouponMessage {
+    color: #ff0000;
+}
