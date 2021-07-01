@@ -45,12 +45,14 @@
     <div class="alert alert-success" id="snackbar" role="alert">
         <b class="ReultMessage">@ViewBag.SuccessMsg</b>
     </div>
+    <div class="alert alert-success" id="snackbarDanger" role="alert">
+        <b id="ErrorMessage"></b>
+    </div>
     @if (ViewBag.SuccessMsg != null)
     {
         <div class="alert alert-success" id="snackbarAccount" role="alert">
             <b>@ViewBag.SuccessMsg</b>
         </div>
-
     }
 
 
