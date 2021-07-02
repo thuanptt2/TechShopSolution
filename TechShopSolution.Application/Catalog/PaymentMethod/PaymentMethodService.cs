@@ -4,12 +4,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Catalog.Coupon;
+using System.Linq;
 using TechShopSolution.ViewModels.Catalog.PaymentMethod;
 using TechShopSolution.ViewModels.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace TechShopSolution.Application.Catalog.PaymentMethod
 {
-    public class PaymentMethodService
+    public class PaymentMethodService : IPaymentMethodService
     {
         private readonly TechShopDBContext _context;
         public PaymentMethodService(TechShopDBContext context)
@@ -117,5 +119,43 @@ namespace TechShopSolution.Application.Catalog.PaymentMethod
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
+        public async Task<PagedResult<PaymentViewModel>> GetAllPaging(GetPaymentPagingRequest request)
+        {
+            var query = from payment in _context.PaymentMethods
+                        where payment.isDelete == false
+                        select payment;
+
+            if (!String.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.name.Contains(request.Keyword));
+            }
+
+            int totalRow = await query.CountAsync();
+
+            var data = query.OrderByDescending(m => m.create_at)
+                .Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(a => new PaymentViewModel()
+                {
+                    id = a.id,
+                    name = a.name,
+                    isActive = a.isActive,
+                    create_at = a.create_at,
+                    delete_at = a.delete_at,
+                    isDelete = a.isDelete,
+                    description = a.description,
+                    update_at = a.update_at,
+                }).ToListAsync();
+
+            var pageResult = new PagedResult<PaymentViewModel>()
+            {
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Items = await data,
+            };
+            return pageResult;
+        }
+
     }
 }
