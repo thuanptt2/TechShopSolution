@@ -182,7 +182,6 @@ namespace TechShopSolution.WebApp.Controllers
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
-
         }
         public async Task<JsonResult> LoadProvince()
         {
