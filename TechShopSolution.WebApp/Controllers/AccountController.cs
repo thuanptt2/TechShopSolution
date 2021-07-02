@@ -34,9 +34,38 @@ namespace TechShopSolution.WebApp.Controllers
         [Route("dang-nhap")]
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
+            await HttpContext.SignOutAsync(
+                          CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
+        }
+        [HttpPost]
+        [Route("dang-nhap")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View(request);
+            var result = await _adminApiClient.AuthenticateCustomer(request);
+            if (result.IsSuccess)
+            {
+                var adminPrincipal = this.ValidateToken(result.ResultObject);
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(180),
+                    IsPersistent = false
+                };
+                HttpContext.Session.SetString("Tokenuser", result.ResultObject);
+                await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            adminPrincipal,
+                            authProperties);
+
+                return RedirectToAction("Index", "Home");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
         }
         [Route("dang-ky")]
         [HttpGet]
@@ -57,13 +86,13 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 var token = await _adminApiClient.AuthenticateCustomer(new LoginRequest { Email = request.email, Password = request.password, Remeber_me = true });
 
-                var adminPrincipal = this.ValidateToken(token.Message);
+                var adminPrincipal = this.ValidateToken(token.ResultObject);
                 var authProperties = new AuthenticationProperties
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                     IsPersistent = false
                 };
-                HttpContext.Session.SetString("Token", token.Message);
+                HttpContext.Session.SetString("Token", token.ResultObject);
                 await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
@@ -155,34 +184,6 @@ namespace TechShopSolution.WebApp.Controllers
                 return Json($"Email {email} đã được sử dụng.");
             }
             return Json(true);
-        }
-        [HttpPost]
-        [Route("dang-nhap")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginRequest request)
-        {
-            if (!ModelState.IsValid)
-                return View(request);
-            var result = await _adminApiClient.AuthenticateCustomer(request);
-            if (result.IsSuccess)
-            {
-                var adminPrincipal = this.ValidateToken(result.ResultObject);
-                var authProperties = new AuthenticationProperties
-                {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(180),
-                    IsPersistent = false
-                };
-                HttpContext.Session.SetString("Tokenuser", result.ResultObject);
-                await HttpContext.SignInAsync(
-                            CookieAuthenticationDefaults.AuthenticationScheme,
-                            adminPrincipal,
-                            authProperties);
-
-                return RedirectToAction("Index", "Home");
-            }
-            ModelState.AddModelError("", result.Message);
-            return View(request);
-
         }
         public async Task<JsonResult> LoadProvince()
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -12,40 +13,138 @@ using TechShopSolution.WebApp.Models;
 
 namespace TechShopSolution.WebApp.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IProductApiClient _productApiClient;
         private readonly ICouponApiClient _couponApiClient;
+        private readonly ICustomerApiClient _customerApiClient;
 
-        public CartController(IProductApiClient productApiClient, ICouponApiClient couponApiClient)
+        public CartController(IProductApiClient productApiClient, ICouponApiClient couponApiClient, ICustomerApiClient customerApiClient)
         {
             _productApiClient = productApiClient;
             _couponApiClient = couponApiClient;
+            _customerApiClient = customerApiClient;
         }
+        [AllowAnonymous]
         [Route("/gio-hang")]
         public IActionResult Index()
         {
             return View();
         }
         [HttpGet]
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout(string id)
         {
-            return View();
+            var customer = await _customerApiClient.GetById(int.Parse(id));
+            ViewBag.Customer = customer.ResultObject;
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+            CartViewModel currentCart = new CartViewModel();
+            List<CreateOrderDetailRequest> OrderDetail = new List<CreateOrderDetailRequest>();
+            if (session != null)
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+            int? coupon_id = null; decimal amount = 0; decimal total = 0; decimal discount = 0;
+
+            foreach (var item in currentCart.items)
+            {
+                if (item.PromotionPrice > 0)
+                    amount = item.Quantity * item.PromotionPrice;
+                else amount = item.Quantity * item.Price;
+                total += amount;
+                var detail = new CreateOrderDetailRequest
+                {
+                    product_id = item.Id,
+                    promotion_price = item.PromotionPrice,
+                    quantity = item.Quantity,
+                    image = item.Images,
+                    name = item.Name,
+                    slug = item.Slug,
+                    unit_price = item.Price
+                };
+                OrderDetail.Add(detail);
+            }
+            if (currentCart.coupon != null)
+            {
+                var coupon = await _couponApiClient.GetByCode(currentCart.coupon.code);
+                if (coupon.ResultObject != null)
+                    coupon_id = coupon.ResultObject.id;
+                if (coupon.ResultObject.min_order_value != null)
+                {
+                    if ((decimal)coupon.ResultObject.min_order_value <= total)
+                    {
+                        if (coupon.ResultObject.type.Equals("Phần trăm"))
+                        {
+                            if (coupon.ResultObject.max_price != null)
+                            {
+                                discount = total * ((decimal)coupon.ResultObject.value / 100);
+                                if (discount > (decimal)coupon.ResultObject.max_price)
+                                    discount = (decimal)coupon.ResultObject.max_price;
+                            }
+                            else discount = total * ((decimal)coupon.ResultObject.value / 100);
+                        }
+                        else discount = (decimal)coupon.ResultObject.value;
+                    }
+                }
+                else
+                {
+                    if (coupon.ResultObject.type.Equals("Phần trăm"))
+                    {
+                        if (coupon.ResultObject.max_price != null)
+                        {
+                            discount = total * ((decimal)coupon.ResultObject.value / 100);
+                            if (discount > (decimal)coupon.ResultObject.max_price)
+                                discount = (decimal)coupon.ResultObject.max_price;
+                        }
+                        else discount = total * ((decimal)coupon.ResultObject.value / 100);
+                    }
+                    else discount = (decimal)coupon.ResultObject.value;
+                }
+            }
+
+            return View(new CheckoutRequest
+            {
+                Order = new CreteOrderRequest
+                {
+                    address_receiver = customer.ResultObject.address,
+                    coupon_id = coupon_id,
+                    cus_id = customer.ResultObject.id,
+                    total = total,
+                    discount = discount,
+                    name_receiver = customer.ResultObject.name,
+                    note = null,
+                    phone_receiver = customer.ResultObject.phone,
+                },
+                OrderDetails = OrderDetail
+            });
         }
         [HttpPost]
         public IActionResult Checkout(CheckoutRequest request)
         {
             return View();
         }
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult GetListItems()
+        public async Task<IActionResult> GetListItems()
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             CartViewModel currentCart = new CartViewModel();
             if (session != null)
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+            if (currentCart.coupon != null)
+            {
+                var result = await _couponApiClient.GetByCode(currentCart.coupon.code);
+                currentCart.coupon = new CouponViewModel
+                {
+                    code = result.ResultObject.code,
+                    type = result.ResultObject.type,
+                    value = result.ResultObject.value,
+                    max_value = result.ResultObject.max_price,
+                    min_order_value = result.ResultObject.min_order_value,
+                    quantity = result.ResultObject.quantity
+                };
+            }
             return Ok(currentCart);
         }
+        [AllowAnonymous]
         public async Task<IActionResult> AddToCart(int id)
         {
             var product = await _productApiClient.GetById(id);
@@ -80,12 +179,13 @@ namespace TechShopSolution.WebApp.Controllers
                 };
                 if (currentCart.items == null) currentCart.items = new List<CartItemViewModel>();
                 currentCart.items.Add(cartItem);
-                
+
             }
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
 
             return Ok(currentCart);
         }
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateCart(int id, int quantity)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
@@ -106,7 +206,7 @@ namespace TechShopSolution.WebApp.Controllers
 
                 }
             }
-            if(currentCart.coupon != null)
+            if (currentCart.coupon != null)
             {
                 var result = await _couponApiClient.GetByCode(currentCart.coupon.code);
                 currentCart.coupon = new CouponViewModel
@@ -122,6 +222,7 @@ namespace TechShopSolution.WebApp.Controllers
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
         }
+        [AllowAnonymous]
         public async Task<IActionResult> UseCoupon(string code)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
@@ -153,7 +254,7 @@ namespace TechShopSolution.WebApp.Controllers
                 {
                     decimal total = 0;
                     decimal amount = 0;
-                    foreach(var item in currentCart.items)
+                    foreach (var item in currentCart.items)
                     {
                         if (item.PromotionPrice > 0)
                         {
@@ -188,6 +289,69 @@ namespace TechShopSolution.WebApp.Controllers
                 return Ok(currentCart);
             }
 
+        }
+        [AllowAnonymous]
+        public async Task<JsonResult> LoadProvince()
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadProvince();
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        [AllowAnonymous]
+        public async Task<JsonResult> LoadDistrict(int provinceID)
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadDistrict(provinceID);
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        [AllowAnonymous]
+        public async Task<JsonResult> LoadWard(int districtID)
+        {
+            try
+            {
+                var result = await _customerApiClient.LoadWard(districtID);
+                if (result == null || !result.IsSuccess)
+                {
+                    return null;
+                }
+                return Json(new
+                {
+                    data = result.ResultObject,
+                    status = true
+                });
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

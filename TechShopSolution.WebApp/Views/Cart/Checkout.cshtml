@@ -1,0 +1,227 @@
+﻿@model TechShopSolution.ViewModels.Sales.CheckoutRequest
+@{
+    ViewData["Title"] = "Thanh toán đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+@section Script {
+    <script>
+        $("#check2").click(function () {
+            if (this.checked) {
+                $("#address").hide();
+            } else
+                $("#address").show();
+        })
+        $("#check1").click(function () {
+            $("#address").show();
+            $('#ddlDistrict option:first').prop('selected', true);
+            $('#ddlCity option:first').prop('selected', true);
+            $('#ddlWard option:first').prop('selected', true);
+        })
+    </script>
+    <script src="~/js/Location.js"></script>
+}
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index", "Cart", new { area = "" })">Giỏ hàng</a> <span class="divider">/</span></li>
+        <li class="active">Thanh toán</li>
+    </ul>
+
+    <div asp-validation-summary="ModelOnly" class="text-error margin-top-20"></div>
+    <div class="well shadow">
+        <div class="step-checkout">
+            <h2>Bước 1: <b>Thông tin nhận hàng</b></h2>
+            <hr class="soft" />
+            <div class="row d-flex margin-top-20">
+                <div class="span4">
+                    <h5> Thông tin người nhận: </h5>
+                    <div class="control-group">
+                        <label class="control-label">Tên<sup style="color: #C74A6D">*</sup></label>
+                        <div class="controls">
+                            <input type="text" placeholder="Nhập họ và tên" class="margin-right-20" asp-for="Order.name_receiver">
+                            <span asp-validation-for="Order.name_receiver" class="text-error"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Số điện thoại<sup style="color: #C74A6D">*</sup></label>
+                        <div class="controls">
+                            <input type="text" placeholder="Nhập số điện thoại" class="margin-right-20" asp-for="Order.phone_receiver">
+                            <span asp-validation-for="Order.phone_receiver" class="text-error"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span4">
+                    <h5> Giao hàng tới: </h5>
+                    <label class="radio">
+                        <input type="radio" id="check1" data-toggle="collapse" data-target=".collapseOne.in" name="collapseGroup" checked>
+                        Địa chỉ mặc định
+                    </label>
+                    <label class="radio">
+                        <input type="radio" id="check2" data-toggle="collapse" data-target=".collapseOne:not(.in)" name="collapseGroup">
+                        Chọn địa chỉ khác
+                    </label>
+                    @if (ViewBag.Customer == null)
+                    {
+                        <div class="margin-top-20" id="address">
+                            <i class="icon-map-marker"></i>&nbsp; <span>Chưa có địa chỉ, vui lòng chọn địa chỉ khác</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="margin-top-20" id="address">
+                            <i class="icon-map-marker"></i>&nbsp; <span>@ViewBag.Customer.address</span>
+                        </div>
+                    }
+                    <div class="margin-top-20">
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="collapseOne panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <div class="control-group">
+                                            <label class="control-label" asp-for="Order.address_receiver">Tỉnh/Thành phố <sup style="color: #C74A6D">*</sup></label>
+                                            <div class="controls">
+                                                <input asp-for="Order.address_receiver" type="hidden" id="txtCity" />
+                                                <select id="ddlCity" asp-for="Order.address_receiver" class="form-control margin-right-20">
+                                                    <option value="">--Chọn quận huyện--</option>
+                                                </select>
+                                                <span asp-validation-for="Order.address_receiver" class="text-error"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="control-group">
+                                            <label class="control-label" asp-for="Order.address_receiver">Quận/Huyện <sup style="color: #C74A6D">*</sup></label>
+                                            <div class="controls">
+                                                <input type="hidden" asp-for="Order.address_receiver" class="margin-right-20" id="txtDistrict" />
+                                                <select id="ddlDistrict" asp-for="Order.address_receiver" class="form-control margin-right-20">
+                                                    <option value="">--Chọn quận huyện--</option>
+                                                </select>
+                                                <span asp-validation-for="Order.address_receiver" class="text-error"></span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="control-group">
+                                            <label class="control-label" asp-for="Order.address_receiver">Xã/Phường <sup style="color: #C74A6D">*</sup></label>
+                                            <div class="controls">
+                                                <input type="hidden" asp-for="Order.address_receiver" id="txtWard" />
+                                                <select id="ddlWard" asp-for="Order.address_receiver" class="form-control margin-right-20">
+                                                    <option value="">--Chọn quận huyện--</option>
+                                                </select>
+                                                <span asp-validation-for="Order.address_receiver" class="text-error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" asp-for="Order.address_receiver">Số nhà, tên đường<sup style="color: #C74A6D">*</sup></label>
+                                            <div class="controls">
+                                                <input type="text" asp-for="Order.address_receiver" class="margin-right-20" />
+                                                <span asp-validation-for="Order.address_receiver" class="text-error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="well shadow margin-top-20">
+        <div class="step-checkout">
+            <h2>Bước 2: <b>Ghi chú cho đơn hàng</b></h2>
+            <hr class="soft" />
+            <div class="margin-top-20">
+                <textarea placeholder="Nhập ghi chú cho đơn hàng" asp-for="Order.note" style="width: 100%; margin-top: 10px; height: 70px;"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="well shadow margin-top-20">
+        <div class="step-checkout">
+            <h2>Bước 3: <b>Phương thức thanh toán</b></h2>
+            <hr class="soft" />
+        </div>
+    </div>
+    <div class="well shadow margin-top-20">
+        <div class="step-checkout">
+            <div class="d-flex">
+                <h2>Bước 4: <b>Xác nhận thông tin đơn hàng</b></h2>
+                <a href="/gio-hang" style="right: 0; margin-top:23px; margin-inline-start: auto;">Chỉnh sửa</a>
+            </div>
+            <hr class="soft" />
+            <div class="margin-top-20">
+                <table class="table table-bordered table-cart">
+                    <thead>
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Sớ lượng</th>
+                            <th>Giá</th>
+                            <th>Tổng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart_body">
+                        @{
+                            foreach (var item in Model.OrderDetails)
+                            {
+                                <tr>
+                                    <td> <img width="60" height="60" src="data:image/jpeg;base64,@item.image" alt="@item.name" /></td>
+                                    <td><a href="san-pham/@item.slug">@item.name</a></td>
+                                    <td align="center">
+                                        @item.quantity
+                                    </td>
+                                    @if (item.promotion_price > 0)
+                                    {
+                                        <td align="center">
+                                            @String.Format(info, "{0:N0}", item.promotion_price)
+                                        </td>
+                                        <td align="center">
+                                            @{
+                                                var total = item.promotion_price * item.quantity;
+
+                                            }
+                                            @String.Format(info, "{0:N0}", total)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td align="center">
+                                            @String.Format(info, "{0:N0}", item.unit_price)
+
+                                        </td>
+                                        <td align="center">
+                                            @{
+                                                var total = item.unit_price * item.quantity;
+
+                                            }
+                                            @String.Format(info, "{0:N0}", total)
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" style="text-align:right">Tổng tạm tính:	</td>
+                            <td>@String.Format(info, "{0:N0}", Model.Order.total)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align:right">Mã giảm giá:	</td>
+                            <td>- @String.Format(info, "{0:N0}", Model.Order.discount)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align:right">Phí vận chuyển:	</td>
+                            <td>@String.Format(info, "{0:N0}", 0)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align:right"><strong>Thành tiền </strong></td>
+                            <td class="label label-important" style="display:block"> <strong><span id="lbl_maintotal">@String.Format(info, "{0:N0}", Model.Order.total - Model.Order.discount)</span></strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <a class="pull-right btn btn-success">Hoàn tất</a>
+</div>

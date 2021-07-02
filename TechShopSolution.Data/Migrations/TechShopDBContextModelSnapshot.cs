@@ -578,6 +578,9 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<string>("address_receiver")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("coupon_id")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("create_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -610,9 +613,6 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<bool>("status")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("subtotal")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal>("total")
                         .HasColumnType("decimal(18,2)");
 
@@ -623,6 +623,8 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("id");
+
+                    b.HasIndex("coupon_id");
 
                     b.HasIndex("cus_id");
 
@@ -702,6 +704,9 @@ namespace TechShopSolution.Data.Migrations
 
                     b.Property<DateTime?>("delete_at")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
@@ -998,6 +1003,10 @@ namespace TechShopSolution.Data.Migrations
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Order", b =>
                 {
+                    b.HasOne("TechShopSolution.Data.Entities.Coupon", "Coupon")
+                        .WithMany("Orders")
+                        .HasForeignKey("coupon_id");
+
                     b.HasOne("TechShopSolution.Data.Entities.Customer", "Customers")
                         .WithMany("Order")
                         .HasForeignKey("cus_id")
@@ -1015,6 +1024,8 @@ namespace TechShopSolution.Data.Migrations
                         .HasForeignKey("payment_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Coupon");
 
                     b.Navigation("Customers");
 
@@ -1088,6 +1099,11 @@ namespace TechShopSolution.Data.Migrations
             modelBuilder.Entity("TechShopSolution.Data.Entities.CategoryNews", b =>
                 {
                     b.Navigation("ListNews");
+                });
+
+            modelBuilder.Entity("TechShopSolution.Data.Entities.Coupon", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Customer", b =>

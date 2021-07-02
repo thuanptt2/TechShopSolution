@@ -1,0 +1,79 @@
+﻿@model TechShopSolution.ViewModels.Catalog.PaymentMethod.PaymentCreateRequest
+
+@{
+    ViewData["Title"] = "Thêm phương thức thanh toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section jsFooter {
+    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#txtDescription'), {
+                // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(err => {
+                console.error(err.stack);
+            });
+    </script>
+   
+}
+<div class="container-fluid">
+    <h2 class="mt-4">Thêm phương thức thanh toán</h2>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/brand/index">Thanh toán</a></li>
+        <li class="breadcrumb-item active">Thêm phương thức</li>
+    </ol>
+    <form asp-action="Create" asp-controller="Payment" method="post">
+        <div class="padding-container">
+            <div class="row">
+                <div class="col-lg-12 col-12 wrapper-content-limit">
+                    <div class="wrapper-content mb-3 shadow">
+                        <label class="title-fill">Thông tin chung</label>
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group mt-2">
+                            <label asp-for="name" class="control-label lableFormField"></label>
+                            <input asp-for="name" class="form-control" id="txtName" />
+                            <span asp-validation-for="name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="description" class="control-label lableFormField"></label>
+                            <textarea asp-for="description" class="form-control" id="txtDescription"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="isActive" class="control-label lableFormField"></label>
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="isActive" type="radio" value="true" id="flexRadioDefault1" checked>
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Hiển thị
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="isActive" type="radio" value="false" id="flexRadioDefault2">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Ẩn đi
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mt-5 text-right">
+                            <a class="btn btn-primary" href="/payment/index">
+                                <i class="fa fa-chevron-left"></i>  Trở về
+                            </a>
+                            <button class="btn btn-success" type="submit">
+                                <i class="fa fa-save"></i>
+                                Lưu lại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

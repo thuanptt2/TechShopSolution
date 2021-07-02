@@ -13,8 +13,8 @@ namespace TechShopSolution.Data.Entities
         public string address_receiver { get; set; }
         public decimal total { get; set; }
         public decimal discount { get; set; }
-        public decimal subtotal { get; set; }
         public decimal transport_fee { get; set; }
+        public int? coupon_id { get; set; }
         public int payment_id { get; set; }
         public bool status { get; set; }
         public bool isPay { get; set; }
@@ -25,6 +25,7 @@ namespace TechShopSolution.Data.Entities
         public List<OrderDetail> OrderDetails { get; set; }
         public Customer Customers { get; set; }
         public Transport Transport { get; set; }
+        public Coupon Coupon { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
     }
 }

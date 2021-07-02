@@ -50,6 +50,7 @@ namespace TechShopSolution.WebApp
             services.AddTransient<IAdminApiClient, AdminApiClient>();
             services.AddTransient<ICouponApiClient, CouponApiClient>();
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();
+            services.AddTransient<IPaymentApiClient, PaymentApiClient>();
             services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
             services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
 
@@ -107,8 +108,8 @@ namespace TechShopSolution.WebApp
                   name: "Dang nhap",
                   pattern: "/dang-nhap", new
                   {
-                      controller = "Product",
-                      action = "Category"
+                      controller = "Account",
+                      action = "Login"
                   });
 
                 endpoints.MapControllerRoute(
@@ -139,7 +140,21 @@ namespace TechShopSolution.WebApp
                     controller = "Cart",
                     action = "Index"
                 });
+                endpoints.MapControllerRoute(
+               name: "Dang nhap tai khoan",
+               pattern: "don-hang/dang-nhap", new
+               {
+                   controller = "Order",
+                   action = "Login"
+               });
 
+                endpoints.MapControllerRoute(
+                  name: "Dang Ky tai khoan",
+                  pattern: "don-hang/dang-ky", new
+                  {
+                      controller = "Order",
+                      action = "Register"
+                  });
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
