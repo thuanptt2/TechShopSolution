@@ -29,6 +29,8 @@ namespace TechShopSolution.WebApp.Controllers
             _configuration = configuration;
             _customerApiClient = customerApiClient;
         }
+
+
         public IActionResult Index()
         {
             return View();
@@ -64,7 +66,7 @@ namespace TechShopSolution.WebApp.Controllers
                             adminPrincipal,
                             authProperties);
 
-                return RedirectToAction("Checkout", "Cart");
+                return RedirectToAction("Checkout", "Cart", new { id = adminPrincipal.FindFirst(ClaimTypes.Sid).Value });
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
@@ -99,7 +101,7 @@ namespace TechShopSolution.WebApp.Controllers
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
                             authProperties);
-                return RedirectToAction("Checkout", "Cart");
+                return RedirectToAction("Checkout", "Cart", new { id = adminPrincipal.FindFirst(ClaimTypes.Sid).Value });
             }
             ModelState.AddModelError("", result.Message);
             return View(request);

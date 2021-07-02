@@ -466,3 +466,14 @@ input.input-validation-error {
 .comments-facebook {
     border: 1px solid #ccc;
 }
+.step-checkout h2 {
+    color: #000;
+    font-size: 22px;
+    font-weight: 300;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+}
+
+.step-checkout b {
+    color: #ffc000;
+}
