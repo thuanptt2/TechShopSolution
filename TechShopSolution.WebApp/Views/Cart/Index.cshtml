@@ -1,4 +1,6 @@
-﻿@ViewData["Title"] = "";
+﻿@{
+    ViewData["Title"] = "Giỏ hàng";
+}
 @section Script{
     <script src="~/js/Cart.js"></script>
     <script>
@@ -70,5 +72,13 @@
     </table>
 
     <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large table-cart"><i class="icon-arrow-left"></i> Tiếp tục mua hàng </a>
-    <a href="login.html" class="btn btn-large pull-right table-cart">Tiếp theo <i class="icon-arrow-right"></i></a>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a href="@Url.Action("Checkout", "Cart")" class="btn btn-large pull-right table-cart">Thanh toán <i class="icon-arrow-right"></i></a>
+    }
+    else
+    {
+        <a href="@Url.Action("Login", "Order")" class="btn btn-large pull-right table-cart">Thanh toán <i class="icon-arrow-right"></i></a>
+
+    }
 </div>
