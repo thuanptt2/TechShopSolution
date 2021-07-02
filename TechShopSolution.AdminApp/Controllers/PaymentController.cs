@@ -70,6 +70,20 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View(updateRequest);
         }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _paymentApiClient.Delete(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Xóa phương thức thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
         [HttpPost]
         public async Task<IActionResult> Update(PaymentUpdateRequest request)
         {
