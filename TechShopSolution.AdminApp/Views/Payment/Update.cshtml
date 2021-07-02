@@ -1,7 +1,7 @@
-﻿@model TechShopSolution.ViewModels.Catalog.PaymentMethod.PaymentCreateRequest
+﻿@model TechShopSolution.ViewModels.Catalog.PaymentMethod.PaymentUpdateRequest
 
 @{
-    ViewData["Title"] = "Thêm phương thức thanh toán";
+    ViewData["Title"] = "Chi tiết phương thức thanh toán";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -19,16 +19,16 @@
                 console.error(err.stack);
             });
     </script>
-   
+
 }
 <div class="container-fluid">
-    <h2 class="mt-4">Thêm phương thức thanh toán</h2>
+    <h2 class="mt-4">Cập nhật phương thức thanh toán</h2>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
         <li class="breadcrumb-item"><a href="/brand/index">Thanh toán</a></li>
-        <li class="breadcrumb-item active">Thêm phương thức</li>
+        <li class="breadcrumb-item active">Cập nhật phương thức</li>
     </ol>
-    <form asp-action="Create" asp-controller="Payment" method="post">
+    <form asp-action="Update" asp-controller="Payment" method="post">
         <div class="padding-container">
             <div class="row">
                 <div class="col-lg-12 col-12 wrapper-content-limit">
@@ -36,6 +36,7 @@
                         <label class="title-fill">Thông tin chung</label>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="id" hidden />
                         <div class="form-group mt-2">
                             <label asp-for="name" class="control-label lableFormField"></label>
                             <input asp-for="name" class="form-control" id="txtName" />
