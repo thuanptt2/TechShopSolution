@@ -43,7 +43,7 @@
     </div>
 
     <div class="alert alert-success" id="snackbar" role="alert">
-        <b class="ReultMessage">@ViewBag.SuccessMsg</b>
+        <b class="ReultMessage"></b>
     </div>
     <div class="alert alert-success" id="snackbarDanger" role="alert">
         <b id="ErrorMessage"></b>
@@ -187,6 +187,13 @@
                 $("#loaderbody").addClass('hide');
             });
         });
+        var x = document.getElementById("snackbarAccount");
+
+        // Add the "show" class to DIV
+        x.className = "show";
+
+        // After 3 seconds, remove the show class from DIV
+        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
     </script>
     <!-- Themes switcher section ============================================================================================= -->
     <div id="secectionBox">

@@ -19,30 +19,34 @@ namespace TechShopSolution.Application.Catalog.Order
         {
             try
             {
+                var customer = await _context.Customers.FindAsync(request.Order.cus_id);
+                if (customer.address == "")
+                    customer.address = request.Order.address_receiver;
                 var order = new TechShopSolution.Data.Entities.Order
                 {
-                   address_receiver = request.Order.address_receiver,
-                   coupon_id = request.Order.coupon_id,
-                   create_at = DateTime.Now,
-                   transport_fee = request.Order.transport_fee == null ? 0 : (decimal)request.Order.transport_fee,
-                   cus_id = request.Order.cus_id,
-                   discount = request.Order.discount,
-                   isPay = request.Order.payment_id == 1 ? true : false,
-                   payment_id = (int)request.Order.payment_id,
-                   isShip = false,
-                   name_receiver = request.Order.name_receiver,
-                   note = request.Order.note,
-                   phone_receiver = request.Order.phone_receiver,
-                   status = true,
-                   total = request.Order.total,
+                    address_receiver = request.Order.address_receiver,
+                    coupon_id = request.Order.coupon_id,
+                    create_at = DateTime.Now,
+                    transport_fee = request.Order.transport_fee == null ? 0 : (decimal)request.Order.transport_fee,
+                    cus_id = request.Order.cus_id,
+                    discount = request.Order.discount,
+                    isPay = request.Order.payment_id == 1 ? true : false,
+                    payment_id = (int)request.Order.payment_id,
+                    isShip = false,
+                    name_receiver = request.Order.name_receiver,
+                    note = request.Order.note,
+                    phone_receiver = request.Order.phone_receiver,
+                    status = true,
+                    total = request.Order.total,
                 };
                 _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
 
-                foreach(var item in request.OrderDetails)
+                foreach (var item in request.OrderDetails)
                 {
                     var detail = new TechShopSolution.Data.Entities.OrderDetail
                     {
+                        order_id = order.id,
                         product_id = item.product_id,
                         promotion_price = item.promotion_price,
                         quantity = item.quantity,
@@ -55,7 +59,7 @@ namespace TechShopSolution.Application.Catalog.Order
             }
             catch
             {
-                return new ApiErrorResult<bool>("Tạo đơn đặt hàng thất bại");
+                return new ApiErrorResult<bool>("Tạo đơn đặt hàng thất bại, quý khách vui lòng thử lại sau");
             }
         }
     }

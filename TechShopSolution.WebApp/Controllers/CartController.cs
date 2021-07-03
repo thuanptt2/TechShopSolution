@@ -162,6 +162,7 @@ namespace TechShopSolution.WebApp.Controllers
             if(result.IsSuccess)
             {
                 TempData["result"] = "Đặt hàng thành công. Cảm ơn quý khách đã mua hàng của chúng tôi.";
+                HttpContext.Session.Remove(SystemConstants.CartSession);
                 return RedirectToAction("Index","Home");
             }
             ModelState.AddModelError("", result.Message);
