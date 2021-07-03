@@ -97,29 +97,23 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> ChangeStatus(int id)
         {
             var result = await _brandApiClient.ChangeStatus(id);
-            if (result == null)
-            {
-                ModelState.AddModelError("Cập nhật thất bại", result.Message);
-            }
             if (result.IsSuccess)
             {
                 TempData["result"] = "Thay đổi trạng thái thành công";
                 return RedirectToAction("Index");
             }
+            ModelState.AddModelError("Cập nhật thất bại", result.Message);
             return View("Index");
         }
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _brandApiClient.Delete(id);
-            if (result == null)
-            {
-                ModelState.AddModelError("", result.Message);
-            }
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa thương hiệu thành công";
                 return RedirectToAction("Index");
             }
+            ModelState.AddModelError("", result.Message);
             return View("Index");
         }
         [AcceptVerbs("GET", "POST")]

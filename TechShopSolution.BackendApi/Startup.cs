@@ -15,6 +15,7 @@ using TechShopSolution.Application.Catalog.Category;
 using TechShopSolution.Application.Catalog.Coupon;
 using TechShopSolution.Application.Catalog.Customer;
 using TechShopSolution.Application.Catalog.Location;
+using TechShopSolution.Application.Catalog.Order;
 using TechShopSolution.Application.Catalog.PaymentMethod;
 using TechShopSolution.Application.Catalog.Product;
 using TechShopSolution.Application.Common;
@@ -58,6 +59,7 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<ICouponService, CouponService>();
             services.AddTransient<IPaymentMethodService, PaymentMethodService>();
             services.AddTransient<ILoadLocationService, LoadLocationService>();

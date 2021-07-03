@@ -20,14 +20,16 @@ namespace TechShopSolution.WebApp.Controllers
         private readonly ICouponApiClient _couponApiClient;
         private readonly ICustomerApiClient _customerApiClient;
         private readonly IPaymentApiClient _paymentApiClient;
+        private readonly IOrderApiClient _orderApiClient;
 
         public CartController(IProductApiClient productApiClient, ICouponApiClient couponApiClient,
-            ICustomerApiClient customerApiClient, IPaymentApiClient paymentApiClient)
+            ICustomerApiClient customerApiClient, IPaymentApiClient paymentApiClient, IOrderApiClient orderApiClient)
         {
             _productApiClient = productApiClient;
             _couponApiClient = couponApiClient;
             _customerApiClient = customerApiClient;
             _paymentApiClient = paymentApiClient;
+            _orderApiClient = orderApiClient;
         }
         [AllowAnonymous]
         [Route("/gio-hang")]
@@ -156,6 +158,13 @@ namespace TechShopSolution.WebApp.Controllers
                 request.Order.payment_id = null;
             if (!ModelState.IsValid)
                 return View(request);
+            var result = await _orderApiClient.CreateOrder(request);
+            if(result.IsSuccess)
+            {
+                TempData["result"] = "Đặt hàng thành công. Cảm ơn quý khách đã mua hàng của chúng tôi.";
+                return RedirectToAction("Index","Home");
+            }
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
         [AllowAnonymous]

@@ -33,6 +33,10 @@ namespace TechShopSolution.WebApp.Controllers
             var cate2 = await _categorytApiClient.GetById(2);
             ViewBag.Cate1 = cate1.ResultObject.cate_slug;
             ViewBag.Cate2 = cate2.ResultObject.cate_slug;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
             return View(viewModel);
         }
         public IActionResult Privacy()
