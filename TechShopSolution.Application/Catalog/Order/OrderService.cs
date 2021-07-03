@@ -43,7 +43,6 @@ namespace TechShopSolution.Application.Catalog.Order
                 {
                     var detail = new TechShopSolution.Data.Entities.OrderDetail
                     {
-                        order_id = order.id,
                         product_id = item.product_id,
                         promotion_price = item.promotion_price,
                         quantity = item.quantity,
