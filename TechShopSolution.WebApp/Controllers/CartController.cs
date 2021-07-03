@@ -19,12 +19,15 @@ namespace TechShopSolution.WebApp.Controllers
         private readonly IProductApiClient _productApiClient;
         private readonly ICouponApiClient _couponApiClient;
         private readonly ICustomerApiClient _customerApiClient;
+        private readonly IPaymentApiClient _paymentApiClient;
 
-        public CartController(IProductApiClient productApiClient, ICouponApiClient couponApiClient, ICustomerApiClient customerApiClient)
+        public CartController(IProductApiClient productApiClient, ICouponApiClient couponApiClient,
+            ICustomerApiClient customerApiClient, IPaymentApiClient paymentApiClient)
         {
             _productApiClient = productApiClient;
             _couponApiClient = couponApiClient;
             _customerApiClient = customerApiClient;
+            _paymentApiClient = paymentApiClient;
         }
         [AllowAnonymous]
         [Route("/gio-hang")]
@@ -36,7 +39,11 @@ namespace TechShopSolution.WebApp.Controllers
         public async Task<IActionResult> Checkout(string id)
         {
             var customer = await _customerApiClient.GetById(int.Parse(id));
-            ViewBag.Customer = customer.ResultObject;
+            if(customer.ResultObject != null)
+            {
+                ViewBag.CustomerAddress = customer.ResultObject.address;
+            }
+            ViewBag.Payment = await _paymentApiClient.GetAll();
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             CartViewModel currentCart = new CartViewModel();
             List<CreateOrderDetailRequest> OrderDetail = new List<CreateOrderDetailRequest>();
@@ -99,7 +106,6 @@ namespace TechShopSolution.WebApp.Controllers
                     else discount = (decimal)coupon.ResultObject.value;
                 }
             }
-
             return View(new CheckoutRequest
             {
                 Order = new CreteOrderRequest
@@ -117,9 +123,38 @@ namespace TechShopSolution.WebApp.Controllers
             });
         }
         [HttpPost]
-        public IActionResult Checkout(CheckoutRequest request)
+        public async Task<IActionResult> Checkout(CheckoutRequest request)
         {
-            return View();
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+            CartViewModel currentCart = new CartViewModel();
+            List<CreateOrderDetailRequest> OrderDetail = new List<CreateOrderDetailRequest>();
+            if (session != null)
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+
+            foreach (var item in currentCart.items)
+            {
+                var detail = new CreateOrderDetailRequest
+                {
+                    product_id = item.Id,
+                    promotion_price = item.PromotionPrice,
+                    quantity = item.Quantity,
+                    image = item.Images,
+                    name = item.Name,
+                    slug = item.Slug,
+                    unit_price = item.Price
+                };
+                OrderDetail.Add(detail);
+            }
+            request.OrderDetails = OrderDetail;
+            var customer = await _customerApiClient.GetById(request.Order.cus_id);
+            if (customer.ResultObject != null)
+            {
+                ViewBag.CustomerAddress = customer.ResultObject.address;
+            }
+            ViewBag.Payment = await _paymentApiClient.GetAll();
+            if (!ModelState.IsValid)
+                return View(request);
+            return View(request);
         }
         [AllowAnonymous]
         [HttpGet]

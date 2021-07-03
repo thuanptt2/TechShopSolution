@@ -25,6 +25,12 @@ namespace TechShopSolution.BackendApi.Controllers
             var payment = await _paymentService.GetAllPaging(requet);
             return Ok(payment);
         }
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll()
+        {
+            var payment = await _paymentService.GetAll();
+            return Ok(payment);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(int id)
         {
