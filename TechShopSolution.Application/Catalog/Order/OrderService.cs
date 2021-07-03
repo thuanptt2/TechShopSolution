@@ -15,7 +15,7 @@ namespace TechShopSolution.Application.Catalog.Order
         {
             _context = context;
         }
-        public async Task<ApiResult<bool>> Create(CheckoutRequest request)
+        public async Task<ApiResult<string>> Create(CheckoutRequest request)
         {
             try
             {
@@ -55,11 +55,11 @@ namespace TechShopSolution.Application.Catalog.Order
                     _context.OrDetails.Add(detail);
                 }
                 await _context.SaveChangesAsync();
-                return new ApiSuccessResult<bool>();
+                return new ApiSuccessResult<string>(order.id.ToString());
             }
             catch
             {
-                return new ApiErrorResult<bool>("Tạo đơn đặt hàng thất bại, quý khách vui lòng thử lại sau");
+                return new ApiErrorResult<string>("Tạo đơn đặt hàng thất bại, quý khách vui lòng thử lại sau");
             }
         }
     }

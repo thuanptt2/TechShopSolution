@@ -9,6 +9,6 @@ namespace TechShopSolution.Application.Catalog.Order
 {
     public interface IOrderService
     {
-        Task<ApiResult<bool>> Create(CheckoutRequest request);
+        Task<ApiResult<string>> Create(CheckoutRequest request);
     }
 }

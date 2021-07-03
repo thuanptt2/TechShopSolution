@@ -9,6 +9,6 @@ namespace TechShopSolution.ApiIntegration
 {
     public interface IOrderApiClient
     {
-        Task<ApiResult<bool>> CreateOrder(CheckoutRequest request);
+        Task<ApiResult<string>> CreateOrder(CheckoutRequest request);
     }
 }
