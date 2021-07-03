@@ -152,6 +152,8 @@ namespace TechShopSolution.WebApp.Controllers
                 ViewBag.CustomerAddress = customer.ResultObject.address;
             }
             ViewBag.Payment = await _paymentApiClient.GetAll();
+            if (request.Order.payment_id == 0)
+                request.Order.payment_id = null;
             if (!ModelState.IsValid)
                 return View(request);
             return View(request);

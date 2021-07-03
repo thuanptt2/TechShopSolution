@@ -30,6 +30,7 @@ using TechShopSolution.ViewModels.Catalog.Customer.Validation;
 using TechShopSolution.ViewModels.Catalog.Customer.Validator;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Catalog.Product.Validator;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.BackendApi
@@ -70,7 +71,6 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IValidator<BrandCreateRequest>, BrandCreateValidator>();
             services.AddTransient<IValidator<BrandUpdateRequest>, BrandUpdateValidator>();
             services.AddTransient<IValidator<CustomerRegisterRequest>, CustomerRegisterValidator>();
-
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
