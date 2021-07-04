@@ -6,17 +6,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section jsFooter {
-    <script>
-        window.onload = function () {
-            var x = document.getElementById("snackbar");
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
 
-            // Add the "show" class to DIV
-            x.className = "show";
+                // Add the "show" class to DIV
+                x.className = "show";
 
-            // After 3 seconds, remove the show class from DIV
-            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-        };
-    </script>
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
 }
 <div class="container-fluid px-4">
     <h3 class="mt-4">Danh sách Sản phẩm</h3>
@@ -34,12 +51,12 @@
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
             <div class="input-group">
                 <label for="pet-select"></label>
-               
+
                 <div class="form-group mr-3">
                     <select name="CategoryID" asp-items="@(new SelectList(ViewBag.ListCate,"id", "cate_name"))" class="form-control">
                         <option value="" class="font-italic">Lọc theo loại sản phẩm</option>
                     </select>
-                </div> 
+                </div>
                 <div class="form-group mr-3">
                     <select name="BrandID" asp-items="@(new SelectList(ViewBag.ListBrand,"id","brand_name"))" class="form-control">
                         <option value="" class="font-italic">Lọc theo thương hiệu</option>
@@ -58,7 +75,12 @@
             <div class="alert alert-success" id="snackbar" role="alert">
                 <b>@ViewBag.SuccessMsg</b>
             </div>
-
+        }
+        @if (ViewBag.ErrorMsg != null)
+        {
+            <div class="alert alert-danger" id="snackbarDanger" role="alert">
+                <b>@ViewBag.ErrorMsg</b>
+            </div>
         }
 
         <!-- The actual snackbar -->

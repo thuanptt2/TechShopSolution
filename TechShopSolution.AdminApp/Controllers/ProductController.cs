@@ -40,10 +40,14 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _productApiClient.GetProductPagings(request);
             ViewBag.Keyword = keyword;
-           
+
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
             }
             ViewBag.ListCate = await OrderCateToTree(categoryList);
             ViewBag.ListBrand = await _productApiClient.GetAllBrand();
@@ -113,14 +117,14 @@ namespace TechShopSolution.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            var imageList = await Task.Run(() => _productApiClient.GetImageByProductID(id));
-            ViewData["imageList"] = imageList;
             var result = await Task.Run(() => _productApiClient.GetById(id));
             if (!result.IsSuccess || result.ResultObject == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View("Index");
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index");
             }
+            var imageList = await Task.Run(() => _productApiClient.GetImageByProductID(id));
+            ViewData["imageList"] = imageList;
             var updateRequest = new ProductUpdateRequest()
             {
                 Id = result.ResultObject.id,

@@ -31,6 +31,10 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(data);
         }
         [HttpGet]
@@ -58,8 +62,8 @@ namespace TechShopSolution.AdminApp.Controllers
             var result = await _brandApiClient.GetById(id);
             if (!result.IsSuccess || result.ResultObject == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View("Index");
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index");
             }
             var updateRequest = new BrandUpdateRequest()
             {
@@ -113,8 +117,8 @@ namespace TechShopSolution.AdminApp.Controllers
                 TempData["result"] = "Xóa thương hiệu thành công";
                 return RedirectToAction("Index");
             }
-            ModelState.AddModelError("", result.Message);
-            return View("Index");
+            TempData["error"] = result.Message;
+            return RedirectToAction("Index");
         }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(int id, string brand_slug)

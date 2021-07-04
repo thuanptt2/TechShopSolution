@@ -84,7 +84,7 @@ namespace TechShopSolution.Application.Catalog.Category
         public async Task<List<CategoryViewModel>> GetAllCategory()
         {
             var query = from cate in _context.Categories
-                        where cate.isDelete == false
+                        where cate.isDelete == false && cate.isActive == true
                         select cate;
             if (query == null)
                 return null;
@@ -110,6 +110,8 @@ namespace TechShopSolution.Application.Catalog.Category
                 var cate = await _context.Categories.FindAsync(cateID);
                 if (cate != null)
                 {
+                    if(await _context.CategoryProducts.AnyAsync(x=>x.cate_id == cate.id))
+                        return new ApiErrorResult<bool>($"Đang có sản phẩm thuộc loại này nên không thể xóa, Vui lòng gỡ hết sản phẩm thuộc loại này để tiếp tục");
                     cate.isDelete = true;
                     cate.delete_at = DateTime.Now;
                     await _context.SaveChangesAsync();

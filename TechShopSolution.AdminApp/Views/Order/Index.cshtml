@@ -5,6 +5,37 @@
     ViewData["Title"] = "Danh sách đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section jsFooter
+{
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+}
 
 <div class="container-fluid px-4">
     <h3 class="mt-4">Danh sách đơn hàng</h3>
@@ -12,6 +43,18 @@
         <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
         <li class="breadcrumb-item active">Đơn hàng</li>
     </ol>
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <div class="alert alert-success" id="snackbar" role="alert">
+            <b>@ViewBag.SuccessMsg</b>
+        </div>
+    }
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <div class="alert alert-danger" id="snackbarDanger" role="alert">
+            <b>@ViewBag.ErrorMsg</b>
+        </div>
+    }
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="padding-container">
         <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Payment">

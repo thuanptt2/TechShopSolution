@@ -163,15 +163,14 @@ namespace TechShopSolution.Application.Catalog.Order
 
             }).FirstOrDefault();
 
-            var customer = await _context.Customers.FindAsync(DataOrder.cus_id);
-            DataOrder.cus_name = customer.name;
-            DataOrder.cus_email = customer.email;
-            DataOrder.cus_phone = customer.phone;
-
             if (DataOrder == null)
             {
                 return new ApiErrorResult<OrderDetailViewModel>("Đơn hàng không tồn tại");
             }
+            var customer = await _context.Customers.FindAsync(DataOrder.cus_id);
+            DataOrder.cus_name = customer.name;
+            DataOrder.cus_email = customer.email;
+            DataOrder.cus_phone = customer.phone;
 
             List<OrderDetailModel> Details = query.Select(a => new OrderDetailModel()
             {

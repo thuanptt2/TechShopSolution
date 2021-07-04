@@ -19,6 +19,7 @@
 </head>
 
 <body class="sb-nav-fixed">
+   
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="#">TechShop Solution</a>
@@ -132,6 +133,20 @@
     <script src="~/js/notify.min.js" asp-append-version="true"></script>
     <script src="~/font-awesome/js/all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
     @RenderSection("jsFooter", required: false)
 </body>
 </html>

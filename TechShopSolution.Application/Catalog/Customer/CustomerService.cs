@@ -77,6 +77,8 @@ namespace TechShopSolution.Application.Catalog.Customer
                 var customer = await _context.Customers.FindAsync(cusID);
                 if (customer != null)
                 {
+                    if (await _context.Orders.AnyAsync(x => x.cus_id == customer.id))
+                        return new ApiErrorResult<bool>($"Khách hàng này đang có đơn hàng đấy, không thể xóa!");
                     customer.isDelete = true;
                     customer.delete_at = DateTime.Now;
                     await _context.SaveChangesAsync();

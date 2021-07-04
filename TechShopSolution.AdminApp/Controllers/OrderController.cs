@@ -25,7 +25,14 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _orderApiClient.GetOrderPagings(request);
             ViewBag.Keyword = keyword;
-           
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(data);
         }
         [HttpGet]
@@ -34,8 +41,8 @@ namespace TechShopSolution.AdminApp.Controllers
             var result = await _orderApiClient.GetById(id);
             if (!result.IsSuccess || result.ResultObject == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View("Index");
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index");
             }
             
             return View(result.ResultObject);
