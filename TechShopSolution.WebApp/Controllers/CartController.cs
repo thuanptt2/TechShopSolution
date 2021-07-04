@@ -11,6 +11,8 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.Utilities.Constants;
+using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.WebApp.Models;
 
@@ -44,7 +46,7 @@ namespace TechShopSolution.WebApp.Controllers
         public async Task<IActionResult> Checkout(string id)
         {
             var customer = await _customerApiClient.GetById(int.Parse(id));
-            if(customer.ResultObject != null)
+            if (customer.ResultObject != null)
             {
                 ViewBag.CustomerAddress = customer.ResultObject.address;
             }
@@ -164,18 +166,12 @@ namespace TechShopSolution.WebApp.Controllers
             var result = await _orderApiClient.CreateOrder(request);
             if(result.IsSuccess)
             {
-                var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-                string contentMail = System.IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\mail-template", "neworder.html"));
-                contentMail = contentMail.Replace("{{order_id}}", result.ResultObject);
-                contentMail = contentMail.Replace("{{total}}", String.Format(info, "{0:N0}", request.Order.total));
-                contentMail = contentMail.Replace("{{discount}}", String.Format(info, "{0:N0}", request.Order.discount));
-                contentMail = contentMail.Replace("{{ship_fee}}", String.Format(info, "{0:N0}", request.Order.transport_fee));
-                contentMail = contentMail.Replace("{{address}}", String.Format(info, "{0:N0}", request.Order.address_receiver));
-                var final_total = request.Order.total - request.Order.discount + request.Order.transport_fee;
-                contentMail = contentMail.Replace("{{final_total}}", String.Format(info, "{0:N0}", final_total));
                 TempData["result"] = "Đặt hàng thành công. Cảm ơn quý khách đã mua hàng của chúng tôi.";
                 HttpContext.Session.Remove(SystemConstants.CartSession);
-                await SendMail("thuanneuwu2@gmail.com", customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMail, "thuanneuwu2@gmail.com", "thanhthuan123");
+                var contentMailClient = sendMailToClient(int.Parse(result.ResultObject), request);
+                var contentMailAdmin = sendMailToAdmin(int.Parse(result.ResultObject), request, customer.ResultObject);
+                await SendMail("thuanneuwu2@gmail.com", customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMailClient, "thuanneuwu2@gmail.com", "thanhthuan123");
+                await SendMail("thuanneuwu2@gmail.com", "thuanneuwu2@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin, "thuanneuwu2@gmail.com", "thanhthuan123");
                 return RedirectToAction("Index","Home");
             }
             ModelState.AddModelError("", result.Message);
@@ -413,7 +409,38 @@ namespace TechShopSolution.WebApp.Controllers
                 return null;
             }
         }
-        public static async Task SendMail(string _from, string _to, string _subject, string _body, string _gmail, string _password)
+        public string sendMailToClient(int orderID, CheckoutRequest request)
+        {
+            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+            string contentMail = System.IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\mail-template", "neworder.html"));
+            contentMail = contentMail.Replace("{{order_id}}", orderID.ToString());
+            contentMail = contentMail.Replace("{{total}}", String.Format(info, "{0:N0}", request.Order.total));
+            contentMail = contentMail.Replace("{{discount}}", String.Format(info, "{0:N0}", request.Order.discount));
+            contentMail = contentMail.Replace("{{ship_fee}}", String.Format(info, "{0:N0}", request.Order.transport_fee));
+            contentMail = contentMail.Replace("{{address}}", String.Format(info, "{0:N0}", request.Order.address_receiver));
+            var final_total = request.Order.total - request.Order.discount + request.Order.transport_fee;
+            contentMail = contentMail.Replace("{{final_total}}", String.Format(info, "{0:N0}", final_total));
+            return contentMail;
+        }
+        public string sendMailToAdmin(int orderID, CheckoutRequest request, CustomerViewModel cutomer)
+        {
+            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+            string contentMail = System.IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\mail-template", "AdminOrderConfirm.html"));
+            contentMail = contentMail.Replace("{{order_id}}", orderID.ToString());
+            contentMail = contentMail.Replace("{{customer_name}}", request.Order.name_receiver);
+            contentMail = contentMail.Replace("{{customer_email}}", cutomer.email);
+            contentMail = contentMail.Replace("{{customer_phone}}", request.Order.phone_receiver);
+            contentMail = contentMail.Replace("{{order_note}}", request.Order.note);
+            contentMail = contentMail.Replace("{{order_time}}", DateTime.Now.ToString());
+            contentMail = contentMail.Replace("{{total}}", String.Format(info, "{0:N0}", request.Order.total));
+            contentMail = contentMail.Replace("{{discount}}", String.Format(info, "{0:N0}", request.Order.discount));
+            contentMail = contentMail.Replace("{{ship_fee}}", String.Format(info, "{0:N0}", request.Order.transport_fee));
+            contentMail = contentMail.Replace("{{address}}", String.Format(info, "{0:N0}", request.Order.address_receiver));
+            var final_total = request.Order.total - request.Order.discount + request.Order.transport_fee;
+            contentMail = contentMail.Replace("{{final_total}}", String.Format(info, "{0:N0}", final_total));
+            return contentMail;
+        }
+        public async Task SendMail(string _from, string _to, string _subject, string _body, string _gmail, string _password)
         {
             MailMessage message = new MailMessage(_from, _to, _subject, _body);
             message.BodyEncoding = System.Text.Encoding.UTF8;

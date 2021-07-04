@@ -22,6 +22,17 @@ namespace TechShopSolution.Application.Catalog.Order
                 var customer = await _context.Customers.FindAsync(request.Order.cus_id);
                 if (customer.address == "")
                     customer.address = request.Order.address_receiver;
+                var coupon = await _context.Coupons.FindAsync(request.Order.coupon_id);
+                if (coupon != null)
+                {
+                    if(coupon.quantity != null)
+                    {
+                        if (coupon.quantity == 0)
+                            return new ApiErrorResult<string>("Mã giảm giá bạn sử dụng đã được dùng hết");
+                        else coupon.quantity = coupon.quantity - 1;
+                    }
+                }
+                    
                 var order = new TechShopSolution.Data.Entities.Order
                 {
                     address_receiver = request.Order.address_receiver,

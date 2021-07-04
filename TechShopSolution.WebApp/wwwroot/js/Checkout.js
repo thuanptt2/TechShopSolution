@@ -1,4 +1,30 @@
-﻿$("#check2").click(function () {
+﻿window.onload = function () {
+    if ($('#txtTotal').val() >= 2000000) {
+        document.getElementById("txtTransportFee").value = 0;
+        $('#transport_fee').text("Miễn phí");
+        var newTotal = $('#txtTotal').val() - $('#txtDiscount').val();
+        $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+    }
+    else {
+        var address = document.getElementById("txtAddressReceiver").value;
+        if (address != "") {
+            var res = address.split(",");
+            if (res[res.length - 1] === " TP Hồ Chí Minh") {
+                document.getElementById("txtTransportFee").value = 0;
+                $('#transport_fee').text("Miễn phí");
+                var newTotal = $('#txtTotal').val() - $('#txtDiscount').val();
+                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+            }
+            else {
+                document.getElementById("txtTransportFee").value = 50000;
+                var newTotal = $('#txtTotal').val() - $('#txtDiscount').val() + 50000;
+                $('#transport_fee').text("50.000");
+                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+            }
+        };
+    }
+};
+$("#check2").click(function () {
     if (this.checked) {
         $("#address").hide();
     } else
@@ -9,9 +35,56 @@ $("#check1").click(function () {
     $('#ddlDistrict option:first').prop('selected', true);
     $('#ddlCity option:first').prop('selected', true);
     $('#ddlWard option:first').prop('selected', true);
+    if ($('#txtTotal').val() >= 2000000) {
+        document.getElementById("txtTransportFee").value = 0;
+        $('#transport_fee').text("Miễn phí");
+        var newTotal = $('#txtTotal').val() - $('#txtDiscount').val();
+        $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+    }
+    else {
+        var address = document.getElementById("txtAddressReceiver").value;
+        if (address != "") {
+            var res = address.split(",");
+            if (res[res.length - 1] === " TP Hồ Chí Minh") {
+                document.getElementById("txtTransportFee").value = 0;
+                $('#transport_fee').text("Miễn phí");
+                var newTotal = $('#txtTotal').val() - $('#txtDiscount').val();
+                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+            }
+            else {
+                document.getElementById("txtTransportFee").value = 50000;
+                var newTotal = $('#txtTotal').val() - $('#txtDiscount').val() + 50000;
+                $('#transport_fee').text("50.000");
+                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+            }
+        };
+    }
+});
+$(document).on('change', '#ddlCity', function () {
+    if ($('#txtTotal').val() < 2000000) {
+        var city = $("#ddlCity option:selected").text();
+        if (city === "TP Hồ Chí Minh") {
+            document.getElementById("txtTransportFee").value = 0;
+            $('#transport_fee').text("Miễn phí");
+            var newTotal = $('#txtTotal').val() - $('#txtDiscount').val();
+            $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+        }
+        else {
+            document.getElementById("txtTransportFee").value = 50000;
+            var newTotal = $('#txtTotal').val() - $('#txtDiscount').val() + 50000;
+            $('#transport_fee').text("50.000");
+            $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+        }
+    } else {
+        document.getElementById("txtTransportFee").value = 0;
+        $('#transport_fee').text("Miễn phí");
+        var newTotal = $('#txtTotal').val() - $('#txtDiscount').val();
+        $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newTotal));
+    }
 });
 $("#btnSubmit").click(function () {
-    if ($("#check2").attr("checked") == "checked") {
+    var radio = document.getElementById('check2');
+    if (radio.checked) {
         if ($("#txtAddressChoose")) {
             if ($("#ddlCity").val() != "" && $("#ddlDistrict").val() != "" && $("#ddlWard").val() != "" && $("#txtHomeAddress").val() != "") {
                 var city = $("#ddlCity option:selected").text();
@@ -39,5 +112,4 @@ $(document).on('change', '.radio-button', function () {
     if (radio.is(':checked')) {
         document.getElementById("PaymentDecription").innerHTML = document.getElementById("decription-" + radio.val()).innerHTML;
     }
-
 });

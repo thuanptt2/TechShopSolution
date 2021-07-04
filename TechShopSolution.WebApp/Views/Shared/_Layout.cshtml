@@ -37,7 +37,7 @@
 
 </head>
 <body>
-   @RenderSection("FacebookComments", required: false);
+    @RenderSection("FacebookComments", required: false);
     <div class="loaderbody" id="loaderbody">
         <div class="loader"></div>
     </div>
@@ -187,14 +187,19 @@
                 $("#loaderbody").addClass('hide');
             });
         });
-        var x = document.getElementById("snackbarAccount");
-
-        // Add the "show" class to DIV
-        x.className = "show";
-
-        // After 3 seconds, remove the show class from DIV
-        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
     </script>
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            var x = document.getElementById("snackbarAccount");
+
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        </script>
+    }
     <!-- Themes switcher section ============================================================================================= -->
     <div id="secectionBox">
         <link rel="stylesheet" href="/themes/switch/themeswitch.css" type="text/css" media="screen" />
