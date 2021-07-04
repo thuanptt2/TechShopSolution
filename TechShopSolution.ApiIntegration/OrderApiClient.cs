@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TechShopSolution.ViewModels.Catalog.Coupon;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
 
@@ -32,6 +33,16 @@ namespace TechShopSolution.ApiIntegration
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
+        }
+        public async Task<PagedResult<OrderViewModel>> GetOrderPagings(GetOrderPagingRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/order/paging?Keyword={request.Keyword}&pageIndex=" +
+                $"{request.PageIndex}&pageSize={request.PageSize}");
+            var body = await respone.Content.ReadAsStringAsync();
+            var order = JsonConvert.DeserializeObject<PagedResult<OrderViewModel>>(body);
+            return order;
         }
     }
 }

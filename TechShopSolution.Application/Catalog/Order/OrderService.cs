@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace TechShopSolution.Application.Catalog.Order
 {
@@ -73,5 +75,49 @@ namespace TechShopSolution.Application.Catalog.Order
                 return new ApiErrorResult<string>("Tạo đơn đặt hàng thất bại, quý khách vui lòng thử lại sau");
             }
         }
+        public PagedResult<OrderViewModel> GetAllPaging(GetOrderPagingRequest request)
+        {
+            var query = from o in _context.Orders
+                        join od in _context.OrDetails on o.id equals od.order_id
+                        select new { o };
+
+            if (!String.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.o.id.ToString().Contains(request.Keyword) || x.o.name_receiver.Contains(request.Keyword));
+            }
+
+
+            var data = query.AsEnumerable()
+                   .GroupBy(g => g.o);
+
+            int totalRow = data.Count();
+
+            List<OrderViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(a => new OrderViewModel()
+                {
+                    id = a.Key.id,
+                    create_at = a.Key.create_at,
+                    cus_id = a.Key.cus_id,
+                    name_receiver = a.Key.name_receiver,
+                    discount = a.Key.discount,
+                    isPay = a.Key.isPay,
+                    isShip = a.Key.isShip,
+                    status = a.Key.status,
+                    total = a.Key.total,
+                    transport_fee = a.Key.transport_fee
+
+                }).ToList();
+
+            var pageResult = new PagedResult<OrderViewModel>()
+            {
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Items = result,
+            };
+            return pageResult;
+        }
+
     }
 }

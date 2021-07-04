@@ -323,3 +323,13 @@ hr {
 .badge-cate-tag:hover .deleteCateTag {
     visibility: visible;
 }
+.text-success-order {
+    font-size: 15px;
+    font-weight: 500;
+    color: #22c993;
+}
+.text-warning-order {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fdbd41;
+}

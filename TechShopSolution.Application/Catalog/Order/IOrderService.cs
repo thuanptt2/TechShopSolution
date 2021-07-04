@@ -10,5 +10,6 @@ namespace TechShopSolution.Application.Catalog.Order
     public interface IOrderService
     {
         Task<ApiResult<string>> Create(CheckoutRequest request);
+        PagedResult<OrderViewModel> GetAllPaging(GetOrderPagingRequest request);
     }
 }

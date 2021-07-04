@@ -10,5 +10,6 @@ namespace TechShopSolution.ApiIntegration
     public interface IOrderApiClient
     {
         Task<ApiResult<string>> CreateOrder(CheckoutRequest request);
+        Task<PagedResult<OrderViewModel>> GetOrderPagings(GetOrderPagingRequest request);
     }
 }
