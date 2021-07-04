@@ -8,6 +8,7 @@ namespace TechShopSolution.Data.Entities
     {
         public int id { get; set; }
         public string name { get; set; }
+        public string description { get; set; }
         public bool isActive { get; set; }
         public bool isDelete { get; set; }
         public DateTime create_at { get; set; }

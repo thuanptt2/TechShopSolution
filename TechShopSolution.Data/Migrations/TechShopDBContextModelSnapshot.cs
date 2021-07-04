@@ -573,10 +573,17 @@ namespace TechShopSolution.Data.Migrations
             modelBuilder.Entity("TechShopSolution.Data.Entities.Order", b =>
                 {
                     b.Property<int>("id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 100000)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("address_receiver")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("coupon_id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("create_at")
                         .ValueGeneratedOnAdd()
@@ -610,9 +617,6 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<bool>("status")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("subtotal")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal>("total")
                         .HasColumnType("decimal(18,2)");
 
@@ -623,6 +627,8 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("id");
+
+                    b.HasIndex("coupon_id");
 
                     b.HasIndex("cus_id");
 
@@ -702,6 +708,9 @@ namespace TechShopSolution.Data.Migrations
 
                     b.Property<DateTime?>("delete_at")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
@@ -900,6 +909,8 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 100000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("cod_price")
@@ -926,6 +937,8 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("id");
+
+                    b.HasAlternateKey("order_id");
 
                     b.HasIndex("transporter_id");
 
@@ -998,15 +1011,13 @@ namespace TechShopSolution.Data.Migrations
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Order", b =>
                 {
+                    b.HasOne("TechShopSolution.Data.Entities.Coupon", "Coupon")
+                        .WithMany("Orders")
+                        .HasForeignKey("coupon_id");
+
                     b.HasOne("TechShopSolution.Data.Entities.Customer", "Customers")
                         .WithMany("Order")
                         .HasForeignKey("cus_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TechShopSolution.Data.Entities.Transport", "Transport")
-                        .WithOne("Order")
-                        .HasForeignKey("TechShopSolution.Data.Entities.Order", "id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1016,11 +1027,11 @@ namespace TechShopSolution.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Coupon");
+
                     b.Navigation("Customers");
 
                     b.Navigation("PaymentMethod");
-
-                    b.Navigation("Transport");
                 });
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.OrderDetail", b =>
@@ -1066,11 +1077,19 @@ namespace TechShopSolution.Data.Migrations
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Transport", b =>
                 {
+                    b.HasOne("TechShopSolution.Data.Entities.Order", "Order")
+                        .WithOne("Transport")
+                        .HasForeignKey("TechShopSolution.Data.Entities.Transport", "order_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TechShopSolution.Data.Entities.Transporter", "Transporter")
                         .WithMany("Transports")
                         .HasForeignKey("transporter_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("Transporter");
                 });
@@ -1090,6 +1109,11 @@ namespace TechShopSolution.Data.Migrations
                     b.Navigation("ListNews");
                 });
 
+            modelBuilder.Entity("TechShopSolution.Data.Entities.Coupon", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("TechShopSolution.Data.Entities.Customer", b =>
                 {
                     b.Navigation("Order");
@@ -1098,6 +1122,8 @@ namespace TechShopSolution.Data.Migrations
             modelBuilder.Entity("TechShopSolution.Data.Entities.Order", b =>
                 {
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("Transport");
                 });
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.PaymentMethod", b =>
@@ -1112,11 +1138,6 @@ namespace TechShopSolution.Data.Migrations
                     b.Navigation("ProductInCategory");
 
                     b.Navigation("Ratings");
-                });
-
-            modelBuilder.Entity("TechShopSolution.Data.Entities.Transport", b =>
-                {
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Transporter", b =>

@@ -15,6 +15,8 @@ using TechShopSolution.Application.Catalog.Category;
 using TechShopSolution.Application.Catalog.Coupon;
 using TechShopSolution.Application.Catalog.Customer;
 using TechShopSolution.Application.Catalog.Location;
+using TechShopSolution.Application.Catalog.Order;
+using TechShopSolution.Application.Catalog.PaymentMethod;
 using TechShopSolution.Application.Catalog.Product;
 using TechShopSolution.Application.Common;
 using TechShopSolution.Application.System;
@@ -29,6 +31,7 @@ using TechShopSolution.ViewModels.Catalog.Customer.Validation;
 using TechShopSolution.ViewModels.Catalog.Customer.Validator;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Catalog.Product.Validator;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.BackendApi
@@ -56,7 +59,9 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<ICouponService, CouponService>();
+            services.AddTransient<IPaymentMethodService, PaymentMethodService>();
             services.AddTransient<ILoadLocationService, LoadLocationService>();
             services.AddTransient<IValidator<CustomerCreateRequest>, CreateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
@@ -68,7 +73,6 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IValidator<BrandCreateRequest>, BrandCreateValidator>();
             services.AddTransient<IValidator<BrandUpdateRequest>, BrandUpdateValidator>();
             services.AddTransient<IValidator<CustomerRegisterRequest>, CustomerRegisterValidator>();
-
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 

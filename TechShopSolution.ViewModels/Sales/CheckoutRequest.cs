@@ -6,6 +6,7 @@ namespace TechShopSolution.ViewModels.Sales
 {
     public class CheckoutRequest
     {
-
+        public List<CreateOrderDetailRequest> OrderDetails { get; set; }
+        public CreteOrderRequest Order { get; set; }
     }
 }
