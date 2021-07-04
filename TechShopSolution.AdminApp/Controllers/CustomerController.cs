@@ -58,6 +58,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var result = await _customerApiClient.GetById(id);
+            var latest_order = await _customerApiClient.GetLatestOrder(id, 20);
             if (!result.IsSuccess || result.ResultObject == null)
             {
                 ModelState.AddModelError("", result.Message);
@@ -78,6 +79,7 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            ViewBag.LatestOrde = latest_order;
             return View(updateRequest);
         }
         [HttpPost]

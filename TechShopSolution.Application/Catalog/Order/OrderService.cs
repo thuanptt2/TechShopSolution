@@ -38,6 +38,7 @@ namespace TechShopSolution.Application.Catalog.Order
                         else coupon.quantity = coupon.quantity - 1;
                     }
                 }
+                
 
                 var order = new TechShopSolution.Data.Entities.Order
                 {
@@ -70,6 +71,16 @@ namespace TechShopSolution.Application.Catalog.Order
                         unit_price = item.unit_price,
                     };
                     _context.OrDetails.Add(detail);
+                    var product = await _context.Products.FindAsync(item.product_id);
+                    if (product != null)
+                    {
+                        if (product.instock != null)
+                        {
+                            if (product.instock == 0)
+                                return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã hết hạn vui lòng bỏ sản phẩm ra khỏi giỏ hàng.");
+                            else product.instock = product.instock - item.quantity;
+                        }
+                    }
                 }
                 await _context.SaveChangesAsync();
                 return new ApiSuccessResult<string>(order.id.ToString());
@@ -96,7 +107,8 @@ namespace TechShopSolution.Application.Catalog.Order
 
             int totalRow = data.Count();
 
-            List<OrderViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+            List<OrderViewModel> result = data.OrderByDescending(x => x.Key.create_at)
+                .Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(a => new OrderViewModel()
                 {

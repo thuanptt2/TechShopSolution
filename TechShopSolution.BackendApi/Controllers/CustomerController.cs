@@ -98,5 +98,11 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("orderlatest")]
+        public IActionResult GetLatestOrder(int id, int take)
+        {
+            var result = _customerService.GetLatestOrder(id, take);
+            return Ok(result);
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Sales;
 
 namespace TechShopSolution.Application.Catalog.Customer
 {
@@ -247,6 +248,34 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return false;
             }
             return true;
+        }
+        public List<OrderViewModel> GetLatestOrder(int id,int take)
+        {
+            var query = from o in _context.Orders
+                        join od in _context.OrDetails on o.id equals od.order_id
+                        where o.cus_id == id
+                        select new { o };
+
+            var data = query.AsEnumerable()
+                   .GroupBy(g => g.o);
+
+            var result = data.OrderByDescending(x => x.Key.create_at)
+                .Take(take)
+                .Select(a => new OrderViewModel
+                {
+                    create_at = a.Key.create_at,
+                    cus_id = a.Key.cus_id,
+                    discount = a.Key.discount,
+                    id = a.Key.id,
+                    isPay = a.Key.isPay,
+                    isShip = a.Key.isShip,
+                    name_receiver = a.Key.name_receiver,
+                    status = a.Key.status,
+                    total = a.Key.total,
+                    transport_fee = a.Key.transport_fee
+                }).ToList();
+
+            return result;
         }
     }
 }
