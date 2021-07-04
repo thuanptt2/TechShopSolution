@@ -33,5 +33,11 @@ namespace TechShopSolution.BackendApi.Controllers
             var customer = _orderService.GetAllPaging(requet);
             return Ok(customer);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var result = await _orderService.Detail(id);
+            return Ok(result);
+        }
     }
 }

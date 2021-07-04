@@ -6,7 +6,7 @@ namespace TechShopSolution.ViewModels.Sales
 {
     public class OrderDetailViewModel
     {
-        public OrderViewModel Order { get; set; }
+        public OrderModel Order { get; set; }
         public List<OrderDetailModel> Details { get; set; }
     }
 }

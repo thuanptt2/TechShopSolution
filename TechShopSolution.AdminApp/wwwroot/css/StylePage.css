@@ -103,6 +103,7 @@ hr {
 
 .table td, .table th {
     vertical-align: middle;
+    max-width: 600px;
 }
 
 .pagination {
@@ -332,4 +333,58 @@ hr {
     font-size: 15px;
     font-weight: 500;
     color: #fdbd41;
+}
+.order-detail--list-status {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0 -10px;
+}
+.ui-toolbar-product-info {
+    padding: 6px 10px;
+    max-width: 275px;
+}
+.order-detail--list-status .ui-toolbar-product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-right: 1px solid hsla(0,0%,87.8%,.37);
+}
+.ui-toolbar-product-info .ui-product-body {
+    color: #6c798f;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+.ui-toolbar-product-info .ui-product-body {
+    font-weight: 500;
+    line-height: 21px;
+    font-size: 15px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: grey;
+}
+.order-detail--list-status .ui-product-body, .order-detail--list-status .ui-product-head {
+    margin-bottom: 0 !important;
+}
+.ui-toolbar-product-info .ui-product-head {
+    color: #212121;
+    font-size: 19px;
+    line-height: 26px;
+    margin-bottom: 5px;
+}
+
+.order-detail--list-status-code {
+    font-size: 24px;
+}
+table a {
+    color: #161616;
+    font-weight: 500;
+}
+table a:hover {
+    text-decoration: none;
+}
+.text-danger-order {
+    font-size: 15px;
+    font-weight: 500;
+    color: #d32e2e;
 }

@@ -44,5 +44,15 @@ namespace TechShopSolution.ApiIntegration
             var order = JsonConvert.DeserializeObject<PagedResult<OrderViewModel>>(body);
             return order;
         }
+        public async Task<ApiResult<OrderDetailViewModel>> GetById(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/order/{id}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<OrderDetailViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<OrderDetailViewModel>>(body);
+        }
     }
 }

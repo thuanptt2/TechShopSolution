@@ -7,15 +7,19 @@ using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using TechShopSolution.Application.Common;
 
 namespace TechShopSolution.Application.Catalog.Order
 {
     public class OrderService : IOrderService
     {
         private readonly TechShopDBContext _context;
-        public OrderService(TechShopDBContext context)
+        private readonly IStorageService _storageService;
+        public OrderService(TechShopDBContext context, IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
         }
         public async Task<ApiResult<string>> Create(CheckoutRequest request)
         {
@@ -27,14 +31,14 @@ namespace TechShopSolution.Application.Catalog.Order
                 var coupon = await _context.Coupons.FindAsync(request.Order.coupon_id);
                 if (coupon != null)
                 {
-                    if(coupon.quantity != null)
+                    if (coupon.quantity != null)
                     {
                         if (coupon.quantity == 0)
                             return new ApiErrorResult<string>("Mã giảm giá bạn sử dụng đã được dùng hết");
                         else coupon.quantity = coupon.quantity - 1;
                     }
                 }
-                    
+
                 var order = new TechShopSolution.Data.Entities.Order
                 {
                     address_receiver = request.Order.address_receiver,
@@ -117,6 +121,67 @@ namespace TechShopSolution.Application.Catalog.Order
                 Items = result,
             };
             return pageResult;
+        }
+        public async Task<ApiResult<OrderDetailViewModel>> Detail(int id)
+        {
+            var query = from od in _context.OrDetails
+                        join p in _context.Products on od.product_id equals p.id
+                        join o in _context.Orders on od.order_id equals o.id
+                        where o.id == id
+                        select new { p, o, od };
+
+
+            OrderModel DataOrder = query.Select(a => new OrderModel()
+            {
+                id = a.o.id,
+                create_at = a.o.create_at,
+                cus_id = a.o.cus_id,
+                name_receiver = a.o.name_receiver,
+                discount = a.o.discount,
+                isPay = a.o.isPay,
+                isShip = a.o.isShip,
+                status = a.o.status,
+                note = a.o.note,
+                address_receiver = a.o.address_receiver,
+                coupon_id = a.o.coupon_id,
+                payment_id = a.o.payment_id,
+                phone_receiver = a.o.phone_receiver,
+                total = a.o.total,
+                transport_fee = a.o.transport_fee
+
+            }).FirstOrDefault();
+
+            var customer = await _context.Customers.FindAsync(DataOrder.cus_id);
+            DataOrder.cus_name = customer.name;
+            DataOrder.cus_email = customer.email;
+            DataOrder.cus_phone = customer.phone;
+
+            if (DataOrder == null)
+            {
+                return new ApiErrorResult<OrderDetailViewModel>("Đơn hàng không tồn tại");
+            }
+
+            List<OrderDetailModel> Details = query.Select(a => new OrderDetailModel()
+            {
+                order_id = a.od.order_id,
+                product_id = a.od.product_id,
+                product_image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
+                product_name = a.p.name,
+                promotion_price = a.od.promotion_price,
+                quantity = a.od.quantity,
+                unit_price = a.od.unit_price
+            }).ToList();
+
+            var model = new OrderDetailViewModel();
+            model.Order = DataOrder;
+            model.Details = Details;
+            return new ApiSuccessResult<OrderDetailViewModel>(model);
+        }
+        protected static string GetBase64StringForImage(string imgPath)
+        {
+            byte[] imageBytes = File.ReadAllBytes(imgPath);
+            string base64String = Convert.ToBase64String(imageBytes);
+            return base64String;
         }
 
     }

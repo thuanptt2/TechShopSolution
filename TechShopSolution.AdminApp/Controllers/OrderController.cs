@@ -28,5 +28,17 @@ namespace TechShopSolution.AdminApp.Controllers
            
             return View(data);
         }
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var result = await _orderApiClient.GetById(id);
+            if (!result.IsSuccess || result.ResultObject == null)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View("Index");
+            }
+            
+            return View(result.ResultObject);
+        }
     }
 }
