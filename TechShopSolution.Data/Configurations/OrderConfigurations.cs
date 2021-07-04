@@ -13,6 +13,7 @@ namespace TechShopSolution.Data.Configurations
         {
             builder.ToTable("Order");
             builder.HasKey(x => x.id);
+            builder.Property(x => x.id).UseIdentityColumn(100000,1);
             builder.Property(x => x.cus_id).IsRequired();
             builder.Property(x => x.payment_id).IsRequired();
             builder.Property(x => x.status).IsRequired();
@@ -25,6 +26,7 @@ namespace TechShopSolution.Data.Configurations
             builder.HasOne(x => x.Customers).WithMany(t => t.Order).HasForeignKey(x => x.cus_id);
             builder.HasOne(x => x.Coupon).WithMany(t => t.Orders).HasForeignKey(x => x.coupon_id);
             builder.HasOne(x => x.PaymentMethod).WithMany(t => t.Orders).HasForeignKey(x => x.payment_id);
+            builder.HasOne(x => x.Transport).WithOne(t => t.Order).HasForeignKey<Transport>(t => t.order_id);
         }
     }
 }

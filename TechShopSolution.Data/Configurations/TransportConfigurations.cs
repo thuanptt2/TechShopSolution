@@ -13,6 +13,7 @@ namespace TechShopSolution.Data.Configurations
         {
             builder.ToTable("Transport");
             builder.HasKey(x => x.id);
+            builder.Property(x => x.id).UseIdentityColumn(100000,1);
             builder.Property(x => x.cod_price).IsRequired();
             builder.Property(x => x.lading_code).IsRequired().HasMaxLength(255).IsUnicode(false);
             builder.Property(x => x.transporter_id).IsRequired();
@@ -20,9 +21,8 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.create_at)
                 .HasDefaultValueSql("GetDate()");
             builder.Property(x => x.update_at);
-
+            builder.HasAlternateKey(x => x.order_id);
             builder.HasOne(x => x.Transporter).WithMany(t => t.Transports).HasForeignKey(x => x.transporter_id);
-            builder.HasOne(x => x.Order).WithOne(t => t.Transport).HasForeignKey<Order>(x => x.id);
         }
     }
 }

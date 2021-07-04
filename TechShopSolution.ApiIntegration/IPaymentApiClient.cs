@@ -15,5 +15,6 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<bool>> ChangeStatus(int Id);
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<PaymentViewModel>> GetById(int id);
+        Task<List<PaymentViewModel>> GetAll();
     }
 }

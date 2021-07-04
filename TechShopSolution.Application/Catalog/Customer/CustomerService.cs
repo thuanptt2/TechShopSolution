@@ -32,7 +32,6 @@ namespace TechShopSolution.Application.Catalog.Customer
                     sex = request.sex,
                     isActive = request.isActive,
                     isDelete = false,
-                    Order = new List<Data.Entities.Order>(),
                     create_at = DateTime.Now
                 };
                 _context.Customers.Add(customer);

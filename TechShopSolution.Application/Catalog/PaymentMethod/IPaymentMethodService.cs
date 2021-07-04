@@ -15,5 +15,6 @@ namespace TechShopSolution.Application.Catalog.PaymentMethod
         Task<ApiResult<PaymentViewModel>> GetById(int id);
         Task<ApiResult<bool>> Update(PaymentUpdateRequest request);
         Task<PagedResult<PaymentViewModel>> GetAllPaging(GetPaymentPagingRequest request);
+        Task<List<PaymentViewModel>> GetAll();
     }
 }

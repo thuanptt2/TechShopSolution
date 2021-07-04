@@ -86,14 +86,14 @@ namespace TechShopSolution.Application.Catalog.PaymentMethod
             }
             var paymentt = new PaymentViewModel()
             {
-               create_at = payment.create_at,
-               name = payment.name,
-               isActive = payment.isActive,
-               isDelete = payment.isDelete,
-               id = payment.id,
-               delete_at = payment.delete_at,
-               description = payment.description,
-               update_at = payment.update_at
+                create_at = payment.create_at,
+                name = payment.name,
+                isActive = payment.isActive,
+                isDelete = payment.isDelete,
+                id = payment.id,
+                delete_at = payment.delete_at,
+                description = payment.description,
+                update_at = payment.update_at
             };
             return new ApiSuccessResult<PaymentViewModel>(paymentt);
         }
@@ -118,6 +118,28 @@ namespace TechShopSolution.Application.Catalog.PaymentMethod
             {
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
+        }
+        public async Task<List<PaymentViewModel>> GetAll()
+        {
+            var query = from payment in _context.PaymentMethods
+                        where payment.isDelete == false
+                        select payment;
+
+            var data = query
+                .Select(a => new PaymentViewModel()
+                {
+                    id = a.id,
+                    name = a.name,
+                    isActive = a.isActive,
+                    create_at = a.create_at,
+                    delete_at = a.delete_at,
+                    isDelete = a.isDelete,
+                    description = a.description,
+                    update_at = a.update_at,
+                }).ToListAsync();
+
+            return await data;
+
         }
         public async Task<PagedResult<PaymentViewModel>> GetAllPaging(GetPaymentPagingRequest request)
         {
@@ -156,6 +178,5 @@ namespace TechShopSolution.Application.Catalog.PaymentMethod
             };
             return pageResult;
         }
-
     }
 }
