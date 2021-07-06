@@ -421,3 +421,9 @@ table a:hover {
 .item-dropdown {
     margin: 10px 0;
 }
+.datepicker {
+    background-color: #fff !important;
+}
+.datepicker:hover {
+    cursor: pointer
+}

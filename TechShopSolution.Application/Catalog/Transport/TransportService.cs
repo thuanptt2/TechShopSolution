@@ -5,12 +5,12 @@ using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using TechShopSolution.Application.Common;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Transport;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using TechShopSolution.Application.Common;
 
 namespace TechShopSolution.Application.Catalog.Transport
 {
@@ -21,7 +21,7 @@ namespace TechShopSolution.Application.Catalog.Transport
         public TransportService(TechShopDBContext context, IStorageService storageService)
         {
             _context = context;
-            storageService = _storageService;
+            _storageService = storageService;
         }
         public async Task<ApiResult<bool>> ChangeStatus(int id)
         {
@@ -177,12 +177,12 @@ namespace TechShopSolution.Application.Catalog.Transport
                     id = a.id,
                     name = a.name,
                     isActive = a.isActive,
+                    image = GetBase64StringForImage(_storageService.GetFileUrl(a.image)),
                     create_at = a.create_at,
                     link = a.link,
-                    image = GetBase64StringForImage(_storageService.GetFileUrl(a.image)),
-                    update_at = a.update_at,
                 }).ToListAsync();
 
+           
             var pageResult = new PagedResult<TransporterViewModel>()
             {
                 TotalRecords = totalRow,

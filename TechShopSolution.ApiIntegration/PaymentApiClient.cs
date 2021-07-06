@@ -29,7 +29,6 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<ApiResult<bool>> CreatePayment(PaymentCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -44,7 +43,6 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<ApiResult<bool>> Delete(int id)
         {
             var client = _httpClientFactory.CreateClient();
@@ -55,7 +53,6 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<ApiResult<PaymentViewModel>> GetById(int id)
         {
             var client = _httpClientFactory.CreateClient();
@@ -85,7 +82,6 @@ namespace TechShopSolution.ApiIntegration
             var payment = JsonConvert.DeserializeObject<List<PaymentViewModel>>(body);
             return payment;
         }
-
         public async Task<ApiResult<bool>> UpdatePayment(PaymentUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();

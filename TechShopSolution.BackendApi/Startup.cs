@@ -32,7 +32,6 @@ using TechShopSolution.ViewModels.Catalog.Customer.Validation;
 using TechShopSolution.ViewModels.Catalog.Customer.Validator;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Catalog.Product.Validator;
-using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.BackendApi
