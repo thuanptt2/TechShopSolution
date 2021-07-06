@@ -53,12 +53,12 @@
                 <label for="pet-select"></label>
 
                 <div class="form-group mr-3">
-                    <select name="CategoryID" asp-items="@(new SelectList(ViewBag.ListCate,"id", "cate_name"))" class="form-control">
+                    <select name="CategoryID" asp-items="ViewBag.Categories" class="form-select">
                         <option value="" class="font-italic">Lọc theo loại sản phẩm</option>
                     </select>
                 </div>
                 <div class="form-group mr-3">
-                    <select name="BrandID" asp-items="@(new SelectList(ViewBag.ListBrand,"id","brand_name"))" class="form-control">
+                    <select name="BrandID" asp-items="ViewBag.Brands" class="form-select">
                         <option value="" class="font-italic">Lọc theo thương hiệu</option>
                     </select>
                 </div>
@@ -88,6 +88,9 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light thead-dark">
                     <tr>
+                        <th scope="col" width="60px" class="text-center">
+                            Ảnh
+                        </th>
                         <th scope="col" width="400px">
                             Tên sản phẩm
                         </th>
@@ -118,25 +121,26 @@
                 <tbody>
                     @if (Model.Items == null)
                     {
-                        <tr>
-                            <td>
-                                Không có sản phẩm nào.
-                            </td>
-                        </tr>
+                    <tr>
+                        <th></th>
+                        <th>Không có sản phẩm nào.</th>
+                    </tr>
                     }
                     else if (Model.TotalRecords == 0)
                     {
-                        <tr>
-                            <td>
-                                Không tìm thấy sản phẩm.
-                            </td>
-                        </tr>
+                    <tr>
+                        <th></th>
+                        <th>Không tìm thấy sản phẩm.</th>
+                    </tr>
                     }
                     else
                     {
                         @foreach (var item in Model.Items)
                         {
                             <tr>
+                                <td>
+                                   <img src="data:image/jpeg;base64,@item.image" width="50"/>
+                                </td>
                                 <td>
                                     @Html.ActionLink(item.name, "Update", new { id = item.id })
                                 </td>

@@ -45,6 +45,9 @@ $().ready(function () {
             for (var key of formData.keys()) {
                 listImages.append("files", formData.get(key));
             }
+            if (document.getElementById('checkInstock').checked == false) {
+                document.getElementById("txtInstock").value = null;
+            }
             $.ajax(
                 {
                     url: "/Product/sendListMoreImage",

@@ -17,7 +17,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<ProductViewModel>> GetById(int id);
         Task<ApiResult<ProductViewModel>> GetBySlug(string slug);
         PagedResult<ProductViewModel> GetAllPaging(GetProductPagingRequest request);
-        PagedResult<ProductViewModel> GetAllPagingWithMainImage(GetProductPagingRequest request);
         PagedResult<ProductViewModel> GetPublicProducts(GetPublicProductPagingRequest request);
         Task<bool> isValidSlug(string Code, string slug);
         Task<List<ImageListResult>> GetImagesByProductID(int id);

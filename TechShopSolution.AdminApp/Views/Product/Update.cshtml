@@ -259,22 +259,44 @@
                             Quản Lý Tồn Kho
                         </label>
                         <hr />
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    <input type="checkbox" />  Có quản lý tồn kho
-                                </label>
-                            </div>
-                        </div>
-                        <div id="collapseOne" aria-expanded="false" class="collapse">
-                            <div class="well">
-                                <div class="form-group">
-                                    <label asp-for="Instock" class="control-label lableFormField"></label>
-                                    <input asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
-                                    <span asp-validation-for="Instock" class="text-danger"></span>
+                        @if (Model.Instock == null)
+                        {
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        <input type="checkbox" id="checkInstock"/>  Có quản lý tồn kho
+                                    </label>
                                 </div>
                             </div>
-                        </div>
+                            <div id="collapseOne" aria-expanded="false" class="collapse">
+                                <div class="well">
+                                    <div class="form-group">
+                                        <label asp-for="Instock" class="control-label lableFormField"></label>
+                                        <input id="txtInstock" asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
+                                        <span asp-validation-for="Instock" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <input type="checkbox" checked="checked" id="checkInstock"/>  Có quản lý tồn kho
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="collapseOne" aria-expanded="false" class="collapse show">
+                                <div class="well">
+                                    <div class="form-group">
+                                        <label asp-for="Instock" class="control-label lableFormField"></label>
+                                        <input id="txtInstock" asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
+                                        <span asp-validation-for="Instock" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                     <div class="wrapper-content mb-4">
                         <label class="title-fill">
