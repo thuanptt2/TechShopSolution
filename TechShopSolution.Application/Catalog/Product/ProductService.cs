@@ -175,9 +175,9 @@ namespace TechShopSolution.Application.Catalog.Product
                 if (!String.IsNullOrEmpty(request.Keyword))
                     query = query.Where(x => x.p.name.Contains(request.Keyword));
 
-                if (request.CategoryID.Count() != 0)
+                if (request.CategoryID != null)
                 {
-                    query = query.Where(x => x.pic.cate_id == (request.CategoryID[0]));
+                    query = query.Where(x => x.pic.cate_id == request.CategoryID);
                 }
 
                 if (request.BrandID != null)
@@ -203,7 +203,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         create_at = a.Key.create_at,
                         descriptions = a.Key.descriptions,
                         featured = a.Key.featured,
-                        image = a.Key.image,
+                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
                         instock = a.Key.instock,
                         meta_descriptions = a.Key.meta_descriptions,
                         meta_keywords = a.Key.meta_keywords,
@@ -217,90 +217,6 @@ namespace TechShopSolution.Application.Catalog.Product
                         unit_price = a.Key.unit_price,
                         warranty = a.Key.warranty,
                     }).ToList();
-
-                var pageResult = new PagedResult<ProductViewModel>()
-                {
-                    TotalRecords = totalRow,
-                    PageSize = request.PageSize,
-                    PageIndex = request.PageIndex,
-                    Items = result,
-                };
-                return pageResult;
-            }
-            catch
-            {
-                var pageResult = new PagedResult<ProductViewModel>()
-                {
-                    TotalRecords = 0,
-                    PageSize = request.PageSize,
-                    PageIndex = request.PageIndex,
-                    Items = null,
-                };
-                return pageResult;
-            }
-        }
-        public PagedResult<ProductViewModel> GetAllPagingWithMainImage(GetProductPagingRequest request)
-        {
-            try
-            {
-                var query = from p in _context.Products
-                            join pic in _context.CategoryProducts on p.id equals pic.product_id
-                            where p.isDelete == false && p.isActive == true
-                            select new { p, pic };
-
-                if (!String.IsNullOrEmpty(request.Keyword))
-                    query = query.Where(x => x.p.name.Contains(request.Keyword));
-
-                if (request.CategoryID != null)
-                    if (request.CategoryID.Count != 0)
-                        query = query.Where(x => x.pic.cate_id == (request.CategoryID[0]));
-
-                if (request.BrandID != null)
-                {
-                    query = query.Where(x => x.p.brand_id == request.BrandID);
-                }
-
-                var data = query.AsEnumerable()
-                    .OrderByDescending(m => m.p.create_at)
-                    .GroupBy(g => g.p);
-
-                int totalRow = data.Count();
-
-                List<ProductViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
-                    .Take(request.PageSize)
-                    .Select(a => new ProductViewModel()
-                    {
-                        id = a.Key.id,
-                        name = a.Key.name,
-                        best_seller = a.Key.best_seller,
-                        brand_id = a.Key.brand_id,
-                        code = a.Key.code,
-                        create_at = a.Key.create_at,
-                        descriptions = a.Key.descriptions,
-                        featured = a.Key.featured,
-                        image = a.Key.image,
-                        instock = a.Key.instock,
-                        meta_descriptions = a.Key.meta_descriptions,
-                        meta_keywords = a.Key.meta_keywords,
-                        meta_tittle = a.Key.meta_tittle,
-                        more_images = a.Key.more_images,
-                        promotion_price = a.Key.promotion_price,
-                        short_desc = a.Key.short_desc,
-                        slug = a.Key.slug,
-                        specifications = a.Key.specifications,
-                        isActive = a.Key.isActive,
-                        unit_price = a.Key.unit_price,
-                        warranty = a.Key.warranty,
-                    }).ToList();
-
-                foreach (var pro in result)
-                {
-                    if (pro.image != null)
-                    {
-                        ImageListResult image = new ImageListResult();
-                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
-                    }
-                }
 
                 var pageResult = new PagedResult<ProductViewModel>()
                 {

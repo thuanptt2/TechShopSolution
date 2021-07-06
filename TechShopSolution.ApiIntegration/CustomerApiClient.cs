@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Location;
+using TechShopSolution.ViewModels.Sales;
 
 namespace TechShopSolution.ApiIntegration
 {
@@ -70,6 +71,16 @@ namespace TechShopSolution.ApiIntegration
             if(respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<CustomerViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<CustomerViewModel>>(body);
+        }
+        public async Task<List<OrderViewModel>> GetLatestOrder(int id, int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/customer/orderlatest?id={id}&take={take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<OrderViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<OrderViewModel>>(body);
         }
         public async Task<PagedResult<CustomerViewModel>> GetCustomerPagings(GetCustomerPagingRequest request)
         {

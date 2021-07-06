@@ -27,5 +27,33 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("paging")]
+        public IActionResult GetAllPaging([FromQuery] GetOrderPagingRequest requet)
+        {
+            var customer = _orderService.GetAllPaging(requet);
+            return Ok(customer);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var result = await _orderService.Detail(id);
+            return Ok(result);
+        }
+        [HttpGet("paymentconfirm/{id}")]
+        public async Task<IActionResult> PaymentConfirm(int id)
+        {
+            var result = await _orderService.PaymentConfirm(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("cancelorder/{id}")]
+        public async Task<IActionResult> Cancelorder(int id)
+        {
+            var result = await _orderService.CancelOrder(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

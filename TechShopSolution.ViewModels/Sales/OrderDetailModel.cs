@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TechShopSolution.Data.Entities
+namespace TechShopSolution.ViewModels.Sales
 {
-    public class OrderDetail
+    public class OrderDetailModel
     {
         public int order_id { get; set; }
         public int product_id { get; set; }
+        public string product_name { get; set; }
+        public string product_image { get; set; }
         public int quantity { get; set; }
         public decimal unit_price { get; set; }
         public decimal? promotion_price { get; set; }
-        public Order Order { get; set; }
-        public Product Product { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Location;
+using TechShopSolution.ViewModels.Sales;
 
 namespace TechShopSolution.ApiIntegration
 {
@@ -23,6 +24,6 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<List<ProvinceModel>>> LoadProvince();
         Task<ApiResult<List<DistrictModel>>> LoadDistrict(int provinceID);
         Task<ApiResult<List<WardModel>>> LoadWard(int districtID);
-
+        Task<List<OrderViewModel>> GetLatestOrder(int id, int take);
     }
 }

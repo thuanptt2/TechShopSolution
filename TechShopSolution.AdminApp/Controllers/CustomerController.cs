@@ -33,6 +33,10 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(data);
         }
         [HttpGet]
@@ -58,10 +62,11 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var result = await _customerApiClient.GetById(id);
+            var latest_order = await _customerApiClient.GetLatestOrder(id, 20);
             if (!result.IsSuccess || result.ResultObject == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View("Index");
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index");
             }
             var updateRequest = new CustomerUpdateRequest()
             {
@@ -78,6 +83,7 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            ViewBag.LatestOrde = latest_order;
             return View(updateRequest);
         }
         [HttpPost]
@@ -130,30 +136,24 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> ChangeStatus(int id)
         {
             var result = await _customerApiClient.ChangeStatus(id);
-            if (result == null)
-            {
-                ModelState.AddModelError("Cập nhật thất bại", result.Message);
-            }
             if (result.IsSuccess)
             {
                 TempData["result"] = "Thay đổi trạng thái thành công";
                 return RedirectToAction("Index");
             }
-            return View("Index");
+            TempData["error"] = result.Message;
+            return RedirectToAction("Index");
         }
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _customerApiClient.Delete(id);
-            if (result == null)
-            {
-                ModelState.AddModelError("", result.Message);
-            }
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa khách hàng thành công";
                 return RedirectToAction("Index");
             }
-            return View("Index");
+            TempData["error"] = result.Message;
+            return RedirectToAction("Index");
         }
         public async Task<JsonResult> LoadProvince()
         {

@@ -45,6 +45,10 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(data);
         }
         public async Task<List<CategoryViewModel>> OrderCateToTree(List<CategoryViewModel> lst, int parent_id = 0, int level = 0)
@@ -97,8 +101,8 @@ namespace TechShopSolution.AdminApp.Controllers
             var result = await _categoryApiClient.GetById(id);
             if (!result.IsSuccess || result.ResultObject == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View("Index");
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index");
             }
             var updateRequest = new UpdateCategoryRequest()
             {
@@ -141,31 +145,25 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _categoryApiClient.Delete(id);
-            if (result == null)
-            {
-                ModelState.AddModelError("", result.Message);
-            }
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa loại sản phẩm thành công";
                 return RedirectToAction("Index");
             }
-            return View("Index");
+            TempData["error"] = result.Message;
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public async Task<IActionResult> ChangeStatus(int id)
         {
             var result = await _categoryApiClient.ChangeStatus(id);
-            if (result == null)
-            {
-                ModelState.AddModelError("Cập nhật thất bại", result.Message);
-            }
             if (result.IsSuccess)
             {
                 TempData["result"] = "Thay đổi trạng thái thành công";
                 return RedirectToAction("Index");
             }
-            return View("Index");
+            TempData["error"] = result.Message;
+            return RedirectToAction("Index");
         }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(int id, string cate_slug)

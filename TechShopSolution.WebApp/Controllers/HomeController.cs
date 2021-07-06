@@ -36,6 +36,7 @@ namespace TechShopSolution.WebApp.Controllers
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
+                TempData["result"] = null;
             }
             return View(viewModel);
         }

@@ -58,7 +58,7 @@ namespace TechShopSolution.AdminApp.Controllers
                 var adminPrincipal = this.ValidateToken(token);
                 var authProperties = new AuthenticationProperties
                 {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(120),
                     IsPersistent = false
                 };
                 HttpContext.Session.SetString("Token", token);
