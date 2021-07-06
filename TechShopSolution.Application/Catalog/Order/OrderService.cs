@@ -188,6 +188,47 @@ namespace TechShopSolution.Application.Catalog.Order
             model.Details = Details;
             return new ApiSuccessResult<OrderDetailViewModel>(model);
         }
+        public async Task<ApiResult<string>> PaymentConfirm(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+                return new ApiErrorResult<string>("Không tìm thấy đơn hàng này trong CSDL");
+            if(order.isPay)
+                return new ApiErrorResult<string>("Đơn hàng này đã được thanh toán rồi, không thể thanh toán lại");
+            order.isPay = true;
+            _context.SaveChanges();
+            return new ApiSuccessResult<string>("Thanh toán đơn hàng thành công");
+        }
+        public async Task<ApiResult<string>> CancelOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+                return new ApiErrorResult<string>("Không tìm thấy đơn hàng này trong CSDL");
+            if (!order.status)
+                return new ApiErrorResult<string>("Đơn hàng này đã bị hủy trước đó, không thể hủy lại");
+            var isValid = await _context.Transports.AnyAsync(x => x.order_id == id);
+            if(isValid)
+                return new ApiErrorResult<string>("Đơn hàng này đã được tạo đơn vận chuyển, không thể hủy");
+            else
+            {
+                order.status = false;
+                var details = await _context.OrDetails.Where(x => x.order_id == order.id).ToListAsync();
+                foreach (var item in details)
+                {
+                    var product = _context.Products.Find(item.product_id);
+                    if(product != null)
+                    {
+                        if(product.instock != null)
+                        {
+                            product.instock += item.quantity;
+                        }
+                    }
+                }
+                _context.SaveChanges();
+                return new ApiSuccessResult<string>("Hủy đơn hàng thành công");
+            }
+        }
+
         protected static string GetBase64StringForImage(string imgPath)
         {
             byte[] imageBytes = File.ReadAllBytes(imgPath);

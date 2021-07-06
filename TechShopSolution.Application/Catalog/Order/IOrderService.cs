@@ -12,5 +12,7 @@ namespace TechShopSolution.Application.Catalog.Order
         Task<ApiResult<string>> Create(CheckoutRequest request);
         PagedResult<OrderViewModel> GetAllPaging(GetOrderPagingRequest request);
         Task<ApiResult<OrderDetailViewModel>> Detail(int id);
+        Task<ApiResult<string>> CancelOrder(int id);
+        Task<ApiResult<string>> PaymentConfirm(int id);
     }
 }

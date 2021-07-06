@@ -44,8 +44,40 @@ namespace TechShopSolution.AdminApp.Controllers
                 TempData["error"] = result.Message;
                 return RedirectToAction("Index");
             }
-            
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(result.ResultObject);
         }
+        [HttpGet]
+        public async Task<IActionResult> PaymentConfirm(int id)
+        {
+            var result = await _orderApiClient.PaymentConfirm(id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Detail", new { id = id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("Detail", new { id = id });
+        }
+        [HttpGet]
+        public async Task<IActionResult> CancelOrder(int id)
+        {
+            var result = await _orderApiClient.CancelOrder(id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Detail", new { id = id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("Detail", new { id = id });
+        }
+
     }
 }
