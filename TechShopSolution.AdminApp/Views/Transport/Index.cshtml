@@ -55,7 +55,7 @@
                 <label for="pet-select"></label>
                 <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
                 <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
-                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/brand/index'"><i class="fas fa-times"></i></button>
+                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/transport/index'"><i class="fas fa-times"></i></button>
             </div>
         </form>
         <!-- Notification -->
@@ -124,7 +124,7 @@
                                     </td>
 
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.name)
+                                        @Html.ActionLink(item.name, "Update", new { id = item.id })
                                     </td>
 
                                     <td>
@@ -134,13 +134,13 @@
                                     @if (item.isActive)
                                     {
                                         <td align="center">
-                                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Payment", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Transport", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                         </td>
                                     }
                                     else
                                     {
                                         <td align="center">
-                                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Payment", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Transport", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                         </td>
                                     }
                                     <td align="center">

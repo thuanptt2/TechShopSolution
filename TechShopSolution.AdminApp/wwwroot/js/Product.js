@@ -8,7 +8,6 @@ $().ready(function () {
             $("#ProductImage").attr("src", x);
             console.log(event);
         })
-
     });
 
     $("#ProductMoreImagesInput").change(function () {

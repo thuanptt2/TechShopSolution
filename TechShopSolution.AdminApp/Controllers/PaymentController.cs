@@ -89,7 +89,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(PaymentUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _paymentApiClient.UpdatePayment(request);
             if (result.IsSuccess)
             {

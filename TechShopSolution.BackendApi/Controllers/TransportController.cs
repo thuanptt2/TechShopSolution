@@ -38,7 +38,8 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TransporterCreateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] TransporterCreateRequest request)
         {
             var result = await _transportService.Create(request);
             if (!result.IsSuccess)
@@ -46,7 +47,8 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(result);
         }
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] TransporterUpdateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] TransporterUpdateRequest request)
         {
             var result = await _transportService.Update(request);
             if (!result.IsSuccess)

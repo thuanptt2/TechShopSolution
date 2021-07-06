@@ -10,6 +10,7 @@ namespace TechShopSolution.ViewModels.Transport
         public int id { get; set; }
         public string name { get; set; }
         public IFormFile image { get; set; }
+        public string imageBase64 { get; set; }
         public string link { get; set; }
         public bool isActive { get; set; }
     }

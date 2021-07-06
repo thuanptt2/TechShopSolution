@@ -104,7 +104,7 @@ namespace TechShopSolution.Application.Catalog.Transport
                 isActive = result.isActive,
                 id = result.id,
                 update_at = result.update_at,
-                image = result.image,
+                image = GetBase64StringForImage(_storageService.GetFileUrl(result.image)),
                 link = result.link
             };
             return new ApiSuccessResult<TransporterViewModel>(transporter);
