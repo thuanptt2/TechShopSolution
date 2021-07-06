@@ -52,11 +52,9 @@ namespace TechShopSolution.Application.Catalog.Transport
                     create_at = DateTime.Now,
                     link = request.link,
                     isActive = request.isActive,
-                    name = request.name, 
+                    name = request.name,
                     image = await this.SaveFile(request.image),
-
-
-            };
+                };
                 _context.Transporters.Add(transporter);
                 await _context.SaveChangesAsync();
                 return new ApiSuccessResult<bool>();
@@ -73,7 +71,6 @@ namespace TechShopSolution.Application.Catalog.Transport
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
         }
-
         public async Task<ApiResult<bool>> Delete(int id)
         {
             try
@@ -123,7 +120,11 @@ namespace TechShopSolution.Application.Catalog.Transport
                     result.name = request.name;
                     result.update_at = DateTime.Now;
                     result.link = request.link;
-                    result.image = request.image == null ? result.image : request.image;
+                    if(request.image != null)
+                    {
+                        await _storageService.DeleteFileAsync(result.image);
+                        result.image = await this.SaveFile(request.image);
+                    }
 
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();

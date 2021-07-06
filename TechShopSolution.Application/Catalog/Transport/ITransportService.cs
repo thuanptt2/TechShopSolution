@@ -12,12 +12,10 @@ namespace TechShopSolution.Application.Catalog.Transport
     {
         Task<ApiResult<bool>> ChangeStatus(int id);
         Task<ApiResult<bool>> Create(TransporterCreateRequest request);
-        Task<string> SaveFile(IFormFile file);
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<TransporterViewModel>> GetById(int id);
         Task<ApiResult<bool>> Update(TransporterUpdateRequest request);
         Task<List<TransporterViewModel>> GetAll();
         Task<PagedResult<TransporterViewModel>> GetAllPaging(GetTransporterPagingRequest request);
-        string GetBase64StringForImage(string imgPath);
     }
 }
