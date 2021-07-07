@@ -242,6 +242,20 @@ namespace TechShopSolution.Application.Catalog.Order
                 return new ApiSuccessResult<string>("Hủy đơn hàng thành công");
             }
         }
+        public async Task<ApiResult<string>> ConfirmOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+                return new ApiErrorResult<string>("Không tìm thấy đơn hàng này trong CSDL");
+            if (order.status == 1)
+                return new ApiErrorResult<string>("Đơn hàng này đã được duyệt trước đó, không thể duyệt lại");
+            if (order.status == -1)
+                return new ApiErrorResult<string>("Đơn hàng này đã bị hủy, không thể duyệt");
+            order.status = 1;
+            _context.SaveChanges();
+            return new ApiSuccessResult<string>("Duyệt đơn hàng thành công");
+
+        }
         protected static string GetBase64StringForImage(string imgPath)
         {
             byte[] imageBytes = File.ReadAllBytes(imgPath);

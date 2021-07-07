@@ -78,6 +78,18 @@ namespace TechShopSolution.AdminApp.Controllers
             TempData["result"] = result.ResultObject;
             return RedirectToAction("Detail", new { id = id });
         }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmOrder(int id)
+        {
+            var result = await _orderApiClient.ConfirmOrder(id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Detail", new { id = id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("Detail", new { id = id });
+        }
 
     }
 }

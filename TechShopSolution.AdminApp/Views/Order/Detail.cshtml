@@ -164,10 +164,11 @@
                         Thao tác
                     </button>
                 }
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item item-dropdown" href="@Url.Action("PaymentConfirm", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn thanh toán cho đơn hàng này?')">Xác nhận thanh toán</a>
-                    <a class="dropdown-item" id="btnCancelOrder" href="@Url.Action("CancelOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này? hành động này không thể hoàn tác')">Hủy đơn hàng</a>
-                </div>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item item-dropdown" href="@Url.Action("ConfirmOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn duyệt đơn hàng này?')">Duyệt đơn hàng</a>
+                <a class="dropdown-item item-dropdown" href="@Url.Action("PaymentConfirm", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn thanh toán cho đơn hàng này?')">Xác nhận thanh toán</a>
+                <a class="dropdown-item" id="btnCancelOrder" href="@Url.Action("CancelOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này? hành động này không thể hoàn tác')">Hủy đơn hàng</a>
+            </div>
             </div>
         </div>
     </div>

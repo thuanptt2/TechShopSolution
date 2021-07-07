@@ -173,7 +173,7 @@
                                 else if (item.status == 0)
                                 {
                                     <td class="text-warning-order text-center">
-                                       ◯ Chưa duyệt
+                                        ◯ Chưa duyệt
                                     </td>
                                 }
                                 else
@@ -182,14 +182,27 @@
                                         ×  Đã hủy
                                     </td>
                                 }
+                                @if (item.status == -1)
+                                {
+                                    <td align="center" style="text-decoration: line-through;" class="text-danger">
+                                        @{
+                                            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                            var total = item.total + item.transport_fee - item.discount;
+                                        }
+                                        @String.Format(info, "{0:N0}", total)
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        @{
+                                            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                            var total = item.total + item.transport_fee - item.discount;
+                                        }
+                                        @String.Format(info, "{0:N0}", total)
+                                    </td>
+                                }
 
-                                <td align="center">
-                                    @{
-                                        var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-                                        var total = item.total + item.transport_fee - item.discount;
-                                    }
-                                    @String.Format(info, "{0:N0}", total)
-                                </td>
                             </tr>
                         }
                     }

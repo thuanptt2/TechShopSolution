@@ -74,6 +74,16 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
         }
+        public async Task<ApiResult<string>> ConfirmOrder(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/order/confirm/{id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
+        }
 
     }
 }

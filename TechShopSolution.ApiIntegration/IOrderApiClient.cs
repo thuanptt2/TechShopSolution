@@ -14,5 +14,6 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<OrderDetailViewModel>> GetById(int id);
         Task<ApiResult<string>> PaymentConfirm(int id);
         Task<ApiResult<string>> CancelOrder(int id);
+        Task<ApiResult<string>> ConfirmOrder(int id);
     }
 }
