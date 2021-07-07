@@ -226,26 +226,6 @@
                             }
                         </tbody>
                     </table>
-                    <div class="text-right">
-                        @if (Model.Order.status == 0)
-                        {
-                            <a id="btnEdit" class="btn btn-primary" onclick="return alert('Đơn hàng này chưa được duyệt, không thể tạo đơn vận chuyển')">
-                                Giao hàng
-                            </a>
-                        }
-                        else if (Model.Order.status == -1)
-                        {
-                            <button type="button" id="btnEdit" class="btn btn-primary" disabled>
-                                Giao hàng
-                            </button>
-                        }
-                        else
-                        {
-                            <a id="btnCreateShippingOrder" class="btn btn-primary" onclick="showInPopup('@Url.Action("CreateShippingOrder","Transport",new { id = Model.Order.id }, Context.Request.Scheme)','Tạo đơn vận chuyển')">
-                                Giao hàng
-                            </a>
-                        }
-                    </div>
                 </div>
                 <div class="wrapper-content mt-3 mb-3 shadow">
                     <label class="title-fill">Chi tiết đơn hàng</label>
@@ -300,6 +280,76 @@
                             </div>
                         </div>
                     </div>
+
+                    <label class="title-fill">Thông tin vận chuyển</label>
+                    <hr />
+                    @if (Model.Order.ship_status != 1)
+                    {
+                        <span class="text-warning-order">
+                            Đơn hàng này chưa được vận chuyển
+                        </span>
+                        <div class="text-right">
+                            @if (Model.Order.status == 0)
+                            {
+                                <a id="btnEdit" class="btn btn-primary" onclick="return alert('Đơn hàng này chưa được duyệt, không thể tạo đơn vận chuyển')">
+                                    Giao hàng
+                                </a>
+                            }
+                            else if (Model.Order.status == -1 || Model.Order.ship_status == 1)
+                            {
+                                <button type="button" id="btnEdit" class="btn btn-primary" disabled>
+                                    Giao hàng
+                                </button>
+                            }
+                            else
+                            {
+                                <a id="btnCreateShippingOrder" class="btn btn-primary" onclick="showInPopup('@Url.Action("CreateShippingOrder","Transport",new { id = Model.Order.id, receive_address = Model.Order.address_receiver }, Context.Request.Scheme)','Tạo đơn vận chuyển')">
+                                    Giao hàng
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-lg-6 col-6">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="lableFormField">Tổng giá trị đơn hàng</label>
+                                    </div>
+                                    <div class="col text-right">
+                                        @String.Format(info, "{0:N0}", Model.Order.total + Model.Order.transport_fee - Model.Order.discount)
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="lableFormField">Tổng giá trị đơn hàng</label>
+                                    </div>
+                                    <div class="col text-right">
+                                        @String.Format(info, "{0:N0}", Model.Order.total + Model.Order.transport_fee - Model.Order.discount)
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="lableFormField">Tổng giá trị đơn hàng</label>
+                                    </div>
+                                    <div class="col text-right">
+                                        @String.Format(info, "{0:N0}", Model.Order.total + Model.Order.transport_fee - Model.Order.discount)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-6">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="lableFormField">Số lượng sản phẩm</label>
+                                    </div>
+                                    <div class="col text-right">
+                                        @Model.Details.Count()
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
             <div class="col-12 col-lg-4">
@@ -336,7 +386,7 @@
                     {
                         <div class="row">
                             <div class="col">
-                                <label class="title-fill">Địa chỉ mặc định</label>
+                                <label class="title-fill">Địa chỉ giao hàng</label>
                             </div>
                             <div class="col text-right">
                                 <a id="btnEdit" onclick="showInPopup('@Url.Action("UpdateReceiveAddress","Order",new { id = Model.Order.id }, Context.Request.Scheme)','Thay đổi địa chỉ')">
@@ -347,7 +397,7 @@
                     }
                     else
                     {
-                        <label class="title-fill">Địa chỉ mặc định</label>
+                        <label class="title-fill">Địa chỉ giao hàng</label>
                     }
                     <hr />
                     <div class="row mb-2">

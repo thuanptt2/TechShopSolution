@@ -205,7 +205,7 @@ namespace TechShopSolution.Application.Catalog.Transport
                 var transport = new TechShopSolution.Data.Entities.Transport
                 {
                     create_at = DateTime.Now,
-                    cod_price = request.cod_price,
+                    cod_price = (decimal)request.cod_price,
                     lading_code = request.lading_code,
                     order_id = request.order_id,
                     ship_status = 1,

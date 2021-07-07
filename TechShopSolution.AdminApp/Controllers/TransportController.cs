@@ -120,12 +120,16 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> CreateShippingOrder(int id)
+        public async Task<IActionResult> CreateShippingOrder(int id, string receive_address)
         {
             ViewBag.Transporter = await _transportApiClient.GetAll();
+            
             var request = new CreateTransportRequest()
             {
-                order_id = id
+                order_id = id,
+                to_address = receive_address,
+                from_address = "12 Đường 41, Phường 10, Quận 6, TP Hồ Chí Minh",
+                cod_price = null
             };
             return View(request);
         }
