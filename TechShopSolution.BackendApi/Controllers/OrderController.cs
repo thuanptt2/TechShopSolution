@@ -63,5 +63,13 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpPut("UpdateReceiveAddress")]
+        public async Task<IActionResult> UpdateAddress([FromBody] OrderUpdateAddressRequest request)
+        {
+            var result = await _orderService.UpdateAddress(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

@@ -8,7 +8,7 @@
 }
 @section jsFooter
 {
-    <script src="~/js/site.js"></script>
+    <script src="~/js/Order.js"></script>
     @if (ViewBag.ErrorMsg != null)
     {
         <script>
@@ -241,7 +241,7 @@
                         }
                         else
                         {
-                            <a id="btnEdit" class="btn btn-primary" onclick="showInPopup('@Url.Action("CreateShippingOrder","Transport",new { id = Model.Order.id }, Context.Request.Scheme)','Tạo đơn vận chuyển')">
+                            <a id="btnCreateShippingOrder" class="btn btn-primary" onclick="showInPopup('@Url.Action("CreateShippingOrder","Transport",new { id = Model.Order.id }, Context.Request.Scheme)','Tạo đơn vận chuyển')">
                                 Giao hàng
                             </a>
                         }
@@ -332,7 +332,23 @@
                     </div>
                 </div>
                 <div class="wrapper-content shadow">
-                    <label class="title-fill">Thông tin giao hàng</label>
+                    @if (Model.Order.ship_status == 0 && Model.Order.status != -1)
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <label class="title-fill">Địa chỉ mặc định</label>
+                            </div>
+                            <div class="col text-right">
+                                <a id="btnEdit" onclick="showInPopup('@Url.Action("UpdateReceiveAddress","Order",new { id = Model.Order.id }, Context.Request.Scheme)','Thay đổi địa chỉ')">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <label class="title-fill">Địa chỉ mặc định</label>
+                    }
                     <hr />
                     <div class="row mb-2">
                         <div class="col">

@@ -15,5 +15,6 @@ namespace TechShopSolution.Application.Catalog.Order
         Task<ApiResult<string>> CancelOrder(int id);
         Task<ApiResult<string>> PaymentConfirm(int id);
         Task<ApiResult<string>> ConfirmOrder(int id);
+        Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request);
     }
 }

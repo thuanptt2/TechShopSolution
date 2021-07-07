@@ -90,6 +90,32 @@ namespace TechShopSolution.AdminApp.Controllers
             TempData["result"] = result.ResultObject;
             return RedirectToAction("Detail", new { id = id });
         }
-
+        [HttpGet]
+        public IActionResult UpdateReceiveAddress(int id)
+        {
+            var updateAddressRequest = new OrderUpdateAddressRequest()
+            {
+                Id = id,
+                City = null,
+                District = null,
+                House = null,
+                Ward = null
+            };
+            return View(updateAddressRequest);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateReceiveAddress(OrderUpdateAddressRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _orderApiClient.UpdateAddress(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật địa chỉ giao hàng thành công";
+                return RedirectToAction(nameof(Detail), new { id = request.Id });
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }

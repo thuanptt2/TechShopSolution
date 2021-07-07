@@ -262,6 +262,32 @@ namespace TechShopSolution.Application.Catalog.Order
             string base64String = Convert.ToBase64String(imageBytes);
             return base64String;
         }
+        public async Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request)
+        {
+            try
+            {
+                var order = await _context.Orders.FindAsync(request.Id);
+                if (order != null)
+                {
+                    if(order.status == -1)
+                        return new ApiErrorResult<bool>("Đơn hàng này đã bị hủy, không thể cập nhật địa chỉ giao hàng");
+                    else
+                    {
+                        string newAddress = request.House + " " + request.Ward + ", " + request.District + ", " + request.City;
+                        order.address_receiver = newAddress;
+                        order.update_at = DateTime.Now;
+                        await _context.SaveChangesAsync();
+                        return new ApiSuccessResult<bool>();
+                    }
+
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy đơn hàng này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
 
     }
 }
