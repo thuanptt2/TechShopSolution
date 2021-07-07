@@ -179,9 +179,9 @@ namespace TechShopSolution.Application.Catalog.Category
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-        public async Task<ApiResult<CategoryViewModel>> GetById(int brandId)
+        public async Task<ApiResult<CategoryViewModel>> GetById(int id)
         {
-            var cateExist = await _context.Categories.FindAsync(brandId);
+            var cateExist = await _context.Categories.FindAsync(id);
             if (cateExist == null || cateExist.isDelete)
             {
                 return new ApiErrorResult<CategoryViewModel>("Loại sản phẩm không tồn tại");

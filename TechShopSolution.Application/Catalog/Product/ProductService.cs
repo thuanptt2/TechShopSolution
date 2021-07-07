@@ -11,6 +11,7 @@ using System.IO;
 using TechShopSolution.Application.Common;
 using TechShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
+using TechShopSolution.ViewModels.Catalog.Category;
 
 namespace TechShopSolution.Application.Catalog.Product
 {
@@ -303,7 +304,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         create_at = a.Key.create_at,
                         descriptions = a.Key.descriptions,
                         featured = a.Key.featured,
-                        image = a.Key.image,
+                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
                         instock = a.Key.instock,
                         meta_descriptions = a.Key.meta_descriptions,
                         meta_keywords = a.Key.meta_keywords,
@@ -317,15 +318,6 @@ namespace TechShopSolution.Application.Catalog.Product
                         unit_price = a.Key.unit_price,
                         warranty = a.Key.warranty,
                     }).ToList();
-
-                foreach (var pro in result)
-                {
-                    if (pro.image != null)
-                    {
-                        ImageListResult image = new ImageListResult();
-                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
-                    }
-                }
                
 
                 var pageResult = new PagedResult<ProductViewModel>()
@@ -455,6 +447,69 @@ namespace TechShopSolution.Application.Catalog.Product
             catch
             {
                 return new PublicProductsViewModel { Count = 0, Products = null };
+            }
+        }
+        public async Task<PublicCayegoyProductsViewModel> GetHomeProductByCategory(int id, int take)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                            join c in _context.Categories on pic.cate_id equals c.id
+                            where p.isDelete == false && c.id == id && p.isActive == true
+                            select new { p, c };
+                
+                var category = await query.Select(a => new CategoryViewModel()
+                {
+                    id = a.c.id,
+                    cate_name = a.c.cate_name,
+                    cate_slug = a.c.cate_slug,
+                    meta_descriptions = a.c.meta_descriptions,
+                    meta_keywords = a.c.meta_keywords,
+                    meta_title = a.c.meta_title,
+                    parent_id = a.c.parent_id,
+                    isActive = a.c.isActive,
+                }).FirstAsync();
+
+                var data = query.AsEnumerable()
+                   .GroupBy(g => g.p);
+
+                int totalRow = data.Count();
+
+                int Count = await query.CountAsync();
+
+                List<ProductViewModel> Products = data.OrderByDescending(m => m.Key.create_at)
+                    .Take(take)
+                    .Select(a => new ProductViewModel()
+                    {
+                       id = a.Key.id,
+                        name = a.Key.name,
+                        best_seller = a.Key.best_seller,
+                        brand_id = a.Key.brand_id,
+                        code = a.Key.code,
+                        create_at = a.Key.create_at,
+                        descriptions = a.Key.descriptions,
+                        featured = a.Key.featured,
+                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
+                        instock = a.Key.instock,
+                        meta_descriptions = a.Key.meta_descriptions,
+                        meta_keywords = a.Key.meta_keywords,
+                        meta_tittle = a.Key.meta_tittle,
+                        more_images = a.Key.more_images,
+                        promotion_price = a.Key.promotion_price,
+                        short_desc = a.Key.short_desc,
+                        slug = a.Key.slug,
+                        specifications = a.Key.specifications,
+                        isActive = a.Key.isActive,
+                        unit_price = a.Key.unit_price,
+                        warranty = a.Key.warranty,
+                    }).ToList();
+
+                return new PublicCayegoyProductsViewModel { Count = Count, Products = Products, Category = category };
+            }
+            catch
+            {
+                return new PublicCayegoyProductsViewModel { Count = 0, Products = null, Category = null };
             }
         }
         public List<ProductViewModel> GetProductsRelated(int idBrand, int take)

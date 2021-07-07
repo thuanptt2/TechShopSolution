@@ -11,9 +11,6 @@ namespace TechShopSolution.WebApp.Models
     {
         public PublicProductsViewModel FeaturedProducts { get; set; }
         public PublicProductsViewModel BestSellerProducts { get; set; }
-        public PublicProductsViewModel ProductWithCate1 { get; set; }
-        public PublicProductsViewModel ProductWithCate2 { get; set; }
-        public PublicProductsViewModel ProductWithCate3 { get; set; }
-
+        public List<PublicCayegoyProductsViewModel> ListCategoryProducts { get; set; }
     }
 }

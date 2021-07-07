@@ -49,9 +49,9 @@
     display: block;
 }
 .product-short-desc {
-    margin-top: 10px;
     font-size: 0.7rem;
     font-weight: 500;
+    padding: 0 30px;
     overflow: hidden;
     text-overflow: ellipsis;
     height: 100px;
@@ -498,9 +498,57 @@ input.input-validation-error {
     border-radius: 4px;
 }
 
-#myBtn:hover {
-  background-color: #555;
-}
 html {
     scroll-behavior: smooth;
+}
+.image-category-product {
+    max-width: 580px;
+    max-height: 80px;
+    height: 100%;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    margin-left: 15%;
+    margin-top: 30px;
+}
+.background-category-section-2 {
+    background-image: url('../images/br3-20210405025810.jpg');
+}
+.background-category-section-1 {
+    background-image: url('../images/br2-20210405025719.jpg');
+}
+.image-category-vga {
+    background-image: url('../images/menu-07-20210405030920.png');
+}
+.image-category-cpu {
+    background-image: url('../images/menu-08-20210405030736.png');
+}
+.image-category-mainboard {
+    background-image: url('../images/menu-23-20210405065402.png');
+}
+.image-category-ram {
+    background-image: url('../images/menu-10-20210405030920.png');
+}
+.category-products {
+    padding: 80px 0;
+}
+.pull-right-text {
+    padding-top: 30px;
+}
+.ladi-image-background ul, ol {
+    margin: 0 !important;
+}
+.wrapper-container {
+    margin-left: 5% !important;
+    width: 100% !important;
+}
+
+@media only screen and (min-width: 1200px) {
+    /* For mobile phones: */
+    .category-products .span3 {
+        width: 255px !important;
+    }
 }
