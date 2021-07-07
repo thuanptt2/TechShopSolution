@@ -73,5 +73,14 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest(result);
         }
+        [HttpPost("createshipping")]
+        public async Task<IActionResult> Create([FromBody] CreateTransportRequest request)
+        {
+            var result = await _transportService.CreateShippingOrder(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
     }
 }

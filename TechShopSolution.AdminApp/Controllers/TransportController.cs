@@ -119,5 +119,30 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        [HttpGet]
+        public async Task<IActionResult> CreateShippingOrder(int id)
+        {
+            ViewBag.Transporter = await _transportApiClient.GetAll();
+            var request = new CreateTransportRequest()
+            {
+                order_id = id
+            };
+            return View(request);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateShippingOrder(CreateTransportRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _transportApiClient.CreateShippingOrder(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Tạo đơn vận chuyển thành công";
+                return RedirectToAction("Detail", "Order", new { id = request.order_id });
+            }
+            ViewBag.Transporter = await _transportApiClient.GetAll();
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }

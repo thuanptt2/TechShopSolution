@@ -198,5 +198,28 @@ namespace TechShopSolution.Application.Catalog.Transport
             string base64String = Convert.ToBase64String(imageBytes);
             return base64String;
         }
+        public async Task<ApiResult<bool>> CreateShippingOrder(CreateTransportRequest request)
+        {
+            try
+            {
+                var transport = new TechShopSolution.Data.Entities.Transport
+                {
+                    create_at = DateTime.Now,
+                    cod_price = request.cod_price,
+                    lading_code = request.lading_code,
+                    order_id = request.order_id,
+                    ship_status = 1,
+                    transporter_id = request.transporter_id,
+                };
+                _context.Transports.Add(transport);
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Thêm thất bại");
+            }
+        }
+
     }
 }

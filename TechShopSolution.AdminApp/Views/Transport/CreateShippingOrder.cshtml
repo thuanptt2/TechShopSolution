@@ -1,0 +1,39 @@
+﻿@model TechShopSolution.ViewModels.Transport.CreateTransportRequest;
+
+@{
+    Layout = null;
+}
+
+
+<form asp-action="CreateShippingOrder" asp-controller="Transport" method="post" onsubmit="return SubmitForm(this);">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="order_id" class="form-control" hidden/>
+    <div class="form-group">
+        <label asp-for="transporter_id" class="control-label lableFormField"></label>
+        <select asp-for="transporter_id" asp-items="@(new SelectList(ViewBag.Transporter, "id", "name"))" class="form-control">
+            <option value="">--Chọn đơn vị vận chuyển--</option>
+        </select>
+
+        <span asp-validation-for="transporter_id" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="cod_price" class="control-label lableFormField"></label>
+        <input asp-for="cod_price" class="form-control" />
+        <span asp-validation-for="cod_price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="lading_code" class="control-label lableFormField"></label>
+        <input asp-for="lading_code" class="form-control" />
+        <span asp-validation-for="lading_code" class="text-danger"></span>
+    </div>
+
+    <div class="form-group text-right">
+        <input type="submit" value="Tạo đơn vận chuyển" class="btn btn-primary" />
+    </div>
+</form>
+
+<script src="~/js/Location.js"></script>
+<script src="~/jquery-validate/jquery.validate.min.js"></script>
+<script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

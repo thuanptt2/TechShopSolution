@@ -16,5 +16,6 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<TransporterViewModel>> GetById(int id);
         Task<List<TransporterViewModel>> GetAll();
+        Task<ApiResult<bool>> CreateShippingOrder(CreateTransportRequest request);
     }
 }

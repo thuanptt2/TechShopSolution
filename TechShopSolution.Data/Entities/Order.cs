@@ -22,6 +22,7 @@ namespace TechShopSolution.Data.Entities
         public DateTime create_at { get; set; }
         public DateTime? update_at { get; set; }
         public DateTime? cancel_at { get; set; }
+        public string cancel_reason { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
         public Customer Customers { get; set; }
         public Transport Transport { get; set; }
