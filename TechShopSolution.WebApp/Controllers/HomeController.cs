@@ -28,7 +28,7 @@ namespace TechShopSolution.WebApp.Controllers
             List<PublicCayegoyProductsViewModel> CategoryProducts = new List<PublicCayegoyProductsViewModel>(); 
             for(int i = 0; i < CateIDs.Length; i++)
             {
-                var data = await _productApiClient.GetHomeProducts(int.Parse(CateIDs[i]), 6);
+                var data = await _productApiClient.GetHomeProducts(int.Parse(CateIDs[i]), 8);
                 CategoryProducts.Add(data);
             }
             var viewModel = new HomeViewModel

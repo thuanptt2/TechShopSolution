@@ -18,6 +18,7 @@ namespace TechShopSolution.Data.Configurations
             builder.Property(x => x.lading_code).IsRequired().HasMaxLength(255).IsUnicode(false);
             builder.Property(x => x.transporter_id).IsRequired();
             builder.Property(x => x.order_id).IsRequired();
+            builder.Property(x => x.ship_status).IsRequired();
             builder.Property(x => x.create_at)
                 .HasDefaultValueSql("GetDate()");
             builder.Property(x => x.update_at);

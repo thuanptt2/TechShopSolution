@@ -38,8 +38,6 @@ namespace TechShopSolution.Application.Catalog.Order
                         else coupon.quantity = coupon.quantity - 1;
                     }
                 }
-                
-
                 var order = new TechShopSolution.Data.Entities.Order
                 {
                     address_receiver = request.Order.address_receiver,
@@ -48,13 +46,12 @@ namespace TechShopSolution.Application.Catalog.Order
                     transport_fee = request.Order.transport_fee == null ? 0 : (decimal)request.Order.transport_fee,
                     cus_id = request.Order.cus_id,
                     discount = request.Order.discount,
-                    isPay = request.Order.payment_id == 1 ? true : false,
+                    isPay = false,
                     payment_id = (int)request.Order.payment_id,
-                    isShip = false,
                     name_receiver = request.Order.name_receiver,
                     note = request.Order.note,
                     phone_receiver = request.Order.phone_receiver,
-                    status = true,
+                    status = 0,
                     total = request.Order.total,
                 };
                 _context.Orders.Add(order);
@@ -94,7 +91,7 @@ namespace TechShopSolution.Application.Catalog.Order
         {
             var query = from o in _context.Orders
                         join od in _context.OrDetails on o.id equals od.order_id
-                        select new { o };
+                        select new { o , od};
 
             if (!String.IsNullOrEmpty(request.Keyword))
             {
@@ -118,12 +115,21 @@ namespace TechShopSolution.Application.Catalog.Order
                     name_receiver = a.Key.name_receiver,
                     discount = a.Key.discount,
                     isPay = a.Key.isPay,
-                    isShip = a.Key.isShip,
                     status = a.Key.status,
                     total = a.Key.total,
                     transport_fee = a.Key.transport_fee
 
                 }).ToList();
+
+            foreach(var item in result)
+            {
+                var tranport = _context.Transports.Where(x => x.order_id == item.id).FirstOrDefault();
+                if (tranport != null)
+                {
+                    item.ship_status = tranport.ship_status;
+                }
+                else item.ship_status = 0;
+            }
 
             var pageResult = new PagedResult<OrderViewModel>()
             {
@@ -151,9 +157,10 @@ namespace TechShopSolution.Application.Catalog.Order
                 name_receiver = a.o.name_receiver,
                 discount = a.o.discount,
                 isPay = a.o.isPay,
-                isShip = a.o.isShip,
                 status = a.o.status,
                 note = a.o.note,
+                cancel_at = a.o.cancel_at,
+                update_at = a.o.cancel_at,
                 address_receiver = a.o.address_receiver,
                 coupon_id = a.o.coupon_id,
                 payment_id = a.o.payment_id,
@@ -162,6 +169,13 @@ namespace TechShopSolution.Application.Catalog.Order
                 transport_fee = a.o.transport_fee
 
             }).FirstOrDefault();
+
+            var transport = _context.Transports.Where(x => x.order_id == DataOrder.id).FirstOrDefault();
+            if (transport != null)
+            {
+                DataOrder.ship_status = transport.ship_status;
+            }
+            else DataOrder.ship_status = 0;
 
             if (DataOrder == null)
             {
@@ -204,14 +218,14 @@ namespace TechShopSolution.Application.Catalog.Order
             var order = await _context.Orders.FindAsync(id);
             if (order == null)
                 return new ApiErrorResult<string>("Không tìm thấy đơn hàng này trong CSDL");
-            if (!order.status)
+            if (order.status == -1)
                 return new ApiErrorResult<string>("Đơn hàng này đã bị hủy trước đó, không thể hủy lại");
             var isValid = await _context.Transports.AnyAsync(x => x.order_id == id);
             if(isValid)
                 return new ApiErrorResult<string>("Đơn hàng này đã được tạo đơn vận chuyển, không thể hủy");
             else
             {
-                order.status = false;
+                order.status = -1;
                 var details = await _context.OrDetails.Where(x => x.order_id == order.id).ToListAsync();
                 foreach (var item in details)
                 {
@@ -228,7 +242,6 @@ namespace TechShopSolution.Application.Catalog.Order
                 return new ApiSuccessResult<string>("Hủy đơn hàng thành công");
             }
         }
-
         protected static string GetBase64StringForImage(string imgPath)
         {
             byte[] imageBytes = File.ReadAllBytes(imgPath);

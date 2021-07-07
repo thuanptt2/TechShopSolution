@@ -146,22 +146,34 @@
                                 }
 
 
-                                @if (item.isShip)
+                                @if (item.ship_status == 1)
                                 {
                                     <td class="text-success-order text-center">
                                         ✔  Đã giao hàng
                                     </td>
                                 }
-                                else
+                                else if (item.ship_status == 0)
                                 {
                                     <td class="text-warning-order text-center">
                                         ◯  Chưa giao hàng
                                     </td>
                                 }
-                                @if (item.status)
+                                else
+                                {
+                                    <td class="text-warning-order text-center">
+                                        ×  Đã hủy
+                                    </td>
+                                }
+                                @if (item.status == 1)
                                 {
                                     <td class="text-success-order text-center">
-                                        ✔  Thành công
+                                        ✔  Đã duyệt
+                                    </td>
+                                }
+                                else if (item.status == 0)
+                                {
+                                    <td class="text-warning-order text-center">
+                                       ◯ Chưa duyệt
                                     </td>
                                 }
                                 else

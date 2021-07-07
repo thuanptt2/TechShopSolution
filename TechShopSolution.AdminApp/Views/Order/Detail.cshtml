@@ -77,19 +77,25 @@
                         Trạng thái giao hàng
                     </div>
                     <div class="ui-product-head">
-                        @if (Model.Order.isShip)
+                        @if (Model.Order.ship_status == 1)
                         {
                             <span class="text-success-order">
-                                ✔ Đã giao hàng
+                                ✔  Đã giao hàng
                             </span>
                         }
-                        else
+                        else if (Model.Order.ship_status == 0)
                         {
+
                             <span class="text-warning-order">
                                 ◯ Chưa giao hàng
                             </span>
                         }
-
+                        else
+                        {
+                            <span class="text-danger-order">
+                                ×  Đã bị hủy
+                            </span>
+                        }
                     </div>
                 </div>
                 <div class="ui-toolbar-product-info">
@@ -119,16 +125,23 @@
                     </div>
                     <div class="ui-product-head">
                         <div class="ui-product-head">
-                            @if (Model.Order.status)
+                            @if (Model.Order.status == 1)
                             {
                                 <span class="text-success-order">
-                                    ✔ Thành công
+                                    ✔  Đã duyệt
+                                </span>
+                            }
+                            else if (Model.Order.status == 0)
+                            {
+
+                                <span class="text-warning-order">
+                                    ◯ Chưa duyệt
                                 </span>
                             }
                             else
                             {
                                 <span class="text-danger-order">
-                                    × Đã hủy
+                                    ×  Đã hủy
                                 </span>
                             }
                         </div>
@@ -139,9 +152,18 @@
         </div>
         <div class="col-lg-auto col-sm-12 ml-4 mb-3 mr-4">
             <div class="btn-group">
-                <button type="button" class="btn btn-secondary dropdown-toggle btnDropdownAction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Thao tác
-                </button>
+                @if (Model.Order.status == -1)
+                {
+                    <button type="button" class="btn btn-secondary dropdown-toggle btnDropdownAction" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Thao tác
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary dropdown-toggle btnDropdownAction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Thao tác
+                    </button>
+                }
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item item-dropdown" href="@Url.Action("PaymentConfirm", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn thanh toán cho đơn hàng này?')">Xác nhận thanh toán</a>
                     <a class="dropdown-item" id="btnCancelOrder" href="@Url.Action("CancelOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này? hành động này không thể hoàn tác')">Hủy đơn hàng</a>

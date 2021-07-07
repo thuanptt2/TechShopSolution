@@ -19,10 +19,12 @@ namespace TechShopSolution.ViewModels.Sales
         public decimal transport_fee { get; set; }
         public int? coupon_id { get; set; }
         public int payment_id { get; set; }
-        public bool status { get; set; }
+        public int status { get; set; }
         public bool isPay { get; set; }
-        public bool isShip { get; set; }
+        public int ship_status { get; set; }
         public string note { get; set; }
         public DateTime create_at { get; set; }
+        public DateTime? update_at { get; set; }
+        public DateTime? cancel_at { get; set; }
     }
 }
