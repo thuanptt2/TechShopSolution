@@ -20,5 +20,6 @@ namespace TechShopSolution.Application.Catalog.Transport
         Task<ApiResult<bool>> CreateShippingOrder(CreateTransportRequest request);
         Task<ApiResult<bool>> UpdateLadingCode(UpdateLadingCodeRequest request);
         Task<ApiResult<string>> CancelShippingOrder(int id);
+        Task<PagedResult<TransportViewModel>> GetPagingTransport(GetTransportPagingRequest request);
     }
 }

@@ -211,6 +211,42 @@ namespace TechShopSolution.Application.Catalog.Transport
             };
             return pageResult;
         }
+        public async Task<PagedResult<TransportViewModel>> GetPagingTransport(GetTransportPagingRequest request)
+        {
+            var query = from t in _context.Transports
+                        select t;
+
+            if (!String.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.id.ToString().Contains(request.Keyword));
+            }
+
+            int totalRow = await query.CountAsync();
+
+            var data = query.OrderByDescending(m => m.create_at)
+                .Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(a => new TransportViewModel()
+                {
+                    id = a.id,
+                    order_id = a.order_id,
+                    transporter_id = a.transporter_id,
+                    transporter_name = a.Transporter.name,
+                    ship_status = a.ship_status,
+                    cod_price = a.cod_price,
+                    create_at = a.create_at
+                }).ToListAsync();
+
+
+            var pageResult = new PagedResult<TransportViewModel>()
+            {
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Items = await data,
+            };
+            return pageResult;
+        }
         protected static string GetBase64StringForImage(string imgPath)
         {
             byte[] imageBytes = File.ReadAllBytes(imgPath);

@@ -25,6 +25,12 @@ namespace TechShopSolution.BackendApi.Controllers
             var payment = await _transportService.GetAllPaging(requet);
             return Ok(payment);
         }
+        [HttpGet("pagingtransport")]
+        public async Task<IActionResult> GetPagingTransport([FromQuery] GetTransportPagingRequest request)
+        {
+            var payment = await _transportService.GetPagingTransport(request);
+            return Ok(payment);
+        }
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {

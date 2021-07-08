@@ -131,7 +131,7 @@
                         </td>
 
                         <td class="text-danger">
-                            @Html.DisplayFor(modelItem => item.name_receiver)
+                            @Html.ActionLink(item.id.ToString(), "Update", "Customer", new { id = item.id }, new { target = "_blank" })
                         </td>
                     }
                     else
@@ -144,7 +144,7 @@
                         </td>
 
                         <td>
-                            @Html.DisplayFor(modelItem => item.name_receiver)
+                            @Html.ActionLink(item.id.ToString(), "Update", "Customer", new { id = item.id }, new { target = "_blank" })
                         </td>
                     }
                     @if (item.isPay)

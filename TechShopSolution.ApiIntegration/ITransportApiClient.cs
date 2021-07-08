@@ -19,5 +19,6 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<bool>> CreateShippingOrder(CreateTransportRequest request);
         Task<ApiResult<bool>> UpdateLadingCode(UpdateLadingCodeRequest request);
         Task<ApiResult<string>> CancelShippingOrder(int id);
+        Task<PagedResult<TransportViewModel>> GetTransportPagings(GetTransportPagingRequest request);
     }
 }

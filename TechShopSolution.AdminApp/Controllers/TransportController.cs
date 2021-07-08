@@ -35,6 +35,26 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View(data);
         }
+        public async Task<IActionResult> ListTransport(string keyword, int pageIndex = 1, int pageSize = 20)
+        {
+            var request = new GetTransportPagingRequest()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+            };
+            var data = await _transportApiClient.GetTransportPagings(request);
+            ViewBag.Keyword = keyword;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
+            return View(data);
+        }
         [HttpGet]
         public async Task<IActionResult> ChangeStatus(int id)
         {
