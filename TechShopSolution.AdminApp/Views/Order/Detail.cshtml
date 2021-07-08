@@ -244,7 +244,7 @@
                                         <img style="display:block; width:60px;height:60px;"
                                              src="data:image/jpeg;base64, @item.product_image" />
                                     </th>
-                                    <td><a href="@Url.Action("Update", "Product", new { id = item.product_id })">@item.product_name</a> </td>
+                                    <td><a href="@Url.Action("Update", "Product", new { id = item.product_id })" target="_blank">@item.product_name</a> </td>
                                     <td class="text-center">@item.quantity</td>
                                     <td class="text-center">
                                         @if (item.promotion_price != 0)
@@ -366,7 +366,7 @@
                                             <label class="lableFormField">Mã đơn vận chuyển</label>
                                         </div>
                                         <div class="col text-right">
-                                            <a href="@Url.Action("Detail", "Transport", new { id = Model.Transport.id })"><strong class=""> @Model.Transport.id</strong></a>
+                                            <a href="@Url.Action("Detail", "Transport", new { id = Model.Transport.id })" target="_blank"><strong class=""> @Model.Transport.id</strong></a>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
@@ -374,7 +374,7 @@
                                             <label class="lableFormField">Đơn vị vận chuyển</label>
                                         </div>
                                         <div class="col text-right">
-                                            <a href="@Url.Action("Update", "Transport", new { id = Model.Transport.transporter_id })"><strong class=""> @Model.Transport.transporter_name</strong></a>
+                                            <a href="@Url.Action("Update", "Transport", new { id = Model.Transport.transporter_id })" target="_blank"><strong class=""> @Model.Transport.transporter_name</strong></a>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
@@ -431,7 +431,7 @@
                                     </div>
                                     <div class="row mb-2">
                                         <div class="col text-right btn-nomal">
-                                            <a id="btnCreateShippingOrder" class="btn" onclick="showInPopup('@Url.Action("CreateShippingOrder","Transport",new { id = Model.Order.id, receive_address = Model.Order.address_receiver }, Context.Request.Scheme)','Tạo đơn vận chuyển')">
+                                            <a class="btn" onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Order.id, ladin_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
                                                 <i class="fas fa-pencil-alt"></i>  Cập nhật mã vận đơn
                                             </a>
                                         </div>
@@ -451,7 +451,7 @@
                             <label class="lableFormField">Tên</label>
                         </div>
                         <div class="col-auto text-right">
-                            <a href="@Url.Action("Update", "Customer", new { id = Model.Order.cus_id })"><strong class="">@Model.Order.cus_name</strong></a>
+                            <a href="@Url.Action("Update", "Customer", new { id = Model.Order.cus_id })" target="_blank"><strong class="">@Model.Order.cus_name</strong></a>
                         </div>
                     </div>
                     <div class="row mb-2">

@@ -172,7 +172,7 @@
                                 <label class="title-fill">Đơn hàng gần nhất</label>
                             </div>
                             <div class="col text-right">
-                                <a href="@Url.Action("Index", "Order")">
+                                <a href="@Url.Action("Index", "Order")" target="_blank">
                                     Xem tất cả
                                 </a>
                             </div>
@@ -216,7 +216,7 @@
                                     {
                                     <tr>
                                         <td class="text-center">
-                                            <a href="@Url.Action("Detail", "Order", new { id = item.id })">#@item.id</a>
+                                            <a href="@Url.Action("Detail", "Order", new { id = item.id }) target="_blank"">#@item.id</a>
                                         </td>
                                         <td>
                                             @item.create_at

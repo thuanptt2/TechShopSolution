@@ -81,6 +81,14 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpPut("newladingcode")]
+        public async Task<IActionResult> UpdateLadingCode([FromBody] UpdateLadingCodeRequest request)
+        {
+            var result = await _transportService.UpdateLadingCode(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
 
     }
 }

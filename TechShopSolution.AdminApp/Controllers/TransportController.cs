@@ -150,5 +150,29 @@ namespace TechShopSolution.AdminApp.Controllers
             TempData["error"] = result.Message;
             return RedirectToAction("Detail", "Order", new { id = request.order_id });
         }
+        [HttpGet]
+        public IActionResult UpdateLadingCode(int id, string lading_code)
+        {
+            var request = new UpdateLadingCodeRequest()
+            {
+                Id = id,
+                New_LadingCode = lading_code,
+            };
+            return View(request);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateLadingCode(UpdateLadingCodeRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _transportApiClient.UpdateLadingCode(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật mã vận đơn thành công";
+                return RedirectToAction("Detail", "Order", new { id = request.Id });
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }

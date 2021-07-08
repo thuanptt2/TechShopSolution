@@ -129,11 +129,30 @@ namespace TechShopSolution.Application.Catalog.Transport
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }
-                else return new ApiErrorResult<bool>("Không tìm thấy phương thức đơn vị vận chuyển này");
+                else return new ApiErrorResult<bool>("Không tìm thấy đơn vị vận chuyển này");
             }
             catch
             {
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+        public async Task<ApiResult<bool>> UpdateLadingCode(UpdateLadingCodeRequest request)
+        {
+            try
+            {
+                var result = await _context.Transports.Where(x=>x.order_id == request.Id).FirstOrDefaultAsync();
+                if (result != null)
+                {
+                    result.lading_code = request.New_LadingCode;
+                    result.update_at = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy đơn hàng #" + request.Id);
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Thêm mã vận đơn mới thất bại, hãy thử lại sau.");
             }
         }
         public async Task<List<TransporterViewModel>> GetAll()
