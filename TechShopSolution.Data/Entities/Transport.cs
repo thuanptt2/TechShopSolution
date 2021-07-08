@@ -15,6 +15,8 @@ namespace TechShopSolution.Data.Entities
         public decimal cod_price { get; set; }
         public string lading_code { get; set; }
         public DateTime create_at { get; set; }
+        public DateTime? cancel_at { get; set; }
+        public DateTime? done_at { get; set; }
         public DateTime? update_at { get; set; }
         public Transporter Transporter { get; set; }
         public Order Order { get; set; }
