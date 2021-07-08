@@ -15,7 +15,7 @@ namespace TechShopSolution.Data.Configurations
             builder.HasKey(x => x.id);
             builder.Property(x => x.id).UseIdentityColumn(100000,1);
             builder.Property(x => x.cod_price).IsRequired();
-            builder.Property(x => x.lading_code).IsRequired().HasMaxLength(255).IsUnicode(false);
+            builder.Property(x => x.lading_code).IsUnicode(false);
             builder.Property(x => x.transporter_id).IsRequired();
             builder.Property(x => x.order_id).IsRequired();
             builder.Property(x => x.ship_status).IsRequired();

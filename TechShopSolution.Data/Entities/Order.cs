@@ -20,6 +20,7 @@ namespace TechShopSolution.Data.Entities
         public bool isPay { get; set; }
         public string note { get; set; }
         public DateTime create_at { get; set; }
+        public DateTime? confirm_at { get; set; }
         public DateTime? pay_at { get; set; }
         public DateTime? update_at { get; set; }
         public DateTime? cancel_at { get; set; }

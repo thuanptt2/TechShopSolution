@@ -224,6 +224,7 @@ namespace TechShopSolution.Application.Catalog.Order
             if(order.isPay)
                 return new ApiErrorResult<string>("Đơn hàng này đã được thanh toán rồi, không thể thanh toán lại");
             order.isPay = true;
+            order.pay_at = DateTime.Now;
             _context.SaveChanges();
             return new ApiSuccessResult<string>("Thanh toán đơn hàng thành công");
         }
@@ -240,6 +241,7 @@ namespace TechShopSolution.Application.Catalog.Order
             else
             {
                 order.status = -1;
+                order.cancel_at = DateTime.Now;
                 var details = await _context.OrDetails.Where(x => x.order_id == order.id).ToListAsync();
                 foreach (var item in details)
                 {
@@ -266,6 +268,7 @@ namespace TechShopSolution.Application.Catalog.Order
             if (order.status == -1)
                 return new ApiErrorResult<string>("Đơn hàng này đã bị hủy, không thể duyệt");
             order.status = 1;
+            order.confirm_at = DateTime.Now;
             _context.SaveChanges();
             return new ApiSuccessResult<string>("Duyệt đơn hàng thành công");
 
