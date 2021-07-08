@@ -17,5 +17,7 @@ namespace TechShopSolution.ViewModels.Transport
         public string lading_code { get; set; }
         public DateTime create_at { get; set; }
         public DateTime? update_at { get; set; }
+        public DateTime? cancel_at { get; set; }
+        public DateTime? done_at { get; set; }
     }
 }

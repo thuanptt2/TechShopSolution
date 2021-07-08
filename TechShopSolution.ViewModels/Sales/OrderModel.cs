@@ -14,6 +14,7 @@ namespace TechShopSolution.ViewModels.Sales
         public string name_receiver { get; set; }
         public string phone_receiver { get; set; }
         public string address_receiver { get; set; }
+        public string cancel_reason { get; set; }
         public decimal total { get; set; }
         public decimal discount { get; set; }
         public decimal transport_fee { get; set; }

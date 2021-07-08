@@ -160,6 +160,7 @@ namespace TechShopSolution.Application.Catalog.Order
                 isPay = a.o.isPay,
                 status = a.o.status,
                 note = a.o.note,
+                cancel_reason = a.o.cancel_reason,
                 cancel_at = a.o.cancel_at,
                 update_at = a.o.cancel_at,
                 address_receiver = a.o.address_receiver,
@@ -184,6 +185,8 @@ namespace TechShopSolution.Application.Catalog.Order
                 transport.ship_status = result.ship_status;
                 transport.transporter_id = result.transporter_id;
                 transport.update_at = result.update_at;
+                transport.done_at = result.done_at;
+                transport.cancel_at = result.cancel_at;
                 var transporter = await _context.Transporters.FindAsync(result.transporter_id);
                 transport.transporter_name = transporter.name;
                 DataOrder.ship_status = transport.ship_status;
@@ -228,19 +231,20 @@ namespace TechShopSolution.Application.Catalog.Order
             _context.SaveChanges();
             return new ApiSuccessResult<string>("Thanh toán đơn hàng thành công");
         }
-        public async Task<ApiResult<string>> CancelOrder(int id)
+        public async Task<ApiResult<string>> CancelOrder(OrderCancelRequest request)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(request.Id);
             if (order == null)
                 return new ApiErrorResult<string>("Không tìm thấy đơn hàng này trong CSDL");
             if (order.status == -1)
                 return new ApiErrorResult<string>("Đơn hàng này đã bị hủy trước đó, không thể hủy lại");
-            var isValid = await _context.Transports.AnyAsync(x => x.order_id == id);
+            var isValid = await _context.Transports.AnyAsync(x => x.order_id == request.Id);
             if(isValid)
                 return new ApiErrorResult<string>("Đơn hàng này đã được tạo đơn vận chuyển, không thể hủy");
             else
             {
                 order.status = -1;
+                order.cancel_reason = request.reason;
                 order.cancel_at = DateTime.Now;
                 var details = await _context.OrDetails.Where(x => x.order_id == order.id).ToListAsync();
                 foreach (var item in details)

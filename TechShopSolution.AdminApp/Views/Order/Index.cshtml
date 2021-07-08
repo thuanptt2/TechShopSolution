@@ -120,90 +120,105 @@
                     {
                         @foreach (var item in Model.Items)
                         {
-                            <tr>
-                                <td class="text-center">
-                                    @Html.ActionLink("#" + item.id.ToString(), "Detail", new { id = item.id })
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.create_at)
-                                </td>
+                <tr>
+                    @if (item.status == -1)
+                    {
+                        <td class="text-center text-danger">
+                            @Html.ActionLink("#" + item.id.ToString(), "Detail", new { id = item.id })
+                        </td>
+                        <td class="text-danger">
+                            @Html.DisplayFor(modelItem => item.create_at)
+                        </td>
 
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.name_receiver)
-                                </td>
+                        <td class="text-danger">
+                            @Html.DisplayFor(modelItem => item.name_receiver)
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-center">
+                            @Html.ActionLink("#" + item.id.ToString(), "Detail", new { id = item.id })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.create_at)
+                        </td>
 
-                                @if (item.isPay)
-                                {
-                                    <td class="text-success-order text-center">
-                                        ✔  Đã thanh toán
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="text-warning-order text-center">
-                                        ◯  Chưa thanh toán
-                                    </td>
-                                }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name_receiver)
+                        </td>
+                    }
+                    @if (item.isPay)
+                    {
+                        <td class="text-success-order text-center">
+                            ✔  Đã thanh toán
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-warning-order text-center">
+                            ◯  Chưa thanh toán
+                        </td>
+                    }
 
 
-                                @if (item.ship_status == 1)
-                                {
-                                    <td class="text-success-order text-center">
-                                        ✔  Đã giao hàng
-                                    </td>
-                                }
-                                else if (item.ship_status == 0)
-                                {
-                                    <td class="text-warning-order text-center">
-                                        ◯  Chưa giao hàng
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="text-warning-order text-center">
-                                        ×  Đã hủy
-                                    </td>
-                                }
-                                @if (item.status == 1)
-                                {
-                                    <td class="text-success-order text-center">
-                                        ✔  Đã duyệt
-                                    </td>
-                                }
-                                else if (item.status == 0)
-                                {
-                                    <td class="text-warning-order text-center">
-                                        ◯ Chưa duyệt
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="text-danger-order text-center">
-                                        ×  Đã hủy
-                                    </td>
-                                }
-                                @if (item.status == -1)
-                                {
-                                    <td align="center" style="text-decoration: line-through;" class="text-danger">
-                                        @{
-                                            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-                                            var total = item.total + item.transport_fee - item.discount;
-                                        }
-                                        @String.Format(info, "{0:N0}", total)
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td align="center">
-                                        @{
-                                            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-                                            var total = item.total + item.transport_fee - item.discount;
-                                        }
-                                        @String.Format(info, "{0:N0}", total)
-                                    </td>
-                                }
+                    @if (item.ship_status == 1)
+                    {
+                        <td class="text-success-order text-center">
+                            ✔  Đã giao hàng
+                        </td>
+                    }
+                    else if (item.ship_status == 0)
+                    {
+                        <td class="text-warning-order text-center">
+                            ◯  Chưa giao hàng
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-warning-order text-center">
+                            ×  Đã hủy
+                        </td>
+                    }
+                    @if (item.status == 1)
+                    {
+                        <td class="text-success-order text-center">
+                            ✔  Đã duyệt
+                        </td>
+                    }
+                    else if (item.status == 0)
+                    {
+                        <td class="text-warning-order text-center">
+                            ◯ Chưa duyệt
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-danger-order text-center">
+                            ×  Đã hủy
+                        </td>
+                    }
+                    @if (item.status == -1)
+                    {
+                        <td align="center" style="text-decoration: line-through;" class="text-danger">
+                            @{
+                                var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                var total = item.total + item.transport_fee - item.discount;
+                            }
+                            @String.Format(info, "{0:N0}", total)
+                        </td>
+                    }
+                    else
+                    {
+                        <td align="center">
+                            @{
+                                var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                var total = item.total + item.transport_fee - item.discount;
+                            }
+                            @String.Format(info, "{0:N0}", total)
+                        </td>
+                    }
 
-                            </tr>
+                </tr>
                         }
                     }
                 </tbody>

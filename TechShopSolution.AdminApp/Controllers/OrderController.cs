@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,16 +68,25 @@ namespace TechShopSolution.AdminApp.Controllers
             return RedirectToAction("Detail", new { id = id });
         }
         [HttpGet]
-        public async Task<IActionResult> CancelOrder(int id)
+        public IActionResult CancelOrder(int id)
         {
-            var result = await _orderApiClient.CancelOrder(id);
+            var request = new OrderCancelRequest()
+            {
+                Id = id
+            };
+            return View(request);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CancelOrder(OrderCancelRequest request)
+        {
+            var result = await _orderApiClient.CancelOrder(request);
             if (!result.IsSuccess)
             {
                 TempData["error"] = result.Message;
-                return RedirectToAction("Detail", new { id = id });
+                return RedirectToAction("Detail", new { id = request.Id });
             }
             TempData["result"] = result.ResultObject;
-            return RedirectToAction("Detail", new { id = id });
+            return RedirectToAction("Detail", new { id = request.Id });
         }
         [HttpGet]
         public async Task<IActionResult> ConfirmOrder(int id)

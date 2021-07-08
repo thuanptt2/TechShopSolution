@@ -217,9 +217,8 @@ namespace TechShopSolution.Application.Catalog.Transport
             }
             catch
             {
-                return new ApiErrorResult<bool>("Thêm thất bại");
+                return new ApiErrorResult<bool>("Tạo đơn vận chuyển thất bại, vui lòng thử lại");
             }
         }
-
     }
 }

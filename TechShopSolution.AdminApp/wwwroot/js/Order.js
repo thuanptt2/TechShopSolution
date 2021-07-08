@@ -40,5 +40,5 @@
                 $('#form-modal').modal('show');
             }
         })
-    }
+    };
 })

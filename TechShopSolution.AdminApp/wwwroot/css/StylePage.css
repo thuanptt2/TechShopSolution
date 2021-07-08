@@ -434,3 +434,12 @@ table a:hover {
     color: #2962ff!important;
 }
 
+.box-shadow {
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+}
+.detail-order .padding-container {
+    padding-top: 0 !important;
+}
+.text-danger a {
+    color: #d32e2e !important;
+}

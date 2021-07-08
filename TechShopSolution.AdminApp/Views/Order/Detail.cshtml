@@ -40,7 +40,7 @@
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
-<div class="container-fluid">
+<div class="container-fluid detail-order">
     <ol class="breadcrumb mb-4 mt-3">
         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
         <li class="breadcrumb-item"><a href="/order/index">Đơn hàng</a></li>
@@ -153,7 +153,7 @@
         </div>
         <div class="col-lg-auto col-sm-12 ml-4 mb-3 mr-4">
             <div class="btn-group">
-                @if (Model.Order.status == -1)
+                @if (Model.Order.status == -1 || Model.Order.ship_status == 2)
                 {
                     <button type="button" class="btn btn-secondary dropdown-toggle btnDropdownAction" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Thao tác
@@ -168,13 +168,59 @@
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item item-dropdown" href="@Url.Action("ConfirmOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn duyệt đơn hàng này?')">Duyệt đơn hàng</a>
                     <a class="dropdown-item item-dropdown" href="@Url.Action("PaymentConfirm", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn thanh toán cho đơn hàng này?')">Xác nhận thanh toán</a>
-                    <a class="dropdown-item" id="btnCancelOrder" href="@Url.Action("CancelOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này? hành động này không thể hoàn tác')">Hủy đơn hàng</a>
+                    @if (Model.Order.ship_status == 1)
+                    {
+                        <a class="dropdown-item" href="#" id="btnCancelOrder" onclick="alert('Đơn hàng này đang được vận chuyển thông thể Hủy')">Hủy đơn hàng</a>
+                    }
+                    else
+                    {
+                        <a class="dropdown-item" href="#" id="btnCancelOrder" onclick="showInPopup('@Url.Action("CancelOrder","Order",new { id = Model.Order.id }, Context.Request.Scheme)','Chọn lý do hủy đơn hàng')">Hủy đơn hàng</a>
+                    }
+
                 </div>
             </div>
         </div>
     </div>
+
     <div class="padding-container">
-        <div class="row mt-3">
+        @if (Model.Order.status == -1)
+        {
+            <div class="row alert alert-warning box-shadow">
+                <div class="col-auto p-0 pr-4">
+                    <span class="omni-svg-create svg-next-icon svg-next-icon-size-16">
+                        <i class="fas fa-exclamation-triangle" style="color: rgb(138, 109, 59);"></i>
+                    </span>
+                </div>
+                <div class="col-auto p-0">
+                    <p class="omni-alert-pannel-title">
+                        <strong>Đơn hàng đã hủy</strong>
+                    </p>
+                    <p class="omni-alert-pannel-description mb-0">
+                        Đơn hàng đã được hủy vào lúc <strong>@Model.Order.cancel_at</strong>. <br />
+                        Lý do: <strong>@Model.Order.cancel_reason</strong>
+                    </p>
+                </div>
+            </div>
+        }
+        else if (Model.Order.ship_status == 2)
+        {
+            <div class="row alert alert-warning box-shadow">
+                <div class="col-auto p-0 pr-4">
+                    <span class="omni-svg-create svg-next-icon svg-next-icon-size-16">
+                        <i class="fas fa-exclamation-triangle" style="color: rgb(138, 109, 59);"></i>
+                    </span>
+                </div>
+                <div class="col-auto p-0">
+                    <p class="omni-alert-pannel-title">
+                        <strong>Đơn hàng đã được giao thành công</strong>
+                    </p>
+                    <p class="omni-alert-pannel-description mb-0">
+                        Đơn hàng đã được giao thành công vào lúc <strong>@Model.Transport.done_at</strong>. <br />
+                    </p>
+                </div>
+            </div>
+        }
+        <div class="row mt-4">
             <div class="col-12 col-lg-8">
                 <div class="wrapper-content shadow">
                     <label class="title-fill">Chi tiết sản phẩm</label>
@@ -283,7 +329,7 @@
 
                     <label class="title-fill">Thông tin vận chuyển</label>
                     <hr />
-                    @if (Model.Order.ship_status != 1)
+                    @if (Model.Order.ship_status == 0)
                     {
                         <span class="text-warning-order">
                             Đơn hàng này chưa được vận chuyển
@@ -372,7 +418,7 @@
                                             <label class="lableFormField">Tiền thu hộ</label>
                                         </div>
                                         <div class="col text-right">
-                                            @String.Format(info, "{0:N0}", Model.Transport.cod_price) 
+                                            @String.Format(info, "{0:N0}", Model.Transport.cod_price)
                                         </div>
                                     </div>
                                     <div class="row mb-2">
@@ -473,4 +519,3 @@
         </div>
     </div>
 </div>
-
