@@ -9,6 +9,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using TechShopSolution.Application.Common;
+using TechShopSolution.ViewModels.Transport;
 
 namespace TechShopSolution.Application.Catalog.Order
 {
@@ -169,10 +170,22 @@ namespace TechShopSolution.Application.Catalog.Order
                 transport_fee = a.o.transport_fee
 
             }).FirstOrDefault();
-
-            var transport = _context.Transports.Where(x => x.order_id == DataOrder.id).FirstOrDefault();
-            if (transport != null)
+            TransportViewModel transport = new TransportViewModel();
+            var result = _context.Transports.Where(x => x.order_id == DataOrder.id).FirstOrDefault();
+            if (result != null)
             {
+                transport.cod_price = result.cod_price;
+                transport.create_at = result.create_at;
+                transport.from_address = result.from_address;
+                transport.to_address = result.to_address;
+                transport.id = result.id;
+                transport.lading_code = result.lading_code;
+                transport.order_id = result.order_id;
+                transport.ship_status = result.ship_status;
+                transport.transporter_id = result.transporter_id;
+                transport.update_at = result.update_at;
+                var transporter = await _context.Transporters.FindAsync(result.transporter_id);
+                transport.transporter_name = transporter.name;
                 DataOrder.ship_status = transport.ship_status;
             }
             else DataOrder.ship_status = 0;
@@ -199,6 +212,7 @@ namespace TechShopSolution.Application.Catalog.Order
 
             var model = new OrderDetailViewModel();
             model.Order = DataOrder;
+            model.Transport = transport;
             model.Details = Details;
             return new ApiSuccessResult<OrderDetailViewModel>(model);
         }

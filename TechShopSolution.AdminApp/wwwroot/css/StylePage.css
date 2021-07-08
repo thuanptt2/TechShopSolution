@@ -427,3 +427,10 @@ table a:hover {
 .datepicker:hover {
     cursor: pointer
 }
+.btn-nomal a {
+    background: #E9ECEF !important;
+}
+.btn-nomal a:hover {
+    color: #2962ff!important;
+}
+

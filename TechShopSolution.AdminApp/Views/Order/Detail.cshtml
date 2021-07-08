@@ -311,44 +311,88 @@
                     }
                     else
                     {
-                        <div class="row">
-                            <div class="col-lg-6 col-6">
-                                <div class="row mb-2">
-                                    <div class="col">
-                                        <label class="lableFormField">Tổng giá trị đơn hàng</label>
+                        if (Model.Transport != null)
+                        {
+                            <div class="row">
+                                <div class="col-lg-6 col-6">
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <label class="lableFormField">Mã đơn vận chuyển</label>
+                                        </div>
+                                        <div class="col text-right">
+                                            <a href="@Url.Action("Detail", "Transport", new { id = Model.Transport.id })"><strong class=""> @Model.Transport.id</strong></a>
+                                        </div>
                                     </div>
-                                    <div class="col text-right">
-                                        @String.Format(info, "{0:N0}", Model.Order.total + Model.Order.transport_fee - Model.Order.discount)
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <label class="lableFormField">Đơn vị vận chuyển</label>
+                                        </div>
+                                        <div class="col text-right">
+                                            <a href="@Url.Action("Update", "Transport", new { id = Model.Transport.transporter_id })"><strong class=""> @Model.Transport.transporter_name</strong></a>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <label class="lableFormField">Mã vận đơn</label>
+                                        </div>
+                                        <div class="col text-right">
+                                            @Model.Transport.lading_code
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row mb-2">
-                                    <div class="col">
-                                        <label class="lableFormField">Tổng giá trị đơn hàng</label>
+                                <div class="col-lg-6 col-6">
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <label class="lableFormField">Trạng thái vận chuyển</label>
+                                        </div>
+                                        <div class="col text-right">
+                                            @if (Model.Transport.ship_status == 1)
+                                            {
+                                                <span class="text-success-order">
+                                                    ✔  Đã giao hàng
+                                                </span>
+                                            }
+                                            else if (Model.Transport.ship_status == 0)
+                                            {
+
+                                                <span class="text-warning-order">
+                                                    ◯ Chưa giao hàng
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger-order">
+                                                    ×  Đã bị hủy
+                                                </span>
+                                            }
+                                        </div>
                                     </div>
-                                    <div class="col text-right">
-                                        @String.Format(info, "{0:N0}", Model.Order.total + Model.Order.transport_fee - Model.Order.discount)
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <label class="lableFormField">Tiền thu hộ</label>
+                                        </div>
+                                        <div class="col text-right">
+                                            @String.Format(info, "{0:N0}", Model.Transport.cod_price) 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col">
-                                        <label class="lableFormField">Tổng giá trị đơn hàng</label>
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <label class="lableFormField">Vận chuyển lúc</label>
+                                        </div>
+                                        <div class="col text-right">
+                                            @Model.Transport.create_at
+                                        </div>
                                     </div>
-                                    <div class="col text-right">
-                                        @String.Format(info, "{0:N0}", Model.Order.total + Model.Order.transport_fee - Model.Order.discount)
+                                    <div class="row mb-2">
+                                        <div class="col text-right btn-nomal">
+                                            <a id="btnCreateShippingOrder" class="btn" onclick="showInPopup('@Url.Action("CreateShippingOrder","Transport",new { id = Model.Order.id, receive_address = Model.Order.address_receiver }, Context.Request.Scheme)','Tạo đơn vận chuyển')">
+                                                <i class="fas fa-pencil-alt"></i>  Cập nhật mã vận đơn
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-6">
-                                <div class="row mb-2">
-                                    <div class="col">
-                                        <label class="lableFormField">Số lượng sản phẩm</label>
-                                    </div>
-                                    <div class="col text-right">
-                                        @Model.Details.Count()
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        }
                     }
                 </div>
             </div>

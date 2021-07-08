@@ -137,16 +137,18 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> CreateShippingOrder(CreateTransportRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+            {
+                ViewBag.Transporter = await _transportApiClient.GetAll();
+                return View(request);
+            }
             var result = await _transportApiClient.CreateShippingOrder(request);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Tạo đơn vận chuyển thành công";
                 return RedirectToAction("Detail", "Order", new { id = request.order_id });
             }
-            ViewBag.Transporter = await _transportApiClient.GetAll();
-            ModelState.AddModelError("", result.Message);
-            return View(request);
+            TempData["error"] = result.Message;
+            return RedirectToAction("Detail", "Order", new { id = request.order_id });
         }
     }
 }
