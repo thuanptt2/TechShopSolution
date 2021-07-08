@@ -377,7 +377,7 @@
                                             <a href="@Url.Action("Update", "Transport", new { id = Model.Transport.transporter_id })" target="_blank"><strong class=""> @Model.Transport.transporter_name</strong></a>
                                         </div>
                                     </div>
-                                    <div class="row mb-2">
+                                    <div class="row mb-4">
                                         <div class="col">
                                             <label class="lableFormField">Mã vận đơn</label>
                                         </div>
@@ -385,6 +385,16 @@
                                             @Model.Transport.lading_code
                                         </div>
                                     </div>
+                                    @if (Model.Transport.ship_status == 1)
+                                    {
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <a class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy giao hàng cho đơn hàng này, hành động này không thể hoàn tác?')" href="@Url.Action("CancelShippingOrder","Order",new { transport_id = Model.Transport.id, order_id = Model.Order.id })">
+                                                    Hủy giao hàng
+                                                </a>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                                 <div class="col-lg-6 col-6">
                                     <div class="row mb-2">
@@ -421,7 +431,7 @@
                                             @String.Format(info, "{0:N0}", Model.Transport.cod_price)
                                         </div>
                                     </div>
-                                    <div class="row mb-2">
+                                    <div class="row mb-4">
                                         <div class="col">
                                             <label class="lableFormField">Vận chuyển lúc</label>
                                         </div>
@@ -429,13 +439,16 @@
                                             @Model.Transport.create_at
                                         </div>
                                     </div>
-                                    <div class="row mb-2">
-                                        <div class="col text-right btn-nomal">
-                                            <a class="btn" onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Order.id, ladin_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
-                                                <i class="fas fa-pencil-alt"></i>  Cập nhật mã vận đơn
-                                            </a>
+                                    @if (Model.Transport.ship_status == 1)
+                                    {
+                                        <div class="row mb-2">
+                                            <div class="col text-right btn-nomal">
+                                                <a class="btn" onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Order.id, ladin_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
+                                                    <i class="fas fa-pencil-alt"></i>  Cập nhật mã vận đơn
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
                                 </div>
                             </div>
                         }

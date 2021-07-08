@@ -164,7 +164,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> UpdateLadingCode(UpdateLadingCodeRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _transportApiClient.UpdateLadingCode(request);
             if (result.IsSuccess)
             {
@@ -173,6 +173,18 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+        [HttpGet]
+        public async Task<IActionResult> CancelShippingOrder(int id)
+        {
+            var result = await _transportApiClient.CancelShippingOrder(id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Detail", new { id = id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("Detail", new { id = id });
         }
     }
 }

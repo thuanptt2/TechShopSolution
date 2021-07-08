@@ -12,9 +12,12 @@ namespace TechShopSolution.AdminApp.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderApiClient _orderApiClient;
-        public OrderController(IOrderApiClient orderApiClient)
+        private readonly ITransportApiClient _transportApiClient;
+
+        public OrderController(IOrderApiClient orderApiClient, ITransportApiClient transportApiClient)
         {
             _orderApiClient = orderApiClient;
+            _transportApiClient = transportApiClient;
         }
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 20)
         {
@@ -126,6 +129,18 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+        [HttpGet]
+        public async Task<IActionResult> CancelShippingOrder(int transport_id, int order_id)
+        {
+            var result = await _transportApiClient.CancelShippingOrder(transport_id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Detail", new { id = order_id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("Detail", new { id = order_id });
         }
     }
 }

@@ -89,6 +89,14 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("canceltransport/{id}")]
+        public async Task<IActionResult> Cancelorder(int id)
+        {
+            var result = await _transportService.CancelShippingOrder(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
 
     }
 }

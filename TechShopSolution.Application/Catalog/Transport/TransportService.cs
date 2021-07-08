@@ -239,5 +239,22 @@ namespace TechShopSolution.Application.Catalog.Transport
                 return new ApiErrorResult<bool>("Tạo đơn vận chuyển thất bại, vui lòng thử lại");
             }
         }
+        public async Task<ApiResult<string>> CancelShippingOrder(int id)
+        {
+            var transport = await _context.Transports.FindAsync(id);
+            if (transport == null)
+                return new ApiErrorResult<string>("Không tìm thấy đơn vận chuyển này trong CSDL");
+            if(transport.ship_status == 2)
+            {
+                return new ApiErrorResult<string>("Đơn hàng này đã được vận chuyển thành công, không thể hủy");
+            }
+            else
+            {
+                transport.ship_status = -1;
+                transport.cancel_at = DateTime.Now;
+                _context.SaveChanges();
+                return new ApiSuccessResult<string>("Hủy giao hàng thành công");
+            }
+        }
     }
 }

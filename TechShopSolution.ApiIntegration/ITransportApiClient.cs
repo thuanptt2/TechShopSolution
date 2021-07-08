@@ -18,5 +18,6 @@ namespace TechShopSolution.ApiIntegration
         Task<List<TransporterViewModel>> GetAll();
         Task<ApiResult<bool>> CreateShippingOrder(CreateTransportRequest request);
         Task<ApiResult<bool>> UpdateLadingCode(UpdateLadingCodeRequest request);
+        Task<ApiResult<string>> CancelShippingOrder(int id);
     }
 }
