@@ -443,3 +443,16 @@ table a:hover {
 .text-danger a {
     color: #d32e2e !important;
 }
+.min-width-120px {
+    min-width: 120px !important;
+}
+.btnEditLadingCode {
+    color: #161616 !important;
+}
+.lading-code a {
+    color: #161616;
+    margin-left: 10px;
+}
+.lading-code a:hover {
+    cursor: pointer;
+}

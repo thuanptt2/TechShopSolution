@@ -103,6 +103,11 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-
+        [HttpGet("detail/{id}")]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var result = await _transportService.Detail(id);
+            return Ok(result);
+        }
     }
 }

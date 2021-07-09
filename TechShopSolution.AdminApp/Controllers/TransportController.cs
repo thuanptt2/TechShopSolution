@@ -189,7 +189,7 @@ namespace TechShopSolution.AdminApp.Controllers
             if (result.IsSuccess)
             {
                 TempData["result"] = "Cập nhật mã vận đơn thành công";
-                return RedirectToAction("Detail", "Order", new { id = request.Id });
+                return RedirectToAction("Detail", "Transport", new { id = request.Id});
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
@@ -205,6 +205,25 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             TempData["result"] = result.ResultObject;
             return RedirectToAction("Detail", new { id = id });
+        }
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var result = await _transportApiClient.Detail(id);
+            if (!result.IsSuccess || result.ResultObject == null)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("ListTransport");
+            }
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
+            return View(result.ResultObject);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 
 @{
-    ViewData["Title"] = "Chi tiết phương thức thanh toán";
+    ViewData["Title"] = "Chi tiết đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 }
@@ -443,7 +443,7 @@
                                     {
                                         <div class="row mb-2">
                                             <div class="col text-right btn-nomal">
-                                                <a class="btn" onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Order.id, ladin_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
+                                                <a class="btn" onclick="showInPopup('@Url.Action("UpdateLadingCode","Order",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code, order_id = Model.Order.id }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
                                                     <i class="fas fa-pencil-alt"></i>  Cập nhật mã vận đơn
                                                 </a>
                                             </div>

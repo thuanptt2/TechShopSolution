@@ -121,10 +121,10 @@
                             @foreach (var item in Model.Items)
                             {
                                 <tr>
-                                    <td>
-                                        @Html.ActionLink(item.id.ToString(), "Detail", new { id = item.id })
+                                    <td class="text-center">
+                                        @Html.ActionLink(item.id.ToString(), "Detail", "Transport", new { id = item.id })
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @Html.ActionLink("#" + item.order_id, "Detail", "Order", new { id = item.order_id }, new { target = "_blank" })
                                     </td>
                                     <td>

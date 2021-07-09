@@ -11,6 +11,7 @@ using TechShopSolution.ViewModels.Transport;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TechShopSolution.Application.Common;
+using TechShopSolution.ViewModels.Sales;
 
 namespace TechShopSolution.Application.Catalog.Transport
 {
@@ -109,6 +110,84 @@ namespace TechShopSolution.Application.Catalog.Transport
             };
             return new ApiSuccessResult<TransporterViewModel>(transporter);
         }
+        public async Task<ApiResult<OrderDetailViewModel>> Detail(int id)
+        {
+            var query = from tp in _context.Transports
+                        join o in _context.Orders on tp.order_id equals o.id
+                        join od in _context.OrDetails on o.id equals od.order_id
+                        join p in _context.Products on od.product_id equals p.id
+                        join t in _context.Transporters on tp.transporter_id equals t.id
+                        where tp.id == id
+                        select new { p, o, od, tp };
+
+           
+            TransportViewModel transport = query.Select(a => new TransportViewModel()
+            {
+                cod_price = a.tp.cod_price,
+                ship_status = a.tp.ship_status,
+                order_id = a.tp.order_id,
+                id = a.tp.id,
+                create_at = a.tp.create_at,
+                from_address = a.tp.from_address,
+                lading_code = a.tp.lading_code,
+                to_address = a.tp.to_address,
+                transporter_id = a.tp.transporter_id,
+                transporter_name = a.tp.Transporter.name,
+                update_at = a.tp.update_at,
+                cancel_at = a.tp.cancel_at,
+                
+            }).FirstOrDefault();
+
+            if (transport == null)
+            {
+                return new ApiErrorResult<OrderDetailViewModel>("Đơn vận chuyển này không tồn tại");
+            }
+
+            OrderModel DataOrder = query.Select(a => new OrderModel()
+            {
+                id = a.o.id,
+                create_at = a.o.create_at,
+                cus_id = a.o.cus_id,
+                name_receiver = a.o.name_receiver,
+                discount = a.o.discount,
+                isPay = a.o.isPay,
+                status = a.o.status,
+                note = a.o.note,
+                cancel_reason = a.o.cancel_reason,
+                cancel_at = a.o.cancel_at,
+                update_at = a.o.cancel_at,
+                address_receiver = a.o.address_receiver,
+                coupon_id = a.o.coupon_id,
+                payment_id = a.o.payment_id,
+                phone_receiver = a.o.phone_receiver,
+                total = a.o.total,
+                transport_fee = a.o.transport_fee
+
+            }).FirstOrDefault();
+          
+            var customer = await _context.Customers.FindAsync(DataOrder.cus_id);
+            DataOrder.cus_name = customer.name;
+            DataOrder.cus_email = customer.email;
+            DataOrder.cus_phone = customer.phone;
+            DataOrder.cus_address = customer.address;
+
+            List<OrderDetailModel> Details = query.Select(a => new OrderDetailModel()
+            {
+                order_id = a.od.order_id,
+                product_id = a.od.product_id,
+                product_image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
+                product_name = a.p.name,
+                promotion_price = a.od.promotion_price,
+                quantity = a.od.quantity,
+                unit_price = a.od.unit_price
+            }).ToList();
+
+            var model = new OrderDetailViewModel();
+            model.Order = DataOrder;
+            model.Transport = transport;
+            model.Details = Details;
+            return new ApiSuccessResult<OrderDetailViewModel>(model);
+        }
         public async Task<ApiResult<bool>> Update(TransporterUpdateRequest request)
         {
             try
@@ -140,7 +219,7 @@ namespace TechShopSolution.Application.Catalog.Transport
         {
             try
             {
-                var result = await _context.Transports.Where(x=>x.order_id == request.Id).FirstOrDefaultAsync();
+                var result = await _context.Transports.Where(x=>x.id == request.Id).FirstOrDefaultAsync();
                 if (result != null)
                 {
                     result.lading_code = request.New_LadingCode;
@@ -148,7 +227,7 @@ namespace TechShopSolution.Application.Catalog.Transport
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }
-                else return new ApiErrorResult<bool>("Không tìm thấy đơn hàng #" + request.Id);
+                else return new ApiErrorResult<bool>("Không tìm thấy đơn vận chuyển" + request.Id);
             }
             catch
             {

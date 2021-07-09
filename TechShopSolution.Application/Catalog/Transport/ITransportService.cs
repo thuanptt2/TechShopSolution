@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.Transport;
 
 namespace TechShopSolution.Application.Catalog.Transport
@@ -21,5 +22,6 @@ namespace TechShopSolution.Application.Catalog.Transport
         Task<ApiResult<bool>> UpdateLadingCode(UpdateLadingCodeRequest request);
         Task<ApiResult<string>> CancelShippingOrder(int id);
         Task<PagedResult<TransportViewModel>> GetPagingTransport(GetTransportPagingRequest request);
+        Task<ApiResult<OrderDetailViewModel>> Detail(int id);
     }
 }

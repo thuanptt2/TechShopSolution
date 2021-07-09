@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.Transport;
 
 namespace TechShopSolution.ApiIntegration
@@ -20,5 +21,6 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<bool>> UpdateLadingCode(UpdateLadingCodeRequest request);
         Task<ApiResult<string>> CancelShippingOrder(int id);
         Task<PagedResult<TransportViewModel>> GetTransportPagings(GetTransportPagingRequest request);
+        Task<ApiResult<OrderDetailViewModel>> Detail(int id);
     }
 }

@@ -11,6 +11,7 @@ namespace TechShopSolution.ViewModels.Sales
         public string cus_name { get; set; }
         public string cus_email { get; set; }
         public string cus_phone { get; set; }
+        public string cus_address { get; set; }
         public string name_receiver { get; set; }
         public string phone_receiver { get; set; }
         public string address_receiver { get; set; }

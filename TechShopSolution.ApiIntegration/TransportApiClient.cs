@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.Transport;
 
 namespace TechShopSolution.ApiIntegration
@@ -170,7 +171,15 @@ namespace TechShopSolution.ApiIntegration
             var transporter = JsonConvert.DeserializeObject<PagedResult<TransportViewModel>>(body);
             return transporter;
         }
-
-
+        public async Task<ApiResult<OrderDetailViewModel>> Detail(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/transport/detail/{id}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<OrderDetailViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<OrderDetailViewModel>>(body);
+        }
     }
 }

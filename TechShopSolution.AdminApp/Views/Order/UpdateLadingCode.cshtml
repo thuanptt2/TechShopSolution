@@ -5,9 +5,10 @@
 }
 
 
-<form asp-action="UpdateLadingCode" asp-controller="Transport" method="post" onsubmit="return SubmitForm(this);">
+<form asp-action="UpdateLadingCode" asp-controller="Order" method="post" onsubmit="return SubmitForm(this);">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input asp-for="Id" class="form-control" hidden />
+    <input asp-for="order_id" class="form-control" hidden />
     <div class="form-group">
         <label asp-for="New_LadingCode" class="control-label lableFormField"></label>
         <input asp-for="New_LadingCode" class="form-control" placeholder="Nhập mã vận đơn" />

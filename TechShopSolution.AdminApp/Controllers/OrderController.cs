@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Sales;
+using TechShopSolution.ViewModels.Transport;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
@@ -141,6 +142,31 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             TempData["result"] = result.ResultObject;
             return RedirectToAction("Detail", new { id = order_id });
+        }
+        [HttpGet]
+        public IActionResult UpdateLadingCode(int id, string lading_code, int order_id)
+        {
+            var request = new UpdateLadingCodeRequest()
+            {
+                Id = id,
+                New_LadingCode = lading_code,
+                order_id = order_id,
+            };
+            return View(request);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateLadingCode(UpdateLadingCodeRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View(request);
+            var result = await _transportApiClient.UpdateLadingCode(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật mã vận đơn thành công";
+                return RedirectToAction("Detail", "Order", new { id = request.order_id });
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
         }
     }
 }
