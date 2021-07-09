@@ -636,4 +636,44 @@ ol.progtrckr {
         font-size: 2.2em;
         bottom: -1.2em;
     }
-
+.space-between-flex {
+    display: flex;
+    justify-content: space-between;
+}
+.order-hr {
+    margin-top: 5px !important;
+}
+.order-tracking-product-name {
+    overflow: hidden;
+    height: 35px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+.order-tracking-product .table th, .table td {
+    border-top: 0;
+}
+.text-center {
+    text-align: center;
+}
+.text-warning-order {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fdbd41;
+}
+.text-danger-order {
+    font-size: 15px;
+    font-weight: 500;
+    color: #d32e2e;
+}
+.text-success-order {
+    font-size: 15px;
+    font-weight: 500;
+    color: #22c993;
+}
+.text-info-order {
+    font-size: 15px;
+    font-weight: 500;
+    color: #007bff;
+}

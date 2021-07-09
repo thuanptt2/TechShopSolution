@@ -34,7 +34,6 @@
         <ul id="infoDetail" class="nav padding-container nav-tabs">
             <li class="active"><a href="#info" data-toggle="tab">Thông tin tài khoản</a></li>
             <li><a href="#address" onclick="showInPopup('@Url.Action("UpdateAddress","Account",new { id = Model.Id })')" data-toggle="tab">Sổ địa chỉ</a></li>
-            <li><a href="#orders" data-toggle="tab">Xem đơn hàng</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in wrapper-content" id="info">
@@ -102,9 +101,20 @@
                 </div>
 
             </div>
-            <div class="tab-pane fade wrapper-content" id="orders">
-                Hello
-            </div>
         </div>
     </div>
 </div>
+<ol class="progtrckr" data-progtrckr-steps="5">
+    <li class="progtrckr-done">Đặt thành công</li>
+    <!--
+    -->
+    <li class="progtrckr-done">Chờ thanh toán</li>
+    <!--
+    -->
+    <li class="progtrckr-done">Đơn hàng bị hủy</li>
+    <!--
+    -->
+    <li class="progtrckr-todo">Shipped</li>
+    <!--
+    -->
+</ol>

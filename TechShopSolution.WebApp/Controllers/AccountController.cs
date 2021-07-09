@@ -268,5 +268,17 @@ namespace TechShopSolution.WebApp.Controllers
                           CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public async Task<IActionResult> OrderTracking(int id)
+        {
+            var result = await _customerApiClient.GetCustomerOrders(id);
+            if(!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index","Home");
+            }
+            ViewBag.Model = result.ResultObject;
+            return View();
+        }
     }
 }

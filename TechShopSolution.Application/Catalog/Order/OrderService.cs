@@ -315,6 +315,54 @@ namespace TechShopSolution.Application.Catalog.Order
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
+        public async Task<ApiResult<List<OrderPublicViewModel>>> GetCustomerOrders(int id)
+        {
+            var customer = await _context.Customers.FindAsync(id);
+            if(customer == null)
+                return new ApiErrorResult<List<OrderPublicViewModel>>("Khách hàng không tồn tại");
+
+            var query = from od in _context.OrDetails
+                        join p in _context.Products on od.product_id equals p.id
+                        join o in _context.Orders on od.order_id equals o.id
+                        where o.cus_id == id
+                        select new { p, o, od };
+            
+
+            var data = query.AsEnumerable()
+                  .GroupBy(g => g.o);
+
+            var Orders = data.OrderByDescending(x => x.Key.create_at)
+                .Select(a => new OrderPublicViewModel()
+                {
+                    id = a.Key.id,
+                    order_status = a.Key.status,
+                    ship_status = a.Key.Transport == null ? 0 : a.Key.Transport.ship_status,
+                    total = a.Key.total - a.Key.discount + a.Key.transport_fee,
+                    pay_status = a.Key.isPay,
+                    Products = a.Key.OrderDetails.Select(b => new OrderDetailModel()
+                    {
+                        order_id = b.order_id,
+                        product_id = b.product_id,
+                        product_image = GetBase64StringForImage(_storageService.GetFileUrl(b.Product.image)),
+                        product_name = b.Product.name,
+                        promotion_price = b.promotion_price,
+                        quantity = b.quantity,
+                        unit_price = b.unit_price,
+                    }).ToList()
+                }).ToList();
+
+            foreach (var item in Orders)
+            {
+                var tranport = _context.Transports.Where(x => x.order_id == item.id).FirstOrDefault();
+                if (tranport != null)
+                {
+                    item.ship_status = tranport.ship_status;
+                }
+                else item.ship_status = 0;
+            }
+
+            return new ApiSuccessResult<List<OrderPublicViewModel>>(Orders);
+        }
 
     }
 }
