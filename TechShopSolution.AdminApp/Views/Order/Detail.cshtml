@@ -86,7 +86,6 @@
                         }
                         else if (Model.Order.ship_status == 0)
                         {
-
                             <span class="text-warning-order">
                                 ◯ Chưa giao hàng
                             </span>
@@ -107,9 +106,18 @@
                         <div class="ui-product-head">
                             @if (Model.Order.isPay)
                             {
-                                <span class="text-success-order">
-                                    ✔ Đã thanh toán
-                                </span>
+                                if (Model.Order.status == -1)
+                                {
+                                    <span class="text-success-order cancel-danger-text">
+                                        ✔ Đã thanh toán
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-success-order">
+                                        ✔ Đã thanh toán
+                                    </span>
+                                }
                             }
                             else
                             {
@@ -198,24 +206,6 @@
                     <p class="omni-alert-pannel-description mb-0">
                         Đơn hàng đã được hủy vào lúc <strong>@Model.Order.cancel_at</strong>. <br />
                         Lý do: <strong>@Model.Order.cancel_reason</strong>
-                    </p>
-                </div>
-            </div>
-        }
-        else if (Model.Order.ship_status == 2)
-        {
-            <div class="row alert alert-warning box-shadow">
-                <div class="col-auto p-0 pr-4">
-                    <span class="omni-svg-create svg-next-icon svg-next-icon-size-16">
-                        <i class="fas fa-exclamation-triangle" style="color: rgb(138, 109, 59);"></i>
-                    </span>
-                </div>
-                <div class="col-auto p-0">
-                    <p class="omni-alert-pannel-title">
-                        <strong>Đơn hàng đã được giao thành công</strong>
-                    </p>
-                    <p class="omni-alert-pannel-description mb-0">
-                        Đơn hàng đã được giao thành công vào lúc <strong>@Model.Transport.done_at</strong>. <br />
                     </p>
                 </div>
             </div>
@@ -456,6 +446,36 @@
                 </div>
             </div>
             <div class="col-12 col-lg-4">
+                <div class="wrapper-content shadow mb-3">
+                    <label class="title-fill">Thông tin thanh toán</label>
+                    <hr />
+                    <p class="lableFormField">Phương thức thanh toán:</p>
+                    <p><a href="@Url.Action("Update", "Payment", new { id = Model.Order.payment_id })" target="_blank"><strong class=""> @Model.Order.payment_name</strong></a>                    </p>
+                    <p class="lableFormField">Trạng thái thanh toán:</p>
+                    <p>
+                        @if (Model.Order.isPay)
+                        {
+                            if (Model.Order.status == -1)
+                            {
+                                <span class="text-success-order cancel-danger-text">
+                                    ✔ Đã thanh toán
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-success-order">
+                                    ✔ Đã thanh toán
+                                </span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-warning-order">
+                                ◯ Chưa thanh toán
+                            </span>
+                        }
+                    </p>
+                </div>
                 <div class="wrapper-content shadow mb-3">
                     <label class="title-fill">Thông tin người mua</label>
                     <hr />

@@ -91,8 +91,9 @@ namespace TechShopSolution.Application.Catalog.Order
         public PagedResult<OrderViewModel> GetAllPaging(GetOrderPagingRequest request)
         {
             var query = from o in _context.Orders
+                        join c in _context.Customers on o.cus_id equals c.id
                         join od in _context.OrDetails on o.id equals od.order_id
-                        select new { o , od};
+                        select new { o , od, c};
 
             if (!String.IsNullOrEmpty(request.Keyword))
             {
@@ -113,6 +114,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     id = a.Key.id,
                     create_at = a.Key.create_at,
                     cus_id = a.Key.cus_id,
+                    cus_name = a.Key.Customers.name,
                     name_receiver = a.Key.name_receiver,
                     discount = a.Key.discount,
                     isPay = a.Key.isPay,
@@ -146,8 +148,10 @@ namespace TechShopSolution.Application.Catalog.Order
             var query = from od in _context.OrDetails
                         join p in _context.Products on od.product_id equals p.id
                         join o in _context.Orders on od.order_id equals o.id
+                        join pm in _context.PaymentMethods on o.payment_id equals pm.id
+                        join c in _context.Customers on o.cus_id equals c.id
                         where o.id == id
-                        select new { p, o, od };
+                        select new { p, o, od, pm, c};
 
 
             OrderModel DataOrder = query.Select(a => new OrderModel()
@@ -159,6 +163,11 @@ namespace TechShopSolution.Application.Catalog.Order
                 discount = a.o.discount,
                 isPay = a.o.isPay,
                 status = a.o.status,
+                payment_name = a.pm.name,
+                cus_phone = a.c.phone,
+                cus_name = a.c.name,
+                cus_address = a.c.address,
+                cus_email = a.c.email,
                 note = a.o.note,
                 cancel_reason = a.o.cancel_reason,
                 cancel_at = a.o.cancel_at,
@@ -197,10 +206,7 @@ namespace TechShopSolution.Application.Catalog.Order
             {
                 return new ApiErrorResult<OrderDetailViewModel>("Đơn hàng không tồn tại");
             }
-            var customer = await _context.Customers.FindAsync(DataOrder.cus_id);
-            DataOrder.cus_name = customer.name;
-            DataOrder.cus_email = customer.email;
-            DataOrder.cus_phone = customer.phone;
+            
 
             List<OrderDetailModel> Details = query.Select(a => new OrderDetailModel()
             {
@@ -238,7 +244,7 @@ namespace TechShopSolution.Application.Catalog.Order
                 return new ApiErrorResult<string>("Không tìm thấy đơn hàng này trong CSDL");
             if (order.status == -1)
                 return new ApiErrorResult<string>("Đơn hàng này đã bị hủy trước đó, không thể hủy lại");
-            var isValid = await _context.Transports.AnyAsync(x => x.order_id == request.Id);
+            var isValid = await _context.Transports.AnyAsync(x => x.order_id == request.Id && x.ship_status == 1);
             if(isValid)
                 return new ApiErrorResult<string>("Đơn hàng này đã được tạo đơn vận chuyển, không thể hủy");
             else

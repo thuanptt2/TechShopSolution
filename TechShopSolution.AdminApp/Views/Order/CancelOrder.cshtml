@@ -4,10 +4,9 @@
     Layout = null;
 }
 
-
 <div class="alert alert-info">
     <p class="mt-2">Trong trường hợp đơn hàng giả mạo, khách hàng thay đổi nhu cầu hoặc hết hàng, Chúng tôi đề nghị bạn nên hủy đơn hàng.</p>
-    <p>Hủy bỏ một đơn đặt hàng thao tác không thể phục hồi lại..</p>
+    <p>Hủy bỏ một đơn đặt hàng thao tác không thể phục hồi lại.</p>
 </div>
 <form asp-action="CancelOrder" id="formCancel" asp-controller="Order" method="post" onsubmit="return SubmitForm(this);">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -56,7 +55,8 @@
             } else {
                 $.validator.unobtrusive.parse(form);
                 if ($(form).valid() == true) {
-                    document.getElementById('reason').value = $("txtReason").val();
+                    var customReason = $("#txtReason").val();
+                    $("#reason option:selected").val(customReason);
                     form.submit();
                 }
             }

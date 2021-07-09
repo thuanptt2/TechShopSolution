@@ -95,7 +95,7 @@
                                 ✔  Đã giao hàng
                             </span>
                         }
-                        else if (Model.Order.ship_status == 0)
+                        else if (Model.Transport.ship_status == 0)
                         {
 
                             <span class="text-warning-order">
@@ -112,35 +112,28 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-auto col-sm-12 ml-4 mb-3 mr-4">
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary">
-                    <i class="fas fa-print"></i>  In
-                </button>
-            </div>
-        </div>
     </div>
     <div class="padding-container">
-        @if (Model.Transport.ship_status == -1)
-        {
-            <div class="row alert alert-warning box-shadow">
-                <div class="col-auto p-0 pr-4">
-                    <span class="omni-svg-create svg-next-icon svg-next-icon-size-16">
-                        <i class="fas fa-exclamation-triangle" style="color: rgb(138, 109, 59);"></i>
-                    </span>
-                </div>
-                <div class="col-auto p-0">
-                    <p class="omni-alert-pannel-title">
-                        <strong>Đơn vận chuyển đã bị hủy</strong>
-                    </p>
-                    <p class="omni-alert-pannel-description mb-0">
-                        Đơn vận chuyển đã bị hủy vào lúc <strong>@Model.Transport.cancel_at</strong>. <br />
-                    </p>
-                </div>
-            </div>
-        }
         <div class="row mt-4">
             <div class="col-12 col-lg-8">
+                @if (Model.Transport.ship_status == -1)
+                {
+                    <div class="row alert alert-warning box-shadow">
+                        <div class="col-auto p-0 pr-4">
+                            <span class="omni-svg-create svg-next-icon svg-next-icon-size-16">
+                                <i class="fas fa-exclamation-triangle" style="color: rgb(138, 109, 59);"></i>
+                            </span>
+                        </div>
+                        <div class="col-auto p-0">
+                            <p class="omni-alert-pannel-title">
+                                <strong>Đơn vận chuyển đã bị hủy</strong>
+                            </p>
+                            <p class="omni-alert-pannel-description mb-0">
+                                Đơn vận chuyển đã bị hủy vào lúc <strong>@Model.Transport.cancel_at</strong>. <br />
+                            </p>
+                        </div>
+                    </div>
+                }
                 <div class="wrapper-content shadow mb-3">
                     <label class="title-fill">Thông tin phiếu vận chuyển</label>
                     <hr />
@@ -271,7 +264,7 @@
                                     <label class="lableFormField min-width-120px">Tên</label>
                                 </div>
                                 <div class="col-auto text-right">
-                                    <a href="@Url.Action("Update", "Customer", new { id = Model.Order.cus_name })" target="_blank"><strong class="">@Model.Order.cus_name</strong></a>
+                                    <a href="@Url.Action("Update", "Customer", new { id = Model.Order.cus_id })" target="_blank"><strong class="">@Model.Order.cus_name</strong></a>
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -354,32 +347,18 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="col-12 col-lg-4">
-                <div class="wrapper-content">
-                    <label class="title-fill">Trạng thái vận chuyển</label>
-                    <hr />
-                    @if (Model.Transport.ship_status == -1)
-                    {
-                        <p>Đơn vận chuyển đã hủy</p>
-                        <p>@Model.Transport.cancel_at</p>
-                    }
-                    else
-                    {
-                        <form class="text-right">
-                            <select name="ship_status" class="form-control mt-3 mb-3">
-                                <option value="1">Đang giao hàng</option>
-                                <option value="2">Giao hàng thành công</option>
-                                <option value="-1">Hủy giao hàng</option>
-                            </select>
-                            <input type="submit" class="btn btn-primary" value="Cập nhật"/>
-                        </form>
-                    }
-                </div>
+                @if (Model.Transport.ship_status != -1)
+                {
+                    <div class="text-right mt-3">
+                        <a class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn vận chuyển này, hành động này không thể hoàn tác?')" href="@Url.Action("CancelShippingOrder","Transport",new { id = Model.Transport.id })">
+                            Hủy giao hàng
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>
-
 </div>
+
 
 

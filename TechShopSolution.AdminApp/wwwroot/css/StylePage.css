@@ -456,3 +456,7 @@ table a:hover {
 .lading-code a:hover {
     cursor: pointer;
 }
+.cancel-danger-text {
+    text-decoration: line-through;
+    color: #d32e2e !important;
+}

@@ -21,6 +21,7 @@ namespace TechShopSolution.ViewModels.Sales
         public decimal transport_fee { get; set; }
         public int? coupon_id { get; set; }
         public int payment_id { get; set; }
+        public string payment_name { get; set; }
         public int status { get; set; }
         public bool isPay { get; set; }
         public int ship_status { get; set; }
