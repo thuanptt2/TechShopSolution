@@ -31,6 +31,10 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(data);
         }
         [HttpGet]
@@ -54,8 +58,8 @@ namespace TechShopSolution.AdminApp.Controllers
             var result = await _couponApiClient.GetById(id);
             if (!result.IsSuccess || result.ResultObject == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View("Index");
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index");
             }
             var updateRequest = new CouponUpdateRequest()
             {
@@ -96,7 +100,18 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             return View();
         }
-        [HttpPost]
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _couponApiClient.Delete(id);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Xóa mã giảm giá thành công";
+                return RedirectToAction("Index");
+            }
+            TempData["error"] = result.Message;
+            return RedirectToAction("Index");
+        }
         public async Task<IActionResult> Create(CouponCreateRequest request)
         {
             if (!ModelState.IsValid)

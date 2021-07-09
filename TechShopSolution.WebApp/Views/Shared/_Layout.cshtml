@@ -37,7 +37,7 @@
 
 </head>
 <body>
-    @RenderSection("FacebookComments", required: false);
+    @RenderSection("FacebookComments", required: false)
     <div class="loaderbody" id="loaderbody">
         <div class="loader"></div>
     </div>
@@ -54,7 +54,7 @@
             <b>@ViewBag.SuccessMsg</b>
         </div>
     }
-    
+
 
     <div id="header">
         <div class="container">
@@ -116,10 +116,7 @@
                     @await Component.InvokeAsync("SlideBar")
                     <br />
                     <div class="thumbnail">
-                        <img src="/themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
-                        <div class="caption">
-                            <h5>Payment Methods</h5>
-                        </div>
+                      
                     </div>
                 </div>
                 <!-- Sidebar end=============================================== -->
@@ -127,6 +124,8 @@
             </div>
         </div>
     </div>
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up"></i></button>
+
     <!-- Footer ================================================================== -->
     <div id="footerSection">
         <div class="container">

@@ -421,3 +421,42 @@ table a:hover {
 .item-dropdown {
     margin: 10px 0;
 }
+.datepicker {
+    background-color: #fff !important;
+}
+.datepicker:hover {
+    cursor: pointer
+}
+.btn-nomal a {
+    background: #E9ECEF !important;
+}
+.btn-nomal a:hover {
+    color: #2962ff!important;
+}
+
+.box-shadow {
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+}
+.detail-order .padding-container {
+    padding-top: 0 !important;
+}
+.text-danger a {
+    color: #d32e2e !important;
+}
+.min-width-120px {
+    min-width: 120px !important;
+}
+.btnEditLadingCode {
+    color: #161616 !important;
+}
+.lading-code a {
+    color: #161616;
+    margin-left: 10px;
+}
+.lading-code a:hover {
+    cursor: pointer;
+}
+.cancel-danger-text {
+    text-decoration: line-through;
+    color: #d32e2e !important;
+}

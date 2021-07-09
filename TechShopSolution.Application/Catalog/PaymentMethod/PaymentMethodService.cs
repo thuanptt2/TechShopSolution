@@ -122,7 +122,7 @@ namespace TechShopSolution.Application.Catalog.PaymentMethod
         public async Task<List<PaymentViewModel>> GetAll()
         {
             var query = from payment in _context.PaymentMethods
-                        where payment.isDelete == false
+                        where payment.isDelete == false && payment.isActive == true
                         select payment;
 
             var data = query

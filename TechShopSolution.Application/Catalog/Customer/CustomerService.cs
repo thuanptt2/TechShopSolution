@@ -270,13 +270,21 @@ namespace TechShopSolution.Application.Catalog.Customer
                     discount = a.Key.discount,
                     id = a.Key.id,
                     isPay = a.Key.isPay,
-                    isShip = a.Key.isShip,
                     name_receiver = a.Key.name_receiver,
                     status = a.Key.status,
                     total = a.Key.total,
                     transport_fee = a.Key.transport_fee
                 }).ToList();
 
+            foreach (var item in result)
+            {
+                var tranport = _context.Transports.Where(x => x.order_id == item.id).FirstOrDefault();
+                if (tranport != null)
+                {
+                    item.ship_status = tranport.ship_status;
+                }
+                else item.ship_status = 0;
+            }
             return result;
         }
     }

@@ -57,7 +57,7 @@
     }
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="padding-container">
-        <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Payment">
+        <a class="btn btn-success mb-3" style="visibility: hidden;">
             <i class="fa fa-plus"></i>
             Thêm mới
         </a>
@@ -121,47 +121,66 @@
                         @foreach (var item in Model.Items)
                         {
                             <tr>
-                                <td class="text-center">
-                                    @Html.ActionLink("#" + item.id.ToString(), "Detail", new { id = item.id })
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.create_at)
-                                </td>
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.name_receiver)
-                                </td>
-
-                                @if (item.isPay)
+                                @if (item.status == -1)
                                 {
-                                    <td class="text-success-order text-center">
-                                        ✔  Đã thanh toán
+                                    <td class="text-center text-danger">
+                                        @Html.ActionLink("#" + item.id.ToString(), "Detail", new { id = item.id })
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.create_at)
+                                    </td>
+
+                                    <td>
+                                        @Html.ActionLink(item.cus_name, "Update", "Customer", new { id = item.cus_id }, new { target = "_blank" })
+                                    </td>
+                                    @if (item.isPay)
+                                    {
+                                        <td class="text-success-order text-center cancel-danger-text">
+                                            ✔  Đã thanh toán
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-warning-order text-center">
+                                            ◯  Chưa thanh toán
+                                        </td>
+                                    }
                                 }
                                 else
                                 {
-                                    <td class="text-warning-order text-center">
-                                        ◯  Chưa thanh toán
+                                    <td class="text-center">
+                                        @Html.ActionLink("#" + item.id.ToString(), "Detail", new { id = item.id })
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.create_at)
+                                    </td>
+
+                                    <td>
+                                        @Html.ActionLink(item.cus_name, "Update", "Customer", new { id = item.cus_id }, new { target = "_blank" })
+                                    </td>
+                                    @if (item.isPay)
+                                    {
+                                        <td class="text-success-order text-center">
+                                            ✔  Đã thanh toán
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-warning-order text-center">
+                                            ◯  Chưa thanh toán
+                                        </td>
+                                    }
                                 }
-
-
-                                @if (item.isShip)
+                                @if (item.ship_status == 1)
                                 {
                                     <td class="text-success-order text-center">
                                         ✔  Đã giao hàng
                                     </td>
                                 }
-                                else
+                                else if (item.ship_status == 0)
                                 {
                                     <td class="text-warning-order text-center">
                                         ◯  Chưa giao hàng
-                                    </td>
-                                }
-                                @if (item.status)
-                                {
-                                    <td class="text-success-order text-center">
-                                        ✔  Thành công
                                     </td>
                                 }
                                 else
@@ -170,14 +189,45 @@
                                         ×  Đã hủy
                                     </td>
                                 }
+                                @if (item.status == 1)
+                                {
+                                    <td class="text-success-order text-center">
+                                        ✔  Đã duyệt
+                                    </td>
+                                }
+                                else if (item.status == 0)
+                                {
+                                    <td class="text-warning-order text-center">
+                                        ◯ Chưa duyệt
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="text-danger-order text-center">
+                                        ×  Đã hủy
+                                    </td>
+                                }
+                                @if (item.status == -1)
+                                {
+                                    <td align="center" style="text-decoration: line-through;" class="text-danger">
+                                        @{
+                                            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                            var total = item.total + item.transport_fee - item.discount;
+                                        }
+                                        @String.Format(info, "{0:N0}", total)
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        @{
+                                            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                            var total = item.total + item.transport_fee - item.discount;
+                                        }
+                                        @String.Format(info, "{0:N0}", total)
+                                    </td>
+                                }
 
-                                <td align="center">
-                                    @{
-                                        var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-                                        var total = item.total + item.transport_fee - item.discount;
-                                    }
-                                    @String.Format(info, "{0:N0}", total)
-                                </td>
                             </tr>
                         }
                     }

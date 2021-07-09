@@ -1,0 +1,24 @@
+﻿@model TechShopSolution.ViewModels.Transport.UpdateLadingCodeRequest
+
+@{
+    Layout = null;
+}
+
+
+<form asp-action="UpdateLadingCode" asp-controller="Transport" method="post" onsubmit="return SubmitForm(this);">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="Id" class="form-control" hidden />
+    <div class="form-group">
+        <label asp-for="New_LadingCode" class="control-label lableFormField"></label>
+        <input asp-for="New_LadingCode" class="form-control" placeholder="Nhập mã vận đơn" />
+        <span asp-validation-for="New_LadingCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group text-right">
+        <input type="submit" value="Cập nhật" class="btn btn-primary" />
+    </div>
+</form>
+
+<script src="~/js/Location.js"></script>
+<script src="~/jquery-validate/jquery.validate.min.js"></script>
+<script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

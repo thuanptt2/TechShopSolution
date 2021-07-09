@@ -64,16 +64,43 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
         }
-        public async Task<ApiResult<string>> CancelOrder(int id)
+        public async Task<ApiResult<string>> CancelOrder(OrderCancelRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/order/cancelorder/{id}");
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var respone = await client.PostAsync($"/api/order/cancelorder", httpContent);
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
         }
+        public async Task<ApiResult<string>> ConfirmOrder(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/order/confirm/{id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
+        }
+        public async Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PutAsync($"/api/order/UpdateReceiveAddress", httpContent);
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
 
     }
 }

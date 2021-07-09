@@ -172,7 +172,7 @@
                                 <label class="title-fill">Đơn hàng gần nhất</label>
                             </div>
                             <div class="col text-right">
-                                <a href="@Url.Action("Index", "Order")">
+                                <a href="@Url.Action("Index", "Order")" target="_blank">
                                     Xem tất cả
                                 </a>
                             </div>
@@ -215,18 +215,36 @@
                                     @foreach (var item in ViewBag.LatestOrde)
                                     {
                                         <tr>
-                                            <td class="text-center">
-                                                <a href="@Url.Action("Detail", "Order", new { id = item.id })">#@item.id</a>
-                                            </td>
+                                            @if (item.status == -1)
+                                            {
+                                                <td class="text-center cancel-danger-text">
+                                                    <a href="@Url.Action("Detail", "Order", new { id = item.id })" target="_blank">#@item.id</a>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center">
+                                                    <a href="@Url.Action("Detail", "Order", new { id = item.id })" target="_blank">#@item.id</a>
+                                                </td>
+                                            }
                                             <td>
                                                 @item.create_at
                                             </td>
 
                                             @if (item.isPay)
                                             {
-                                                <td class="text-success-order text-center">
-                                                    ✔  Đã thanh toán
-                                                </td>
+                                                if (item.status == -1)
+                                                {
+                                                    <td class="text-success-order text-center cancel-danger-text">
+                                                        ✔  Đã thanh toán
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-success-order text-center">
+                                                        ✔  Đã thanh toán
+                                                    </td>
+                                                }
                                             }
                                             else
                                             {
@@ -236,22 +254,34 @@
                                             }
 
 
-                                            @if (item.isShip)
+                                            @if (item.ship_status == 1)
                                             {
                                                 <td class="text-success-order text-center">
                                                     ✔  Đã giao hàng
                                                 </td>
                                             }
-                                            else
+                                            else if (item.ship_status == 0)
                                             {
                                                 <td class="text-warning-order text-center">
                                                     ◯  Chưa giao hàng
                                                 </td>
                                             }
-                                            @if (item.status)
+                                            else
+                                            {
+                                                <td class="text-danger-order text-center">
+                                                    ×  Đã hủy
+                                                </td>
+                                            }
+                                            @if (item.status == 1)
                                             {
                                                 <td class="text-success-order text-center">
-                                                    ✔  Thành công
+                                                    ✔  Đã duyệt
+                                                </td>
+                                            }
+                                            else if (item.status == 0)
+                                            {
+                                                <td class="text-warning-order text-center">
+                                                    ◯ Chưa duyệt
                                                 </td>
                                             }
                                             else
@@ -266,7 +296,16 @@
                                                     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
                                                     var total = item.total + item.transport_fee - item.discount;
                                                 }
-                                                @String.Format(info, "{0:N0}", total)
+                                                @if (item.status == -1)
+                                                {
+                                                    <span class="cancel-danger-text">@String.Format(info, "{0:N0}", total)</span>
+
+                                                }
+                                                else
+                                                {
+                                                    @String.Format(info, "{0:N0}", total)
+
+                                                }
                                             </td>
                                         </tr>
                                     }
@@ -279,8 +318,3 @@
         </div>
     </div>
 </div>
-
-
-    //all script
-
-

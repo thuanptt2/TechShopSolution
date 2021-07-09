@@ -47,10 +47,26 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-        [HttpGet("cancelorder/{id}")]
-        public async Task<IActionResult> Cancelorder(int id)
+        [HttpPost("cancelorder")]
+        public async Task<IActionResult> Cancelorder(OrderCancelRequest request)
         {
-            var result = await _orderService.CancelOrder(id);
+            var result = await _orderService.CancelOrder(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("confirm/{id}")]
+        public async Task<IActionResult> ConfirmOrder(int id)
+        {
+            var result = await _orderService.ConfirmOrder(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpPut("UpdateReceiveAddress")]
+        public async Task<IActionResult> UpdateAddress([FromBody] OrderUpdateAddressRequest request)
+        {
+            var result = await _orderService.UpdateAddress(request);
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);

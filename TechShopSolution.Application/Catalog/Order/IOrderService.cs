@@ -12,7 +12,9 @@ namespace TechShopSolution.Application.Catalog.Order
         Task<ApiResult<string>> Create(CheckoutRequest request);
         PagedResult<OrderViewModel> GetAllPaging(GetOrderPagingRequest request);
         Task<ApiResult<OrderDetailViewModel>> Detail(int id);
-        Task<ApiResult<string>> CancelOrder(int id);
+        Task<ApiResult<string>> CancelOrder(OrderCancelRequest request);
         Task<ApiResult<string>> PaymentConfirm(int id);
+        Task<ApiResult<string>> ConfirmOrder(int id);
+        Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request);
     }
 }

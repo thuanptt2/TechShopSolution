@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
+using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.WebApp.Models;
 
 namespace TechShopSolution.WebApp.Controllers
@@ -22,17 +24,19 @@ namespace TechShopSolution.WebApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            string[] CateIDs = new string[] { "1", "2", "3", "4" , "5" };
+            List<PublicCayegoyProductsViewModel> CategoryProducts = new List<PublicCayegoyProductsViewModel>(); 
+            for(int i = 0; i < CateIDs.Length; i++)
+            {
+                var data = await _productApiClient.GetHomeProducts(int.Parse(CateIDs[i]), 8);
+                CategoryProducts.Add(data);
+            }
             var viewModel = new HomeViewModel
             {
                 FeaturedProducts = await _productApiClient.GetFeaturedProducts(20),
                 BestSellerProducts = await _productApiClient.GetBestSellerProducts(20),
-                ProductWithCate1 = await _productApiClient.GetProductsByCategory(1, 8),
-                ProductWithCate2 = await _productApiClient.GetProductsByCategory(2, 8),
+                ListCategoryProducts = CategoryProducts,
             };
-            var cate1 = await _categorytApiClient.GetById(1);
-            var cate2 = await _categorytApiClient.GetById(2);
-            ViewBag.Cate1 = cate1.ResultObject.cate_slug;
-            ViewBag.Cate2 = cate2.ResultObject.cate_slug;
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];

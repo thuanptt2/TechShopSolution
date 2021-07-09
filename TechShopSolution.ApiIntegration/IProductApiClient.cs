@@ -24,6 +24,7 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<ProductViewModel>> GetById(int id);
         Task<ApiResult<ProductViewModel>> GetBySlug(string slug);
         Task<bool> isValidSlug(string Code, string slug);
+        Task<PublicCayegoyProductsViewModel> GetHomeProducts(int id, int take);
         Task<List<ImageListResult>> GetImageByProductID(int id);
         Task<List<CategoryViewModel>> GetAllCategory();
         Task<List<BrandViewModel>> GetAllBrand();

@@ -7,17 +7,34 @@
 }
 
 @section jsFooter {
-    <script>
-        window.onload = function () {
-            var x = document.getElementById("snackbar");
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
 
-            // Add the "show" class to DIV
-            x.className = "show";
+                // Add the "show" class to DIV
+                x.className = "show";
 
-            // After 3 seconds, remove the show class from DIV
-            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-        };
-    </script>
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
 }
 <div class="container-fluid px-4">
     <h3 class="mt-4">Danh sách mã giảm giá</h3>
@@ -37,7 +54,7 @@
                 <label for="pet-select"></label>
                 <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
                 <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
-                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/coupon/index'"><i class="fas fa-times"></i></button>
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='/coupon/index'"><i class="fas fa-times"></i></button>
             </div>
         </form>
         <!-- Notification -->
@@ -46,7 +63,12 @@
             <div class="alert alert-success" id="snackbar" role="alert">
                 <b>@ViewBag.SuccessMsg</b>
             </div>
-
+        }
+        @if (ViewBag.ErrorMsg != null)
+        {
+            <div class="alert alert-danger" id="snackbarDanger" role="alert">
+                <b>@ViewBag.ErrorMsg</b>
+            </div>
         }
 
         <!-- The actual snackbar -->
