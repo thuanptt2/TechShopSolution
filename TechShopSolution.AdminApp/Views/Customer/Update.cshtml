@@ -167,21 +167,154 @@
                 </div>
                 <div class="col-lg-8 col-12">
                     <div class="wrapper-content shadow">
-                        <label class="title-fill">Đơn hàng gần nhất</label>
-                        <hr />
-                        <div class="ordercus">
-                            <i class="fa fa-inbox fa-3x mb-3"></i>
-                            <br />
-                            Khách hàng này hiện không có đơn hàng.
+                        <div class="row">
+                            <div class="col">
+                                <label class="title-fill">Đơn hàng gần nhất</label>
+                            </div>
+                            <div class="col text-right">
+                                <a href="@Url.Action("Index", "Order")" target="_blank">
+                                    Xem tất cả
+                                </a>
+                            </div>
                         </div>
+                        <hr />
+                        @if (ViewBag.LatestOrde.Count == 0)
+                        {
+                            <div class="ordercus">
+                                <i class="fa fa-inbox fa-3x mb-3"></i>
+                                <br />
+                                Khách hàng này hiện chưa có đơn hàng.
+                            </div>
+                        }
+                        else
+                        {
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            Mã đơn hàng
+                                        </th>
+                                        <th scope="col">
+                                            Ngày tạo
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Thanh toán
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Giao hàng
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Trạng thái
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Tổng tiền
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.LatestOrde)
+                                    {
+                                        <tr>
+                                            @if (item.status == -1)
+                                            {
+                                                <td class="text-center cancel-danger-text">
+                                                    <a href="@Url.Action("Detail", "Order", new { id = item.id })" target="_blank">#@item.id</a>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center">
+                                                    <a href="@Url.Action("Detail", "Order", new { id = item.id })" target="_blank">#@item.id</a>
+                                                </td>
+                                            }
+                                            <td>
+                                                @item.create_at
+                                            </td>
+
+                                            @if (item.isPay)
+                                            {
+                                                if (item.status == -1)
+                                                {
+                                                    <td class="text-success-order text-center cancel-danger-text">
+                                                        ✔  Đã thanh toán
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-success-order text-center">
+                                                        ✔  Đã thanh toán
+                                                    </td>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <td class="text-warning-order text-center">
+                                                    ◯  Chưa thanh toán
+                                                </td>
+                                            }
+
+
+                                            @if (item.ship_status == 1)
+                                            {
+                                                <td class="text-success-order text-center">
+                                                    ✔  Đã giao hàng
+                                                </td>
+                                            }
+                                            else if (item.ship_status == 0)
+                                            {
+                                                <td class="text-warning-order text-center">
+                                                    ◯  Chưa giao hàng
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-danger-order text-center">
+                                                    ×  Đã hủy
+                                                </td>
+                                            }
+                                            @if (item.status == 1)
+                                            {
+                                                <td class="text-success-order text-center">
+                                                    ✔  Đã duyệt
+                                                </td>
+                                            }
+                                            else if (item.status == 0)
+                                            {
+                                                <td class="text-warning-order text-center">
+                                                    ◯ Chưa duyệt
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-danger-order text-center">
+                                                    ×  Đã hủy
+                                                </td>
+                                            }
+
+                                            <td align="center">
+                                                @{
+                                                    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                                    var total = item.total + item.transport_fee - item.discount;
+                                                }
+                                                @if (item.status == -1)
+                                                {
+                                                    <span class="cancel-danger-text">@String.Format(info, "{0:N0}", total)</span>
+
+                                                }
+                                                else
+                                                {
+                                                    @String.Format(info, "{0:N0}", total)
+
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-    //all script
-
-

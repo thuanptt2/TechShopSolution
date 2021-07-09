@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Sales;
 
 namespace TechShopSolution.Application.Catalog.Customer
 {
@@ -76,6 +77,8 @@ namespace TechShopSolution.Application.Catalog.Customer
                 var customer = await _context.Customers.FindAsync(cusID);
                 if (customer != null)
                 {
+                    if (await _context.Orders.AnyAsync(x => x.cus_id == customer.id))
+                        return new ApiErrorResult<bool>($"Khách hàng này đang có đơn hàng đấy, không thể xóa!");
                     customer.isDelete = true;
                     customer.delete_at = DateTime.Now;
                     await _context.SaveChangesAsync();
@@ -247,6 +250,42 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return false;
             }
             return true;
+        }
+        public List<OrderViewModel> GetLatestOrder(int id,int take)
+        {
+            var query = from o in _context.Orders
+                        join od in _context.OrDetails on o.id equals od.order_id
+                        where o.cus_id == id
+                        select new { o };
+
+            var data = query.AsEnumerable()
+                   .GroupBy(g => g.o);
+
+            var result = data.OrderByDescending(x => x.Key.create_at)
+                .Take(take)
+                .Select(a => new OrderViewModel
+                {
+                    create_at = a.Key.create_at,
+                    cus_id = a.Key.cus_id,
+                    discount = a.Key.discount,
+                    id = a.Key.id,
+                    isPay = a.Key.isPay,
+                    name_receiver = a.Key.name_receiver,
+                    status = a.Key.status,
+                    total = a.Key.total,
+                    transport_fee = a.Key.transport_fee
+                }).ToList();
+
+            foreach (var item in result)
+            {
+                var tranport = _context.Transports.Where(x => x.order_id == item.id).FirstOrDefault();
+                if (tranport != null)
+                {
+                    item.ship_status = tranport.ship_status;
+                }
+                else item.ship_status = 0;
+            }
+            return result;
         }
     }
 }

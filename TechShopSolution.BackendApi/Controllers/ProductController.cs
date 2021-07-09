@@ -23,14 +23,6 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest("Không có sản phẩm nào");
             return Ok(products);
         }
-        [HttpPost("filterr")]
-        public IActionResult GetPagingProductsWithMainImage(GetProductPagingRequest requet)
-        {
-            var products = _productService.GetAllPagingWithMainImage(requet);
-            if (products == null)
-                return BadRequest("Không có sản phẩm nào");
-            return Ok(products);
-        }
         [HttpPost("publicfilter")]
         public IActionResult GetPublicProducts(GetPublicProductPagingRequest requet)
         {
@@ -67,6 +59,12 @@ namespace TechShopSolution.BackendApi.Controllers
         public async Task<IActionResult> GetProductsByCategory(int id, int take)
         {
             var product = await _productService.GetProductsByCategory(id, take);
+            return Ok(product);
+        }
+        [HttpGet("HomeProducts")]
+        public async Task<IActionResult> GetHomeProducts(int id, int take)
+        {
+            var product = await _productService.GetHomeProductByCategory(id, take);
             return Ok(product);
         }
         [HttpGet("Related")]

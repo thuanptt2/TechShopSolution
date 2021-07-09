@@ -1,0 +1,92 @@
+﻿
+@model TechShopSolution.ViewModels.Transport.TransporterUpdateRequest
+
+@{
+    ViewData["Title"] = "Thêm mới đơn vị vận chuyển";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section JsFooter {
+    <script>
+        $("#ProductImageInput").change(function (event) {
+            var x = URL.createObjectURL(event.target.files[0]);
+            $("#ProductImage").attr("src", x);
+            console.log(event);
+        })
+    </script>
+}
+<div class="container-fluid">
+    <h3 class="mt-4">Thêm mới đơn vị vận chuyển</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/transport/index">Đơn vị vận chuyển</a></li>
+        <li class="breadcrumb-item active">Thêm mới</li>
+    </ol>
+    <form asp-action="Create" asp-controller="Transport" enctype="multipart/form-data" method="post">
+        <div class="padding-container">
+            <div class="row">
+                <div class="col-lg-12 col-12 wrapper-content-limit">
+                    <div class="wrapper-content mb-3 shadow">
+                        <label class="title-fill">Thông tin chung</label>
+                        <hr />
+                        <div class="row">
+                            <div class="col-lg-5 col-12">
+                                <div class="form-group">
+                                    <label asp-for="image" class="control-label lableFormField"></label>
+                                    <div class="ImageBoxMain">
+                                        <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="ProductImage" class="image hoverDel" />
+                                    </div>
+                                    <div class="custom-file">
+                                        <input asp-for="image" type="file" accept=".jpeg,.png,.gif,.jpg" class="custom-file-input" id="ProductImageInput">
+                                        <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
+                                    </div>
+                                    <span asp-validation-for="image" class="text-danger"></span>
+                                </div>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            </div>
+                            <div class="col-lg-7 col-12">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input asp-for="id" hidden />
+                                <div class="form-group mt-2">
+                                    <label asp-for="name" class="control-label lableFormField"></label>
+                                    <input asp-for="name" class="form-control" id="txtName" />
+                                    <span asp-validation-for="name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label asp-for="link" class="control-label lableFormField"></label>
+                                    <input asp-for="link" class="form-control" id="txtName" />
+                                    <span asp-validation-for="link" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="isActive" class="control-label lableFormField"></label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" asp-for="isActive" type="radio" value="true" id="flexRadioDefault1" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Hiển thị
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" asp-for="isActive" type="radio" value="false" id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Ẩn đi
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mt-5 text-right">
+                                    <a class="btn btn-primary" href="/transport/index">
+                                        <i class="fa fa-chevron-left"></i>  Trở về
+                                    </a>
+                                    <button class="btn btn-success" type="submit">
+                                        <i class="fa fa-save"></i>
+                                        Lưu lại
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

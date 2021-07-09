@@ -10,6 +10,7 @@ using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Category;
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
@@ -29,24 +30,38 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Index(string keyword, int? CategoryID, int? BrandID, int pageIndex = 1, int pageSize = 10)
         {
             var categoryList = await _productApiClient.GetAllCategory();
-            List<int?> lstIDCate = await findChildCategory(categoryList, CategoryID);
             var request = new GetProductPagingRequest()
             {
                 Keyword = keyword,
                 BrandID = BrandID,
-                CategoryID = lstIDCate,
+                CategoryID = CategoryID,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
             };
             var data = await _productApiClient.GetProductPagings(request);
-            ViewBag.Keyword = keyword;
-           
+
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
-            ViewBag.ListCate = await OrderCateToTree(categoryList);
-            ViewBag.ListBrand = await _productApiClient.GetAllBrand();
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
+            var Categories = await OrderCateToTree(categoryList);
+            var Brands = await _productApiClient.GetAllBrand();
+            ViewBag.Brands = Brands.Select(x => new SelectListItem()
+            {
+                Text = x.brand_name,
+                Value = x.id.ToString(),
+                Selected = BrandID != null && x.id == BrandID
+            });
+            ViewBag.Categories = Categories.Select(x => new SelectListItem()
+            {
+                Text = x.cate_name,
+                Value = x.id.ToString(),
+                Selected = CategoryID != null && x.id == CategoryID
+            });
             return View(data);
         }
         public async Task<List<CategoryViewModel>> OrderCateToTree(List<CategoryViewModel> lst, int parent_id = 0, int level = 0)
@@ -71,21 +86,6 @@ namespace TechShopSolution.AdminApp.Controllers
                 return result;
             }
             return null;
-        }
-        public async Task<List<int?>> findChildCategory(List<CategoryViewModel> lst, int? categoryID)
-        {
-            List<int?> CateIDs = new List<int?>();
-            if (categoryID != null)
-            {
-                CateIDs.Add(categoryID);
-                List<CategoryViewModel> lstCateChild = new List<CategoryViewModel>();
-                lstCateChild = await OrderCateToTree(lst, (int)categoryID);
-                foreach(var cate in lstCateChild)
-                {
-                    CateIDs.Add(cate.id);
-                }
-            }
-            return CateIDs;
         }
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -113,14 +113,14 @@ namespace TechShopSolution.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            var imageList = await Task.Run(() => _productApiClient.GetImageByProductID(id));
-            ViewData["imageList"] = imageList;
             var result = await Task.Run(() => _productApiClient.GetById(id));
             if (!result.IsSuccess || result.ResultObject == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View("Index");
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index");
             }
+            var imageList = await Task.Run(() => _productApiClient.GetImageByProductID(id));
+            ViewData["imageList"] = imageList;
             var updateRequest = new ProductUpdateRequest()
             {
                 Id = result.ResultObject.id,
@@ -157,7 +157,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction("Update",request.Id);
+                return RedirectToAction("Update", request.Id);
             var result = await _productApiClient.UpdateProduct(request);
             if (result.IsSuccess)
             {
@@ -176,7 +176,7 @@ namespace TechShopSolution.AdminApp.Controllers
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\assets\ProductImage", image.FileName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                       await image.CopyToAsync(fileStream);
+                        await image.CopyToAsync(fileStream);
                     }
                 }
             }

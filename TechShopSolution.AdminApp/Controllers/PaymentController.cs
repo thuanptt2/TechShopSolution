@@ -31,6 +31,10 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(data);
         }
         [HttpGet]
@@ -54,8 +58,8 @@ namespace TechShopSolution.AdminApp.Controllers
             var result = await _paymentApiClient.GetById(id);
             if (!result.IsSuccess || result.ResultObject == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View("Index");
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index");
             }
             var updateRequest = new PaymentUpdateRequest()
             {
@@ -73,22 +77,19 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _paymentApiClient.Delete(id);
-            if (result == null)
-            {
-                ModelState.AddModelError("", result.Message);
-            }
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa phương thức thành công";
                 return RedirectToAction("Index");
             }
-            return View("Index");
+            TempData["error"] = result.Message;
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> Update(PaymentUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _paymentApiClient.UpdatePayment(request);
             if (result.IsSuccess)
             {

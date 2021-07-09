@@ -27,5 +27,49 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("paging")]
+        public IActionResult GetAllPaging([FromQuery] GetOrderPagingRequest requet)
+        {
+            var customer = _orderService.GetAllPaging(requet);
+            return Ok(customer);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var result = await _orderService.Detail(id);
+            return Ok(result);
+        }
+        [HttpGet("paymentconfirm/{id}")]
+        public async Task<IActionResult> PaymentConfirm(int id)
+        {
+            var result = await _orderService.PaymentConfirm(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpPost("cancelorder")]
+        public async Task<IActionResult> Cancelorder(OrderCancelRequest request)
+        {
+            var result = await _orderService.CancelOrder(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("confirm/{id}")]
+        public async Task<IActionResult> ConfirmOrder(int id)
+        {
+            var result = await _orderService.ConfirmOrder(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpPut("UpdateReceiveAddress")]
+        public async Task<IActionResult> UpdateAddress([FromBody] OrderUpdateAddressRequest request)
+        {
+            var result = await _orderService.UpdateAddress(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

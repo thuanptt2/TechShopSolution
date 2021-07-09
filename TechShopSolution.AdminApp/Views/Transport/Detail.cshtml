@@ -1,0 +1,364 @@
+﻿@model TechShopSolution.ViewModels.Sales.OrderDetailViewModel
+
+
+@{
+    ViewData["Title"] = "Chi tiết đơn vận chuyển";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+@section jsFooter
+{
+    <script src="~/js/Order.js"></script>
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<div class="container-fluid detail-order">
+    <ol class="breadcrumb mb-4 mt-3">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/order/index">Đơn vận chuyển</a></li>
+        <li class="breadcrumb-item active">@Model.Transport.id</li>
+    </ol>
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <div class="alert alert-success" id="snackbar" role="alert">
+            <b>@ViewBag.SuccessMsg</b>
+        </div>
+    }
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <div class="alert alert-danger" id="snackbarDanger" role="alert">
+            <b>@ViewBag.ErrorMsg</b>
+        </div>
+    }
+    <div class="row">
+        <div class="col-lg col-sm-12 mb-3">
+            <div class="order-detail--list-status ml-3">
+                <div class="ui-toolbar-product-info">
+                    <div class="ui-product-body pl-0">
+                        Mã
+                    </div>
+                    <div class="ui-product-head">
+                        <div class="table-break-word">
+                            <strong class="order-detail--list-status-code">
+                                @Model.Transport.id
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-toolbar-product-info">
+                    <div class="ui-product-body pl-0">
+                        Ngày tạo
+                    </div>
+                    <div class="ui-product-head">
+                        <div class="table-break-word">
+                            @Model.Transport.create_at
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-toolbar-product-info">
+                    <div class="ui-product-body pl-0">
+                        Trạng thái giao hàng
+                    </div>
+                    <div class="ui-product-head">
+                        @if (Model.Transport.ship_status == 1)
+                        {
+                            <span class="text-success-order">
+                                ✔  Đã giao hàng
+                            </span>
+                        }
+                        else if (Model.Transport.ship_status == 0)
+                        {
+
+                            <span class="text-warning-order">
+                                ◯ Chưa giao hàng
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-danger-order">
+                                ×  Đã bị hủy
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="padding-container">
+        <div class="row mt-4">
+            <div class="col-12 col-lg-8">
+                @if (Model.Transport.ship_status == -1)
+                {
+                    <div class="row alert alert-warning box-shadow">
+                        <div class="col-auto p-0 pr-4">
+                            <span class="omni-svg-create svg-next-icon svg-next-icon-size-16">
+                                <i class="fas fa-exclamation-triangle" style="color: rgb(138, 109, 59);"></i>
+                            </span>
+                        </div>
+                        <div class="col-auto p-0">
+                            <p class="omni-alert-pannel-title">
+                                <strong>Đơn vận chuyển đã bị hủy</strong>
+                            </p>
+                            <p class="omni-alert-pannel-description mb-0">
+                                Đơn vận chuyển đã bị hủy vào lúc <strong>@Model.Transport.cancel_at</strong>. <br />
+                            </p>
+                        </div>
+                    </div>
+                }
+                <div class="wrapper-content shadow mb-3">
+                    <label class="title-fill">Thông tin phiếu vận chuyển</label>
+                    <hr />
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="row mb-2">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Mã đơn hàng</label>
+                                </div>
+                                <div class="col-auto text-right">
+                                    <a href="@Url.Action("Detail", "Order", new { id = Model.Order.id })" target="_blank"><strong class="">#@Model.Order.id</strong></a>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Mã vận đơn</label>
+                                </div>
+                                <div class="col-auto text-right lading-code">
+                                    @if (Model.Transport.lading_code == "")
+                                    {
+                                        <span>--- </span>
+                                        <a onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.Transport.lading_code </span>
+                                        <a href="#" onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="row mb-2">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Đơn vị vận chuyển</label>
+                                </div>
+                                <div class="col-auto text-right">
+                                    <a href="@Url.Action("Update", "Transport", new { id = Model.Transport.transporter_id })" target="_blank"><strong class="">@Model.Transport.transporter_name</strong></a>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Tiền thu hộ (COD)</label>
+                                </div>
+                                <div class="col-auto text-right lading-code">
+                                    @String.Format(info, "{0:N0}", Model.Transport.cod_price)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label class="min-width-120px"><strong>Gửi từ:</strong></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Tên</label>
+                                </div>
+                                <div class="col-auto">
+                                    <span>TechShop</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Số điện thoại</label>
+                                </div>
+                                <div class="col-auto">
+                                    <span>0965 349 315</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Địa chỉ</label>
+                                </div>
+                                <div class="col-auto">
+                                    <span>12 Đường 41, Phường 10, Quận 6, TP Hồ Chí Minh</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label class="min-width-120px"><strong>Gửi đến:</strong></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Tên</label>
+                                </div>
+                                <div class="col-auto">
+                                    <span>@Model.Order.name_receiver</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Số điện thoại</label>
+                                </div>
+                                <div class="col-auto">
+                                    <span>@Model.Order.phone_receiver</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Địa chỉ</label>
+                                </div>
+                                <div class="col-auto">
+                                    <span>@Model.Order.address_receiver</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper-content shadow mb-3">
+                    <label class="title-fill">Thông tin người mua</label>
+                    <hr />
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="row mb-2">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Tên</label>
+                                </div>
+                                <div class="col-auto text-right">
+                                    <a href="@Url.Action("Update", "Customer", new { id = Model.Order.cus_id })" target="_blank"><strong class="">@Model.Order.cus_name</strong></a>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Số điện thoại</label>
+                                </div>
+                                <div class="col-auto text-right lading-code">
+                                    <span>@Model.Order.cus_phone</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="row mb-2">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Email</label>
+                                </div>
+                                <div class="col-auto text-right">
+                                    <span>@Model.Order.cus_email</span>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-auto">
+                                    <label class="lableFormField min-width-120px">Địa chỉ</label>
+                                </div>
+                                <div class="col-auto text-right">
+                                    <span>@Model.Order.cus_address</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper-content shadow">
+                    <label class="title-fill">Thông tin sản phẩm</label>
+                    <hr />
+                    <table class="table table-borderless table-detail-product table-responsive">
+                        <thead>
+                            <tr>
+                                <th scope="col">Ảnh</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col" class="text-center">Số lượng</th>
+                                <th scope="col" class="text-center">Giá</th>
+                                <th scope="col" class="text-center">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Details.Count; i++)
+                            {
+                                var item = Model.Details[i];
+                                <tr>
+                                    <th scope="row">
+                                        <img style="display:block; width:60px;height:60px;"
+                                             src="data:image/jpeg;base64, @item.product_image" />
+                                    </th>
+                                    <td><a href="@Url.Action("Update", "Product", new { id = item.product_id })" target="_blank">@item.product_name</a> </td>
+                                    <td class="text-center">@item.quantity</td>
+                                    <td class="text-center">
+                                        @if (item.promotion_price != 0)
+                                        {
+                                            @String.Format(info, "{0:N0}", item.promotion_price)
+                                        }
+                                        else
+                                        {
+                                            @String.Format(info, "{0:N0}", item.unit_price)
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.promotion_price != 0)
+                                        {
+                                            var total = item.promotion_price * item.quantity;
+                                            @String.Format(info, "{0:N0}", total)
+                                        }
+                                        else
+                                        {
+                                            var total = item.unit_price * item.quantity;
+                                            @String.Format(info, "{0:N0}", total)
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                @if (Model.Transport.ship_status != -1)
+                {
+                    <div class="text-right mt-3">
+                        <a class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn vận chuyển này, hành động này không thể hoàn tác?')" href="@Url.Action("CancelShippingOrder","Transport",new { id = Model.Transport.id })">
+                            Hủy giao hàng
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

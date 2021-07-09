@@ -125,7 +125,6 @@
                                     <div class="ProductMoreImages">
                                         <div class="custom-file">
                                             <input type="file" name="More_images" multiple accept=".jpeg,.png,.gif,.jpg" id="ProductMoreImagesInput" class="custom-file-input">
-                                            @*<input asp-for="More_images" type="file" multiple id="ImagesURL" hidden>*@
                                             <label class="custom-file-label" for="customFile">Chọn hình ảnh...</label>
                                         </div>
                                     </div>
@@ -220,7 +219,7 @@
                         <div class="form-group">
                             <div class="checkbox">
                                 <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    <input type="checkbox" />  Có quản lý tồn kho
+                                    <input type="checkbox" id="checkInstock"/>  Có quản lý tồn kho
                                 </label>
                             </div>
                         </div>
@@ -228,7 +227,7 @@
                             <div class="well">
                                 <div class="form-group">
                                     <label asp-for="Instock" class="control-label lableFormField"></label>
-                                    <input asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
+                                    <input id="txtInstock" asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
                                     <span asp-validation-for="Instock" class="text-danger"></span>
                                 </div>
                             </div>

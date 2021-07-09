@@ -582,6 +582,15 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<string>("address_receiver")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("cancel_at")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("cancel_reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("confirm_at")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("coupon_id")
                         .HasColumnType("int");
 
@@ -599,14 +608,14 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<bool>("isPay")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("isShip")
-                        .HasColumnType("bit");
-
                     b.Property<string>("name_receiver")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("note")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("pay_at")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("payment_id")
                         .HasColumnType("int");
@@ -614,8 +623,8 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<string>("phone_receiver")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("status")
-                        .HasColumnType("bit");
+                    b.Property<int>("status")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("total")
                         .HasColumnType("decimal(18,2)");
@@ -913,6 +922,9 @@ namespace TechShopSolution.Data.Migrations
                         .HasAnnotation("SqlServer:IdentitySeed", 100000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime?>("cancel_at")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("cod_price")
                         .HasColumnType("decimal(18,2)");
 
@@ -921,14 +933,24 @@ namespace TechShopSolution.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GetDate()");
 
+                    b.Property<DateTime?>("done_at")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("from_address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("lading_code")
-                        .IsRequired()
-                        .HasMaxLength(255)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(max)");
 
                     b.Property<int>("order_id")
                         .HasColumnType("int");
+
+                    b.Property<int>("ship_status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("to_address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("transporter_id")
                         .HasColumnType("int");
@@ -960,11 +982,17 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<DateTime?>("delete_at")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("isDelete")
                         .HasColumnType("bit");
+
+                    b.Property<string>("link")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()

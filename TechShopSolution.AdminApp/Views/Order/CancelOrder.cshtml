@@ -1,0 +1,71 @@
+﻿@model TechShopSolution.ViewModels.Sales.OrderCancelRequest
+
+@{
+    Layout = null;
+}
+
+<div class="alert alert-info">
+    <p class="mt-2">Trong trường hợp đơn hàng giả mạo, khách hàng thay đổi nhu cầu hoặc hết hàng, Chúng tôi đề nghị bạn nên hủy đơn hàng.</p>
+    <p>Hủy bỏ một đơn đặt hàng thao tác không thể phục hồi lại.</p>
+</div>
+<form asp-action="CancelOrder" id="formCancel" asp-controller="Order" method="post" onsubmit="return SubmitForm(this);">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="reason" class="control-label lableFormField"></label>
+        <input asp-for="Id" class="form-control" hidden />
+        <select asp-for="reason" id="reason" class="form-control">
+            <option value="">Chọn lý do hủy đơn hàng</option>
+            <option value="Khách hàng đổi ý">Khách hàng đổi ý</option>
+            <option value="Đơn hàng giả mạo">Đơn hàng giả mạo</option>
+            <option value="Hết hàng">Hết hàng</option>
+            <option value="Khác">Khác</option>
+        </select>
+        <span asp-validation-for="reason" class="text-danger"></span>
+    </div>
+    <div class="form-group" id="divReason" style="display: none">
+        <label class="control-label lableFormField">Ghi rõ lý do</label>
+        <input class="form-control mb-3" id="txtReason" placeholder="Nhập lý do" />
+    </div>
+    <div class="alert alert-info">
+        <p class="mt-2">Các sản phẩm trong đơn hàng này sẽ tự động được hoàn trả số lượng về kho sau khi đơn hàng này bị hủy.</p>
+    </div>
+    <div class="form-group text-right">
+        <input type="button" value="Hủy đơn hàng" id="btnApply" class="btn btn-primary"/>
+    </div>
+</form>
+
+<script src="~/js/Location.js"></script>
+<script src="~/jquery-validate/jquery.validate.min.js"></script>
+<script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $("#reason").change(function () {
+        if (document.getElementById('reason').value == "Khác") {
+            document.getElementById('divReason').style.display = "inline";
+        } else {
+            document.getElementById('divReason').style.display = "none";
+        }
+    });
+    $("#btnApply").click(function () {
+        var reason = document.getElementById('reason').value;
+        var form = document.getElementById("formCancel");
+        if (reason == "Khác") {
+            if ($("#txtReason").val() == "") {
+                alert("Vui lòng ghi rõ lý do hủy đơn hàng");
+            } else {
+                $.validator.unobtrusive.parse(form);
+                if ($(form).valid() == true) {
+                    var customReason = $("#txtReason").val();
+                    $("#reason option:selected").val(customReason);
+                    form.submit();
+                }
+            }
+        }
+        else {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid() == true) {
+                form.submit();
+            }
+        }
+    })
+</script>

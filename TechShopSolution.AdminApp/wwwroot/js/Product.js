@@ -8,7 +8,6 @@ $().ready(function () {
             $("#ProductImage").attr("src", x);
             console.log(event);
         })
-
     });
 
     $("#ProductMoreImagesInput").change(function () {
@@ -44,6 +43,9 @@ $().ready(function () {
             listImages = new FormData();
             for (var key of formData.keys()) {
                 listImages.append("files", formData.get(key));
+            }
+            if (document.getElementById('checkInstock').checked == false) {
+                document.getElementById("txtInstock").value = null;
             }
             $.ajax(
                 {

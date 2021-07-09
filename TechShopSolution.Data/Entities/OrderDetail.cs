@@ -13,5 +13,5 @@ namespace TechShopSolution.Data.Entities
         public decimal? promotion_price { get; set; }
         public Order Order { get; set; }
         public Product Product { get; set; }
-}
+    }
 }

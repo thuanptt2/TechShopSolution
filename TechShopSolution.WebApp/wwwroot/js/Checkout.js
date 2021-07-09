@@ -87,6 +87,7 @@ $("#btnSubmit").click(function () {
     if (radio.checked) {
         if ($("#txtAddressChoose")) {
             if ($("#ddlCity").val() != "" && $("#ddlDistrict").val() != "" && $("#ddlWard").val() != "" && $("#txtHomeAddress").val() != "") {
+                $("#loaderbody").removeClass('hide');
                 var city = $("#ddlCity option:selected").text();
                 var district = $("#ddlDistrict option:selected").text();
                 var ward = $("#ddlWard option:selected").text();
@@ -101,7 +102,9 @@ $("#btnSubmit").click(function () {
         }
     }
     else {
+        $("#loaderbody").removeClass('hide');
         document.getElementById("txtAddressReceiver").value = $("#txtAddressDefault").val();
+        $("#loaderbody").removeClass('hide');
         document.getElementById("checkoutForm").submit();
     }
 });

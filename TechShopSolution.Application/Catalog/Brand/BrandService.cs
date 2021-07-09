@@ -69,6 +69,8 @@ namespace TechShopSolution.Application.Catalog.Brand
                 var brand = await _context.Brands.FindAsync(brandID);
                 if (brand != null)
                 {
+                    if (await _context.Products.AnyAsync(x => x.brand_id == brand.id))
+                        return new ApiErrorResult<bool>($"Đang có sản phẩm thuộc thương hiệu này nên không thể xóa, Vui lòng gỡ hết sản phẩm thuộc thương hiệu này để tiếp tục");
                     brand.isDelete = true;
                     brand.delete_at = DateTime.Now;
                     await _context.SaveChangesAsync();
@@ -119,9 +121,9 @@ namespace TechShopSolution.Application.Catalog.Brand
         }
         public async Task<List<BrandViewModel>> GetAllBrand()
         {
-            var query = from cate in _context.Brands
-                        where cate.isDelete == false
-                        select cate;
+            var query = from brand in _context.Brands
+                        where brand.isDelete == false && brand.isActive == true
+                        select brand;
             if (query == null)
                 return null;
 
