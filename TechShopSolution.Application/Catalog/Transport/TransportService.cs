@@ -129,6 +129,7 @@ namespace TechShopSolution.Application.Catalog.Transport
                 id = a.tp.id,
                 create_at = a.tp.create_at,
                 from_address = a.tp.from_address,
+                done_at = a.tp.done_at,
                 lading_code = a.tp.lading_code,
                 to_address = a.tp.to_address,
                 transporter_id = a.tp.transporter_id,
@@ -345,6 +346,10 @@ namespace TechShopSolution.Application.Catalog.Transport
                     ship_status = 1,
                     transporter_id = request.transporter_id,
                 };
+                if (request.lading_code != null)
+                {
+                    transport.update_at = DateTime.Now;
+                }
                 _context.Transports.Add(transport);
                 await _context.SaveChangesAsync();
                 return new ApiSuccessResult<bool>();
@@ -371,5 +376,21 @@ namespace TechShopSolution.Application.Catalog.Transport
                 return new ApiSuccessResult<string>("Hủy giao hàng thành công");
             }
         }
+        public async Task<ApiResult<string>> ConfirmDoneShip(int id)
+        {
+            var transport = await _context.Transports.FindAsync(id);
+            if (transport == null)
+                return new ApiErrorResult<string>("Không tìm thấy đơn vận chuyển này trong CSDL");
+            if (transport.ship_status == 2)
+                return new ApiErrorResult<string>("Đơn vận chuyển này đã hoàn thành");
+            if (transport.ship_status == -1)
+                return new ApiErrorResult<string>("Đơn vận chuyển này đã bị hủy, không thể làm điều này");
+
+            transport.ship_status = 2;
+            transport.done_at = DateTime.Now;
+            _context.SaveChanges();
+            return new ApiSuccessResult<string>("Xác nhận thành công");
+        }
+
     }
 }

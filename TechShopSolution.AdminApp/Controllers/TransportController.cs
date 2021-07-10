@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TechShopSolution.ViewModels.Transport;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
+    [Authorize]
     public class TransportController : Controller
     {
         private readonly ITransportApiClient _transportApiClient;
@@ -140,7 +142,7 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> CreateShippingOrder(int id, string receive_address)
+        public async Task<IActionResult> CreateShippingOrder(int id, decimal cod_price, string receive_address)
         {
             ViewBag.Transporter = await _transportApiClient.GetAll();
             
@@ -224,6 +226,18 @@ namespace TechShopSolution.AdminApp.Controllers
                 ViewBag.ErrorMsg = TempData["error"];
             }
             return View(result.ResultObject);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmDoneShip(int transport_id)
+        {
+            var result = await _transportApiClient.ConfirmDoneShip(transport_id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Detail", new { id = transport_id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("Detail", new { id = transport_id });
         }
     }
 }

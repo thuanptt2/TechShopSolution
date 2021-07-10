@@ -133,27 +133,34 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.create_at)
                                     </td>
-                                    @if (item.ship_status == 1)
+                                    @if (item.ship_status == 2)
                                     {
                                         <td class="text-success-order text-center">
-                                            ✔  Đã giao hàng
+                                            ✔  Giao hàng thành công
+                                        </td>
+                                    }
+                                    else if (item.ship_status == 1)
+                                    {
+                                        <td class="text-info-order text-center">
+                                            Đang giao hàng
                                         </td>
                                     }
                                     else if (item.ship_status == 0)
                                     {
+
                                         <td class="text-warning-order text-center">
-                                            ◯  Chưa giao hàng
+                                            ◯ Chưa giao hàng
                                         </td>
                                     }
                                     else
                                     {
                                         <td class="text-danger-order text-center">
-                                            ×  Đã hủy
+                                            ×  Đã bị hủy
                                         </td>
                                     }
                                     @{
                                         var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-                                         <td class="text-center">
+                                        <td class="text-center">
                                             @String.Format(info, "{0:N0}", item.cod_price)
                                         </td>
                                     }

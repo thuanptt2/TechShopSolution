@@ -460,3 +460,8 @@ table a:hover {
     text-decoration: line-through;
     color: #d32e2e !important;
 }
+.text-info-order {
+    font-size: 15px;
+    font-weight: 500;
+    color: #007bff;
+}

@@ -19,6 +19,7 @@ namespace TechShopSolution.ViewModels.Sales
         public string receiver_name { get; set; }
         public string receiver_number { get; set; }
         public string cancel_reason { get; set; }
+        public int? transport_id { get; set; }
         public string transporter_name { get; set; }
         public string transporter_link { get; set; }
         public string lading_code { get; set; }

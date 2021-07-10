@@ -61,12 +61,12 @@
                                 }
                                 else
                                 {
-                                    <div class="step" data-desc="Nhận hàng"><i class="fas fa-box"></i></div>
+                                    <div class="step" data-desc="Đã nhận hàng"><i class="fas fa-box"></i></div>
                                 }
                             }
                             else
                             {
-                                <div class="step" data-desc="Vận chuyển đã bị hủy"><i class="fas fa-shipping-fast"></i></div>
+                                <div class="step" data-desc="Giao hàng đã bị hủy"><i class="fas fa-shipping-fast"></i></div>
                             }
                         }
                     }
@@ -104,9 +104,21 @@
                 }
             }
         </div>
+        <div class="text-right">
+            @if (ViewBag.Model.ship_status != 1 && ViewBag.Model.ship_status != 2 && ViewBag.Model.order_status != -1)
+            {
+                <hr class="soft" />
+                <a class="btn btn-danger margin-top-20" href="#">Hủy đơn hàng</a>
+            }
+            @if (ViewBag.Model.ship_status == 1 && ViewBag.Model.transport_id != null)
+            {
+                <hr class="soft" />
+                <a class="btn btn-primary margin-top-20" onclick="return confirm('Bạn có chắc chắn muốn xác nhận đã nhận được hàng?')" href="@Url.Action("ConfirmReceive", "Account", new { transport_id = ViewBag.Model.transport_id, order_id = ViewBag.Model.id })">Xác nhận đã nhận hàng</a>
+            }
+        </div>
         <div class="hr-style"></div>
         <div class="row margin-top-20">
-            <div class=" span5">
+            <div class="span5">
                 <div class="history-tl-container">
                     <ul class="tl">
                         @if (ViewBag.Model.done_ship_at != null)
@@ -156,7 +168,7 @@
                                     </div>
                                     <div class="item-title">Mã vận đơn</div>
                                     <div class="item-detail">
-                                        <p>@ViewBag.Model.lading_code là mã vận đơn của quý khách</p>
+                                        <p><strong>@ViewBag.Model.lading_code</strong> là mã vận đơn của quý khách</p>
                                         <p>Quý khách có thể tra cứu thông tin vận chuyển bằng mã vận đơn <a href="@ViewBag.Model.transporter_link" target="_blank">TẠI ĐÂY</a></p>
                                     </div>
                                 </li>
@@ -167,7 +179,7 @@
                                 </div>
                                 <div class="item-title">Đã giao cho ĐVVC</div>
                                 <div class="item-detail">
-                                    Kiện hàng đã được giao cho ĐVVC @ViewBag.Model.transporter_name vào lúc @ViewBag.Model.ship_at
+                                    Kiện hàng đã được giao cho ĐVVC <strong>@ViewBag.Model.transporter_name</strong> vào lúc @ViewBag.Model.ship_at
                                 </div>
                             </li>
                         }
@@ -191,7 +203,7 @@
                                         @String.Format("{0:t}", ViewBag.Model.pay_at)<br>
                                     </div>
                                     <div class="item-title">Thanh toán thành công</div>
-                                    <div class="item-detail">Chúng tôi xác nhận thanh toán thành công số tiền @String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</div>
+                                    <div class="item-detail">Chúng tôi xác nhận thanh toán thành công số tiền <strong>@String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</strong></div>
                                 </li>
                             }
                             else
@@ -201,7 +213,7 @@
                                         @String.Format("{0:t}", ViewBag.Model.pay_at)<br>
                                     </div>
                                     <div class="item-title">Thanh toán thành công</div>
-                                    <div class="item-detail">Chúng tôi xác nhận thanh toán thành công số tiền @String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</div>
+                                    <div class="item-detail">Chúng tôi xác nhận thanh toán thành công số tiền <strong>@String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</strong></div>
                                 </li>
                             }
                         }
@@ -247,7 +259,7 @@
                                 </div>
                                 <div class="item-title">Đơn hàng đã bị hủy</div>
                                 <div class="item-detail">
-                                    <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p> 
+                                    <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p>
                                     <p>Lý do: <strong>@ViewBag.Model.cancel_reason</strong></p>
                                 </div>
                             </li>

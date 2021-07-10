@@ -290,7 +290,27 @@ namespace TechShopSolution.WebApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Model = result.ResultObject;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmReceive(int transport_id, int order_id)
+        {
+            var result = await _customerApiClient.ConfirmDoneShip(transport_id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("OrderDetail", new { id = order_id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("OrderDetail", new { id = order_id });
         }
     }
 }

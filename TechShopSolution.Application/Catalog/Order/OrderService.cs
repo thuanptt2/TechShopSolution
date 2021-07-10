@@ -414,6 +414,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     Order.ship_status = transport.ship_status;
                     Order.ship_at = transport.create_at;
                     Order.cancel_ship_at = transport.cancel_at;
+                    Order.transport_id = transport.id;
                     Order.lading_code = transport.lading_code;
                     Order.enter_lading_code_at = transport.update_at;
                     Order.done_ship_at = transport.done_at;
