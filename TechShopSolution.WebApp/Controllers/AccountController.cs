@@ -280,5 +280,17 @@ namespace TechShopSolution.WebApp.Controllers
             ViewBag.Model = result.ResultObject;
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            var result = await _customerApiClient.GetOrderDetail(id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.Model = result.ResultObject;
+            return View();
+        }
     }
 }

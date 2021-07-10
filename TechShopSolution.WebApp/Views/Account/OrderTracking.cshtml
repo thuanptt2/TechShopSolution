@@ -36,7 +36,7 @@
                         {
                             <div class="wrapper-content margin-bottom-20 margin-top-20">
                                 <div class="space-between-flex">
-                                    <p><strong>Đơn hàng #@ViewBag.Model[i].id</strong></p>
+                                    <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
                                     @if (ViewBag.Model[i].order_status == -1)
                                     {
                                         <p class="pull-right text-danger-order"><strong>× Đã hủy</strong></p>
@@ -66,7 +66,7 @@
                                     }
                                 </div>
                                 <hr class="order-hr" />
-                                <a href="#">
+                                <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })">
                                     <table class="table table-borderless">
                                         <tbody>
                                             @foreach (var item in ViewBag.Model[i].Products)
@@ -75,7 +75,7 @@
                                                     <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > i)
+                                                    @if (item.promotion_price > 0)
                                                     {
                                                         <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
                                                     }
@@ -95,7 +95,7 @@
                                 @if (ViewBag.Model[i].ship_status == 1)
                                 {
                                     <div class="pull-right-text">
-                                        <a class="btn-primary" href="#">Đánh giá</a>
+                                        <a class="btn btn-danger" href="#">Đánh giá</a>
                                     </div>
                                 }
                             </div>
@@ -129,11 +129,11 @@
                             type1++;
                             <div class="wrapper-content margin-bottom-20 margin-top-20">
                                 <div class="space-between-flex">
-                                    <p><strong>Đơn hàng #@ViewBag.Model[i].id</strong></p>
+                                    <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
                                     <p class="pull-right text-warning-order"><strong>Chờ duyệt</strong></p>
                                 </div>
                                 <hr class="order-hr" />
-                                <a href="#">
+                                <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })">
                                     <table class="table table-borderless">
                                         <tbody>
                                             @foreach (var item in ViewBag.Model[i].Products)
@@ -142,7 +142,7 @@
                                                     <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > i)
+                                                    @if (item.promotion_price > 0)
                                                     {
                                                         <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
                                                     }
@@ -162,7 +162,7 @@
                                 @if (ViewBag.Model[i].ship_status == 1)
                                 {
                                     <div class="pull-right-text">
-                                        <a class="btn-primary" href="#">Đánh giá</a>
+                                        <a class="btn btn-danger" href="#">Đánh giá</a>
                                     </div>
                                 }
                             </div>
@@ -195,11 +195,11 @@
                             type2++;
                             <div class="wrapper-content margin-bottom-20 margin-top-20">
                                 <div class="space-between-flex">
-                                    <p><strong>Đơn hàng #@ViewBag.Model[i].id</strong></p>
+                                    <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
                                     <p class="pull-right text-info-order"><strong>Chờ vận chuyển</strong></p>
                                 </div>
                                 <hr class="order-hr" />
-                                <a href="#">
+                                <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })">
                                     <table class="table table-borderless">
                                         <tbody>
                                             @foreach (var item in ViewBag.Model[i].Products)
@@ -208,7 +208,7 @@
                                                     <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > i)
+                                                    @if (item.promotion_price > 0)
                                                     {
                                                         <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
                                                     }
@@ -228,7 +228,7 @@
                                 @if (ViewBag.Model[i].ship_status == 1)
                                 {
                                     <div class="pull-right-text">
-                                        <a class="btn-primary" href="#">Đánh giá</a>
+                                        <a class="btn btn-danger" href="#">Đánh giá</a>
                                     </div>
                                 }
                             </div>
@@ -261,11 +261,11 @@
                             type3++;
                             <div class="wrapper-content margin-bottom-20 margin-top-20">
                                 <div class="space-between-flex">
-                                    <p><strong>Đơn hàng #@ViewBag.Model[i].id</strong></p>
+                                    <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
                                     <p class="pull-right text-success-order"><strong>✔ Đã vận chuyển</strong></p>
                                 </div>
                                 <hr class="order-hr" />
-                                <a href="#">
+                                <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })">
                                     <table class="table table-borderless">
                                         <tbody>
                                             @foreach (var item in ViewBag.Model[i].Products)
@@ -274,7 +274,7 @@
                                                     <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > i)
+                                                    @if (item.promotion_price > 0)
                                                     {
                                                         <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
                                                     }
@@ -294,7 +294,7 @@
                                 @if (ViewBag.Model[i].ship_status == 1)
                                 {
                                     <div class="pull-right-text">
-                                        <a class="btn-primary" href="#">Đánh giá</a>
+                                        <a class="btn btn-danger" href="#">Đánh giá</a>
                                     </div>
                                 }
                             </div>
@@ -327,11 +327,11 @@
                             type4++;
                             <div class="wrapper-content margin-bottom-20 margin-top-20">
                                 <div class="space-between-flex">
-                                    <p><strong>Đơn hàng #@ViewBag.Model[i].id</strong></p>
+                                    <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
                                     <p class="pull-right text-danger-order"><strong>× Đã hủy</strong></p>
                                 </div>
                                 <hr class="order-hr" />
-                                <a href="#">
+                                <a href="@Url.Action("OrderDetail", "Account", new { id = ViewBag.Model[i].id })">
                                     <table class="table table-borderless">
                                         <tbody>
                                             @foreach (var item in ViewBag.Model[i].Products)
@@ -340,7 +340,7 @@
                                                     <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > i)
+                                                    @if (item.promotion_price > 0)
                                                     {
                                                         <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
                                                     }
@@ -360,7 +360,7 @@
                                 @if (ViewBag.Model[i].ship_status == 1)
                                 {
                                     <div class="pull-right-text">
-                                        <a class="btn-primary" href="#">Đánh giá</a>
+                                        <a class="btn btn-danger" href="#">Đánh giá</a>
                                     </div>
                                 }
                             </div>
@@ -385,17 +385,3 @@
         </div>
     </div>
 </div>
-<!--<ol class="progtrckr" data-progtrckr-steps="5">
-    <li class="progtrckr-done">Đặt thành công</li>-->
-<!--
--->
-<!--<li class="progtrckr-done">Chờ thanh toán</li>-->
-<!--
--->
-<!--<li class="progtrckr-done">Đơn hàng bị hủy</li>-->
-<!--
--->
-<!--<li class="progtrckr-todo">Shipped</li>-->
-<!--
--->
-<!--</ol>-->

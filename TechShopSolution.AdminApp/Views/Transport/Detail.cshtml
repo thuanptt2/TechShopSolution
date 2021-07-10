@@ -152,19 +152,25 @@
                                     <label class="lableFormField min-width-120px">Mã vận đơn</label>
                                 </div>
                                 <div class="col-auto text-right lading-code">
-                                    @if (Model.Transport.lading_code == "")
+                                    @if (Model.Transport.lading_code == null)
                                     {
                                         <span>--- </span>
-                                        <a onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
+                                        if (Model.Transport.ship_status != -1)
+                                        {
+                                            <a onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                        }
                                     }
                                     else
                                     {
                                         <span>@Model.Transport.lading_code </span>
-                                        <a href="#" onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
+                                        if (Model.Transport.ship_status != -1)
+                                        {
+                                            <a onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                        }
                                     }
                                 </div>
                             </div>

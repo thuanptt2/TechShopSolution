@@ -336,7 +336,6 @@ namespace TechShopSolution.Application.Catalog.Order
                 {
                     id = a.Key.id,
                     order_status = a.Key.status,
-                    ship_status = a.Key.Transport == null ? 0 : a.Key.Transport.ship_status,
                     total = a.Key.total - a.Key.discount + a.Key.transport_fee,
                     pay_status = a.Key.isPay,
                     Products = a.Key.OrderDetails.Select(b => new OrderDetailModel()
@@ -363,6 +362,75 @@ namespace TechShopSolution.Application.Catalog.Order
 
             return new ApiSuccessResult<List<OrderPublicViewModel>>(Orders);
         }
+        public ApiResult<OrderPublicViewModel> GetDetailOrder(int id)
+        {
+           
+            var query = from od in _context.OrDetails
+                        join p in _context.Products on od.product_id equals p.id
+                        join o in _context.Orders on od.order_id equals o.id
+                        join pm in _context.PaymentMethods on o.payment_id equals pm.id
+                        where o.id == id
+                        select new { p, o, od, pm };
 
+            var data = query.AsEnumerable()
+                  .GroupBy(g => g.o);
+            var Order = data.OrderByDescending(x => x.Key.create_at)
+                .Select(a => new OrderPublicViewModel()
+                {
+                    id = a.Key.id,
+                    order_status = a.Key.status,
+                    ship_status = a.Key.Transport == null ? 0 : a.Key.Transport.ship_status,
+                    total = a.Key.total - a.Key.discount + a.Key.transport_fee,
+                    pay_status = a.Key.isPay,
+                    cancel_at = a.Key.cancel_at,
+                    cancel_reason = a.Key.cancel_reason,
+                    confirm_at = a.Key.confirm_at,
+                    payment_name = a.Key.PaymentMethod.name,
+                    pay_at = a.Key.pay_at,
+                    discount = a.Key.discount,
+                    ship_fee = a.Key.transport_fee,
+                    create_at = a.Key.create_at,
+                    receiver_address = a.Key.address_receiver,
+                    receiver_name = a.Key.name_receiver,
+                    receiver_number = a.Key.phone_receiver,
+                    Products = a.Key.OrderDetails.Select(b => new OrderDetailModel()
+                    {
+                        order_id = b.order_id,
+                        product_id = b.product_id,
+                        product_image = GetBase64StringForImage(_storageService.GetFileUrl(b.Product.image)),
+                        product_name = b.Product.name,
+                        product_slug = b.Product.slug,
+                        promotion_price = b.promotion_price,
+                        quantity = b.quantity,
+                        unit_price = b.unit_price,
+                    }).ToList()
+                }).FirstOrDefault();
+
+            if (Order != null)
+            {
+                var transport = _context.Transports.Where(x => x.order_id == Order.id).FirstOrDefault();
+                if (transport != null)
+                {
+                    Order.ship_status = transport.ship_status;
+                    Order.ship_at = transport.create_at;
+                    Order.cancel_ship_at = transport.cancel_at;
+                    Order.lading_code = transport.lading_code;
+                    Order.enter_lading_code_at = transport.update_at;
+                    Order.done_ship_at = transport.done_at;
+                    var transporter = _context.Transporters.Where(x => x.id == transport.transporter_id).FirstOrDefault();
+                    if(transporter != null)
+                    {
+                        Order.transporter_link = transporter.link;
+                        Order.transporter_name = transporter.name;
+                    }
+                }
+            }
+            else
+            {
+                return new ApiErrorResult<OrderPublicViewModel>("Không tìm thấy đơn hàng này");
+            }
+
+            return new ApiSuccessResult<OrderPublicViewModel>(Order);
+        }
     }
 }

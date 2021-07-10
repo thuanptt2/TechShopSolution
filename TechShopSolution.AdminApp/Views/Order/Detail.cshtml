@@ -325,17 +325,24 @@
                             Đơn hàng này chưa được vận chuyển
                         </span>
                         <div class="text-right">
-                            @if (Model.Order.status == 0)
+
+                            @if (Model.Order.status == -1 || Model.Order.ship_status == 1)
+                            {
+                                <button type="button" id="btnEdit" class="btn btn-primary" disabled>
+                                    Giao hàng
+                                </button>
+                            }
+                            else if (Model.Order.status == 0)
                             {
                                 <a id="btnEdit" class="btn btn-primary" onclick="return alert('Đơn hàng này chưa được duyệt, không thể tạo đơn vận chuyển')">
                                     Giao hàng
                                 </a>
                             }
-                            else if (Model.Order.status == -1 || Model.Order.ship_status == 1)
+                            else if (!Model.Order.isPay)
                             {
-                                <button type="button" id="btnEdit" class="btn btn-primary" disabled>
+                                <a id="btnEdit" class="btn btn-primary" onclick="return alert('Đơn hàng này chưa thanh toán, Hãy liên hệ với khách hàng để thanh toán trước đã nhé!')">
                                     Giao hàng
-                                </button>
+                                </a>
                             }
                             else
                             {

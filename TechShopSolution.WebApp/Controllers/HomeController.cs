@@ -42,6 +42,11 @@ namespace TechShopSolution.WebApp.Controllers
                 ViewBag.SuccessMsg = TempData["result"];
                 TempData["result"] = null;
             }
+
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(viewModel);
         }
         public IActionResult Privacy()

@@ -1,0 +1,335 @@
+﻿@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("OrderTracking", "Account", new { id = User.FindFirst(ClaimTypes.Sid).Value })">Đơn hàng</a> <span class="divider">/</span></li>
+        <li class="active">@ViewBag.Model.id</li>
+    </ul>
+    <hr class="soft" />
+
+    <div class="wrapper-content margin-bottom-20">
+        <div class="space-between-flex">
+            <a href="@Url.Action("OrderTracking", "Account", new { id = User.FindFirst(ClaimTypes.Sid).Value })"><i class="fas fa-chevron-left"></i> TRỞ LẠI</a>
+            <p>MÃ ĐƠN HÀNG: <strong>#@ViewBag.Model.id</strong></p>
+        </div>
+        <hr />
+        <div id="steps">
+            <div class="step" data-desc="Đơn hàng đã đặt"><i class="fas fa-receipt"></i></div>
+            @if (ViewBag.Model.confirm_at == null)
+            {
+                <div class="step active" data-desc="Chờ duyệt"><i class="fas fa-clipboard-check"></i></div>
+                <div class="step" data-desc="Thanh toán"><i class="fas fa-handshake"></i></div>
+                <div class="step" data-desc="Vận chuyển"><i class="fas fa-shipping-fast"></i></div>
+                <div class="step" data-desc="Nhận hàng"><i class="fas fa-box"></i></div>
+            }
+            else
+            {
+                @if (ViewBag.Model.cancel_at == null)
+                {
+                    <div class="step" data-desc="Đơn hàng đã duyệt"><i class="fas fa-clipboard-check"></i></div>
+                    if (ViewBag.Model.pay_at == null)
+                    {
+                        <div class="step active" data-desc="Chờ thanh toán"><i class="fas fa-handshake"></i></div>
+                        <div class="step" data-desc="Vận chuyển"><i class="fas fa-shipping-fast"></i></div>
+                        <div class="step" data-desc="Nhận hàng"><i class="fas fa-box"></i></div>
+                    }
+                    else
+                    {
+                        <div class="step" data-desc="Đã thanh toán "><i class="fas fa-handshake"></i></div>
+                        if (ViewBag.Model.ship_at == null)
+                        {
+                            <div class="step active" data-desc="Chờ vận chuyển"><i class="fas fa-shipping-fast"></i></div>
+                            <div class="step" data-desc="Nhận hàng"><i class="fas fa-box"></i></div>
+                        }
+                        else
+                        {
+                            if (ViewBag.Model.cancel_ship_at == null)
+                            {
+                                <div class="step" data-desc="Đã giao cho ĐVVC"><i class="fas fa-shipping-fast"></i></div>
+                                if (ViewBag.Model.done_ship_at == null)
+                                {
+                                    <div class="step active" data-desc="Nhận hàng"><i class="fas fa-box"></i></div>
+                                }
+                                else
+                                {
+                                    <div class="step" data-desc="Nhận hàng"><i class="fas fa-box"></i></div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="step" data-desc="Vận chuyển đã bị hủy"><i class="fas fa-shipping-fast"></i></div>
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (ViewBag.Model.confirm_at == null)
+                    {
+                        <div class="step" data-desc="Đơn hàng đã bị hủy"></div>
+                    }
+                    else
+                    {
+                        <div class="step" data-desc="Đơn hàng đã duyệt"><i class="fas fa-clipboard-check"></i></div>
+                        if (ViewBag.Model.pay_at == null)
+                        {
+                            <div class="step" data-desc="Đơn hàng đã bị hủy"></div>
+                        }
+                        else
+                        {
+                            <div class="step" data-desc="Đã thanh toán "><i class="fas fa-handshake"></i></div>
+                            if (ViewBag.Model.ship_at == null)
+                            {
+                                <div class="step" data-desc="Đơn hàng đã bị hủy"></div>
+                            }
+                            else
+                            {
+                                if (ViewBag.Model.cancel_ship_at != null)
+                                {
+                                    <div class="step" data-desc="Vận chuyển đã bị hủy"><i class="fas fa-shipping-fast"></i></div>
+                                    <div class="step" data-desc="Đơn hàng đã bị hủy"></div>
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        </div>
+        <div class="hr-style"></div>
+        <div class="row margin-top-20">
+            <div class=" span5">
+                <div class="history-tl-container">
+                    <ul class="tl">
+                        @if (ViewBag.Model.done_ship_at != null)
+                        {
+                            <li class="tl-item">
+                                <div class="timestamp">
+                                    @String.Format("{0:t}", ViewBag.Model.done_ship_at)<br>
+                                </div>
+                                <div class="item-title">Giao hàng thành công</div>
+                                <div class="item-detail">Đơn hàng đã được giao vào lúc @ViewBag.Model.done_ship_at</div>
+                            </li>
+                        }
+                        @{
+                            bool flag = false;
+                        }
+                        @if (ViewBag.Model.cancel_ship_at != null)
+                        {
+                            if (ViewBag.Model.cancel_at != null)
+                            {
+                                flag = true;
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.cancel_at)<br>
+                                    </div>
+                                    <div class="item-title">Đơn hàng đã bị hủy</div>
+                                    <div class="item-detail">
+                                        <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p>
+                                        <p>Lý do: <strong>@ViewBag.Model.cancel_reason</strong></p>
+                                    </div>
+                                </li>
+                            }
+                            <li class="tl-item">
+                                <div class="timestamp">
+                                    @String.Format("{0:t}", ViewBag.Model.cancel_ship_at)<br>
+                                </div>
+                                <div class="item-title">Giao hàng đã bị hủy</div>
+                                <div class="item-detail">Giao hàng đã bị hủy vào lúc @ViewBag.Model.cancel_ship_at</div>
+                            </li>
+                        }
+                        @if (ViewBag.Model.ship_at != null)
+                        {
+                            if (ViewBag.Model.enter_lading_code_at != null)
+                            {
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.enter_lading_code_at)<br>
+                                    </div>
+                                    <div class="item-title">Mã vận đơn</div>
+                                    <div class="item-detail">
+                                        <p>@ViewBag.Model.lading_code là mã vận đơn của quý khách</p>
+                                        <p>Quý khách có thể tra cứu thông tin vận chuyển bằng mã vận đơn <a href="@ViewBag.Model.transporter_link" target="_blank">TẠI ĐÂY</a></p>
+                                    </div>
+                                </li>
+                            }
+                            <li class="tl-item">
+                                <div class="timestamp">
+                                    @String.Format("{0:t}", ViewBag.Model.ship_at)<br>
+                                </div>
+                                <div class="item-title">Đã giao cho ĐVVC</div>
+                                <div class="item-detail">
+                                    Kiện hàng đã được giao cho ĐVVC @ViewBag.Model.transporter_name vào lúc @ViewBag.Model.ship_at
+                                </div>
+                            </li>
+                        }
+                        @if (ViewBag.Model.pay_at != null)
+                        {
+                            if (ViewBag.Model.cancel_at != null && flag == false)
+                            {
+                                flag = true;
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.cancel_at)<br>
+                                    </div>
+                                    <div class="item-title">Đơn hàng đã bị hủy</div>
+                                    <div class="item-detail">
+                                        <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p>
+                                        <p>Lý do: <strong>@ViewBag.Model.cancel_reason</strong></p>
+                                    </div>
+                                </li>
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.pay_at)<br>
+                                    </div>
+                                    <div class="item-title">Thanh toán thành công</div>
+                                    <div class="item-detail">Chúng tôi xác nhận thanh toán thành công số tiền @String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</div>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.pay_at)<br>
+                                    </div>
+                                    <div class="item-title">Thanh toán thành công</div>
+                                    <div class="item-detail">Chúng tôi xác nhận thanh toán thành công số tiền @String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</div>
+                                </li>
+                            }
+                        }
+                        @if (ViewBag.Model.confirm_at != null)
+                        {
+                            if (ViewBag.Model.cancel_at != null && flag == false)
+                            {
+                                flag = true;
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.cancel_at)<br>
+                                    </div>
+                                    <div class="item-title">Đơn hàng đã bị hủy</div>
+                                    <div class="item-detail">
+                                        <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p>
+                                        <p>Lý do: <strong>@ViewBag.Model.cancel_reason</strong></p>
+                                    </div>
+                                </li>
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.confirm_at)<br>
+                                    </div>
+                                    <div class="item-title">Đơn hàng đã được duyệt</div>
+                                    <div class="item-detail">Đơn hàng được duyệt vào lúc @ViewBag.Model.confirm_at</div>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.confirm_at)<br>
+                                    </div>
+                                    <div class="item-title">Đơn hàng đã được duyệt</div>
+                                    <div class="item-detail">Đơn hàng được duyệt vào lúc @ViewBag.Model.confirm_at</div>
+                                </li>
+                            }
+                        }
+                        @if (ViewBag.Model.cancel_at != null && flag == false)
+                        {
+                            <li class="tl-item">
+                                <div class="timestamp">
+                                    @String.Format("{0:t}", ViewBag.Model.cancel_at)<br>
+                                </div>
+                                <div class="item-title">Đơn hàng đã bị hủy</div>
+                                <div class="item-detail">
+                                    <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p> 
+                                    <p>Lý do: <strong>@ViewBag.Model.cancel_reason</strong></p>
+                                </div>
+                            </li>
+                            <li class="tl-item">
+                                <div class="timestamp">
+                                    @String.Format("{0:t}", ViewBag.Model.create_at)<br>
+                                </div>
+                                <div class="item-title">Đơn hàng đã tạo thành công</div>
+                                <div class="item-detail">Đơn hàng được tạo vào lúc @ViewBag.Model.create_at</div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="tl-item">
+                                <div class="timestamp">
+                                    @String.Format("{0:t}", ViewBag.Model.create_at)<br>
+                                </div>
+                                <div class="item-title">Đơn hàng đã tạo thành công</div>
+                                <div class="item-detail">Đơn hàng được tạo vào lúc @ViewBag.Model.create_at</div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="span3">
+                <p class="receive-title">Địa chỉ nhận hàng</p>
+                <p>@ViewBag.Model.receiver_name</p>
+                <p class="receive-item">@ViewBag.Model.receiver_number</p>
+                <p class="receive-item">@ViewBag.Model.receiver_address</p>
+            </div>
+        </div>
+    </div>
+    <div class="row margin-auto table-hr-top">
+        <table class="table table-borderless">
+            <tbody>
+                @foreach (var item in ViewBag.Model.Products)
+                {
+                    <tr class="order-tracking-product">
+                        <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                        <td class="order-tracking-product-name"><a href="@Url.Action("Detail", "Product", new { slug = item.product_slug })" target="_blank">@item.product_name</a></td>
+                        <td style="width: 7%">x @item.quantity</td>
+                        @if (item.promotion_price > 0)
+                        {
+                            <td class="text-right">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
+                        }
+                        else
+                        {
+                            <td class="text-right">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right">Tổng tiền hàng	</td>
+                    <td class="text-right w-20">@String.Format(info, "{0:c}", ViewBag.Model.total)</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right">Mã giảm giá	</td>
+                    <td class="text-right w-20">- <span>@String.Format(info, "{0:c}", ViewBag.Model.discount)</span></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right">Phí vận chuyển	</td>
+                    @if (ViewBag.Model.ship_fee == 0)
+                    {
+                        <td class="text-right w-20">Miễn phí</td>
+                    }
+                    else
+                    {
+                        <td class="text-right w-20">@String.Format(info, "{0:c}", ViewBag.Model.ship_fee)</td>
+                    }
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Thành tiền </strong></td>
+                    <td class="text-right w-20"> <strong><span>@String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</span></strong></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Phương thức thanh toán</strong></td>
+                    <td class="text-right w-20"> <strong><span>@ViewBag.Model.payment_name</span></strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+

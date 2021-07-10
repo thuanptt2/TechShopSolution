@@ -26,6 +26,6 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<List<WardModel>>> LoadWard(int districtID);
         Task<List<OrderViewModel>> GetLatestOrder(int id, int take);
         Task<ApiResult<List<OrderPublicViewModel>>> GetCustomerOrders(int id);
-
+        Task<ApiResult<OrderPublicViewModel>> GetOrderDetail(int id);
     }
 }
