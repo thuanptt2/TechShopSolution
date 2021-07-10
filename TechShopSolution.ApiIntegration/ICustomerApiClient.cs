@@ -28,6 +28,7 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<List<OrderPublicViewModel>>> GetCustomerOrders(int id);
         Task<ApiResult<OrderPublicViewModel>> GetOrderDetail(int id);
         Task<ApiResult<string>> ConfirmDoneShip(int id);
+        Task<ApiResult<string>> CancelOrder(OrderCancelRequest request);
 
     }
 }

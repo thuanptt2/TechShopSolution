@@ -8,6 +8,13 @@
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 }
 
+@section Script {
+
+    <script src="~/js/OrderCancelReason.js"></script>
+    <script src="~/js/site.js"></script>
+}
+
+
 <div class="span9">
     <ul class="breadcrumb">
         <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
@@ -108,7 +115,7 @@
             @if (ViewBag.Model.ship_status != 1 && ViewBag.Model.ship_status != 2 && ViewBag.Model.order_status != -1)
             {
                 <hr class="soft" />
-                <a class="btn btn-danger margin-top-20" href="#">Hủy đơn hàng</a>
+                <a class="btn btn-danger margin-top-20" onclick="showInPopup('@Url.Action("OrderCancelReason", "Account",new { id = ViewBag.Model.id }, Context.Request.Scheme)','Chọn lý do hủy đơn hàng')">Hủy đơn hàng</a>
             }
             @if (ViewBag.Model.ship_status == 1 && ViewBag.Model.transport_id != null)
             {

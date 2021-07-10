@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.WebApp.Controllers
@@ -311,6 +312,27 @@ namespace TechShopSolution.WebApp.Controllers
             }
             TempData["result"] = result.ResultObject;
             return RedirectToAction("OrderDetail", new { id = order_id });
+        }
+        [HttpGet]
+        public IActionResult OrderCancelReason(int id)
+        {
+            var request = new OrderCancelRequest()
+            {
+                Id = id
+            };
+            return View(request);
+        }
+        [HttpPost]
+        public async Task<IActionResult> OrderCancelReason(OrderCancelRequest request)
+        {
+            var result = await _customerApiClient.CancelOrder(request);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("OrderDetail", new { id = request.Id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("OrderDetail", new { id = request.Id });
         }
     }
 }
