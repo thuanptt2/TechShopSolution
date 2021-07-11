@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
@@ -24,14 +25,14 @@ namespace TechShopSolution.WebApp.Controllers
             _customerApiClient = customerApiClient;
         }
 
-
-        public IActionResult Index()
-        {
-            return View();
-        }
         [HttpGet]
+        [Route("tai-khoan/don-hang")]
         public async Task<IActionResult> OrderTracking()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
             var id = User.FindFirst(ClaimTypes.Sid).Value;
 
             var result = await _customerApiClient.GetCustomerOrders(int.Parse(id));
@@ -44,6 +45,7 @@ namespace TechShopSolution.WebApp.Controllers
             return View();
         }
         [HttpGet]
+        [Route("tai-khoan/don-hang/{id}")]
         public async Task<IActionResult> OrderDetail(int id)
         {
             var result = await _customerApiClient.GetOrderDetail(id);

@@ -117,6 +117,10 @@ namespace TechShopSolution.WebApp.Controllers
         [Route("tai-khoan")]
         public async Task<IActionResult> Detail()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
             var id = User.FindFirst(ClaimTypes.Sid).Value;
 
             var result = await _customerApiClient.GetById(int.Parse(id));

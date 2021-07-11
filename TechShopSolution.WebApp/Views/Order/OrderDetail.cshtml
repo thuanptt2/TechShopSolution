@@ -1,7 +1,11 @@
 ﻿@using System.Security.Claims;
 
 @{
-    ViewData["Title"] = "Chi tiết đơn hàng";
+    if (ViewBag.Model != null)
+    {
+        ViewData["Title"] = "Chi tiết đơn hàng #" + ViewBag.Model.id;
+    }
+    
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
@@ -18,8 +22,9 @@
 <div class="span9">
     <ul class="breadcrumb">
         <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
-        <li><a href="@Url.Action("OrderTracking", "Order", new { id = User.FindFirst(ClaimTypes.Sid).Value })">Đơn hàng</a> <span class="divider">/</span></li>
-        <li class="active">@ViewBag.Model.id</li>
+        <li> <a href="@Url.Action("Detail", "Account")">Tài khoản</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("OrderTracking", "Order")">Đơn hàng</a> <span class="divider">/</span></li>
+        <li class="active">#@ViewBag.Model.id</li>
     </ul>
     <hr class="soft" />
 

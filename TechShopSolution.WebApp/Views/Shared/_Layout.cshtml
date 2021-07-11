@@ -89,7 +89,7 @@
                     else
                     {
                         <div class="btn-group btnDropdownAccount">
-                            <a href="@Url.Action("Login", "Account")" role="button" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
+                            <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" role="button" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
                         </div>
                     }
                 </div>
