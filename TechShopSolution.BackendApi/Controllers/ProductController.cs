@@ -38,10 +38,12 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(product);
         }
         [HttpGet("slug")]
-        public async Task<IActionResult> GetBySlug(string slug)
+        public async Task<IActionResult> GetPublicProductDetail(string slug)
         {
-            var product = await _productService.GetBySlug(slug);
-            return Ok(product);
+            var result = await _productService.GetPublicProductDetail(slug);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
         }
         [HttpGet("featured/{take}")]
         public async Task<IActionResult> GetFeaturedProduct(int take)

@@ -26,25 +26,44 @@ namespace TechShopSolution.WebApp.Controllers
         [Route("san-pham/{slug}")]
         public async Task<IActionResult> Detail(string slug)
         {
-            var product = await _productApiClient.GetBySlug(slug);
-            if (product.ResultObject == null)
+            var product = await _productApiClient.GetPublicProductDetail(slug);
+            if (product.ResultObject == null || product.ResultObject.Product == null)
             {
                 TempData["error"] = product.Message;
                 return RedirectToAction("Index", "Home");
             }
-            string[] CateId = product.ResultObject.CateID.Split(",");
-            var Category = await _categorytApiClient.GetById(int.Parse(CateId[0]));
-            var Brand = await _brandApiClient.GetById(product.ResultObject.brand_id);
 
             return View(new ProductDetailViewModel()
             {
-                Product = product.ResultObject,
-                Category = Category.ResultObject,
-                Brand = Brand.ResultObject,
-                ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.brand_id, 4),
-                ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.id),
+                Product = product.ResultObject.Product,
+                Ratings = product.ResultObject.Ratings,
+                ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.Product.id),
             });
         }
+        [HttpGet]
+        public IActionResult Rating(int cus_id, int product_id)
+        {
+            var request = new ProductRatingRequest()
+            {
+                cus_id = cus_id,
+                product_id = product_id,
+                score = 0,
+                content = null
+            };
+            return View(request);
+        }
+        //[HttpPost]
+        //public async Task<IActionResult> OrderCancelReason(OrderCancelRequest request)
+        //{
+        //    var result = await _customerApiClient.CancelOrder(request);
+        //    if (!result.IsSuccess)
+        //    {
+        //        TempData["error"] = result.Message;
+        //        return RedirectToAction("OrderDetail", new { id = request.Id });
+        //    }
+        //    TempData["result"] = result.ResultObject;
+        //    return RedirectToAction("OrderDetail", new { id = request.Id });
+        //}
         [Route("danh-muc/{slug}")]
         public async Task<IActionResult> Category(string slug, decimal? giathapnhat = null, decimal? giacaonhat = null, int sortid = 1, int page = 1)
         {

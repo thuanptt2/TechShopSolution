@@ -11,9 +11,8 @@ namespace TechShopSolution.WebApp.Models
 {
     public class ProductDetailViewModel
     {
-        public CategoryViewModel Category { get; set; }
-        public BrandViewModel Brand { get; set; }
         public ProductViewModel Product { get; set; }
+        public List<RatingViewModel> Ratings { get; set; }
         public List<ProductViewModel> ProductsRelated { get; set; }
         public List<ImageListResult> ImageList { get; set; }
     }
