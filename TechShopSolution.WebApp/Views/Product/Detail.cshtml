@@ -28,7 +28,7 @@ else
     ViewData["Description"] = Model.Product.meta_descriptions;
     ViewData["Keywords"] = Model.Product.meta_keywords;
 
-    <div class="span9">
+    <div class="span9 margin-bottom-20">
         <ul class="breadcrumb">
             <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
             <li><a href="@Url.Action("Category", "Product", new { slug = Model.Product.cate_slug })">@Model.Product.cate_name</a> <span class="divider">/</span></li>
@@ -80,10 +80,18 @@ else
                 <div class="product-short-desc">
                     @Html.Raw(Model.Product.short_desc)
                 </div><br />
+                @if (Model.Product.warranty > 0)
+                {
+                    <p class="margin-bottom-20">
+                        <img src="~/images/huyhieu.png" width="30"/>
+                        Bảo hành: <strong>@Model.Product.warranty tháng</strong>
+                    </p>
+                }
+
                 @if (Model.Product.promotion_price > 1)
                 {
                     var a = Model.Product.unit_price - Model.Product.promotion_price;
-                    <span class="product-price">@String.Format(info, "{0:c}", Model.Product.promotion_price)&nbsp;&nbsp;</span>
+                    <span class="product-price detail-product-price">@String.Format(info, "{0:c}", Model.Product.promotion_price)&nbsp;&nbsp;</span>
                     <span class="product-promotion-pirce">@String.Format(info, "{0:c}", Model.Product.unit_price)&nbsp;&nbsp;</span>
                     <span class="product-total-price">Tiết kiệm @String.Format(info, "{0:c}", a)</span>
                 }
@@ -95,7 +103,7 @@ else
                 }
                 else
                 {
-                    <span class="product-price">@String.Format(info, "{0:c}", Model.Product.unit_price)</span>
+                    <span class="product-price detail-product-price">@String.Format(info, "{0:c}", Model.Product.unit_price)</span>
                 }
                 <br />
                 <a class="btn btn-small pull-right" href="#specifications">Xem chi tiết</a><br />
@@ -159,7 +167,7 @@ else
                             {
                                 <div class="review" itemscope itemtype="http://schema.org/Review">
                                     <h4 class="subheading" itemprop="itemReviewed">@item.content</h4>
-                                    <p class="author" itemprop="author"><small>bởi:</small> @item.cus_name</p>
+                                    <p class="author" itemprop="author"><small>Bởi:</small> @item.cus_name</p>
                                     <div class="rating rating--read-only">
                                         @if (item.score == 1)
                                         {
@@ -202,7 +210,7 @@ else
                                                 <span class="star star--full"></span>
                                                 <span class="star star--full"></span>
                                                 <span class="star star--full"></span>
-                                                <span class="star star--full"></span>
+                                                <span class="star"></span>
                                             </div>
                                         }
                                         else if (item.score == 5)
@@ -238,13 +246,20 @@ else
                             </div>
                         </div>
                         <div class="text-right">
-                            @if (flag)
+                            @if (!User.Identity.IsAuthenticated)
                             {
-                                <a class="btn margin-top-20 margin-right-20" onclick="showInPopup('@Url.Action("Rating", "Product",new { product_id = Model.Product.id }, Context.Request.Scheme)','Đánh giá sản phẩm')">Viết đánh giá</a>
+                                <a class="btn margin-top-20 margin-right-20" href="@Url.Action("Login", "Account",new { returnUrl = Context.Request.Path })">Viết đánh giá</a>
                             }
                             else
                             {
-                                <a class="btn margin-top-20 margin-right-20" onclick="alert('Quý khách đã đánh giá này rồi, không thể đánh giá lại.')">Viết đánh giá</a>
+                                if (flag)
+                                {
+                                    <a class="btn margin-top-20 margin-right-20" onclick="showInPopup('@Url.Action("Rating", "Product",new { product_id = Model.Product.id, product_slug = Model.Product.slug }, Context.Request.Scheme)','Đánh giá sản phẩm')">Viết đánh giá</a>
+                                }
+                                else
+                                {
+                                    <a class="btn margin-top-20 margin-right-20" onclick="alert('Quý khách đã đánh giá này rồi, không thể đánh giá lại.')">Viết đánh giá</a>
+                                }
                             }
                         </div>
                     </div>
@@ -258,7 +273,10 @@ else
             </div>
         </div>
     </div>
-    <h3 class=" margin-top-20">Cùng thương hiệu  @Model.Product.brand_name</h3>
+    @if (Model.ProductsRelated.Count != 0)
+    {
+        <h3 class=" margin-top-20">Cùng thương hiệu  @Model.Product.brand_name</h3>
+    }
     <ul class="thumbnails">
         @{
             if (Model.ProductsRelated != null)

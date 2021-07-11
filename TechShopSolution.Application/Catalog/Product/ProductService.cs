@@ -827,8 +827,15 @@ namespace TechShopSolution.Application.Catalog.Product
         public async Task<ApiResult<bool>> SaveRating(ProductRatingRequest request)
         {
             var rating = await _context.Ratings.Where(x => x.cus_id == request.cus_id && x.product_id == request.product_id).FirstOrDefaultAsync();
-            if (rating == null)
+            if (rating != null)
                 return new ApiErrorResult<bool>("Bạn đã đánh giá sản phẩm này rồi, không thể đánh giá thêm lần nữa");
+            var product = await _context.Products.FindAsync(request.product_id);
+            if (product == null || product.isDelete == true)
+                return new ApiErrorResult<bool>("Sản phẩm bạn đánh giá hiện không còn tồn tại");
+            var customer = await _context.Customers.FindAsync(request.cus_id);
+            if (customer == null || customer.isDelete == true)
+                return new ApiErrorResult<bool>("Không tìm thấy tài khoản của bạn trong CSDL");
+
             var newRating = new TechShopSolution.Data.Entities.Rating()
             {
                 content = request.content,
@@ -838,6 +845,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 score = request.score
             };
             await _context.Ratings.AddAsync(newRating);
+            await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
         }
         private async Task<string> SaveFile(IFormFile file)

@@ -149,5 +149,13 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpPost("rating")]
+        public async Task<IActionResult> RatingProduct(ProductRatingRequest request)
+        {
+            var result = await _productService.SaveRating(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

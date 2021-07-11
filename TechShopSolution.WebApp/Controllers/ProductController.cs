@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Category;
@@ -32,38 +34,53 @@ namespace TechShopSolution.WebApp.Controllers
                 TempData["error"] = product.Message;
                 return RedirectToAction("Index", "Home");
             }
-
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(new ProductDetailViewModel()
             {
                 Product = product.ResultObject.Product,
                 Ratings = product.ResultObject.Ratings,
+                ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.Product.brand_id, 4),
                 ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.Product.id),
             });
         }
         [HttpGet]
-        public IActionResult Rating(int cus_id, int product_id)
+        public IActionResult Rating(int product_id, string product_slug)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
             var request = new ProductRatingRequest()
             {
-                cus_id = cus_id,
+                cus_id = int.Parse(id),
                 product_id = product_id,
+                product_slug = product_slug,
                 score = 0,
                 content = null
             };
             return View(request);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> OrderCancelReason(OrderCancelRequest request)
-        //{
-        //    var result = await _customerApiClient.CancelOrder(request);
-        //    if (!result.IsSuccess)
-        //    {
-        //        TempData["error"] = result.Message;
-        //        return RedirectToAction("OrderDetail", new { id = request.Id });
-        //    }
-        //    TempData["result"] = result.ResultObject;
-        //    return RedirectToAction("OrderDetail", new { id = request.Id });
-        //}
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Rating(ProductRatingRequest request)
+        {
+            var result = await _productApiClient.RatingPoduct(request);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Detail", new { slug = request.product_slug });
+            }
+            TempData["result"] = "Cảm ơn bạn đã đánh giá Sản phẩm & Dịch vụ của chúng tôi ^^";
+            return RedirectToAction("Detail", new { slug = request.product_slug });
+        }
         [Route("danh-muc/{slug}")]
         public async Task<IActionResult> Category(string slug, decimal? giathapnhat = null, decimal? giacaonhat = null, int sortid = 1, int page = 1)
         {

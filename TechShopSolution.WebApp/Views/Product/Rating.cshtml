@@ -8,17 +8,20 @@
 <h3 class="text-center">Bạn có hài lòng về dịch vụ & sản phẩm của chúng tôi?</h3>
 <form asp-action="Rating" asp-controller="Product" method="post">
     <p class="p_class">
-        <input id="radio1" type="radio" name="score" value="5">
+        <input type="hidden" asp-for="product_id">
+        <input type="hidden" asp-for="cus_id">
+        <input type="hidden" asp-for="product_slug">
+        <input id="radio1" type="radio" asp-for="score" value="5">
         <label for="radio1">&#9786;</label>
-        <input id="radio2" type="radio" name="score" value="4">
+        <input id="radio2" type="radio" asp-for="score" value="4">
         <label for="radio2">&#9786;</label>
-        <input id="radio3" type="radio" name="score" value="3">
+        <input id="radio3" type="radio" asp-for="score" value="3">
         <label for="radio3">&#9786;</label>
-        <input id="radio4" type="radio" name="score" value="2">
+        <input id="radio4" type="radio" asp-for="score" value="2">
         <label for="radio4">&#9786;</label>
-        <input id="radio5" type="radio" name="score" value="1">
+        <input id="radio5" type="radio" asp-for="score" value="1">
         <label for="radio5">&#9786;</label>
     </p>
-    <textarea name="content" class="comment_area" placeholder="Để lại bình luận ở đây"></textarea><br>
+    <textarea asp-for="content" class="comment_area" placeholder="Để lại bình luận ở đây"></textarea><br>
     <input type="submit" name="rating_submit" value="Gửi đánh giá!">
 </form>

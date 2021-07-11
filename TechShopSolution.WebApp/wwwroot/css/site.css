@@ -1070,3 +1070,6 @@ body {
 .modal-body {
     max-height: 60%;
 }
+.detail-product-price {
+    font-size: 1.2rem !important;
+}
