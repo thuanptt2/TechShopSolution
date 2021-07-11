@@ -47,7 +47,7 @@ namespace TechShopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request, string returnUrl)
         {
             try
             {
@@ -66,6 +66,11 @@ namespace TechShopSolution.AdminApp.Controllers
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
                             authProperties);
+
+                if(!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
 
                 return RedirectToAction("Index", "Home");
             }

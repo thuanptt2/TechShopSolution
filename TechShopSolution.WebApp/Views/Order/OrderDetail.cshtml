@@ -18,14 +18,14 @@
 <div class="span9">
     <ul class="breadcrumb">
         <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
-        <li><a href="@Url.Action("OrderTracking", "Account", new { id = User.FindFirst(ClaimTypes.Sid).Value })">Đơn hàng</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("OrderTracking", "Order", new { id = User.FindFirst(ClaimTypes.Sid).Value })">Đơn hàng</a> <span class="divider">/</span></li>
         <li class="active">@ViewBag.Model.id</li>
     </ul>
     <hr class="soft" />
 
     <div class="wrapper-content margin-bottom-20">
         <div class="space-between-flex">
-            <a href="@Url.Action("OrderTracking", "Account", new { id = User.FindFirst(ClaimTypes.Sid).Value })"><i class="fas fa-chevron-left"></i> TRỞ LẠI</a>
+            <a href="@Url.Action("OrderTracking", "Order", new { id = User.FindFirst(ClaimTypes.Sid).Value })"><i class="fas fa-chevron-left"></i> TRỞ LẠI</a>
             <p>MÃ ĐƠN HÀNG: <strong>#@ViewBag.Model.id</strong></p>
         </div>
         <hr />
@@ -115,12 +115,12 @@
             @if (ViewBag.Model.ship_status != 1 && ViewBag.Model.ship_status != 2 && ViewBag.Model.order_status != -1)
             {
                 <hr class="soft" />
-                <a class="btn btn-danger margin-top-20" onclick="showInPopup('@Url.Action("OrderCancelReason", "Account",new { id = ViewBag.Model.id }, Context.Request.Scheme)','Chọn lý do hủy đơn hàng')">Hủy đơn hàng</a>
+                <a class="btn btn-danger margin-top-20" onclick="showInPopup('@Url.Action("OrderCancelReason", "Order",new { id = ViewBag.Model.id }, Context.Request.Scheme)','Chọn lý do hủy đơn hàng')">Hủy đơn hàng</a>
             }
             @if (ViewBag.Model.ship_status == 1 && ViewBag.Model.transport_id != null)
             {
                 <hr class="soft" />
-                <a class="btn btn-primary margin-top-20" onclick="return confirm('Bạn có chắc chắn muốn xác nhận đã nhận được hàng?')" href="@Url.Action("ConfirmReceive", "Account", new { transport_id = ViewBag.Model.transport_id, order_id = ViewBag.Model.id })">Xác nhận đã nhận hàng</a>
+                <a class="btn btn-primary margin-top-20" onclick="return confirm('Bạn có chắc chắn muốn xác nhận đã nhận được hàng?')" href="@Url.Action("ConfirmReceive", "Order", new { transport_id = ViewBag.Model.transport_id, order_id = ViewBag.Model.id })">Xác nhận đã nhận hàng</a>
             }
         </div>
         <div class="hr-style"></div>

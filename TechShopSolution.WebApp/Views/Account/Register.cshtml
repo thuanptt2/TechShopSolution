@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Đăng ký thành viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnUrl = Context.Request.Query["ReturnUrl"];
+
 }
 @section Script {
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
@@ -15,7 +17,7 @@
     </ul>
     <h3>Đăng ký</h3>
     <div class="well shadow">
-        <form class="form-horizontal" asp-controller="Account" asp-action="Register" method="post">
+        <form class="form-horizontal" asp-controller="Account" asp-action="Register" asp-route-returnurl = "@returnUrl" method="post">
             <h4>Điền thông tin cá nhân</h4>
             <div asp-validation-summary="ModelOnly" class="text-error"></div>
             <div class="control-group">

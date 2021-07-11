@@ -1,19 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.WebApp.Controllers
@@ -35,93 +29,72 @@ namespace TechShopSolution.WebApp.Controllers
         {
             return View();
         }
-        [Route("don-hang/dang-nhap")]
-        [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> OrderTracking()
         {
-            await HttpContext.SignOutAsync(
-                          CookieAuthenticationDefaults.AuthenticationScheme);
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+
+            var result = await _customerApiClient.GetCustomerOrders(int.Parse(id));
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.Model = result.ResultObject;
             return View();
         }
-        [HttpPost]
-        [Route("don-hang/dang-nhap")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginRequest request)
-        {
-            if (!ModelState.IsValid)
-                return View(request);
-            var result = await _adminApiClient.AuthenticateCustomer(request);
-            if (result.IsSuccess)
-            {
-                var adminPrincipal = this.ValidateToken(result.ResultObject);
-                var authProperties = new AuthenticationProperties
-                {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(180),
-                    IsPersistent = false
-                };
-                HttpContext.Session.SetString("Tokenuser", result.ResultObject);
-                await HttpContext.SignInAsync(
-                            CookieAuthenticationDefaults.AuthenticationScheme,
-                            adminPrincipal,
-                            authProperties);
-
-                return RedirectToAction("Checkout", "Cart", new { id = adminPrincipal.FindFirst(ClaimTypes.Sid).Value });
-            }
-            ModelState.AddModelError("", result.Message);
-            return View(request);
-        }
-        [Route("don-hang/dang-ky")]
         [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Register()
+        public async Task<IActionResult> OrderDetail(int id)
         {
+            var result = await _customerApiClient.GetOrderDetail(id);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.Model = result.ResultObject;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View();
         }
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("don-hang/dang-ky")]
-        public async Task<IActionResult> Register(CustomerRegisterRequest request)
+        [HttpGet]
+        public async Task<IActionResult> ConfirmReceive(int transport_id, int order_id)
         {
-            if (!ModelState.IsValid)
-                return View();
-            var result = await _customerApiClient.Register(request);
-            if (result.IsSuccess)
+            var result = await _customerApiClient.ConfirmDoneShip(transport_id);
+            if (!result.IsSuccess)
             {
-                var token = await _adminApiClient.AuthenticateCustomer(new LoginRequest { Email = request.email, Password = request.password, Remeber_me = true });
-
-                var adminPrincipal = this.ValidateToken(token.ResultObject);
-                var authProperties = new AuthenticationProperties
-                {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                    IsPersistent = false
-                };
-                HttpContext.Session.SetString("Token", token.ResultObject);
-                await HttpContext.SignInAsync(
-                            CookieAuthenticationDefaults.AuthenticationScheme,
-                            adminPrincipal,
-                            authProperties);
-                return RedirectToAction("Checkout", "Cart", new { id = adminPrincipal.FindFirst(ClaimTypes.Sid).Value });
+                TempData["error"] = result.Message;
+                return RedirectToAction("OrderDetail", new { id = order_id });
             }
-            ModelState.AddModelError("", result.Message);
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("OrderDetail", new { id = order_id });
+        }
+        [HttpGet]
+        public IActionResult OrderCancelReason(int id)
+        {
+            var request = new OrderCancelRequest()
+            {
+                Id = id
+            };
             return View(request);
         }
-        private ClaimsPrincipal ValidateToken(string jwtToken)
+        [HttpPost]
+        public async Task<IActionResult> OrderCancelReason(OrderCancelRequest request)
         {
-            IdentityModelEventSource.ShowPII = true;
-
-            SecurityToken validatedToken;
-            TokenValidationParameters validationParameters = new TokenValidationParameters();
-
-            validationParameters.ValidateLifetime = true;
-
-            validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
-            validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
-            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
-
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
-
-            return principal;
+            var result = await _customerApiClient.CancelOrder(request);
+            if (!result.IsSuccess)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("OrderDetail", new { id = request.Id });
+            }
+            TempData["result"] = result.ResultObject;
+            return RedirectToAction("OrderDetail", new { id = request.Id });
         }
     }
 }

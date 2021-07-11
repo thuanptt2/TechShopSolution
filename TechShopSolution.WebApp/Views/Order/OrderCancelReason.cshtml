@@ -8,7 +8,7 @@
     <p class="mt-2">Hành động này sẽ hủy vĩnh viễn đơn hàng, quý khách nên cân nhắc trước khi hủy</p>
     <p>Trường hợp quý khách đã thanh toán cho đơn hàng này rồi nhưng vẫn muốn hủy, bộ phận CSKH của Shop sẽ liên lạc với quý khách để hoàn trả số tiền đã thanh toán.</p>
 </div>
-<form asp-action="OrderCancelReason" id="formCancel" asp-controller="Account" method="post" onsubmit="return SubmitForm(this);">
+<form asp-action="OrderCancelReason" id="formCancel" asp-controller="Order" method="post" onsubmit="return SubmitForm(this);">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="reason" class="control-label lableFormField"></label>
