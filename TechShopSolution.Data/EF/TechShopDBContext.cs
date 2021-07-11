@@ -29,6 +29,7 @@ namespace TechShopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new NewsConfigurations());
             modelBuilder.ApplyConfiguration(new OrderConfigurations());
             modelBuilder.ApplyConfiguration(new OrderDetailConfigurations());
+            modelBuilder.ApplyConfiguration(new RatingConfigurations());
             modelBuilder.ApplyConfiguration(new PartnerConfigurations());
             modelBuilder.ApplyConfiguration(new PaymentMethodConfigurations());
             modelBuilder.ApplyConfiguration(new ProductConfigurations());
@@ -54,6 +55,7 @@ namespace TechShopSolution.Data.EF
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Partner> Partners { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<Slide> Slides { get; set; }
         public DbSet<Transport> Transports { get; set; }
