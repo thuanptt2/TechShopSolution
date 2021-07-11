@@ -141,19 +141,27 @@ namespace TechShopSolution.WebApp
                     action = "Index"
                 });
                 endpoints.MapControllerRoute(
-               name: "Dang nhap tai khoan",
-               pattern: "don-hang/dang-nhap", new
+               name: "don hang da mua",
+               pattern: "tai-khoan/don-hang", new
                {
                    controller = "Order",
-                   action = "Login"
+                   action = "OrderTracking"
                });
 
                 endpoints.MapControllerRoute(
-                  name: "Dang Ky tai khoan",
-                  pattern: "don-hang/dang-ky", new
+                  name: "chi tiet don hang da mua",
+                  pattern: "tai-khoan/don-hang/{id}", new
                   {
                       controller = "Order",
-                      action = "Register"
+                      action = "OrderDetail"
+                  });
+
+                endpoints.MapControllerRoute(
+                  name: "Thanh toan gio hang",
+                  pattern: "/gio-hang/thanh-toan", new
+                  {
+                      controller = "Cart",
+                      action = "Checkout"
                   });
                 endpoints.MapControllerRoute(
                     name: "default",

@@ -9,7 +9,9 @@ var SiteController = function () {
             type: "GET",
             url: "/Cart/GetListItems",
             success: function (res) {
-                $('#lbl_number_items_header').text(res.items.length);
+                if (res != null) {
+                    $('#lbl_number_items_header').text(res.items.length);
+                }
             }
         });
     }
@@ -22,15 +24,17 @@ var SiteController = function () {
                 type: "POST",
                 url: '/Cart/AddToCart/' + idProduct,
                 success: function (res) {
-                    $('#lbl_number_items_header').text(res.items.length);
-                    var x = document.getElementById("snackbar");
-                    $('.ReultMessage').text("Thêm vào giỏ hàng thành công");
+                    if (res != null) {
+                        $('#lbl_number_items_header').text(res.items.length);
+                        var x = document.getElementById("snackbar");
+                        $('.ReultMessage').text("Thêm vào giỏ hàng thành công");
 
-                    // Add the "show" class to DIV
-                    x.className = "show";
+                        // Add the "show" class to DIV
+                        x.className = "show";
 
-                    // After 3 seconds, remove the show class from DIV
-                    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                        // After 3 seconds, remove the show class from DIV
+                        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                    }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     var x = document.getElementById("snackbarDanger");
@@ -89,3 +93,13 @@ function topFunction() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 }
+$(document).ready(function () {
+    $('.step').each(function (index, element) {
+        // element == this
+        $(element).not('.active').addClass('done');
+        $('.done').html('<i class="icon-ok"></i>');
+        if ($(this).is('.active')) {
+            return false;
+        }
+    });
+});

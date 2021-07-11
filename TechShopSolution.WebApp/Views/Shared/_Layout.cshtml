@@ -8,15 +8,6 @@
     <meta name="description" content="@ViewData["Desciption"]">
     <meta name="author" content="TechShop">
     <meta name="keywords" content="@ViewData["Keywords"]">
-    <!--Less styles -->
-    <!-- Other Less css file //different less files has different color scheam
-     <link rel="stylesheet/less" type="text/css" href="/themes/less/simplex.less">
-     <link rel="stylesheet/less" type="text/css" href="/themes/less/classified.less">
-     <link rel="stylesheet/less" type="text/css" href="/themes/less/amelia.less">  MOVE DOWN TO activate
-     -->
-    <!--<link rel="stylesheet/less" type="text/css" href="/themes/less/bootshop.less">
-    <script src="/themes/js/less.js" type="text/javascript"></script> -->
-    <!-- Bootstrap style -->
     <link id="callCss" rel="stylesheet" href="/themes/bootshop/bootstrap.min.css" media="screen" />
     <link href="/themes/css/base.css" rel="stylesheet" media="screen" />
     <!-- Bootstrap style responsive -->
@@ -42,19 +33,25 @@
         <div class="loader"></div>
     </div>
 
-    <div class="alert alert-success" id="snackbar" role="alert">
-        <b class="ReultMessage"></b>
-    </div>
-    <div class="alert alert-success" id="snackbarDanger" role="alert">
-        <b id="ErrorMessage"></b>
-    </div>
+
     @if (ViewBag.SuccessMsg != null)
     {
         <div class="alert alert-success" id="snackbarAccount" role="alert">
             <b>@ViewBag.SuccessMsg</b>
         </div>
     }
-
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <div class="alert alert-danger" id="snackbarDanger" role="alert">
+            <b>@ViewBag.ErrorMsg</b>
+        </div>
+    }
+    <div class="alert alert-success" id="snackbar" role="alert">
+        <b class="ReultMessage"></b>
+    </div>
+    <div class="alert alert-success" id="snackbarDanger" role="alert">
+        <b id="ErrorMessage"></b>
+    </div>
 
     <div id="header">
         <div class="container">
@@ -81,10 +78,10 @@
                                 <button class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> Tài khoản</button>
                                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="@Url.Action("Detail", "Account", new { id = User.FindFirst(ClaimTypes.Sid).Value })"><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
-                                    <li><a href="#"><i class="icon-file"></i> Kiểm tra đơn hàng</a></li>
+                                    <li><a href="@Url.Action("Detail", "Account")"><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
+                                    <li><a href="@Url.Action("OrderTracking", "Order")"><i class="icon-file"></i> Kiểm tra đơn hàng</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="@Url.Action("Logout", "Account")"><i class="i"></i> Đăng xuất</a></li>
+                                    <li><a href="@Url.Action("Logout", "Account")"><i class="i"></i>Đăng xuất</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -92,7 +89,7 @@
                     else
                     {
                         <div class="btn-group btnDropdownAccount">
-                            <a href="@Url.Action("Login", "Account")" role="button" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
+                            <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" role="button" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
                         </div>
                     }
                 </div>
@@ -116,11 +113,26 @@
                     @await Component.InvokeAsync("SlideBar")
                     <br />
                     <div class="thumbnail">
-                      
+
                     </div>
                 </div>
                 <!-- Sidebar end=============================================== -->
                 @RenderBody()
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="form-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeButtonModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
             </div>
         </div>
     </div>
@@ -191,6 +203,20 @@
 
             // After 3 seconds, remove the show class from DIV
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        </script>
+    }
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
         </script>
     }
     <!-- Themes switcher section ============================================================================================= -->

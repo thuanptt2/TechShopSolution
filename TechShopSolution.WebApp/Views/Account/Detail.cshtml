@@ -26,7 +26,7 @@
     <div class="span9">
         <ul class="breadcrumb">
             <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
-            <li class="active">Thông tin cá nhân</li>
+            <li class="active">Tài khoản</li>
         </ul>
 
         <a href="#" name="detail"></a>
@@ -34,7 +34,6 @@
         <ul id="infoDetail" class="nav padding-container nav-tabs">
             <li class="active"><a href="#info" data-toggle="tab">Thông tin tài khoản</a></li>
             <li><a href="#address" onclick="showInPopup('@Url.Action("UpdateAddress","Account",new { id = Model.Id })')" data-toggle="tab">Sổ địa chỉ</a></li>
-            <li><a href="#orders" data-toggle="tab">Xem đơn hàng</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in wrapper-content" id="info">
@@ -101,9 +100,6 @@
 
                 </div>
 
-            </div>
-            <div class="tab-pane fade wrapper-content" id="orders">
-                Hello
             </div>
         </div>
     </div>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using TechShopSolution.ViewModels.Transport;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IOrderApiClient _orderApiClient;

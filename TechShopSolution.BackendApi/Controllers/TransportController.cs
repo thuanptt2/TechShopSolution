@@ -109,5 +109,13 @@ namespace TechShopSolution.BackendApi.Controllers
             var result = await _transportService.Detail(id);
             return Ok(result);
         }
+        [HttpGet("ConfirmDoneShip/{id}")]
+        public async Task<IActionResult> ConfirmDoneShip(int id)
+        {
+            var result = await _transportService.ConfirmDoneShip(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

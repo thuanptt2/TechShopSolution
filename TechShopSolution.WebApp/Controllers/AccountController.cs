@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.WebApp.Controllers
@@ -43,7 +44,7 @@ namespace TechShopSolution.WebApp.Controllers
         [HttpPost]
         [Route("dang-nhap")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request, string ReturnUrl)
         {
             if (!ModelState.IsValid)
                 return View(request);
@@ -61,8 +62,13 @@ namespace TechShopSolution.WebApp.Controllers
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
                             authProperties);
-
-                return RedirectToAction("Index", "Home");
+                if(!string.IsNullOrEmpty(ReturnUrl))
+                {
+                    return Redirect(ReturnUrl);
+                } else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
@@ -77,7 +83,7 @@ namespace TechShopSolution.WebApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("dang-ky")]
-        public async Task<IActionResult> Register(CustomerRegisterRequest request)
+        public async Task<IActionResult> Register(CustomerRegisterRequest request, string returnUrl)
         {
             if (!ModelState.IsValid)
                 return View();
@@ -97,6 +103,11 @@ namespace TechShopSolution.WebApp.Controllers
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
                             authProperties);
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
                 return RedirectToAction("Index", "Home");
 
             }
@@ -104,10 +115,15 @@ namespace TechShopSolution.WebApp.Controllers
             return View(request);
         }
         [Route("tai-khoan")]
-        public async Task<IActionResult> Detail(string id)
+        public async Task<IActionResult> Detail()
         {
-            int ID = int.Parse(id);
-            var result = await _customerApiClient.GetById(ID);
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+
+            var result = await _customerApiClient.GetById(int.Parse(id));
             if (!result.IsSuccess || result.ResultObject == null)
             {
                 ModelState.AddModelError("", result.Message);
@@ -115,7 +131,7 @@ namespace TechShopSolution.WebApp.Controllers
             }
             var updateRequest = new CustomerPublicUpdateRequest()
             {
-                Id = ID,
+                Id = int.Parse(id),
                 name = result.ResultObject.name,
                 birthday = result.ResultObject.birthday,
                 address = result.ResultObject.address,
@@ -268,5 +284,6 @@ namespace TechShopSolution.WebApp.Controllers
                           CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
+       
     }
 }
