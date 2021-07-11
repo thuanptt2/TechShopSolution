@@ -363,7 +363,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         create_at = a.p.create_at,
                         descriptions = a.p.descriptions,
                         featured = a.p.featured,
-                        image = a.p.image,
+                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
                         instock = a.p.instock,
                         meta_descriptions = a.p.meta_descriptions,
                         meta_keywords = a.p.meta_keywords,
@@ -378,14 +378,6 @@ namespace TechShopSolution.Application.Catalog.Product
                         warranty = a.p.warranty,
                     }).ToListAsync();
 
-                foreach (var pro in await data)
-                {
-                    if (pro.image != null)
-                    {
-                        ImageListResult image = new ImageListResult();
-                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
-                    }
-                }
 
                 return new PublicProductsViewModel { Count = Count, Products = await data };
             }
@@ -418,7 +410,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         create_at = a.p.create_at,
                         descriptions = a.p.descriptions,
                         featured = a.p.featured,
-                        image = a.p.image,
+                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
                         instock = a.p.instock,
                         meta_descriptions = a.p.meta_descriptions,
                         meta_keywords = a.p.meta_keywords,
@@ -433,14 +425,6 @@ namespace TechShopSolution.Application.Catalog.Product
                         warranty = a.p.warranty,
                     }).ToListAsync();
 
-                foreach (var pro in await data)
-                {
-                    if (pro.image != null)
-                    {
-                        ImageListResult image = new ImageListResult();
-                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
-                    }
-                }
 
                 return new PublicProductsViewModel { Count = Count, Products = await data };
             }
@@ -536,7 +520,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         create_at = a.Key.create_at,
                         descriptions = a.Key.descriptions,
                         featured = a.Key.featured,
-                        image = a.Key.image,
+                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
                         instock = a.Key.instock,
                         meta_descriptions = a.Key.meta_descriptions,
                         meta_keywords = a.Key.meta_keywords,
@@ -589,7 +573,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         create_at = a.p.create_at,
                         descriptions = a.p.descriptions,
                         featured = a.p.featured,
-                        image = a.p.image,
+                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
                         instock = a.p.instock,
                         meta_descriptions = a.p.meta_descriptions,
                         meta_keywords = a.p.meta_keywords,
@@ -604,14 +588,6 @@ namespace TechShopSolution.Application.Catalog.Product
                         warranty = a.p.warranty,
                     }).ToListAsync();
 
-                foreach (var pro in await data)
-                {
-                    if (pro.image != null)
-                    {
-                        ImageListResult image = new ImageListResult();
-                        pro.image = GetBase64StringForImage(_storageService.GetFileUrl(pro.image));
-                    }
-                }
 
                 return new PublicProductsViewModel { Count = Count, Products = await data };
 
@@ -669,7 +645,7 @@ namespace TechShopSolution.Application.Catalog.Product
             var product = await _context.Products.FindAsync(productId);
             if (product == null || product.isDelete)
             {
-                return new ApiErrorResult<ProductViewModel>("Sản phẩm không tồn tại");
+                return new ApiErrorResult<ProductViewModel>("Sản phẩm không tồn tại hoặc đã bị xóa");
             }
             string CateIds = "";
             var pic = await _context.CategoryProducts.Where(x => x.product_id == productId).ToListAsync();

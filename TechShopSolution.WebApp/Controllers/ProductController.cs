@@ -28,7 +28,10 @@ namespace TechShopSolution.WebApp.Controllers
         {
             var product = await _productApiClient.GetBySlug(slug);
             if (product.ResultObject == null)
-                return View();
+            {
+                TempData["error"] = product.Message;
+                return RedirectToAction("Index", "Home");
+            }
             string[] CateId = product.ResultObject.CateID.Split(",");
             var Category = await _categorytApiClient.GetById(int.Parse(CateId[0]));
             var Brand = await _brandApiClient.GetById(product.ResultObject.brand_id);
