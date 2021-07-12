@@ -199,7 +199,6 @@ namespace TechShopSolution.Application.Catalog.Transport
             string base64String = Convert.ToBase64String(imageBytes);
             return base64String;
         }
-
         public async Task<ApiResult<OrderDetailViewModel>> Detail(int id)
         {
             var query = from tp in _context.Transports
