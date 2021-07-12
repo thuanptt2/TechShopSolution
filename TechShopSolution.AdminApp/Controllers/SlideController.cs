@@ -107,5 +107,16 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View("Index");
         }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _slideApiClient.DeleteSlide(id);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Xóa thành công";
+                return RedirectToAction("Index");
+            }
+            TempData["error"] = result.Message;
+            return RedirectToAction("Index");
+        }
     }
 }
