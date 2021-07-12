@@ -101,7 +101,7 @@ namespace TechShopSolution.Application.Website.Slide
 
             int totalRow = await query.CountAsync();
 
-            var data = query.OrderByDescending(m => m.create_at)
+            var data = query.OrderBy(m => m.display_order)
                 .Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(a => new SlideViewModel()
@@ -154,11 +154,16 @@ namespace TechShopSolution.Application.Website.Slide
                     result.status = request.status;
                     result.update_at = DateTime.Now;
                     result.link = request.link;
+                    if(result.display_order != request.display_order)
+                    {
+                        await DisplayOrder(result.id, request.display_order);
+                    }
                     if (request.image != null)
                     {
                         await _storageService.DeleteFileAsync(result.image);
                         result.image = await this.SaveFile(request.image);
                     }
+                    
 
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
@@ -176,45 +181,35 @@ namespace TechShopSolution.Application.Website.Slide
             string base64String = Convert.ToBase64String(imageBytes);
             return base64String;
         }
-        public async Task<ApiResult<bool>> DisplayOrder(int slide_id, int display_position)
+        public async Task DisplayOrder(int slide_id, int display_position)
         {
-            try
+            var slides = await _context.Slides.OrderBy(x=>x.display_order).ToListAsync();
+            var quantity = slides.Count();
+            for (int i = 0; i < slides.Count; i++)
             {
-                bool flag = false;
-                var slides = await _context.Slides.ToListAsync();
-                for (int i = 0; i < slides.Count; i++)
+                if (slides[i].id == slide_id)
                 {
-                    if(slides[i].id == slide_id)
+                    if (slides[i].display_order > display_position)
                     {
-                        if(slides[i].display_order > display_position)
+                        for (  int j = display_position - 1; j < i; j++)
                         {
-                            for (int j = display_position + 1; j < i - 1; j++)
-                            {
-                                slides[j].display_order++;
-                            }
-                            slides[i].display_order = display_position;
+                            slides[j].display_order = slides[j].display_order + 1;
                         }
-                        else if(slides[i].display_order < display_position)
+                        slides[i].display_order = display_position;
+                    }
+                    else if (slides[i].display_order < display_position)
+                    {
+                        if (display_position > quantity)
+                            display_position = quantity;
+                        for (int j = i; j < display_position; j++)
                         {
-                            for (int j = i + 1; j < display_position - 1 ; j++)
-                            {
-                                slides[j].display_order--;
-                            }
-                            slides[i].display_order = display_position;
+                            slides[j].display_order = slides[j].display_order - 1;
                         }
+                        slides[i].display_order = display_position;
                     }
                 }
-                if (flag)
-                {
-                    await _context.SaveChangesAsync();
-                    return new ApiSuccessResult<bool>();
-                }
-                else return new ApiErrorResult<bool>("Không tìm thấy Slide này");
             }
-            catch
-            {
-                return new ApiErrorResult<bool>("Cập nhật thất bại");
-            }
+            await _context.SaveChangesAsync();
         }
         public async Task<List<SlideViewModel>> GetPublicSlide()
         {

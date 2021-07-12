@@ -468,3 +468,7 @@ table a:hover {
 .image-slide .ImageBoxMain {
     height: auto !important;
 }
+.display-order {
+    text-align: center;
+    font-size: 1.2rem;
+}

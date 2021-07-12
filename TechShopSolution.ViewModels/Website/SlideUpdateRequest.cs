@@ -8,8 +8,9 @@ namespace TechShopSolution.ViewModels.Website
 {
     public class SlideUpdateRequest
     {
-        public int id { get; set; }
         [Display(Name = "Hình ảnh Slide")]
+        public int id { get; set; }
+        public int display_order { get; set; }
         public IFormFile image { get; set; }
         [Display(Name = "Link liên kết")]
         public string link { get; set; }

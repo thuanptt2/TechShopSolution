@@ -56,6 +56,12 @@
                                 <input asp-for="link" class="form-control" id="txtName" />
                                 <span asp-validation-for="link" class="text-danger"></span>
                             </div>
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group mt-2">
+                                <label asp-for="display_order" class="control-label lableFormField"></label>
+                                <input asp-for="display_order" class="form-control" type="number"  min="1"/>
+                                <span asp-validation-for="display_order" class="text-danger"></span>
+                            </div>
                             <div class="form-group">
                                 <label asp-for="status" class="control-label lableFormField"></label>
                                 <div class="form-check">
@@ -72,7 +78,7 @@
                                 </div>
                             </div>
                             <div class="mt-5 text-right">
-                                <a class="btn btn-primary" href="/transport/index">
+                                <a class="btn btn-primary" href="/slide/index">
                                     <i class="fa fa-chevron-left"></i>  Trở về
                                 </a>
                                 <button class="btn btn-success" type="submit">

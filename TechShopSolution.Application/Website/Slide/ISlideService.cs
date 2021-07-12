@@ -16,7 +16,6 @@ namespace TechShopSolution.Application.Website.Slide
         Task<ApiResult<SlideViewModel>> GetById(int id);
         Task<ApiResult<bool>> Update(SlideUpdateRequest request);
         Task<List<SlideViewModel>> GetPublicSlide();
-        Task<ApiResult<bool>> DisplayOrder(int slide_id, int display_position);
 
     }
 }

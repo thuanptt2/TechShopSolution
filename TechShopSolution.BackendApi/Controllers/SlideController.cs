@@ -73,14 +73,6 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest(result);
         }
-        [HttpGet("DisplayOrder")]
-        public async Task<IActionResult> ChangeStatus(int slide_id, int display_position)
-        {
-            var result = await _slideService.DisplayOrder(slide_id, display_position);
-            if (!result.IsSuccess)
-                return BadRequest(result);
-            return Ok(result);
-        }
 
     }
 }
