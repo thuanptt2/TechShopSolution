@@ -47,7 +47,6 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 id = id,
                 status = result.ResultObject.status,
-                display_order = result.ResultObject.display_order,
                 link = result.ResultObject.link,
                 imageBase64 = result.ResultObject.image
             };

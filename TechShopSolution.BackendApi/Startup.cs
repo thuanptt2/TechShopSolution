@@ -36,6 +36,8 @@ using TechShopSolution.ViewModels.Catalog.Product.Validator;
 using TechShopSolution.ViewModels.System;
 using TechShopSolution.ViewModels.Transport;
 using TechShopSolution.ViewModels.Transport.Validator;
+using TechShopSolution.ViewModels.Website;
+using TechShopSolution.ViewModels.Website.Validator;
 
 namespace TechShopSolution.BackendApi
 {
@@ -81,6 +83,8 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IValidator<TransporterCreateRequest>, TransporterCreateValidator>();
             services.AddTransient<IValidator<TransporterCreateRequest>, TransporterCreateValidator>();
             services.AddTransient<IValidator<TransporterUpdateRequest>, TransporterUpdateValidator>();
+            services.AddTransient<IValidator<SlideUpdateRequest>, SlideUpdateValidator>();
+            services.AddTransient<IValidator<SlideCreateRequest>, SlideCreateValidator>();
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 

@@ -47,12 +47,13 @@ namespace TechShopSolution.Application.Website.Slide
         {
             try
             {
+                var slides = await _context.Slides.ToListAsync();
                 var slide = new TechShopSolution.Data.Entities.Slide
                 {
                     create_at = DateTime.Now,
                     link = request.link,
                     status = request.status,
-                    display_order = request.display_order,
+                    display_order = slides.Count() + 1,
                     image = await this.SaveFile(request.image),
                 };
                 _context.Slides.Add(slide);
@@ -78,6 +79,10 @@ namespace TechShopSolution.Application.Website.Slide
                 var result = await _context.Slides.FindAsync(id);
                 if (result != null)
                 {
+                    if (result.image != null)
+                    {
+                        await _storageService.DeleteFileAsync(result.image);
+                    }
                     _context.Slides.Remove(result);
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
@@ -147,7 +152,6 @@ namespace TechShopSolution.Application.Website.Slide
                 if (result != null)
                 {
                     result.status = request.status;
-                    result.display_order = request.display_order;
                     result.update_at = DateTime.Now;
                     result.link = request.link;
                     if (request.image != null)

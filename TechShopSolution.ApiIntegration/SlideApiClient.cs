@@ -46,7 +46,6 @@ namespace TechShopSolution.ApiIntegration
                 ByteArrayContent bytes = new ByteArrayContent(data);
                 requestContent.Add(bytes, "image", request.image.FileName);
             }
-            requestContent.Add(new StringContent(request.display_order.ToString()), "display_order");
             requestContent.Add(new StringContent(request.link.ToString()), "link");
             requestContent.Add(new StringContent(request.status.ToString()), "status");
 
@@ -110,7 +109,6 @@ namespace TechShopSolution.ApiIntegration
                 ByteArrayContent bytes = new ByteArrayContent(data);
                 requestContent.Add(bytes, "image", request.image.FileName);
             }
-            requestContent.Add(new StringContent(request.display_order.ToString()), "display_order");
             requestContent.Add(new StringContent(request.link.ToString()), "link");
             requestContent.Add(new StringContent(request.status.ToString()), "status");
             requestContent.Add(new StringContent(request.id.ToString()), "id");
