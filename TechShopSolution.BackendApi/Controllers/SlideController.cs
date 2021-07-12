@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TechShopSolution.Application.Website.Slide;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Website;
+using TechShopSolution.ViewModels.Website.Slide;
 
 namespace TechShopSolution.BackendApi.Controllers
 {

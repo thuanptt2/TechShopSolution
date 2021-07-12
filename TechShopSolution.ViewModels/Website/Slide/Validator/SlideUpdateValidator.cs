@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TechShopSolution.ViewModels.Website.Validator
+namespace TechShopSolution.ViewModels.Website.Slide.Validator
 {
     public class SlideUpdateValidator : AbstractValidator<SlideUpdateRequest>
     {

@@ -11,6 +11,7 @@ using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Website;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using TechShopSolution.ViewModels.Website.Slide;
 
 namespace TechShopSolution.Application.Website.Slide
 {

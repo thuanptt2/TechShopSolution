@@ -37,7 +37,8 @@ using TechShopSolution.ViewModels.System;
 using TechShopSolution.ViewModels.Transport;
 using TechShopSolution.ViewModels.Transport.Validator;
 using TechShopSolution.ViewModels.Website;
-using TechShopSolution.ViewModels.Website.Validator;
+using TechShopSolution.ViewModels.Website.Slide;
+using TechShopSolution.ViewModels.Website.Slide.Validator;
 
 namespace TechShopSolution.BackendApi
 {

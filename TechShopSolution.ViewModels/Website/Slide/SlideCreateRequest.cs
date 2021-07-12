@@ -4,18 +4,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace TechShopSolution.ViewModels.Website
+namespace TechShopSolution.ViewModels.Website.Slide
 {
-    public class SlideUpdateRequest
+    public class SlideCreateRequest
     {
         [Display(Name = "Hình ảnh Slide")]
-        public int id { get; set; }
-        public int display_order { get; set; }
         public IFormFile image { get; set; }
         [Display(Name = "Link liên kết")]
         public string link { get; set; }
         [Display(Name = "Trạng thái")]
         public bool status { get; set; }
-        public string imageBase64 { get; set; }
     }
 }

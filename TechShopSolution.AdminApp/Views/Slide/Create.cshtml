@@ -1,18 +1,18 @@
 ﻿
-@model TechShopSolution.ViewModels.Website.SlideCreateRequest
+@model TechShopSolution.ViewModels.Website.Slide.SlideCreateRequest
 
 @{
     ViewData["Title"] = "Thêm mới Slide";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section JsFooter {
-    <script>
-        $("#ProductImageInput").change(function (event) {
-            var x = URL.createObjectURL(event.target.files[0]);
-            $("#ProductImage").attr("src", x);
-            console.log(event);
-        })
-    </script>
+        <script>
+            $("#ProductImageInput").change(function (event) {
+                var x = URL.createObjectURL(event.target.files[0]);
+                $("#ProductImage").attr("src", x);
+                console.log(event);
+            })
+        </script>
 }
 <div class="container-fluid">
     <h3 class="mt-4">Thêm mới Slide</h3>

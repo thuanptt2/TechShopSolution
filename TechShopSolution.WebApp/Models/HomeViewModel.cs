@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Product;
-using TechShopSolution.ViewModels.Common;
-using TechShopSolution.ViewModels.Website;
+using TechShopSolution.ViewModels.Website.Slide;
 
 namespace TechShopSolution.WebApp.Models
 {

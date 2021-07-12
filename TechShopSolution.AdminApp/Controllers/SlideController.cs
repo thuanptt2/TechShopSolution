@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Website;
+using TechShopSolution.ViewModels.Website.Slide;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
