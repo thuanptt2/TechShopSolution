@@ -171,7 +171,10 @@ else
                             foreach (var item in Model.Ratings)
                             {
                                 <div class="review" itemscope itemtype="http://schema.org/Review">
-                                    <h4 class="subheading" itemprop="itemReviewed">@item.content</h4>
+                                    <div class="space-between-flex">
+                                        <h4 class="subheading" itemprop="itemReviewed">@item.content</h4>
+                                        <p class="receive-item">@item.date_rating</p>
+                                    </div>
                                     <p class="author" itemprop="author"><small>Bởi:</small> @item.cus_name</p>
                                     <div class="rating rating--read-only">
                                         @if (item.score == 1)

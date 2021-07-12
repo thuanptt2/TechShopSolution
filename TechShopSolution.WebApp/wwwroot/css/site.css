@@ -1033,7 +1033,7 @@ body {
         top: 4px;
     }
 .review {
-    padding-left: 30px;
+    padding: 0 30px;
 }
 #myTabContent2 .tab-pane {
     margin: 30px

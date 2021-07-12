@@ -12,5 +12,6 @@ namespace TechShopSolution.ViewModels.Website
         public int display_order { get; set; }
         public string link { get; set; }
         public bool status { get; set; }
+        public string imageBase64 { get; set; }
     }
 }

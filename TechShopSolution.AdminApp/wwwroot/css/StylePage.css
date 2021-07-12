@@ -465,3 +465,6 @@ table a:hover {
     font-weight: 500;
     color: #007bff;
 }
+.image-slide .ImageBoxMain {
+    height: auto !important;
+}
