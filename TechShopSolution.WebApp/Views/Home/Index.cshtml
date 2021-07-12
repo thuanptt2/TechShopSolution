@@ -10,34 +10,16 @@
     <div id="carouselBlk">
         <div id="myCarousel" class="carousel slide">
             <div class="carousel-inner">
-                <div class="item active">
-                    <div class="container">
-                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/06/Banner-Web-Tong-hop-Nvidia-Geforce-RTX%E2%84%A2.jpg.webp" alt="special offers" /></a>
-                        <div class="carousel-caption">
-                            <h4>Second Thumbnail label</h4>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                @for (int i = 0; i < Model.Sliders.Count; i++)
+                {
+                    <div class="item @(i == 0 ? "active": "")">
+                        <div class="container">
+                            <a href="@Model.Sliders[i].link" class="slide-link">
+                                <img class="slider-image" src="data:image/jpeg;base64, @Model.Sliders[i].image" alt="slide image" />
+                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="item">
-                    <div class="container">
-                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-May-bo-Thuong-Hieu-Gia-Vi-Dieu-1000x633-1.jpg.webp" alt="" /></a>
-                        <div class="carousel-caption">
-                            <h4>Second Thumbnail label</h4>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="container">
-                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-EVGA-RTX-Series-Summer-2021.jpg.webp" alt="" /></a>
-                        <div class="carousel-caption">
-                            <h4>Second Thumbnail label</h4>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        </div>
-
-                    </div>
-                </div>
+                }
             </div>
             <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
             <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>

@@ -19,7 +19,6 @@ using TechShopSolution.WebApp.Models;
 
 namespace TechShopSolution.WebApp.Controllers
 {
-    [Authorize]
     public class CartController : Controller
     {
         private readonly IProductApiClient _productApiClient;
@@ -37,12 +36,12 @@ namespace TechShopSolution.WebApp.Controllers
             _paymentApiClient = paymentApiClient;
             _orderApiClient = orderApiClient;
         }
-        [AllowAnonymous]
         [Route("/gio-hang")]
         public IActionResult Index()
         {
             return View();
         }
+        [Authorize]
         [HttpGet]
         [Route("/gio-hang/thanh-toan")]
         public async Task<IActionResult> Checkout()
@@ -185,7 +184,6 @@ namespace TechShopSolution.WebApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetListItems()
         {
@@ -208,7 +206,6 @@ namespace TechShopSolution.WebApp.Controllers
             }
             return Ok(currentCart);
         }
-        [AllowAnonymous]
         public async Task<IActionResult> AddToCart(int id)
         {
             var product = await _productApiClient.GetById(id);
@@ -249,7 +246,6 @@ namespace TechShopSolution.WebApp.Controllers
 
             return Ok(currentCart);
         }
-        [AllowAnonymous]
         public async Task<IActionResult> UpdateCart(int id, int quantity)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
@@ -286,7 +282,6 @@ namespace TechShopSolution.WebApp.Controllers
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
         }
-        [AllowAnonymous]
         public async Task<IActionResult> UseCoupon(string code)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
@@ -354,7 +349,6 @@ namespace TechShopSolution.WebApp.Controllers
             }
 
         }
-        [AllowAnonymous]
         public async Task<JsonResult> LoadProvince()
         {
             try
@@ -375,7 +369,6 @@ namespace TechShopSolution.WebApp.Controllers
                 return null;
             }
         }
-        [AllowAnonymous]
         public async Task<JsonResult> LoadDistrict(int provinceID)
         {
             try
@@ -396,7 +389,6 @@ namespace TechShopSolution.WebApp.Controllers
                 return null;
             }
         }
-        [AllowAnonymous]
         public async Task<JsonResult> LoadWard(int districtID)
         {
             try

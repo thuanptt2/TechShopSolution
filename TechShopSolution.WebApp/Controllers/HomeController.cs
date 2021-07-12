@@ -15,12 +15,15 @@ namespace TechShopSolution.WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IProductApiClient _productApiClient;
         private readonly ICategoryApiClient _categorytApiClient;
+        private readonly ISlideApiClient _slideApiClient;
 
-        public HomeController(ILogger<HomeController> logger, IProductApiClient productApiClient, ICategoryApiClient categorytApiClient)
+        public HomeController(ILogger<HomeController> logger, IProductApiClient productApiClient, 
+            ICategoryApiClient categorytApiClient, ISlideApiClient slideApiClient)
         {
             _logger = logger;
             _productApiClient = productApiClient;
             _categorytApiClient = categorytApiClient;
+            _slideApiClient = slideApiClient;
         }
         public async Task<IActionResult> Index()
         {
@@ -33,6 +36,7 @@ namespace TechShopSolution.WebApp.Controllers
             }
             var viewModel = new HomeViewModel
             {
+                Sliders = await _slideApiClient.GetAll(),
                 FeaturedProducts = await _productApiClient.GetFeaturedProducts(20),
                 BestSellerProducts = await _productApiClient.GetBestSellerProducts(20),
                 ListCategoryProducts = CategoryProducts,

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Extensions;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -13,6 +14,7 @@ using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.WebApp.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IAdminApiClient _adminApiClient;
