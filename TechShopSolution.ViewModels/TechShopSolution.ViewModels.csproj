@@ -13,8 +13,4 @@
     <ProjectReference Include="..\TechShopSolution.Data\TechShopSolution.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Website\Contact\" />
-  </ItemGroup>
-
 </Project>
