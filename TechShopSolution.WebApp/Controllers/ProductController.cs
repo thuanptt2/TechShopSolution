@@ -128,6 +128,12 @@ namespace TechShopSolution.WebApp.Controllers
                         danhmuccha = Category.ResultObject.id;
                     }
                 }
+                if(giathapnhat > giacaonhat)
+                {
+                    decimal temp = (decimal)giathapnhat;
+                    giathapnhat = giacaonhat;
+                    giacaonhat = temp;
+                }
                 var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
                 {
                     CategorySlug = danhmuc,
@@ -170,6 +176,12 @@ namespace TechShopSolution.WebApp.Controllers
             else
             {
                 Categories = await OrderCateToTree(await _categorytApiClient.GetAllCategory());
+                if (giathapnhat > giacaonhat)
+                {
+                    decimal temp = (decimal)giathapnhat;
+                    giathapnhat = giacaonhat;
+                    giacaonhat = temp;
+                }
                 var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
                 {
                     CategorySlug = danhmuc,

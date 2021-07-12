@@ -68,8 +68,8 @@
             </select>
         </div>
         <div class="d-flex align-item-center margin-bottom-20">
-            <input id="inputSortPriceLow" name="giathapnhat" type="number" min="0" placeholder="Giá thấp nhất" value="@ViewBag.LowestPrice" /><span class="margin-left-20">-</span>
-            <input id="inputSortPriceHigh" name="giacaonhat" type="number" min="0" class="margin-left-20" placeholder="Giá cao nhất" value="@ViewBag.HighestPrice" />
+            <input id="inputSortPriceLow" name="giathapnhat" type="number" min="0" max="1000000000" placeholder="Giá thấp nhất" value="@ViewBag.LowestPrice" /><span class="margin-left-20">-</span>
+            <input id="inputSortPriceHigh" name="giacaonhat" type="number" min="0" max="1000000000" class="margin-left-20" placeholder="Giá cao nhất" value="@ViewBag.HighestPrice" />
             <button type="submit" id="btnSortPrice" class="btn btn-primary margin-left-20">Tìm kiếm</button>
         </div>
 

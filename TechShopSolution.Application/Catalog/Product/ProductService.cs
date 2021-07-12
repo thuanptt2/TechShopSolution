@@ -251,7 +251,7 @@ namespace TechShopSolution.Application.Catalog.Product
                             select new { p, pic, c};
 
                 if (!String.IsNullOrEmpty(request.Keyword))
-                    query = query.Where(x => x.p.name.Contains(request.Keyword));
+                    query = query.Where(x => EF.Functions.Like(x.p.name, $"%{request.Keyword}%"));
 
                 if (!String.IsNullOrEmpty(request.CategorySlug))
                     query = query.Where(x => x.c.cate_slug.Equals(request.CategorySlug));
