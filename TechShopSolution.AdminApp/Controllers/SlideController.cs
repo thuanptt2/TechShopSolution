@@ -92,5 +92,20 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var result = await _slideApiClient.ChangeStatus(id);
+            if (result == null)
+            {
+                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+            }
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Thay đổi trạng thái thành công";
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
     }
 }
