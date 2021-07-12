@@ -33,6 +33,16 @@ $('.rating-bar-container').each(function () {
         $(this).children('.bar').width($(this).attr('valuenow') * 200 / rating.attr('valuemax') + '%');
     }
 });
-
+if (isNaN(parseFloat(averageScore))) {
+    averageScore = 0;
+}
 $('.reviews-num').html(' ' + Number(rating.attr('valuemax')).toLocaleString('ru'));
 $('.score-container .score').html(averageScore);
+$('#rating-score-number').html(averageScore + "/5,0");
+$('#rating-vote-times').html(" (" + totalVotes + " lượt)");
+const starScore = document.getElementById("rating-score-star");
+if (averageScore == 0) {
+    starScore.style.setProperty("--rating", 0);
+} else {
+    starScore.style.setProperty("--rating", parseFloat(averageScore.replace(",", ".")));
+}

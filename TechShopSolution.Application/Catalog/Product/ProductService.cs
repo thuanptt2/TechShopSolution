@@ -732,7 +732,8 @@ namespace TechShopSolution.Application.Catalog.Product
             var dataRating = query2.AsEnumerable()
               .GroupBy(g => g.r);
 
-            List<RatingViewModel> ListRating = dataRating.Select(x => new RatingViewModel()
+            List<RatingViewModel> ListRating = dataRating.OrderByDescending(x => x.Key.date_rating)
+                .Select(x => new RatingViewModel()
             {
                 cus_id = x.Key.cus_id,
                 content = x.Key.content,

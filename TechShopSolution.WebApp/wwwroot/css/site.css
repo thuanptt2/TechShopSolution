@@ -1073,3 +1073,33 @@ body {
 .detail-product-price {
     font-size: 1.2rem !important;
 }
+:root {
+    --star-size: 30px;
+    --star-color: #9199a1;
+    --star-background: rgb(239, 197, 41);
+}
+
+.Stars {
+    --percent: calc(var(--rating) / 5 * 100%);
+    display: inline-block;
+    font-size: var(--star-size);
+    font-family: Times;
+    line-height: 1;
+}
+
+    .Stars::before {
+        content: "★★★★★";
+        letter-spacing: 3px;
+        background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+#rating-vote-times {
+    margin: 7px
+}
+#rating-score-number {
+    font-weight: bold
+}
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}

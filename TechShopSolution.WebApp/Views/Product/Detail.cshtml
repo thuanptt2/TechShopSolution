@@ -80,6 +80,11 @@ else
                 <div class="product-short-desc">
                     @Html.Raw(Model.Product.short_desc)
                 </div><br />
+                      <div class="d-flex margin-bottom-10">
+                          <div class="Stars" id="rating-score-star"></div>
+                          <span id="rating-score-number"></span>
+                          <span id="rating-vote-times"></span>
+                      </div>
                 @if (Model.Product.warranty > 0)
                 {
                     <p class="margin-bottom-20">
