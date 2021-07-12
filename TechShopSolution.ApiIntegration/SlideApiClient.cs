@@ -44,7 +44,7 @@ namespace TechShopSolution.ApiIntegration
                     data = br.ReadBytes((int)request.image.OpenReadStream().Length);
                 }
                 ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "Image", request.image.FileName);
+                requestContent.Add(bytes, "image", request.image.FileName);
             }
             requestContent.Add(new StringContent(request.display_order.ToString()), "display_order");
             requestContent.Add(new StringContent(request.link.ToString()), "link");

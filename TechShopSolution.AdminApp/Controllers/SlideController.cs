@@ -77,5 +77,20 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             return View();
         }
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create(SlideCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _slideApiClient.CreateSlide(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Thêm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }
