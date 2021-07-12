@@ -12,10 +12,10 @@ namespace TechShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SlideContoller : ControllerBase
+    public class SlideController : ControllerBase
     {
         private readonly ISlideService _slideService;
-        public SlideContoller(ISlideService slideService)
+        public SlideController(ISlideService slideService)
         {
             _slideService = slideService;
         }

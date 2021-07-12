@@ -1,0 +1,148 @@
+﻿@using TechShopSolution.ViewModels.Common;
+@model PagedResult<TechShopSolution.ViewModels.Website.SlideViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách Slide";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section jsFooter {
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+}
+<div class="container-fluid px-4">
+    <h3 class="mt-4">Danh sách Slide</h3>
+    <ol class="breadcrumb mb-1">
+        <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+        <li class="breadcrumb-item active"><a href="#">Slide</a></li>
+    </ol>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="padding-container">
+        <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Slide">
+            <i class="fa fa-plus"></i>
+            Thêm mới
+        </a>
+        <!-- Notification -->
+        @if (ViewBag.SuccessMsg != null)
+        {
+            <div class="alert alert-success" id="snackbar" role="alert">
+                <b>@ViewBag.SuccessMsg</b>
+            </div>
+        }
+        @if (ViewBag.ErrorMsg != null)
+        {
+            <div class="alert alert-danger" id="snackbarDanger" role="alert">
+                <b>@ViewBag.ErrorMsg</b>
+            </div>
+        }
+        <!-- The actual snackbar -->
+        <div class="table-responsive shadow-lg">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light thead-dark">
+                    <tr>
+                        <th scope="col" class="text-center" width="70">
+                            Ảnh
+                        </th>
+                        <th scope="col">
+                            Link slide
+                        </th>
+                        <th scope="col">
+                            Thứ tự
+                        </th>
+                        <th scope="col" class="text-center">
+                            Trạng thái
+                        </th>
+                        <th scope="col" class="text-center">
+                            Tác vụ
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @if (Model.Items == null)
+                        {
+                            <tr>
+                                <td>
+                                    Không có Slide nào.
+                                </td>
+                            </tr>
+                        }
+                        else if (Model.TotalRecords == 0)
+                        {
+                            <tr>
+                                <td>
+                                    Không tìm thấy Slide nào.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <a href="@Url.Action("Update", "Slide", new { id = item.id })"><img src="data:image/jpeg;base64,@item.image" width="140" height="70" /></a>
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.link)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.display_order)
+                                    </td>
+
+                                    @if (item.status)
+                                    {
+                                        <td align="center">
+                                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Transport", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td align="center">
+                                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Transport", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        </td>
+                                    }
+                                    <td align="center">
+                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa Slide này? thao tác này không thể hoàn tác?')">Xóa</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            @await Component.InvokeAsync("Pager", Model)
+        </div>
+    </div>
+</div>
