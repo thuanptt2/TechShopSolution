@@ -12,14 +12,12 @@ namespace TechShopSolution.Data.Configurations
         public void Configure(EntityTypeBuilder<Rating> builder)
         {
             builder.ToTable("Rating");
-            builder.HasKey(x => x.id);
+            builder.HasKey(x => new { x.product_id, x.cus_id });
             builder.Property(x => x.score).IsRequired();
-            builder.Property(x => x.email).IsRequired().HasMaxLength(255).IsUnicode(false);
-            builder.Property(x => x.product_id).IsRequired();
-            builder.Property(x => x.name).IsRequired().HasMaxLength(255);
             builder.Property(x => x.date_rating)
                 .HasDefaultValueSql("GetDate()");
             builder.HasOne(x => x.Product).WithMany(t => t.Ratings).HasForeignKey(x => x.product_id);
+            builder.HasOne(x => x.Customer).WithMany(t => t.Ratings).HasForeignKey(x => x.cus_id);
         }
     }
 }

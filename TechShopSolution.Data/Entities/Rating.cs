@@ -6,14 +6,12 @@ namespace TechShopSolution.Data.Entities
 {
     public class Rating
     {
-        public int id { get; set; }
         public int product_id { get; set; }
+        public int cus_id { get; set; }
         public int score { get; set; }
         public string content { get; set; }
         public DateTime date_rating { get; set; }
-        public bool isActive { get; set; }
-        public string name { get; set; }
-        public string email { get; set; }
         public Product Product { get; set; }
+        public Customer Customer { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechShopSolution.Data.EF;
 
 namespace TechShopSolution.Data.Migrations
 {
     [DbContext(typeof(TechShopDBContext))]
-    partial class TechShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210711092758_RemoveTableRating")]
+    partial class RemoveTableRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -834,32 +836,6 @@ namespace TechShopSolution.Data.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("TechShopSolution.Data.Entities.Rating", b =>
-                {
-                    b.Property<int>("product_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("cus_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("date_rating")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GetDate()");
-
-                    b.Property<int>("score")
-                        .HasColumnType("int");
-
-                    b.HasKey("product_id", "cus_id");
-
-                    b.HasIndex("cus_id");
-
-                    b.ToTable("Rating");
-                });
-
             modelBuilder.Entity("TechShopSolution.Data.Entities.Slide", b =>
                 {
                     b.Property<int>("id")
@@ -1076,25 +1052,6 @@ namespace TechShopSolution.Data.Migrations
                     b.Navigation("Brand");
                 });
 
-            modelBuilder.Entity("TechShopSolution.Data.Entities.Rating", b =>
-                {
-                    b.HasOne("TechShopSolution.Data.Entities.Customer", "Customer")
-                        .WithMany("Ratings")
-                        .HasForeignKey("cus_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TechShopSolution.Data.Entities.Product", "Product")
-                        .WithMany("Ratings")
-                        .HasForeignKey("product_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("TechShopSolution.Data.Entities.Transport", b =>
                 {
                     b.HasOne("TechShopSolution.Data.Entities.Order", "Order")
@@ -1137,8 +1094,6 @@ namespace TechShopSolution.Data.Migrations
             modelBuilder.Entity("TechShopSolution.Data.Entities.Customer", b =>
                 {
                     b.Navigation("Order");
-
-                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Order", b =>
@@ -1158,8 +1113,6 @@ namespace TechShopSolution.Data.Migrations
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductInCategory");
-
-                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Transporter", b =>

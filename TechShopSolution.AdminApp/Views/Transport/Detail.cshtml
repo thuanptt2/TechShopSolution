@@ -89,10 +89,16 @@
                         Trạng thái giao hàng
                     </div>
                     <div class="ui-product-head">
-                        @if (Model.Transport.ship_status == 1)
+                        @if (Model.Transport.ship_status == 2)
                         {
                             <span class="text-success-order">
-                                ✔  Đã giao hàng
+                                ✔  Giao hàng thành công
+                            </span>
+                        }
+                        else if (Model.Transport.ship_status == 1)
+                        {
+                            <span class="text-info-order">
+                                Đang giao hàng
                             </span>
                         }
                         else if (Model.Transport.ship_status == 0)
@@ -134,6 +140,24 @@
                         </div>
                     </div>
                 }
+                else if (Model.Transport.ship_status == 2)
+                {
+                    <div class="row alert alert-success box-shadow">
+                        <div class="col-auto p-0 pr-4">
+                            <span class="omni-svg-create svg-next-icon svg-next-icon-size-16">
+                                <i class="fas fa-check text-success-order"></i>
+                            </span>
+                        </div>
+                        <div class="col-auto p-0">
+                            <p class="omni-alert-pannel-title">
+                                <strong>Đơn hàng được giao thành công</strong>
+                            </p>
+                            <p class="omni-alert-pannel-description mb-0">
+                                Đơn hàng được giao thành công đến khách hàng vào lúc <strong>@Model.Transport.done_at</strong>. <br />
+                            </p>
+                        </div>
+                    </div>
+                }
                 <div class="wrapper-content shadow mb-3">
                     <label class="title-fill">Thông tin phiếu vận chuyển</label>
                     <hr />
@@ -152,19 +176,25 @@
                                     <label class="lableFormField min-width-120px">Mã vận đơn</label>
                                 </div>
                                 <div class="col-auto text-right lading-code">
-                                    @if (Model.Transport.lading_code == "")
+                                    @if (Model.Transport.lading_code == null)
                                     {
                                         <span>--- </span>
-                                        <a onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
+                                        if (Model.Transport.ship_status != -1 && Model.Transport.ship_status != 2)
+                                        {
+                                            <a onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                        }
                                     }
                                     else
                                     {
                                         <span>@Model.Transport.lading_code </span>
-                                        <a href="#" onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
+                                        if (Model.Transport.ship_status != -1 && Model.Transport.ship_status != 2)
+                                        {
+                                            <a onclick="showInPopup('@Url.Action("UpdateLadingCode","Transport",new { id = Model.Transport.id, lading_code = Model.Transport.lading_code }, Context.Request.Scheme)','Cập nhật mã vận đơn')">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                        }
                                     }
                                 </div>
                             </div>
@@ -347,11 +377,14 @@
                         </tbody>
                     </table>
                 </div>
-                @if (Model.Transport.ship_status != -1)
+                @if (Model.Transport.ship_status != -1 && Model.Transport.ship_status != 2)
                 {
                     <div class="text-right mt-3">
                         <a class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn vận chuyển này, hành động này không thể hoàn tác?')" href="@Url.Action("CancelShippingOrder","Transport",new { id = Model.Transport.id })">
                             Hủy giao hàng
+                        </a>
+                        <a class="btn btn-success" onclick="return confirm('Bạn có chắc chắn muốn xác nhận giao hàng thành công không, hành động này không thể hoàn tác?')" href="@Url.Action("ConfirmDoneShip","Transport",new { transport_id = Model.Transport.id })">
+                            Xác nhận giao hàng thành công
                         </a>
                     </div>
                 }

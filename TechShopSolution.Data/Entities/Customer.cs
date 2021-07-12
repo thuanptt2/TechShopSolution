@@ -20,5 +20,6 @@ namespace TechShopSolution.Data.Entities
         public DateTime? update_at { get; set; }
         public DateTime? delete_at { get; set; }
         public List<Order> Order { get; set; }
+        public List<Rating> Ratings { get; set; }
     }
 }

@@ -71,5 +71,21 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("CustomerOrders/{id}")]
+        public async Task<IActionResult> GetCustomerOrders(int id)
+        {
+            var result = await _orderService.GetCustomerOrders(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("OrderDetail/{id}")]
+        public IActionResult DetailOrder(int id)
+        {
+            var result = _orderService.GetDetailOrder(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

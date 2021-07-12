@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.Utilities.Constants;
@@ -43,8 +44,15 @@ namespace TechShopSolution.WebApp.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> Checkout(string id)
+        [Route("/gio-hang/thanh-toan")]
+        public async Task<IActionResult> Checkout()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+
             var customer = await _customerApiClient.GetById(int.Parse(id));
             if (customer.ResultObject != null)
             {

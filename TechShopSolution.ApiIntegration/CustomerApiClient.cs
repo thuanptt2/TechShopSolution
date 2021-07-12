@@ -181,5 +181,48 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<List<WardModel>>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<List<WardModel>>>(result);
         }
+        public async Task<ApiResult<List<OrderPublicViewModel>>> GetCustomerOrders(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/order/CustomerOrders/{id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<List<OrderPublicViewModel>>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<List<OrderPublicViewModel>>>(result);
+        }
+        public async Task<ApiResult<OrderPublicViewModel>> GetOrderDetail(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/order/OrderDetail/{id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<OrderPublicViewModel>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<OrderPublicViewModel>>(result);
+        }
+        public async Task<ApiResult<string>> ConfirmDoneShip(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/transport/ConfirmDoneShip/{id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
+        }
+        public async Task<ApiResult<string>> CancelOrder(OrderCancelRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var respone = await client.PostAsync($"/api/order/cancelorder", httpContent);
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
+        }
+
     }
 }

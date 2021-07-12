@@ -186,15 +186,15 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
         }
-        public async Task<ApiResult<ProductViewModel>> GetBySlug(string slug)
+        public async Task<ApiResult<PublicProductDetailViewModel>> GetPublicProductDetail(string slug)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/product/slug?slug={slug}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
-            return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<PublicProductDetailViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<PublicProductDetailViewModel>>(body);
         }
         public async Task<PagedResult<ProductViewModel>> GetProductPagings(GetProductPagingRequest request)
         {
@@ -394,7 +394,6 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<PublicCayegoyProductsViewModel>(body);
             return JsonConvert.DeserializeObject<PublicCayegoyProductsViewModel>(body);
         }
-
         public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
         {
             var client = _httpClientFactory.CreateClient();
@@ -404,6 +403,20 @@ namespace TechShopSolution.ApiIntegration
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
             return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+        }
+        public async Task<ApiResult<bool>> RatingPoduct(ProductRatingRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/api/product/rating", httpContent);
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
     }

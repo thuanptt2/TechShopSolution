@@ -78,14 +78,21 @@
                         Trạng thái giao hàng
                     </div>
                     <div class="ui-product-head">
-                        @if (Model.Order.ship_status == 1)
+                        @if (Model.Order.ship_status == 2)
                         {
                             <span class="text-success-order">
-                                ✔  Đã giao hàng
+                                ✔  Giao hàng thành công
+                            </span>
+                        }
+                        else if (Model.Order.ship_status == 1)
+                        {
+                            <span class="text-info-order">
+                                Đang giao hàng
                             </span>
                         }
                         else if (Model.Order.ship_status == 0)
                         {
+
                             <span class="text-warning-order">
                                 ◯ Chưa giao hàng
                             </span>
@@ -210,6 +217,24 @@
                 </div>
             </div>
         }
+        else if (Model.Order.ship_status == 2)
+        {
+            <div class="row alert alert-success box-shadow">
+                <div class="col-auto p-0 pr-4">
+                    <span class="omni-svg-create svg-next-icon svg-next-icon-size-16">
+                        <i class="fas fa-check text-success-order"></i>
+                    </span>
+                </div>
+                <div class="col-auto p-0">
+                    <p class="omni-alert-pannel-title">
+                        <strong>Đơn hàng được giao thành công</strong>
+                    </p>
+                    <p class="omni-alert-pannel-description mb-0">
+                        Đơn hàng được giao thành công đến khách hàng vào lúc <strong>@Model.Transport.done_at</strong>. <br />
+                    </p>
+                </div>
+            </div>
+        }
         <div class="row mt-4">
             <div class="col-12 col-lg-8">
                 <div class="wrapper-content shadow">
@@ -310,8 +335,11 @@
                                 <div class="col">
                                     <label class="lableFormField">Tổng giá trị đơn hàng</label>
                                 </div>
+                                @{
+                                    var total_finally = Model.Order.total + Model.Order.transport_fee - Model.Order.discount;
+                                }
                                 <div class="col text-right">
-                                    @String.Format(info, "{0:N0}", Model.Order.total + Model.Order.transport_fee - Model.Order.discount)
+                                    @String.Format(info, "{0:N0}", total_finally)
                                 </div>
                             </div>
                         </div>
@@ -325,21 +353,28 @@
                             Đơn hàng này chưa được vận chuyển
                         </span>
                         <div class="text-right">
-                            @if (Model.Order.status == 0)
-                            {
-                                <a id="btnEdit" class="btn btn-primary" onclick="return alert('Đơn hàng này chưa được duyệt, không thể tạo đơn vận chuyển')">
-                                    Giao hàng
-                                </a>
-                            }
-                            else if (Model.Order.status == -1 || Model.Order.ship_status == 1)
+
+                            @if (Model.Order.status == -1 || Model.Order.ship_status == 1)
                             {
                                 <button type="button" id="btnEdit" class="btn btn-primary" disabled>
                                     Giao hàng
                                 </button>
                             }
+                            else if (Model.Order.status == 0)
+                            {
+                                <a id="btnEdit" class="btn btn-primary" onclick="return alert('Đơn hàng này chưa được duyệt, không thể tạo đơn vận chuyển')">
+                                    Giao hàng
+                                </a>
+                            }
+                            else if (!Model.Order.isPay)
+                            {
+                                <a id="btnEdit" class="btn btn-primary" onclick="return alert('Đơn hàng này chưa thanh toán, Hãy liên hệ với khách hàng để thanh toán trước đã nhé!')">
+                                    Giao hàng
+                                </a>
+                            }
                             else
                             {
-                                <a id="btnCreateShippingOrder" class="btn btn-primary" onclick="showInPopup('@Url.Action("CreateShippingOrder","Transport",new { id = Model.Order.id, receive_address = Model.Order.address_receiver }, Context.Request.Scheme)','Tạo đơn vận chuyển')">
+                                <a id="btnCreateShippingOrder" class="btn btn-primary" onclick="showInPopup('@Url.Action("CreateShippingOrder","Transport",new { id = Model.Order.id, cod_price = total_finally, receive_address = Model.Order.address_receiver }, Context.Request.Scheme)','Tạo đơn vận chuyển')">
                                     Giao hàng
                                 </a>
                             }
@@ -392,10 +427,16 @@
                                             <label class="lableFormField">Trạng thái vận chuyển</label>
                                         </div>
                                         <div class="col text-right">
-                                            @if (Model.Transport.ship_status == 1)
+                                            @if (Model.Transport.ship_status == 2)
                                             {
                                                 <span class="text-success-order">
-                                                    ✔  Đã giao hàng
+                                                    ✔  Giao hàng thành công
+                                                </span>
+                                            }
+                                            else if (Model.Transport.ship_status == 1)
+                                            {
+                                                <span class="text-info-order text-center">
+                                                    Đang giao hàng
                                                 </span>
                                             }
                                             else if (Model.Transport.ship_status == 0)
@@ -423,7 +464,7 @@
                                     </div>
                                     <div class="row mb-4">
                                         <div class="col">
-                                            <label class="lableFormField">Vận chuyển lúc</label>
+                                            <label class="lableFormField">Tạo lúc</label>
                                         </div>
                                         <div class="col text-right">
                                             @Model.Transport.create_at

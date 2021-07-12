@@ -1,4 +1,6 @@
 ﻿@using System.Security.Claims;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 @{
     ViewData["Title"] = "Giỏ hàng";
 }
@@ -37,7 +39,7 @@
         </thead>
         <tbody id="cart_body">
         </tbody>
-        <tfoot>
+        <tfoot class="table-hr-top">
             <tr>
                 <td colspan="5" style="text-align:right">Tổng tạm tính:	</td>
                 <td id="lbl_total">0đ</td>
@@ -73,12 +75,10 @@
     </table>
 
     <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large table-cart"><i class="icon-arrow-left"></i> Tiếp tục mua hàng </a>
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a href="@Url.Action("Checkout", "Cart", new { id =  User.FindFirst(ClaimTypes.Sid).Value })" class="btn btn-large pull-right table-cart">Thanh toán <i class="icon-arrow-right"></i></a>
-    }
-    else
-    {
-        <a href="@Url.Action("Login", "Order")" class="btn btn-large pull-right table-cart">Thanh toán <i class="icon-arrow-right"></i></a>
+    @{
+        if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("CartSession")))
+        {
+            <a href="@Url.Action("Checkout", "Cart")" class="btn btn-large pull-right table-cart">Thanh toán <i class="icon-arrow-right"></i></a>
+        }
     }
 </div>

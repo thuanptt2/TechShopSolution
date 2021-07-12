@@ -21,15 +21,15 @@ namespace TechShopSolution.ViewModels.Catalog.Customer.Validator
                   .Must(BeAValidPhone).WithMessage("Vui lòng nhập số điện thoại hợp lệ, VD: 0965349315.")
                   .Must(BeAValidPhone2).WithMessage("Số điện thoại phải bắt đầu bằng số 0");
             RuleFor(x => x.birthday).NotEmpty().WithMessage("Ngày sinh không được để trống")
-                  .Must(BeAValidAge).WithMessage("Ngày sinh không hợp lệ");
+                  .Must(BeAValidDate).WithMessage("Ngày sinh không hợp lệ");
             RuleFor(x => x.confirmpassword).NotEmpty().WithMessage("Vui lòng Nhập lại mật khẩu");
         }
-        protected bool BeAValidAge(DateTime date)
+        protected bool BeAValidDate(DateTime date)
         {
             int currentYear = DateTime.Now.Year;
             int dobYear = date.Year;
 
-            if (dobYear <= currentYear && dobYear > (currentYear - 120))
+            if (dobYear <= currentYear && dobYear > (currentYear - 120) && date < DateTime.Now)
             {
                 return true;
             }

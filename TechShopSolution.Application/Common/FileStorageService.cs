@@ -10,10 +10,13 @@ namespace TechShopSolution.Application.Common
     public class FileStorageService : IStorageService
     {
         private readonly string _userContentFolder;
+        private readonly string _assetsFolder;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
+        private const string Assets = "Assets";
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
             _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME);
+            _assetsFolder = Path.Combine(webHostEnvironment.WebRootPath, Assets);
         }
         public async Task<bool> DeleteFileAsync(string fileName)
         {
@@ -31,7 +34,7 @@ namespace TechShopSolution.Application.Common
             string filePath = Path.Combine(_userContentFolder, fileName);
             if (File.Exists(filePath))
                 return filePath;
-            return "";
+            return Path.Combine(_assetsFolder, "notfound.png");
         }
 
         public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
