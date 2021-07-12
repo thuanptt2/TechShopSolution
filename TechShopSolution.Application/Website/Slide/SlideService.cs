@@ -217,14 +217,14 @@ namespace TechShopSolution.Application.Website.Slide
                         where s.status == true
                         select s;
 
-            var data = query
+            var data = query.OrderBy(x=> x.display_order)
                 .Select(a => new SlideViewModel()
                 {
                     id = a.id,
                     display_order = a.display_order,
                     status = a.status,
                     create_at = a.create_at,
-                    image = a.image,
+                    image = GetBase64StringForImage(_storageService.GetFileUrl(a.image)),
                     link = a.link,
                     update_at = a.update_at,
                 }).ToListAsync();

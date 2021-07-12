@@ -218,12 +218,21 @@ tr:nth-child(odd) {
 }
 
 .slider-image {
-    width: 450px;
+    max-height: 100%;
     max-width: 100%;
-    height: auto !important;
-    object-fit: contain;
+    object-fit: cover !important;
 }
-
+.slide-link .slider-image {
+    height: 400px;
+    width: 100%;
+}
+@media (max-width: 767px) {
+    .slider-image {
+        max-height: 150px;
+        max-width: 100%;
+        object-fit: cover !important;
+    }
+}
 .srchTxt:focus-within {
     background-image: none;
 }
@@ -1102,4 +1111,7 @@ body {
 }
 .margin-bottom-10 {
     margin-bottom: 10px;
+}
+img {
+    object-fit: contain !important;
 }
