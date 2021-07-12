@@ -83,6 +83,18 @@ namespace TechShopSolution.Application.Website.Slide
                     {
                         await _storageService.DeleteFileAsync(result.image);
                     }
+                    var slides = await _context.Slides.OrderBy(x => x.display_order).ToListAsync();
+                    var quantity = slides.Count();
+                    for (int i = 0; i < slides.Count; i++)
+                    {
+                        if (slides[i].id == id)
+                        {
+                            for (int j = i + 1; j < quantity; j++)
+                            {
+                                slides[j].display_order = slides[j].display_order - 1;
+                            }
+                        }
+                    }
                     _context.Slides.Remove(result);
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
