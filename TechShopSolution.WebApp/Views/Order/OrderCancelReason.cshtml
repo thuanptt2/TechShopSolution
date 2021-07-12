@@ -13,7 +13,7 @@
     <div class="form-group">
         <label asp-for="reason" class="control-label lableFormField"></label>
         <input asp-for="Id" class="form-control" type="hidden" />
-        <select asp-for="reason" id="reason" class="form-control">
+        <select asp-for="reason" id="reason" class="form-control style="width: 100%;"">
             <option value="">Chọn lý do hủy đơn hàng</option>
             <option value="Đổi ý không mua nữa">Đổi ý không mua nữa</option>
             <option value="Không thể thanh toán">Không thể thanh toán theo phương thức</option>
@@ -27,7 +27,7 @@
          <div class="control-group">
              <label class="control-label">Ghi rõ lý do<sup style="color: #C74A6D">*</sup></label>
                 <div class="controls">
-                    <input type="password" id="txtReason" placeholder="Nhập lý do" class="margin-right-20">
+                    <input type="text" id="txtReason" placeholder="Nhập lý do" class="margin-right-20" style="width: 96%;">
                 </div>
             </div>
         <div class="alert alert-info">

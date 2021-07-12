@@ -22,7 +22,7 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<bool>> Delete(int cusID);
         Task<ApiResult<bool>> DeleteImage(int id, string fileName);
         Task<ApiResult<ProductViewModel>> GetById(int id);
-        Task<ApiResult<ProductViewModel>> GetBySlug(string slug);
+        Task<ApiResult<PublicProductDetailViewModel>> GetPublicProductDetail(string slug);
         Task<bool> isValidSlug(string Code, string slug);
         Task<PublicCayegoyProductsViewModel> GetHomeProducts(int id, int take);
         Task<List<ImageListResult>> GetImageByProductID(int id);
@@ -32,5 +32,6 @@ namespace TechShopSolution.ApiIntegration
         Task<PublicProductsViewModel> GetBestSellerProducts(int take);
         Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
         Task<List<ProductViewModel>> GetProductsRelated(int id, int take);
+        Task<ApiResult<bool>> RatingPoduct(ProductRatingRequest request);
     }
 }

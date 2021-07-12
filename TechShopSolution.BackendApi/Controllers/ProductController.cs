@@ -38,10 +38,12 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(product);
         }
         [HttpGet("slug")]
-        public async Task<IActionResult> GetBySlug(string slug)
+        public async Task<IActionResult> GetPublicProductDetail(string slug)
         {
-            var product = await _productService.GetBySlug(slug);
-            return Ok(product);
+            var result = await _productService.GetPublicProductDetail(slug);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
         }
         [HttpGet("featured/{take}")]
         public async Task<IActionResult> GetFeaturedProduct(int take)
@@ -143,6 +145,14 @@ namespace TechShopSolution.BackendApi.Controllers
         public async Task<IActionResult> OffFeatured(int id)
         {
             var result = await _productService.OffFeatured(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpPost("rating")]
+        public async Task<IActionResult> RatingProduct(ProductRatingRequest request)
+        {
+            var result = await _productService.SaveRating(request);
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);

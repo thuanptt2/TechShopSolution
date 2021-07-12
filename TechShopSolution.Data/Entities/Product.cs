@@ -33,5 +33,6 @@ namespace TechShopSolution.Data.Entities
         public Brand Brand { get; set; }
         public List<CategoryProduct> ProductInCategory { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
+        public List<Rating> Ratings { get; set; }
     }
 }
