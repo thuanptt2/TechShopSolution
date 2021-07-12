@@ -115,7 +115,7 @@ namespace TechShopSolution.ApiIntegration
             requestContent.Add(new StringContent(request.status.ToString()), "status");
             requestContent.Add(new StringContent(request.id.ToString()), "id");
 
-            var respone = await client.PutAsync($"/api/transport", requestContent);
+            var respone = await client.PutAsync($"/api/slide", requestContent);
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);

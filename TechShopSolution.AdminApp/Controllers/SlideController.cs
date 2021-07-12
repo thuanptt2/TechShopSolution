@@ -57,5 +57,20 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View(updateRequest);
         }
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update(SlideUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View(request);
+            var result = await _slideApiClient.UpdateSlide(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }
