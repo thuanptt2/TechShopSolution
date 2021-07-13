@@ -27,6 +27,14 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateFeedback(FeedbackCreateRequest request)
+        {
+            var result = await _contactService.CreateFeedback(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
         [HttpGet]
         public IActionResult GetContactData()
         {

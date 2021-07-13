@@ -1,6 +1,6 @@
 ﻿@using System.Security.Claims;
 @model TechShopSolution.ViewModels.Website.Contact.ContactViewModel
-@{ 
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -32,7 +32,20 @@
     <div class="loaderbody" id="loaderbody">
         <div class="loader"></div>
     </div>
-    
+    @{
+        @if (ViewBag.SuccessMsg != null)
+        {
+            <div class="alert alert-success" id="snackbar" role="alert">
+                <b>@ViewBag.SuccessMsg</b>
+            </div>
+        }
+        @if (ViewBag.ErrorMsg != null)
+        {
+            <div class="alert alert-danger" id="snackbarDanger" role="alert">
+                <b>@ViewBag.ErrorMsg</b>
+            </div>
+        }
+    }
     <div id="header">
         <div class="container">
             <!-- Navbar ================================================== -->
@@ -103,27 +116,23 @@
                 </div>
                 <div class="span4">
                     <h4>Gửi phản hồi</h4>
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" asp-action="SendFeedback" asp-controller="Contact" method="post">
                         <fieldset>
                             <div class="control-group">
-
-                                <input type="text" placeholder="Họ tên" class="input-xlarge" />
-
+                                <input type="text" placeholder="Họ tên" name="name" required class="input-xlarge" />
                             </div>
                             <div class="control-group">
-
-                                <input type="text" placeholder="địa chỉ email" class="input-xlarge" />
-
+                                <input type="email" placeholder="Địa chỉ email" name="email" required class="input-xlarge" />
                             </div>
                             <div class="control-group">
-
-                                <input type="text" placeholder="Số điện thoại" class="input-xlarge" />
-
+                                <input type="text" placeholder="Số điện thoại" name="phone" required class="input-xlarge" />
                             </div>
                             <div class="control-group">
-                                <textarea rows="3" id="textarea" class="input-xlarge" placeholder="Viết phản hồi của bạn"></textarea>
+                                <input type="text" placeholder="Tiêu đề phản hồi" name="title" required class="input-xlarge" />
                             </div>
-
+                            <div class="control-group">
+                                <textarea rows="3" id="textarea" class="input-xlarge" name="content" required placeholder="Viết nội dung phản hồi của bạn"></textarea>
+                            </div>
                             <button class="btn btn-large" type="submit">Gửi phản hồi</button>
 
                         </fieldset>
@@ -137,7 +146,7 @@
             </div>
         </div>
     </div>
-    
+
     <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up"></i></button>
 
     <!-- Footer ================================================================== -->
@@ -179,8 +188,34 @@
     <script src="/themes/js/bootshop.js"></script>
     <script src="/themes/js/jquery.lightbox-0.5.js"></script>
     <script src="~/js/site.js"></script>
-   
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            var x = document.getElementById("snackbar");
+
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        </script>
+    }
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
     <script>
+
         $(function () {
             $("#loaderbody").addClass('hide');
 

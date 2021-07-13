@@ -89,5 +89,28 @@ namespace TechShopSolution.Application.Website.Contact
             string base64String = Convert.ToBase64String(imageBytes);
             return base64String;
         }
+        public async Task<ApiResult<bool>> CreateFeedback(FeedbackCreateRequest request)
+        {
+            try
+            {
+                var feedback = new TechShopSolution.Data.Entities.Feedback
+                {
+                    create_at = DateTime.Now,
+                    content = request.content,
+                    email = request.email,
+                    isRead = false,
+                    name = request.name,
+                    phone = request.phone,
+                    title = request.title
+                };
+                _context.Feedbacks.Add(feedback);
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Gửi feedback thất bại, quý khách vui lòng thử lại sau");
+            }
+        }
     }
 }

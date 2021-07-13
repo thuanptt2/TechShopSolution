@@ -11,5 +11,6 @@ namespace TechShopSolution.Application.Website.Contact
     {
         Task<ApiResult<bool>> Update(ContactUpdateRequest request);
         ApiResult<ContactViewModel> GetContactData();
+        Task<ApiResult<bool>> CreateFeedback(FeedbackCreateRequest request);
     }
 }

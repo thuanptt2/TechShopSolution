@@ -11,5 +11,6 @@ namespace TechShopSolution.ApiIntegration
     {
         Task<ApiResult<ContactViewModel>> GetcontactInfos();
         Task<ApiResult<bool>> UpdateContact(ContactUpdateRequest request);
+        Task<ApiResult<bool>> SendFeedback(FeedbackCreateRequest request);
     }
 }
