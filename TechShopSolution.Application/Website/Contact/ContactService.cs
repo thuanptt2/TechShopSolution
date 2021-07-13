@@ -10,6 +10,7 @@ using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Website.Contact;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace TechShopSolution.Application.Website.Contact
 {
@@ -112,5 +113,84 @@ namespace TechShopSolution.Application.Website.Contact
                 return new ApiErrorResult<bool>("Gửi feedback thất bại, quý khách vui lòng thử lại sau");
             }
         }
+        public async Task<PagedResult<FeedbackViewModel>> GetFeedbackPaging(GetFeedbackPagingRequets request)
+        {
+            var query = from t in _context.Feedbacks
+                        select t;
+
+            if (!String.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.name.Contains(request.Keyword) || x.email.Contains(request.Keyword)
+                || x.phone.Contains(request.Keyword));
+            }
+
+            int totalRow = await query.CountAsync();
+
+            var data = query.OrderBy(m => m.create_at)
+                .Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(a => new FeedbackViewModel()
+                {
+                    id = a.id,
+                    content = a.content,
+                    create_at = a.create_at,
+                    email = a.email,
+                    isRead = a.isRead,
+                    phone = a.phone,
+                    name = a.name,
+                    title = a.title,
+                }).ToListAsync();
+
+
+            var pageResult = new PagedResult<FeedbackViewModel>()
+            {
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Items = await data,
+            };
+            return pageResult;
+        }
+        public async Task<ApiResult<FeedbackViewModel>> GetById(int id)
+        {
+            var result = await _context.Feedbacks.FindAsync(id);
+            if (result == null)
+            {
+                return new ApiErrorResult<FeedbackViewModel>("Feedback này không tồn tại");
+            }
+            var feedback = new FeedbackViewModel()
+            {
+                create_at = result.create_at,
+                title = result.title,
+                content = result.content,
+                name = result.name,
+                phone = result.phone,
+                isRead = result.isRead,
+                email = result.email,
+                id = result.id,s
+            };
+            return new ApiSuccessResult<FeedbackViewModel>(feedback);
+        }
+        public async Task<ApiResult<bool>> ChangeFeedbackStatus(int id)
+        {
+            try
+            {
+                var result = await _context.Feedbacks.FindAsync(id);
+                if (result != null)
+                {
+                    if (result.isRead)
+                        return new ApiErrorResult<bool>("Bạn đã đọc feedback này rồi");
+                    else result.isRead = true;
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>("Không tìm thấy feedback này");
+            }
+            catch
+            {
+                return new ApiErrorResult<bool>("Cập nhật thất bại");
+            }
+        }
+
     }
 }

@@ -41,5 +41,25 @@ namespace TechShopSolution.BackendApi.Controllers
             var result = _contactService.GetContactData();
             return Ok(result);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetFeedback(int id)
+        {
+            var result = await _contactService.GetById(id);
+            return Ok(result);
+        }
+        [HttpGet("feedback/changestatus/{id}")]
+        public async Task<IActionResult> ChangeFeedbackStatus(int id)
+        {
+            var result = await _contactService.ChangeFeedbackStatus(id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("feedback/paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetFeedbackPagingRequets requet)
+        {
+            var feedback = await _contactService.GetFeedbackPaging(requet);
+            return Ok(feedback);
+        }
     }
 }
