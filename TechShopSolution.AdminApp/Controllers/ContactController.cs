@@ -58,5 +58,26 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View("Detail", request);
         }
+        public async Task<IActionResult> ListFeedbacks(string keyword, int pageIndex = 1, int pageSize = 10)
+        {
+            var request = new GetFeedbackPagingRequets()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+            };
+            var data = await _contactApiClient.GetFeedbackPagings(request);
+            ViewBag.Keyword = keyword;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
+            return View(data);
+        }
+
     }
 }

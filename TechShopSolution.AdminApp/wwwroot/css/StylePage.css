@@ -472,3 +472,7 @@ table a:hover {
     text-align: center;
     font-size: 1.2rem;
 }
+.feedback-none-read {
+    background: #e9ecef;
+    font-weight: bold;
+}

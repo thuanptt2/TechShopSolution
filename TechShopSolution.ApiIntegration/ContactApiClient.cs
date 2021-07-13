@@ -6,6 +6,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TechShopSolution.ViewModels.Catalog.Coupon;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Website.Contact;
 
@@ -96,6 +97,45 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
+        public async Task<ApiResult<bool>> ChangeFeedbackStatus(int Id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/contact/feedback/changestatus/{Id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+        public async Task<PagedResult<FeedbackViewModel>> GetFeedbackPagings(GetFeedbackPagingRequets request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/contact/feedback/paging?Keyword={request.Keyword}&pageIndex=" +
+                $"{request.PageIndex}&pageSize={request.PageSize}");
+            var body = await respone.Content.ReadAsStringAsync();
+            var feedback = JsonConvert.DeserializeObject<PagedResult<FeedbackViewModel>>(body);
+            return feedback;
+        }
+        public async Task<ApiResult<bool>> Delete(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.DeleteAsync($"/api/contact/feedback/{id}");
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+        public async Task<ApiResult<FeedbackViewModel>> GetById(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/contact/feedback/{id}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<FeedbackViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<FeedbackViewModel>>(body);
+        }
     }
 }
