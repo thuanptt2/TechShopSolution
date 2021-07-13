@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using TechShopSolution.ViewModels.Website.Slide;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
+    [Authorize]
     public class SlideController : Controller
     {
         private readonly ISlideApiClient _slideApiClient;

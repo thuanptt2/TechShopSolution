@@ -41,7 +41,7 @@ namespace TechShopSolution.BackendApi.Controllers
             var result = _contactService.GetContactData();
             return Ok(result);
         }
-        [HttpGet("{id}")]
+        [HttpGet("feedback/{id}")]
         public async Task<IActionResult> GetFeedback(int id)
         {
             var result = await _contactService.GetById(id);

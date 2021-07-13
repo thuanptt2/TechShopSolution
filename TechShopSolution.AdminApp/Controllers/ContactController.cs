@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TechShopSolution.ViewModels.Website.Contact;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
+    [Authorize]
     public class ContactController : Controller
     {
         private readonly IContactApiClient _contactApiClient;
@@ -77,6 +79,21 @@ namespace TechShopSolution.AdminApp.Controllers
                 ViewBag.ErrorMsg = TempData["error"];
             }
             return View(data);
+        }
+        [HttpGet]
+        public async Task<IActionResult> DetailFeedBack(int id)
+        {
+            var result = await _contactApiClient.GetFeedback(id);
+            if (!result.IsSuccess || result.ResultObject == null)
+            {
+                TempData["error"] = result.Message;
+                return RedirectToAction("ListFeedbacks");
+            }
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            return View(result.ResultObject);
         }
 
     }

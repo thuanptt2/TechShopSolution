@@ -127,7 +127,7 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-        public async Task<ApiResult<FeedbackViewModel>> GetById(int id)
+        public async Task<ApiResult<FeedbackViewModel>> GetFeedback(int id)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);

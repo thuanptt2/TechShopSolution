@@ -12,7 +12,7 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<ContactViewModel>> GetcontactInfos();
         Task<ApiResult<bool>> UpdateContact(ContactUpdateRequest request);
         Task<ApiResult<bool>> SendFeedback(FeedbackCreateRequest request);
-        Task<ApiResult<FeedbackViewModel>> GetById(int id);
+        Task<ApiResult<FeedbackViewModel>> GetFeedback(int id);
         Task<ApiResult<bool>> Delete(int id);
         Task<PagedResult<FeedbackViewModel>> GetFeedbackPagings(GetFeedbackPagingRequets request);
         Task<ApiResult<bool>> ChangeFeedbackStatus(int Id);
