@@ -13,6 +13,7 @@ namespace TechShopSolution.ViewModels.Website.Contact
         public string phone { get; set; }
         public string hotline { get; set; }
         public IFormFile company_logo { get; set; }
+        public string imageBase64 { get; set; }
         public string fax { get; set; }
         public string email { get; set; }
         public string social_fb { get; set; }
