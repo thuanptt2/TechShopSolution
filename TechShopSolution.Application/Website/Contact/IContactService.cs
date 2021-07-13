@@ -14,5 +14,7 @@ namespace TechShopSolution.Application.Website.Contact
         Task<ApiResult<bool>> CreateFeedback(FeedbackCreateRequest request);
         Task<ApiResult<bool>> ChangeFeedbackStatus(int id);
         Task<ApiResult<FeedbackViewModel>> GetById(int id);
-        Task<PagedResult<FeedbackViewModel>> GetFeedbackPaging(GetFeedbackPagingRequets request)    }
+        Task<PagedResult<FeedbackViewModel>> GetFeedbackPaging(GetFeedbackPagingRequets request);
+        Task<ApiResult<bool>> Delete(int id);
+    }
 }

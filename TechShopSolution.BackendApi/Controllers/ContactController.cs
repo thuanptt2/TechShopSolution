@@ -61,5 +61,15 @@ namespace TechShopSolution.BackendApi.Controllers
             var feedback = await _contactService.GetFeedbackPaging(requet);
             return Ok(feedback);
         }
+        [HttpDelete("feedback/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _contactService.Delete(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

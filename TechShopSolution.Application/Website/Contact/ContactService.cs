@@ -167,7 +167,7 @@ namespace TechShopSolution.Application.Website.Contact
                 phone = result.phone,
                 isRead = result.isRead,
                 email = result.email,
-                id = result.id,s
+                id = result.id,
             };
             return new ApiSuccessResult<FeedbackViewModel>(feedback);
         }
@@ -191,6 +191,25 @@ namespace TechShopSolution.Application.Website.Contact
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
+        public async Task<ApiResult<bool>> Delete(int id)
+        {
+            try
+            {
+                var result = await _context.Feedbacks.FindAsync(id);
+                if (result != null)
+                {
+                    _context.Feedbacks.Remove(result);
+                    await _context.SaveChangesAsync();
+                    return new ApiSuccessResult<bool>();
+                }
+                else return new ApiErrorResult<bool>($"Feedback này không tồn tại");
+            }
+            catch (Exception ex)
+            {
+                return new ApiErrorResult<bool>(ex.Message);
+            }
+        }
+
 
     }
 }
