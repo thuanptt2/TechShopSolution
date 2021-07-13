@@ -33,6 +33,14 @@ namespace TechShopSolution.AdminApp.Controllers
                 social_twitter = contact.ResultObject.social_twitter,
                 social_youtube = contact.ResultObject.social_youtube
             };
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(updateModel);
         }
         [HttpPost]

@@ -229,7 +229,7 @@ namespace TechShopSolution.WebApp.Controllers
                         CategoryViewModel tree = new CategoryViewModel();
                         tree = cate;
                         tree.level = level;
-                        tree.cate_name = String.Concat(Enumerable.Repeat(Microsoft.VisualBasic.Strings.Space(3), level)) + tree.cate_name;
+                        tree.cate_name = String.Concat(Enumerable.Repeat("‣", level)) + tree.cate_name;
 
                         result.Add(tree);  
                         List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);

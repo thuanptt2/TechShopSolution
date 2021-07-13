@@ -40,10 +40,16 @@ namespace TechShopSolution.ApiIntegration
             requestContent.Add(new StringContent(request.company_name.ToString()), "company_name");
             requestContent.Add(new StringContent(request.email.ToString()), "email");
             requestContent.Add(new StringContent(request.id.ToString()), "id");
-            requestContent.Add(new StringContent(request.fax.ToString()), "fax");
-            requestContent.Add(new StringContent(request.hotline.ToString()), "hotline");
             requestContent.Add(new StringContent(request.phone.ToString()), "phone");
-            if(!string.IsNullOrEmpty(request.social_fb))
+            if (!string.IsNullOrEmpty(request.hotline))
+            {
+                requestContent.Add(new StringContent(request.hotline.ToString()), "hotline");
+            }
+            if (!string.IsNullOrEmpty(request.fax))
+            {
+                requestContent.Add(new StringContent(request.fax.ToString()), "fax");
+            }
+            if (!string.IsNullOrEmpty(request.social_fb))
             {
                 requestContent.Add(new StringContent(request.social_fb.ToString()), "social_fb");
             }

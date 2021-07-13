@@ -4,23 +4,38 @@
     ViewData["Title"] = "Chi tiết thông tin liên hệ";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @section jsFooter {
-    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#txtDescription'), {
-                // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
-            })
-            .then(editor => {
-                window.editor = editor;
-            })
-            .catch(err => {
-                console.error(err.stack);
-            });
-    </script>
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
 
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
 }
+
+
 <div class="container-fluid">
     <h2 class="mt-4">Chi tiết liên hệ</h2>
     <ol class="breadcrumb mb-4">
@@ -28,6 +43,18 @@
         <li class="breadcrumb-item active">Liên hệ</li>
         <li class="breadcrumb-item active">Chi tiết</li>
     </ol>
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <div class="alert alert-success" id="snackbar" role="alert">
+            <b>@ViewBag.SuccessMsg</b>
+        </div>
+    }
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <div class="alert alert-danger" id="snackbarDanger" role="alert">
+            <b>@ViewBag.ErrorMsg</b>
+        </div>
+    }
     <form asp-action="Update" asp-controller="Contact" enctype="multipart/form-data" method="post">
         <div class="padding-container">
             <div class="row">
@@ -127,5 +154,4 @@
         </div>
     </form>
 </div>
-
 
