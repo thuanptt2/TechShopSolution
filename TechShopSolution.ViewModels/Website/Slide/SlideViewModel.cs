@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TechShopSolution.ViewModels.Website
+namespace TechShopSolution.ViewModels.Website.Slide
 {
     public class SlideViewModel
     {

@@ -27,6 +27,7 @@
                     <div class="wrapper-content mb-3 shadow">
                         <label class="title-fill">Thông tin chung</label>
                         <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="row">
                             <div class="col-lg-5 col-12">
                                 <div class="form-group">
@@ -47,10 +48,8 @@
                                     </div>
                                     <span asp-validation-for="image" class="text-danger"></span>
                                 </div>
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             </div>
                             <div class="col-lg-7 col-12">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input asp-for="id" hidden />
                                 <div class="form-group mt-2">
                                     <label asp-for="name" class="control-label lableFormField"></label>

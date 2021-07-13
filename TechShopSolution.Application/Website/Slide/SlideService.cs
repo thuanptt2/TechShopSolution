@@ -11,6 +11,7 @@ using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Website;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using TechShopSolution.ViewModels.Website.Slide;
 
 namespace TechShopSolution.Application.Website.Slide
 {
@@ -175,7 +176,6 @@ namespace TechShopSolution.Application.Website.Slide
                         await _storageService.DeleteFileAsync(result.image);
                         result.image = await this.SaveFile(request.image);
                     }
-                    
 
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();

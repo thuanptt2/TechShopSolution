@@ -21,6 +21,7 @@ using TechShopSolution.Application.Catalog.Product;
 using TechShopSolution.Application.Catalog.Transport;
 using TechShopSolution.Application.Common;
 using TechShopSolution.Application.System;
+using TechShopSolution.Application.Website.Contact;
 using TechShopSolution.Application.Website.Slide;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Utilities.Constants;
@@ -36,8 +37,10 @@ using TechShopSolution.ViewModels.Catalog.Product.Validator;
 using TechShopSolution.ViewModels.System;
 using TechShopSolution.ViewModels.Transport;
 using TechShopSolution.ViewModels.Transport.Validator;
-using TechShopSolution.ViewModels.Website;
-using TechShopSolution.ViewModels.Website.Validator;
+using TechShopSolution.ViewModels.Website.Contact;
+using TechShopSolution.ViewModels.Website.Contact.Validator;
+using TechShopSolution.ViewModels.Website.Slide;
+using TechShopSolution.ViewModels.Website.Slide.Validator;
 
 namespace TechShopSolution.BackendApi
 {
@@ -69,6 +72,7 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IPaymentMethodService, PaymentMethodService>();
             services.AddTransient<ITransportService, TransportService>();
             services.AddTransient<ISlideService, SlideService>();
+            services.AddTransient<IContactService, ContactService>();
             services.AddTransient<ILoadLocationService, LoadLocationService>();
             services.AddTransient<IValidator<CustomerCreateRequest>, CreateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();
@@ -85,6 +89,7 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IValidator<TransporterUpdateRequest>, TransporterUpdateValidator>();
             services.AddTransient<IValidator<SlideUpdateRequest>, SlideUpdateValidator>();
             services.AddTransient<IValidator<SlideCreateRequest>, SlideCreateValidator>();
+            services.AddTransient<IValidator<ContactUpdateRequest>, ContactUpdateValidator>();
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 

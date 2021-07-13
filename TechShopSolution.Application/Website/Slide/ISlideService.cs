@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Website;
+using TechShopSolution.ViewModels.Website.Slide;
 
 namespace TechShopSolution.Application.Website.Slide
 {

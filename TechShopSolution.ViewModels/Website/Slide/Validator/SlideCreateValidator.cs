@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TechShopSolution.ViewModels.Website.Slide;
 
-namespace TechShopSolution.ViewModels.Website.Validator
+namespace TechShopSolution.ViewModels.Website.Slide.Validator
 {
     public class SlideCreateValidator : AbstractValidator<SlideCreateRequest>
     {

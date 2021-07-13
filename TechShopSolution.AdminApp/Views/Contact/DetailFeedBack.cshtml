@@ -1,0 +1,100 @@
+﻿@model TechShopSolution.ViewModels.Website.Contact.FeedbackViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section jsFooter {
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbarDanger");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script>
+            window.onload = function () {
+                var x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            };
+        </script>
+    }
+}
+<div class="container-fluid">
+    <ol class="breadcrumb mb-4 mt-3">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/contact/ListFeedbacks">Feedback</a></li>
+        <li class="breadcrumb-item active">Chi tiết</li>
+    </ol>
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <div class="alert alert-success" id="snackbar" role="alert">
+            <b>@ViewBag.SuccessMsg</b>
+        </div>
+    }
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <div class="alert alert-danger" id="snackbarDanger" role="alert">
+            <b>@ViewBag.ErrorMsg</b>
+        </div>
+    }
+    <div class="padding-container">
+        <div class="row">
+            <div class="col-lg-12 col-12 wrapper-content-limit">
+                <div class="wrapper-content mb-3 shadow">
+                    <label class="title-fill">Chi tiết feedback</label>
+                    <hr />
+                    <input asp-for="id" class="form-control" hidden />
+                    <div class="form-group">
+                        <label class="control-label lableFormField">Tiêu đề</label>
+                        <input asp-for="title" class="form-control" id="txtName" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label lableFormField">Nội dung</label>
+                        <textarea asp-for="content" class="form-control" id="txtName" readonly="readonly"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label lableFormField">Gửi bởi</label>
+                        <input asp-for="name" class="form-control" id="txtName" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label lableFormField">Điện thoại</label>
+                        <input asp-for="phone" class="form-control" id="txtName" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label lableFormField">Địa chỉ email</label>
+                        <input asp-for="email" class="form-control" id="txtName" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label lableFormField">Gửi lúc</label>
+                        <input asp-for="create_at" class="form-control" id="txtName" readonly="readonly" />
+                    </div>
+                    @if (!Model.isRead)
+                    {
+                        <div class="text-right">
+                            <a class="btn btn-info text-right" href="@Url.Action("FeedbackChangeStatus", "Contact", new { id = Model.id })">
+                                Đánh dấu đã đọc
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -29,7 +29,6 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<ApiResult<bool>> CreateCoupon(CouponCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -44,7 +43,6 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<ApiResult<bool>> Delete(int id)
         {
             var client = _httpClientFactory.CreateClient();
@@ -55,7 +53,6 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
-
         public async Task<ApiResult<CouponViewModel>> GetById(int id)
         {
             var client = _httpClientFactory.CreateClient();
@@ -76,7 +73,6 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<CouponViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<CouponViewModel>>(body);
         }
-
         public async Task<PagedResult<CouponViewModel>> GetCouponPagings(GetCouponPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();

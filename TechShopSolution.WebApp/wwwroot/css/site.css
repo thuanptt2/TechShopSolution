@@ -530,7 +530,12 @@ input.input-validation-error {
 
 .comments-facebook {
     border: 1px solid #ccc;
+    width: 100% !important;
 }
+    .comments-facebook iframe {
+        width: 100% !important;
+    }
+
 
 .step-checkout h2 {
     color: #000;
@@ -1114,4 +1119,47 @@ body {
 }
 img {
     object-fit: contain !important;
+}
+#mainBody {
+    border-top: 0 !important;
+}
+.contact-info i {
+    font-size: 16px;
+    text-align: center;
+    width: 25px;
+    margin-right: 5px;
+}
+.contact-info {
+    margin-bottom: 15px
+}
+.contact-info .icon-map-marker {
+   font-size: 19px !important;
+   margin-right: 8px;
+}
+.contact-company-name {
+    text-transform: uppercase;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.logo-company-navbar {
+    width: 193px;
+    height: 47px;
+    max-width: 80px;
+    max-height: 47px;
+}
+.contact-company-logo {
+    max-height: 190px;
+    width: 100%;
+}
+.breadcrumb {
+    background-color: #EEEEEE;
+}
+@media (min-width: 768px) and (max-width: 979px) 
+{
+    .navbar .nav > li > a {
+        border-top: 0 !important;
+        padding: 0;
+    }
 }
