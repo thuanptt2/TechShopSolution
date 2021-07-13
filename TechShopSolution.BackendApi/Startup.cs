@@ -21,6 +21,7 @@ using TechShopSolution.Application.Catalog.Product;
 using TechShopSolution.Application.Catalog.Transport;
 using TechShopSolution.Application.Common;
 using TechShopSolution.Application.System;
+using TechShopSolution.Application.Website.Contact;
 using TechShopSolution.Application.Website.Slide;
 using TechShopSolution.Data.EF;
 using TechShopSolution.Utilities.Constants;
@@ -70,6 +71,7 @@ namespace TechShopSolution.BackendApi
             services.AddTransient<IPaymentMethodService, PaymentMethodService>();
             services.AddTransient<ITransportService, TransportService>();
             services.AddTransient<ISlideService, SlideService>();
+            services.AddTransient<IContactService, ContactService>();
             services.AddTransient<ILoadLocationService, LoadLocationService>();
             services.AddTransient<IValidator<CustomerCreateRequest>, CreateRequestValidator>();
             services.AddTransient<IValidator<CustomerUpdateRequest>, UpdateRequestValidator>();

@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace TechShopSolution.Application.Website.Contact
 {
-    public class ContactService
+    public class ContactService : IContactService
     {
         private readonly TechShopDBContext _context;
         private readonly IStorageService _storageService;
@@ -37,8 +37,8 @@ namespace TechShopSolution.Application.Website.Contact
             var infos = query.Select(a => new ContactViewModel()
             {
                 adress = a.adress,
-                company_logo = a.company_logo,
                 company_name = a.company_name,
+                company_logo = GetBase64StringForImage(_storageService.GetFileUrl(a.company_logo)),
                 email = a.email,
                 fax = a.fax,
                 hotline = a.hotline,
@@ -58,8 +58,12 @@ namespace TechShopSolution.Application.Website.Contact
                 var result = await _context.Contacts.FindAsync(request.id);
                 if (result != null)
                 {
+                    if (request.company_logo != null)
+                    {
+                        await _storageService.DeleteFileAsync(result.company_logo);
+                        result.company_logo = await this.SaveFile(request.company_logo);
+                    }
                     result.adress = request.adress;
-                    result.company_logo = request.company_logo;
                     result.company_name = request.company_name;
                     result.email = request.email;
                     result.fax = request.fax;

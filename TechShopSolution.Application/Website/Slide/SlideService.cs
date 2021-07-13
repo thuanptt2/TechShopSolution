@@ -176,7 +176,6 @@ namespace TechShopSolution.Application.Website.Slide
                         await _storageService.DeleteFileAsync(result.image);
                         result.image = await this.SaveFile(request.image);
                     }
-                    
 
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();

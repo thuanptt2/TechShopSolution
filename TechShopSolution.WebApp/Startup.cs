@@ -53,6 +53,7 @@ namespace TechShopSolution.WebApp
             services.AddTransient<IPaymentApiClient, PaymentApiClient>();
             services.AddTransient<IOrderApiClient, OrderApiClient>();
             services.AddTransient<ISlideApiClient, SlideApiClient>();
+            services.AddTransient<IContactApiClient, ContactApiClient>();
             services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
             services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
 

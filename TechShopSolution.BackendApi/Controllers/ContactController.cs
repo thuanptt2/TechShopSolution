@@ -27,7 +27,7 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-        [HttpGet("{id}")]
+        [HttpGet]
         public IActionResult GetContactData()
         {
             var result = _contactService.GetContactData();
