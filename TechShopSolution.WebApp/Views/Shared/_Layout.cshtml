@@ -60,37 +60,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <div class="navbar-inner">
-                    <a class="brand" href="@Url.Action("Index", "Home", new { area = "" })"><img src="/themes/images/logo.png" alt="TechShop" /></a>
-                    @await Component.InvokeAsync("Category")
-                    <ul id="topMenu" class="nav">
-                        <li class=""><a href="#">Giới thiệu</a></li>
-                        <li class=""><a href="#">Tin tức</a></li>
-                        <li class=""><a href="@Url.Action("Index", "Contact")">Liên hệ</a></li>
-                    </ul>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-
-                        <div class="btn-group btnDropdownAccount">
-                            <div class="btn-group">
-                                <button class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> Tài khoản</button>
-                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="@Url.Action("Detail", "Account")"><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
-                                    <li><a href="@Url.Action("OrderTracking", "Order")"><i class="icon-file"></i> Kiểm tra đơn hàng</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="@Url.Action("Logout", "Account")"><i class="i"></i>Đăng xuất</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="btn-group btnDropdownAccount">
-                            <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" role="button" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
-                        </div>
-                    }
-                </div>
+                @await Component.InvokeAsync("NavbarMenu")
             </div>
         </div>
     </div>
