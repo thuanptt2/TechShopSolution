@@ -43,10 +43,22 @@ namespace TechShopSolution.ApiIntegration
             requestContent.Add(new StringContent(request.fax.ToString()), "fax");
             requestContent.Add(new StringContent(request.hotline.ToString()), "hotline");
             requestContent.Add(new StringContent(request.phone.ToString()), "phone");
-            requestContent.Add(new StringContent(request.social_fb.ToString()), "social_fb");
-            requestContent.Add(new StringContent(request.social_instagram.ToString()), "social_instagram");
-            requestContent.Add(new StringContent(request.social_twitter.ToString()), "social_twitter");
-            requestContent.Add(new StringContent(request.social_youtube.ToString()), "social_youtube");
+            if(!string.IsNullOrEmpty(request.social_fb))
+            {
+                requestContent.Add(new StringContent(request.social_fb.ToString()), "social_fb");
+            }
+            if (!string.IsNullOrEmpty(request.social_instagram))
+            {
+                requestContent.Add(new StringContent(request.social_instagram.ToString()), "social_instagram");
+            }
+            if (!string.IsNullOrEmpty(request.social_twitter))
+            {
+                requestContent.Add(new StringContent(request.social_twitter.ToString()), "social_twitter");
+            }
+            if (!string.IsNullOrEmpty(request.social_youtube))
+            {
+                requestContent.Add(new StringContent(request.social_youtube.ToString()), "social_youtube");
+            }
 
             var respone = await client.PutAsync($"/api/Contact", requestContent);
             var result = await respone.Content.ReadAsStringAsync();

@@ -530,7 +530,12 @@ input.input-validation-error {
 
 .comments-facebook {
     border: 1px solid #ccc;
+    width: 100% !important;
 }
+    .comments-facebook iframe {
+        width: 100% !important;
+    }
+
 
 .step-checkout h2 {
     color: #000;
@@ -1134,8 +1139,9 @@ img {
 .contact-company-name {
     text-transform: uppercase;
     font-size: 20px;
+    line-height: 25px;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .logo-company-navbar {
     width: 193px;

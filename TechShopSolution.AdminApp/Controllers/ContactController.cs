@@ -35,5 +35,20 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             return View(updateModel);
         }
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update(ContactUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View("Detail",request);
+            var result = await _contactApiClient.UpdateContact(request);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Cập nhật thành công";
+                return RedirectToAction("Detail");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View("Detail", request);
+        }
     }
 }
