@@ -93,8 +93,36 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             return View(result.ResultObject);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> FeedbackChangeStatus(int id)
+        {
+           
+            var result = await _contactApiClient.ChangeFeedbackStatus(id);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Đánh đấu đã xem thành công";
+                return RedirectToAction("DetailFeedBack", new { id = id });
+            }
+            TempData["error"] = result.Message;
+            return RedirectToAction("DetailFeedBack", new { id = id });
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _contactApiClient.Delete(id);
+            if (result.IsSuccess)
+            {
+                TempData["result"] = "Xóa Feedback thành công";
+                return RedirectToAction("ListFeedbacks");
+            }
+            TempData["error"] = result.Message;
+            return RedirectToAction("ListFeedbacks");
+        }
     }
 }

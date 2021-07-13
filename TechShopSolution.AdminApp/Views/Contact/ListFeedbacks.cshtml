@@ -44,12 +44,16 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="padding-container">
         <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
+        <a class="btn btn-success mb-3" style="visibility: hidden">
+            <i class="fa fa-plus"></i>
+            Thêm mới
+        </a>
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="ListFeedbacks" method="get" style="float: right;">
             <div class="input-group">
                 <label for="pet-select"></label>
                 <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
                 <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
-                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/contact/listfeedbacks'"><i class="fas fa-times"></i></button>
+                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/contact/ListFeedbacks'"><i class="fas fa-times"></i></button>
             </div>
         </form>
         <!-- Notification -->
@@ -134,7 +138,7 @@
                                     </td>
 
                                     <td align="center">
-                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')">Xóa</a>
+                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa Feedback này, hành dộng này sẽ xóa vĩnh viễn Feedback?')">Xóa</a>
                                     </td>
                                 </tr>
                             }
@@ -158,7 +162,7 @@
                                         Chưa xem
                                     </td>
                                     <td align="center">
-                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này')">Xóa</a>
+                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa Feedback này, hành dộng này sẽ xóa vĩnh viễn Feedback?')">Xóa</a>
                                     </td>
                                 </tr>
                             }
