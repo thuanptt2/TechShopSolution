@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TechShopSolution.ViewModels.Website.Contact
 {
-    public class UpdateContactRequest
+    public class ContactUpdateRequest
     {
         public int id { get; set; }
         public string company_name { get; set; }
