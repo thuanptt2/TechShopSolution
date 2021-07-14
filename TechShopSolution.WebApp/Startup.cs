@@ -166,6 +166,13 @@ namespace TechShopSolution.WebApp
                       action = "Checkout"
                   });
                 endpoints.MapControllerRoute(
+                name: "Lien he",
+                pattern: "/lien-he", new
+                {
+                    controller = "Contact",
+                    action = "Index"
+                });
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });

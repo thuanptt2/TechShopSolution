@@ -1166,3 +1166,10 @@ img {
 body {
     padding: 0 !important;
 }
+.recently-product .span3 {
+    margin-bottom: 0 !important;
+}
+.product-related-brand-name {
+    cursor: pointer;
+    color: #ffc000;
+}

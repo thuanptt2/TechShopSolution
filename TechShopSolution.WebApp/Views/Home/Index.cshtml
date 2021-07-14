@@ -52,12 +52,11 @@
                         @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
                         {
                             featuredPart.Add(Model.FeaturedProducts.Products[index]);
-                            if (featuredPart.Count == 4 || Model.FeaturedProducts.Count < 4)
+                            if (featuredPart.Count == 4 || index == Model.FeaturedProducts.Count - 1)
                             {
                                 featuredProducts.Add(featuredPart);
                                 featuredPart = new List<ProductViewModel>();
                             }
-
                         }
                         @for (int index = 0; index < featuredProducts.Count; index++)
                         {
@@ -65,37 +64,34 @@
                                 <ul class="thumbnails">
                                     @foreach (var item in featuredProducts[index])
                                     {
-                                        if (item.instock > 0 || item.instock == null)
-                                        {
-                                            <li class="span3">
-                                                <div class="thumbnail">
-                                                    <i class="tag-featured"></i>
-                                                    <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
-                                                    <div class="caption">
-                                                        <h5>@item.name</h5>
-                                                    </div>
-                                                    <div class="footer-thumbnail">
-                                                        @if (item.promotion_price > 1)
-                                                        {
-                                                            <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
-                                                            <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
-                                                        }
-
-                                                    </div>
-                                                    <div class="product-btn">
-                                                        <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
-                                                            <i class="fas fa-shopping-cart"></i>
-                                                            Mua ngay
-                                                        </a>
-                                                    </div>
+                                        <li class="span3">
+                                            <div class="thumbnail">
+                                                <i class="tag-featured"></i>
+                                                <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                                <div class="caption">
+                                                    <h5>@item.name</h5>
+                                                </div>
+                                                <div class="footer-thumbnail">
+                                                    @if (item.promotion_price > 1)
+                                                    {
+                                                        <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
+                                                        <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                    }
 
                                                 </div>
-                                            </li>
-                                        }
+                                                <div class="product-btn">
+                                                    <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                        Mua ngay
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </li>
                                     }
                                 </ul>
                             </div>
@@ -121,50 +117,47 @@
                         @for (int index = 0; index < Model.BestSellerProducts.Count; index++)
                         {
                             bestSellerPart.Add(Model.BestSellerProducts.Products[index]);
-                            if (bestSellerPart.Count == 4 || Model.BestSellerProducts.Count < 4)
+                            if (bestSellerPart.Count == 4 || index == Model.BestSellerProducts.Count - 1)
                             {
                                 bestProducts.Add(bestSellerPart);
                                 bestSellerPart = new List<ProductViewModel>();
                             }
-
                         }
+
                         @for (int index = 0; index < bestProducts.Count; index++)
                         {
                             <div class="item @(index == 0?"active":"")">
                                 <ul class="thumbnails">
                                     @foreach (var item in bestProducts[index])
                                     {
-                                        if (item.instock > 0 || item.instock == null)
-                                        {
-                                            <li class="span3">
-                                                <div class="thumbnail">
-                                                    <i class="tag-best-seller"></i>
-                                                    <a href="@Url.Action("Detail", "Product", new { slug = item.slug})"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
-                                                    <div class="caption">
-                                                        <h5>@item.name</h5>
-                                                    </div>
-                                                    <div class="footer-thumbnail">
-                                                        @if (item.promotion_price > 1)
-                                                        {
-                                                            <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
-                                                            <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
-                                                        }
-
-                                                    </div>
-                                                    <div class="product-btn">
-                                                        <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
-                                                            <i class="fas fa-shopping-cart"></i>
-                                                            Mua ngay
-                                                        </a>
-                                                    </div>
+                                        <li class="span3">
+                                            <div class="thumbnail">
+                                                <i class="tag-best-seller"></i>
+                                                <a href="@Url.Action("Detail", "Product", new { slug = item.slug})"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                                <div class="caption">
+                                                    <h5>@item.name</h5>
+                                                </div>
+                                                <div class="footer-thumbnail">
+                                                    @if (item.promotion_price > 1)
+                                                    {
+                                                        <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
+                                                        <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                    }
 
                                                 </div>
-                                            </li>
-                                        }
+                                                <div class="product-btn">
+                                                    <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                        Mua ngay
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </li>
                                     }
                                 </ul>
                             </div>
