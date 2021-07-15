@@ -83,13 +83,24 @@
                                                     }
 
                                                 </div>
-                                                <div class="product-btn">
-                                                    <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
-                                                        <i class="fas fa-shopping-cart"></i>
-                                                        Mua ngay
-                                                    </a>
-                                                </div>
-
+                                                @if (item.instock > 0 || item.instock == null)
+                                                {
+                                                    <div class="product-btn">
+                                                        <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                            Mua ngay
+                                                        </a>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="product-btn">
+                                                        <a class="btn-View btn btn" data-id="@item.id" href="@Url.Action("Detail", "Product", new { slug = item.slug})" localize-content>
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                            Xem chi tiết
+                                                        </a>
+                                                    </div>
+                                                }
                                             </div>
                                         </li>
                                     }
@@ -149,13 +160,24 @@
                                                     }
 
                                                 </div>
-                                                <div class="product-btn">
-                                                    <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
-                                                        <i class="fas fa-shopping-cart"></i>
-                                                        Mua ngay
-                                                    </a>
-                                                </div>
-
+                                                @if (item.instock > 0 || item.instock == null)
+                                                {
+                                                    <div class="product-btn">
+                                                        <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                            Mua ngay
+                                                        </a>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="product-btn">
+                                                        <a class="btn-View btn btn" data-id="@item.id" href="@Url.Action("Detail", "Product", new { slug = item.slug})" localize-content>
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                            Xem chi tiết
+                                                        </a>
+                                                    </div>
+                                                }
                                             </div>
                                         </li>
                                     }
@@ -455,7 +477,6 @@
                                 </li>
                             }
                         }
-
                     }
                 }
             </ul>

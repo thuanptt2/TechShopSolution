@@ -1173,3 +1173,15 @@ body {
     cursor: pointer;
     color: #ffc000;
 }
+@media (max-width: 767px) {
+    #footerSection .container {
+        padding: 0 30px;
+    }
+}
+.unavaiable-product {
+    color: #b70000;
+    text-decoration: line-through;
+}
+.text-right {
+    text-align: right;
+}

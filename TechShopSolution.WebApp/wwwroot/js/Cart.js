@@ -1,7 +1,6 @@
 ﻿var CartController = function () {
     this.initialize = function () {
         loadData();
-
         registerEvents();
     }
 
@@ -179,7 +178,8 @@
                 }
                 var html = '';
                 var total = 0;
-
+                var isExist = true;
+                var isAvaiable = true;
                 $.each(res.items, function (i, item) {
                     if (item.promotionPrice > 0) {
                         var amount = item.promotionPrice * item.quantity;
@@ -189,20 +189,39 @@
                         var amount = item.price * item.quantity;
                         var promotion = 0;
                     }
-                    html += "<tr>"
-                        + "<td> <img width=\"60\" height=\"60\" src=\"data:image/jpeg;base64," + item.images + "\" alt=\"\" /></td>"
-                        + "<td class='cart-item-name'><a href=\/san-pham\/" + item.slug + ">" + item.name + "\"</a></td>"
-                        + "<td><div class=\"input-append\"><input class=\"span1 txtQuantity\" style=\"max-width: 34px\" data-id=\"" + item.id + "\" placeholder=\"1\" id=\"txt_quantity_" + item.id + "\" data-count=\"" + item.quantity + "\" value=\"" + item.quantity + "\"  data-instock=\"" + item.instock + "\" size=\"16\" type=\"text\">"
-                        + "<button class=\"btn btn-minus\" data-id=\"" + item.id + "\" type =\"button\"> <i class=\"icon-minus\"></i></button>"
-                        + "<button class=\"btn btn-plus\" type=\"button\" data-id=\"" + item.id + "\"><i class=\"icon-plus\"></i></button>"
-                        + "<button class=\"btn btn-danger btn-remove\" type=\"button\" data-id=\"" + item.id + "\"><i class=\"icon-remove icon-white\"></i></button>"
-                        + "</div>"
-                        + "</td>"
+                    if (item.instock == 0 || !item.isExist) {
+                        html += "<tr class=\"unavaiable-product\">"
+                            + "<td> <img width=\"60\" height=\"60\" src=\"data:image/jpeg;base64," + item.images + "\" alt=\"\" /></td>"
+                            + "<td class='cart-item-name'><a href=\/san-pham\/" + item.slug + ">" + item.name + "\"</a></td>"
+                            + "<td><div class=\"input-append text-right\"><input class=\"span1 txtQuantity\" readonly=\"readonly\" style=\"max-width: 34px; data-id=\"" + item.id + "\" placeholder=\"1\" id=\"txt_quantity_" + item.id + "\" data-count=\"" + item.quantity + "\" value=\"" + item.quantity + "\"  data-instock=\"" + item.instock + "\" size=\"16\" type=\"text\">"
+                            + "<button class=\"btn btn-danger btn-remove\" type=\"button\" data-id=\"" + item.id + "\"><i class=\"icon-remove icon-white\"></i></button>"
+                            + "</div>"
+                            + "</td>"
+                            + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price) + "</td>"
+                            + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(promotion) + "</td>"
+                            + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount) + "</td>"
+                            + "</tr>";
+                        if (!item.isExist) {
+                            isExist = false;
+                        } else if (item.instock == 0) {
+                            isAvaiable = false;
+                        }
+                    } else {
+                        html += "<tr>"
+                            + "<td> <img width=\"60\" height=\"60\" src=\"data:image/jpeg;base64," + item.images + "\" alt=\"\" /></td>"
+                            + "<td class='cart-item-name'><a href=\/san-pham\/" + item.slug + ">" + item.name + "\"</a></td>"
+                            + "<td><div class=\"input-append\"><input class=\"span1 txtQuantity\" style=\"max-width: 34px\" data-id=\"" + item.id + "\" placeholder=\"1\" id=\"txt_quantity_" + item.id + "\" data-count=\"" + item.quantity + "\" value=\"" + item.quantity + "\"  data-instock=\"" + item.instock + "\" size=\"16\" type=\"text\">"
+                            + "<button class=\"btn btn-minus\" data-id=\"" + item.id + "\" type =\"button\"> <i class=\"icon-minus\"></i></button>"
+                            + "<button class=\"btn btn-plus\" type=\"button\" data-id=\"" + item.id + "\"><i class=\"icon-plus\"></i></button>"
+                            + "<button class=\"btn btn-danger btn-remove\" type=\"button\" data-id=\"" + item.id + "\"><i class=\"icon-remove icon-white\"></i></button>"
+                            + "</div>"
+                            + "</td>"
 
-                        + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price) + "</td>"
-                        + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(promotion) + "</td>"
-                        + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount) + "</td>"
-                        + "</tr>";
+                            + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price) + "</td>"
+                            + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(promotion) + "</td>"
+                            + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount) + "</td>"
+                            + "</tr>";
+                    }
                     total += amount;
                 });
                 if (res.coupon != null) {
@@ -277,6 +296,16 @@
                     $('#lbl_number_of_items').text(res.items.length);
                     $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
                     $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+                }
+                if (!isExist) {
+                    alert("Một sản phẩm trong giỏ hàng của bạn không còn tồn tại hoặc đã bị xóa, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé!")
+                    $('#btn-purchase').html('<button class="btn btn-large table-cart" disabled>Thanh toán <i class="icon-arrow-right"></i></button>');
+                } else if (!isAvaiable) {
+                    alert("Một sản phẩm trong giỏ hàng của bạn đã hết hàng, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé!")
+                    $('#btn-purchase').html('<button class="btn btn-large table-cart" disabled>Thanh toán <i class="icon-arrow-right"></i></button>');
+                }
+                else {
+                    $('#btn-purchase').html('<a href="/gio-hang/thanh-toan" class="btn btn-large table-cart">Thanh toán <i class="icon-arrow-right"></i></a>');
                 }
             },
         })

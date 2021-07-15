@@ -75,7 +75,7 @@ namespace TechShopSolution.Application.Catalog.Order
                         if (product.instock != null)
                         {
                             if (product.instock == 0)
-                                return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã hết hạn vui lòng bỏ sản phẩm ra khỏi giỏ hàng.");
+                                return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã hết hàng vui lòng bỏ sản phẩm ra khỏi giỏ hàng.");
                             else product.instock = product.instock - item.quantity;
                         }
                     }
