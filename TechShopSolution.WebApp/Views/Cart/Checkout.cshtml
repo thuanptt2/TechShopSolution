@@ -243,7 +243,7 @@
                                 {
                                     <tr>
                                         <td> <img width="60" height="60" src="data:image/jpeg;base64,@item.image" alt="@item.name" /></td>
-                                        <td><a href="san-pham/@item.slug">@item.name</a></td>
+                                        <td><a href="@Url.Action("Detail", "Product", new { slug = item.slug })" target="_blank">@item.name</a></td>
                                         <td align="center">
                                             @item.quantity
                                         </td>

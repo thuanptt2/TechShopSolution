@@ -79,10 +79,10 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-        [HttpGet("OrderDetail/{id}")]
-        public IActionResult DetailOrder(int id)
+        [HttpGet("OrderDetail")]
+        public IActionResult DetailOrder(int id, int cus_id)
         {
-            var result = _orderService.GetDetailOrder(id);
+            var result = _orderService.GetDetailOrder(id, cus_id);
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
