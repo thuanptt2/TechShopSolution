@@ -28,7 +28,7 @@ namespace TechShopSolution.WebApp.Controllers
         }
 
         [HttpGet]
-        [Route("tai-khoan/don-hang")]
+            [Route("tai-khoan/don-hang")]
         public async Task<IActionResult> OrderTracking()
         {
             if (!User.Identity.IsAuthenticated)
@@ -60,7 +60,7 @@ namespace TechShopSolution.WebApp.Controllers
             if (!result.IsSuccess)
             {
                 TempData["error"] = result.Message;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("OrderTracking", "Order");
             }
             ViewBag.Model = result.ResultObject;
             if (TempData["result"] != null)
