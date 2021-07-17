@@ -75,7 +75,7 @@ namespace TechShopSolution.Application.Catalog.Order
                         if (product.instock != null)
                         {
                             if (product.instock == 0)
-                                return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã hết hạn vui lòng bỏ sản phẩm ra khỏi giỏ hàng.");
+                                return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã hết hàng vui lòng bỏ sản phẩm ra khỏi giỏ hàng.");
                             else product.instock = product.instock - item.quantity;
                         }
                     }
@@ -362,14 +362,15 @@ namespace TechShopSolution.Application.Catalog.Order
 
             return new ApiSuccessResult<List<OrderPublicViewModel>>(Orders);
         }
-        public ApiResult<OrderPublicViewModel> GetDetailOrder(int id)
+        public ApiResult<OrderPublicViewModel> GetDetailOrder(int id, int cus_id)
         {
            
             var query = from od in _context.OrDetails
                         join p in _context.Products on od.product_id equals p.id
                         join o in _context.Orders on od.order_id equals o.id
+                        join c in _context.Customers on o.cus_id equals c.id
                         join pm in _context.PaymentMethods on o.payment_id equals pm.id
-                        where o.id == id
+                        where o.id == id && c.id == cus_id
                         select new { p, o, od, pm };
 
             var data = query.AsEnumerable()

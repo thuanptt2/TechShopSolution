@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section jsFooter {
+
     @if (ViewBag.ErrorMsg != null)
     {
         <script>
@@ -33,6 +34,13 @@
             };
         </script>
     }
+    <script>
+        $("#ProductImageInput").change(function (event) {
+            var x = URL.createObjectURL(event.target.files[0]);
+            $("#ProductImage").attr("src", x);
+            console.log(event);
+        })
+    </script>
 }
 
 

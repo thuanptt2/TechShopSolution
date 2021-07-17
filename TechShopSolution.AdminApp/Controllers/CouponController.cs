@@ -85,7 +85,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(CouponUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _couponApiClient.UpdateCoupon(request);
             if (result.IsSuccess)
             {

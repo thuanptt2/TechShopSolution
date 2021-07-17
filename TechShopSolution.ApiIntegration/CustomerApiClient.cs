@@ -191,11 +191,11 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<List<OrderPublicViewModel>>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<List<OrderPublicViewModel>>>(result);
         }
-        public async Task<ApiResult<OrderPublicViewModel>> GetOrderDetail(int id)
+        public async Task<ApiResult<OrderPublicViewModel>> GetOrderDetail(int id, int cus_id)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/order/OrderDetail/{id}");
+            var respone = await client.GetAsync($"/api/order/OrderDetail?id={id}&cus_id={cus_id}");
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<OrderPublicViewModel>>(result);

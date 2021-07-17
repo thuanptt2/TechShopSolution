@@ -64,7 +64,7 @@
                         <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
                         <div class="controls">
                             <input type="text" class="input-medium" id="codeCoupon" style="text-transform:uppercase" placeholder="CODE">
-                            <button type="button" class="btn" id="btnApplyCoupon"> Áp dụng </button><br />
+                            <button type="button" class="btn" id="btnApplyCoupon" > Áp dụng </button><br />
                             <span id="CouponMessage"></span>
                         </div>
                     </div>
@@ -78,7 +78,8 @@
     @{
         if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("CartSession")))
         {
-            <a href="@Url.Action("Checkout", "Cart")" class="btn btn-large pull-right table-cart">Thanh toán <i class="icon-arrow-right"></i></a>
+            <div id="btn-purchase" class="pull-right">
+            </div>
         }
     }
 </div>

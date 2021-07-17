@@ -1,0 +1,50 @@
+﻿@model TechShopSolution.ViewModels.Website.Contact.ContactViewModel
+
+<div id="footerSection">
+    <div class="container">
+        <div class="row">
+            <div class="span3">
+                <h5>TÀI KHOẢN</h5>
+                <a href="login.html">THÔNG TIN TÀI KHOẢN</a>
+                <a href="login.html">ĐỊA CHỈ</a>
+                <a href="login.html">LỊCH SỬ ĐƠN HÀNG</a>
+            </div>
+            <div class="span3">
+                <h5>THÔNG TIN</h5>
+                <a href="@Url.Action("Index", "Contact")">LIÊN HỆ</a>
+                <a href="register.html">GỬI FEEDBACK</a>
+                <a href="legal_notice.html">ĐĂNG KÝ</a>
+            </div>
+            <div class="span3">
+                <h5>OFFERS CỦA CHÚNG TÔI</h5>
+                <a href="#">SẢN PHẨM MỚI</a>
+                <a href="#">SẢN PHẨM BÁN CHẠY</a>
+                <a href="special_offer.html">SẢN PHẨM NỔI BẬT</a>
+            </div>
+            <div id="socialMedia" class="span3 pull-right">
+                @if (!string.IsNullOrEmpty(Model.social_fb) || !string.IsNullOrEmpty(Model.social_instagram) 
+                    || !string.IsNullOrEmpty(Model.social_twitter) || !string.IsNullOrEmpty(Model.social_youtube))
+                {
+                    <h5>KÊNH XÃ HỘI </h5>
+                }
+                @if (!string.IsNullOrEmpty(Model.social_fb))
+                {
+                    <a href="@Model.social_fb" target="_blank"><img width="60" height="60" src="/themes/images/facebook.png" title="facebook" alt="facebook" /></a>
+                }
+                @if (!string.IsNullOrEmpty(Model.social_instagram))
+                {
+                    <a href="@Model.social_instagram" target="_blank"><img width="60" height="60" src="/themes/images/instagram.png" title="facebook" alt="instagram" /></a>
+                }
+                @if (!string.IsNullOrEmpty(Model.social_twitter))
+                {
+                    <a href="@Model.social_twitter" target="_blank"><img width="60" height="60" src="/themes/images/twitter.png" title="twitter" alt="twitter"/></a>
+                }
+                @if (!string.IsNullOrEmpty(Model.social_youtube))
+                {
+                    <a href="@Model.social_youtube" target="_blank"><img width="60" height="60" src="/themes/images/youtube.png" title="twitter" alt="youtube" /></a>
+                }
+            </div>
+        </div>
+        <p class="pull-right margin-top-20">&copy; @Model.company_name</p>
+    </div><!-- Container End -->
+</div>

@@ -37,8 +37,38 @@ namespace TechShopSolution.WebApp.Controllers
             _orderApiClient = orderApiClient;
         }
         [Route("/gio-hang")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+            CartViewModel currentCart = new CartViewModel();
+            if (!string.IsNullOrEmpty(session))
+            {
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+                foreach(var item in currentCart.items)
+                {
+                    var product = await _productApiClient.GetById(item.Id);
+                    if(product.ResultObject == null)
+                    {
+                        item.isExist = false;
+                    }
+                    else 
+                    {
+                        if (product.ResultObject.instock == 0)
+                        {
+                            item.Instock = 0;
+                        }
+                        else
+                        {
+                            item.Instock = product.ResultObject.instock;
+                        }
+                        if (!item.isExist)
+                        {
+                            item.isExist = true;
+                        }
+                    }
+                }
+                HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+            }
             return View();
         }
         [Authorize]
@@ -233,6 +263,7 @@ namespace TechShopSolution.WebApp.Controllers
                     Code = product.ResultObject.code,
                     Slug = product.ResultObject.slug,
                     Price = product.ResultObject.unit_price,
+                    isExist = true,
                     PromotionPrice = product.ResultObject.promotion_price,
                     Images = product.ResultObject.image,
                     Name = product.ResultObject.name,

@@ -18,6 +18,7 @@ namespace TechShopSolution.WebApp.Controllers
         {
             _contactApiClient = contactApiClient;
         }
+        [Route("lien-he")]
         public async Task<IActionResult> Index()
         {
             var contact = await _contactApiClient.GetcontactInfos();

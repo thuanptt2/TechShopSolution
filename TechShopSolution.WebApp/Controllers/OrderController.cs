@@ -28,7 +28,7 @@ namespace TechShopSolution.WebApp.Controllers
         }
 
         [HttpGet]
-        [Route("tai-khoan/don-hang")]
+            [Route("tai-khoan/don-hang")]
         public async Task<IActionResult> OrderTracking()
         {
             if (!User.Identity.IsAuthenticated)
@@ -50,11 +50,17 @@ namespace TechShopSolution.WebApp.Controllers
         [Route("tai-khoan/don-hang/{id}")]
         public async Task<IActionResult> OrderDetail(int id)
         {
-            var result = await _customerApiClient.GetOrderDetail(id);
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
+            var cus_id = User.FindFirst(ClaimTypes.Sid).Value;
+
+            var result = await _customerApiClient.GetOrderDetail(id, int.Parse(cus_id));
             if (!result.IsSuccess)
             {
                 TempData["error"] = result.Message;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("OrderTracking", "Order");
             }
             ViewBag.Model = result.ResultObject;
             if (TempData["result"] != null)
