@@ -36,6 +36,7 @@ namespace TechShopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new SlideConfigurations());
             modelBuilder.ApplyConfiguration(new TransportConfigurations());
             modelBuilder.ApplyConfiguration(new TransporterConfigurations());
+            modelBuilder.ApplyConfiguration(new FavoriteConfigurations());
             //base.OnModelCreating(modelBuilder);
         }
 
@@ -60,6 +61,7 @@ namespace TechShopSolution.Data.EF
         public DbSet<Slide> Slides { get; set; }
         public DbSet<Transport> Transports { get; set; }
         public DbSet<Transporter> Transporters { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
 
     }
 }
