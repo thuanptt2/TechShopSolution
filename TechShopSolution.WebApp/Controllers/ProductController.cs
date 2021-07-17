@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,9 +44,32 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 ViewBag.ErrorMsg = TempData["error"];
             }
+
+            List<ProductRecentlyViewModel> RecentlyProducts = new List<ProductRecentlyViewModel>();
+            var session = HttpContext.Session.GetString("RecentlyProducts");
+            if(!string.IsNullOrWhiteSpace(session))
+            {
+                RecentlyProducts = JsonConvert.DeserializeObject<List<ProductRecentlyViewModel>>(session);
+            }
+            if(!RecentlyProducts.Any(x=> x.id == product.ResultObject.Product.id))
+            {
+                var pro = new ProductRecentlyViewModel()
+                {
+                    id = product.ResultObject.Product.id,
+                    name = product.ResultObject.Product.name,
+                    promotion_price = product.ResultObject.Product.promotion_price,
+                    slug = product.ResultObject.Product.slug,
+                    image = product.ResultObject.Product.image,
+                    unit_price = product.ResultObject.Product.unit_price,
+                    view_at = DateTime.Now,
+                };
+                RecentlyProducts.Add(pro);
+                HttpContext.Session.SetString("RecentlyProducts", JsonConvert.SerializeObject(RecentlyProducts));
+            }
             return View(new ProductDetailViewModel()
             {
                 Product = product.ResultObject.Product,
+                ProductsRecently = RecentlyProducts.OrderByDescending(x=> x.view_at).ToList(),
                 Ratings = product.ResultObject.Ratings,
                 ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.Product.brand_id, 4),
                 ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.Product.id),
@@ -229,7 +254,7 @@ namespace TechShopSolution.WebApp.Controllers
                         CategoryViewModel tree = new CategoryViewModel();
                         tree = cate;
                         tree.level = level;
-                        tree.cate_name = String.Concat(Enumerable.Repeat(Microsoft.VisualBasic.Strings.Space(3), level)) + tree.cate_name;
+                        tree.cate_name = String.Concat(Enumerable.Repeat("‣", level)) + tree.cate_name;
 
                         result.Add(tree);  
                         List<CategoryViewModel> child = await OrderCateToTree(lst, cate.id, level + 1);

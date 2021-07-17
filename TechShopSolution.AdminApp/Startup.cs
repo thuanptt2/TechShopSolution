@@ -49,6 +49,8 @@ namespace TechShopSolution.AdminApp
             services.AddTransient<IOrderApiClient, OrderApiClient>();
             services.AddTransient<IPaymentApiClient, PaymentApiClient>();
             services.AddTransient<ITransportApiClient, TransportApiClient>();
+            services.AddTransient<ISlideApiClient, SlideApiClient>();
+            services.AddTransient<IContactApiClient, ContactApiClient>();
 
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

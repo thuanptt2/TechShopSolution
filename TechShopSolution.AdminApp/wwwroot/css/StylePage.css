@@ -465,3 +465,14 @@ table a:hover {
     font-weight: 500;
     color: #007bff;
 }
+.image-slide .ImageBoxMain {
+    height: auto !important;
+}
+.display-order {
+    text-align: center;
+    font-size: 1.2rem;
+}
+.feedback-none-read {
+    background: #e9ecef;
+    font-weight: bold;
+}

@@ -704,6 +704,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 cate_name = x.Key.ProductInCategory.First().Category.cate_name.ToString(),
                 cate_slug = x.Key.ProductInCategory.First().Category.cate_slug.ToString(),
                 code = x.Key.code,
+                image = GetBase64StringForImage(_storageService.GetFileUrl(x.Key.image)),
                 create_at = x.Key.create_at,
                 descriptions = x.Key.descriptions,
                 featured = x.Key.featured,

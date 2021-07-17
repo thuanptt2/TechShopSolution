@@ -1,4 +1,5 @@
 ﻿@model ProductDetailViewModel
+@using TechShopSolution.WebApp.Models
 @{
     int score5 = 0;
     int score4 = 0;
@@ -80,15 +81,15 @@ else
                 <div class="product-short-desc">
                     @Html.Raw(Model.Product.short_desc)
                 </div><br />
-                      <div class="d-flex margin-bottom-10">
-                          <div class="Stars" id="rating-score-star"></div>
-                          <span id="rating-score-number"></span>
-                          <span id="rating-vote-times"></span>
-                      </div>
+                <div class="d-flex margin-bottom-10">
+                    <div class="Stars" id="rating-score-star"></div>
+                    <span id="rating-score-number"></span>
+                    <span id="rating-vote-times"></span>
+                </div>
                 @if (Model.Product.warranty > 0)
                 {
                     <p class="margin-bottom-20">
-                        <img src="~/images/huyhieu.png" width="30"/>
+                        <img src="~/images/huyhieu.png" width="30" />
                         Bảo hành: <strong>@Model.Product.warranty tháng</strong>
                     </p>
                 }
@@ -171,7 +172,10 @@ else
                             foreach (var item in Model.Ratings)
                             {
                                 <div class="review" itemscope itemtype="http://schema.org/Review">
-                                    <h4 class="subheading" itemprop="itemReviewed">@item.content</h4>
+                                    <div class="space-between-flex">
+                                        <h4 class="subheading" itemprop="itemReviewed">@item.content</h4>
+                                        <p class="receive-item">@item.date_rating</p>
+                                    </div>
                                     <p class="author" itemprop="author"><small>Bởi:</small> @item.cus_name</p>
                                     <div class="rating rating--read-only">
                                         @if (item.score == 1)
@@ -280,7 +284,7 @@ else
     </div>
     @if (Model.ProductsRelated.Count != 0)
     {
-        <h3 class=" margin-top-20">Cùng thương hiệu  @Model.Product.brand_name</h3>
+        <h3 class=" margin-top-20">Cùng thương hiệu  <span class="product-related-brand-name">@Model.Product.brand_name</span></h3>
     }
     <ul class="thumbnails">
         @{
@@ -288,47 +292,118 @@ else
             {
                 foreach (var product in Model.ProductsRelated)
                 {
-                    <li class="span3">
-                        <div class="thumbnail">
-                            @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
-                            @if (product.featured)
-                            {
-                                <i class="tag-featured"></i>
-                            }
-                            else if (product.best_seller)
-                            {
-                                <i class="tag-best-seller"></i>
-                            }
-                            else if (product.promotion_price > 1)
-                            {
-                                <i class="tag-sale"></i>
-                            }
-                            else if (days.TotalDays == 7)
-                            {
-                                <i class="tag"></i>
-                            }
-                            <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
-                            <div class="caption">
-                                <h5>@product.name</h5>
-                            </div>
-                            <div class="footer-thumbnail">
-                                @if (product.promotion_price > 1)
+                    if (product.id != Model.Product.id)
+                    {
+                        <li class="span3">
+                            <div class="thumbnail">
+                                @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
+                                @if (product.featured)
                                 {
-                                    <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
-                                    <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                    <i class="tag-featured"></i>
                                 }
-                                else
+                                else if (product.best_seller)
                                 {
-                                    <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                    <i class="tag-best-seller"></i>
                                 }
+                                else if (product.promotion_price > 1)
+                                {
+                                    <i class="tag-sale"></i>
+                                }
+                                else if (days.TotalDays == 7)
+                                {
+                                    <i class="tag"></i>
+                                }
+                                <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                                <div class="caption">
+                                    <h5>@product.name</h5>
+                                </div>
+                                <div class="footer-thumbnail">
+                                    @if (product.promotion_price > 1)
+                                    {
+                                        <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                        <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                    }
+                                </div>
+                                <h4 style="text-align:center">
+                                    <a class="btn" href="@Url.Action("Detail", "Product", new { slug = product.slug })">Xem Chi tiết</a>
+                                </h4>
                             </div>
-                            <h4 style="text-align:center">
-                                <a class="btn" href="@Url.Action("Detail", "Product", new { slug = product.slug })">Xem Chi tiết</a>
-                            </h4>
-                        </div>
-                    </li>
+                        </li>
+                    }
                 }
             }
         }
     </ul>
+    @if (Model.ProductsRecently.Count > 1)
+    {
+        <div class="well well-small">
+            <h4>
+                Sản phẩm đã xem
+            </h4>
+            <div class="row-fluid">
+                <div id="recently" class="carousel slide">
+                    <div class="carousel-inner">
+                        @{
+                            List<List<ProductRecentlyViewModel>> recentlyProducts = new List<List<ProductRecentlyViewModel>>();
+                            List<ProductRecentlyViewModel> productPart = new List<ProductRecentlyViewModel>();
+                            var quantityRecentlyProducts = Model.ProductsRecently.Count();
+                        }
+
+                        @for (int index = 0; index < quantityRecentlyProducts; index++)
+                        {
+                            if(Model.ProductsRecently[index].id != Model.Product.id)
+                            {
+                                productPart.Add(Model.ProductsRecently[index]);
+                            }
+                            if (productPart.Count == 4 || index == quantityRecentlyProducts - 1)
+                            {
+                                recentlyProducts.Add(productPart);
+                                productPart = new List<ProductRecentlyViewModel>();
+                            }
+                        }
+                        @for (int index = 0; index < recentlyProducts.Count; index++)
+                        {
+                            <div class="item @(index == 0?"active":"")">
+                                <ul class="thumbnails recently-product">
+                                    @if (recentlyProducts[index].Count > 0)
+                                    {
+                                        @foreach (var item in recentlyProducts[index])
+                                        {
+                                            <li class="span3">
+                                                <div class="thumbnail">
+                                                    <i class="tag-featured"></i>
+                                                    <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                                    <div class="caption">
+                                                        <h5>@item.name</h5>
+                                                    </div>
+                                                    <div class="footer-thumbnail">
+                                                        @if (item.promotion_price > 1)
+                                                        {
+                                                            <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
+                                                            <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                    <a class="left carousel-control" href="#recently" data-slide="prev">‹</a>
+                    <a class="right carousel-control" href="#recently" data-slide="next">›</a>
+                </div>
+            </div>
+        </div>
+    }
 }

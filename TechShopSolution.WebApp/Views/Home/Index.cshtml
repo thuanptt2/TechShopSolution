@@ -10,34 +10,16 @@
     <div id="carouselBlk">
         <div id="myCarousel" class="carousel slide">
             <div class="carousel-inner">
-                <div class="item active">
-                    <div class="container">
-                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/06/Banner-Web-Tong-hop-Nvidia-Geforce-RTX%E2%84%A2.jpg.webp" alt="special offers" /></a>
-                        <div class="carousel-caption">
-                            <h4>Second Thumbnail label</h4>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                @for (int i = 0; i < Model.Sliders.Count; i++)
+                {
+                    <div class="item @(i == 0 ? "active": "")">
+                        <div class="container">
+                            <a href="@Model.Sliders[i].link" class="slide-link">
+                                <img class="slider-image" src="data:image/jpeg;base64, @Model.Sliders[i].image" alt="slide image" />
+                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="item">
-                    <div class="container">
-                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-May-bo-Thuong-Hieu-Gia-Vi-Dieu-1000x633-1.jpg.webp" alt="" /></a>
-                        <div class="carousel-caption">
-                            <h4>Second Thumbnail label</h4>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="container">
-                        <a href="#"><img class="slider-image" src="https://tandoanh.cdn.vccloud.vn/wp-content/uploads/2021/05/Banner-Web-EVGA-RTX-Series-Summer-2021.jpg.webp" alt="" /></a>
-                        <div class="carousel-caption">
-                            <h4>Second Thumbnail label</h4>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        </div>
-
-                    </div>
-                </div>
+                }
             </div>
             <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
             <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
@@ -70,12 +52,11 @@
                         @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
                         {
                             featuredPart.Add(Model.FeaturedProducts.Products[index]);
-                            if (featuredPart.Count == 4 || Model.FeaturedProducts.Count < 4)
+                            if (featuredPart.Count == 4 || index == Model.FeaturedProducts.Count - 1)
                             {
                                 featuredProducts.Add(featuredPart);
                                 featuredPart = new List<ProductViewModel>();
                             }
-
                         }
                         @for (int index = 0; index < featuredProducts.Count; index++)
                         {
@@ -83,37 +64,45 @@
                                 <ul class="thumbnails">
                                     @foreach (var item in featuredProducts[index])
                                     {
-                                        if (item.instock > 0 || item.instock == null)
-                                        {
-                                            <li class="span3">
-                                                <div class="thumbnail">
-                                                    <i class="tag-featured"></i>
-                                                    <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
-                                                    <div class="caption">
-                                                        <h5>@item.name</h5>
-                                                    </div>
-                                                    <div class="footer-thumbnail">
-                                                        @if (item.promotion_price > 1)
-                                                        {
-                                                            <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
-                                                            <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
-                                                        }
+                                        <li class="span3">
+                                            <div class="thumbnail">
+                                                <i class="tag-featured"></i>
+                                                <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                                <div class="caption">
+                                                    <h5>@item.name</h5>
+                                                </div>
+                                                <div class="footer-thumbnail">
+                                                    @if (item.promotion_price > 1)
+                                                    {
+                                                        <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
+                                                        <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                    }
 
-                                                    </div>
+                                                </div>
+                                                @if (item.instock > 0 || item.instock == null)
+                                                {
                                                     <div class="product-btn">
                                                         <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
                                                             <i class="fas fa-shopping-cart"></i>
                                                             Mua ngay
                                                         </a>
                                                     </div>
-
-                                                </div>
-                                            </li>
-                                        }
+                                                }
+                                                else
+                                                {
+                                                    <div class="product-btn">
+                                                        <a class="btn-View btn btn" data-id="@item.id" href="@Url.Action("Detail", "Product", new { slug = item.slug})" localize-content>
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                            Xem chi tiết
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </li>
                                     }
                                 </ul>
                             </div>
@@ -139,50 +128,58 @@
                         @for (int index = 0; index < Model.BestSellerProducts.Count; index++)
                         {
                             bestSellerPart.Add(Model.BestSellerProducts.Products[index]);
-                            if (bestSellerPart.Count == 4 || Model.BestSellerProducts.Count < 4)
+                            if (bestSellerPart.Count == 4 || index == Model.BestSellerProducts.Count - 1)
                             {
                                 bestProducts.Add(bestSellerPart);
                                 bestSellerPart = new List<ProductViewModel>();
                             }
-
                         }
+
                         @for (int index = 0; index < bestProducts.Count; index++)
                         {
                             <div class="item @(index == 0?"active":"")">
                                 <ul class="thumbnails">
                                     @foreach (var item in bestProducts[index])
                                     {
-                                        if (item.instock > 0 || item.instock == null)
-                                        {
-                                            <li class="span3">
-                                                <div class="thumbnail">
-                                                    <i class="tag-best-seller"></i>
-                                                    <a href="@Url.Action("Detail", "Product", new { slug = item.slug})"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
-                                                    <div class="caption">
-                                                        <h5>@item.name</h5>
-                                                    </div>
-                                                    <div class="footer-thumbnail">
-                                                        @if (item.promotion_price > 1)
-                                                        {
-                                                            <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
-                                                            <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
-                                                        }
+                                        <li class="span3">
+                                            <div class="thumbnail">
+                                                <i class="tag-best-seller"></i>
+                                                <a href="@Url.Action("Detail", "Product", new { slug = item.slug})"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                                <div class="caption">
+                                                    <h5>@item.name</h5>
+                                                </div>
+                                                <div class="footer-thumbnail">
+                                                    @if (item.promotion_price > 1)
+                                                    {
+                                                        <span class="product-price">@String.Format(info, "{0:c}", item.promotion_price)</span>
+                                                        <span class="product-promotion-pirce">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
+                                                    }
 
-                                                    </div>
+                                                </div>
+                                                @if (item.instock > 0 || item.instock == null)
+                                                {
                                                     <div class="product-btn">
                                                         <a class="btn-View btn btn-danger btn-buy-now" data-id="@item.id" href="#" localize-content>
                                                             <i class="fas fa-shopping-cart"></i>
                                                             Mua ngay
                                                         </a>
                                                     </div>
-
-                                                </div>
-                                            </li>
-                                        }
+                                                }
+                                                else
+                                                {
+                                                    <div class="product-btn">
+                                                        <a class="btn-View btn btn" data-id="@item.id" href="@Url.Action("Detail", "Product", new { slug = item.slug})" localize-content>
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                            Xem chi tiết
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </li>
                                     }
                                 </ul>
                             </div>
@@ -480,7 +477,6 @@
                                 </li>
                             }
                         }
-
                     }
                 }
             </ul>

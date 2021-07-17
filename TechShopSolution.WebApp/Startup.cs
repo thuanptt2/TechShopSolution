@@ -52,6 +52,8 @@ namespace TechShopSolution.WebApp
             services.AddTransient<ICustomerApiClient, CustomerApiClient>();
             services.AddTransient<IPaymentApiClient, PaymentApiClient>();
             services.AddTransient<IOrderApiClient, OrderApiClient>();
+            services.AddTransient<ISlideApiClient, SlideApiClient>();
+            services.AddTransient<IContactApiClient, ContactApiClient>();
             services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
             services.AddTransient<IValidator<CustomerPublicUpdateRequest>, CustomerUpdatePublicValidator>();
 
@@ -163,6 +165,13 @@ namespace TechShopSolution.WebApp
                       controller = "Cart",
                       action = "Checkout"
                   });
+                endpoints.MapControllerRoute(
+                name: "Lien he",
+                pattern: "/lien-he", new
+                {
+                    controller = "Contact",
+                    action = "Index"
+                });
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
