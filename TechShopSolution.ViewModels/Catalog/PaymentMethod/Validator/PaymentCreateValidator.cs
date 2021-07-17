@@ -10,7 +10,7 @@ namespace TechShopSolution.ViewModels.Catalog.PaymentMethod.Validator
         public PaymentCreateValidator()
         {
             RuleFor(x => x.name).NotEmpty().WithMessage("Tên phương thức không được để trống")
-                                .MaximumLength(255).WithMessage("Tên thương hiệu không thể vượt quá 255 kí tự");
+                                .MaximumLength(255).WithMessage("Tên phương thức không thể vượt quá 255 kí tự");
         }
     }
 }

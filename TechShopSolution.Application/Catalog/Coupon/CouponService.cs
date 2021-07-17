@@ -70,6 +70,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                 var coupon = await _context.Coupons.FindAsync(id);
                 if (coupon != null)
                 {
+                    if(await _context.Orders.AnyAsync(x=>x.coupon_id == id))
+                        return new ApiErrorResult<bool>($"Bạn chỉ có thể xóa mã giảm giá chưa được ai sử dụng");
                     _context.Coupons.Remove(coupon);
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();

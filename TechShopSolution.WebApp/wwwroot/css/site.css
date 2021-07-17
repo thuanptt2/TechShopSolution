@@ -1185,3 +1185,6 @@ body {
 .text-right {
     text-align: right;
 }
+#bestseller .span3 {
+    margin-bottom: 0;
+}
