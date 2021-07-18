@@ -145,13 +145,19 @@ namespace TechShopSolution.Application.Catalog.Coupon
             };
             return new ApiSuccessResult<CouponViewModel>(couponn);
         }
-        public ApiResult<CouponViewModel> GetByCode(string code)
+        public async Task<ApiResult<CouponViewModel>> UseCoupon(string code, int cus_id)
         {
             var coupon = _context.Coupons.Where(x=> x.code.Equals(code)).FirstOrDefault();
             if (coupon == null)
             {
                 return new ApiErrorResult<CouponViewModel>("Mã giảm giá không tồn tại");
             }
+            var isUse = await _context.Orders.AnyAsync(x => x.cus_id == cus_id && x.coupon_id == coupon.id);
+            if(isUse)
+            {
+                return new ApiErrorResult<CouponViewModel>("Bạn đã sử dụng mã này rồi");
+            }
+
             var couponn = new CouponViewModel()
             {
                 code = coupon.code,

@@ -115,39 +115,62 @@ namespace TechShopSolution.WebApp.Controllers
             }
             if (currentCart.coupon != null)
             {
-                var coupon = await _couponApiClient.GetByCode(currentCart.coupon.code);
-                if (coupon.ResultObject != null)
-                    coupon_id = coupon.ResultObject.id;
-                if (coupon.ResultObject.min_order_value != null)
+                var coupon = await _couponApiClient.UseCoupon(currentCart.coupon.code, int.Parse(id));
+                if (!coupon.IsSuccess)
                 {
-                    if ((decimal)coupon.ResultObject.min_order_value <= total)
+                    ViewBag.ErrorMsg = coupon.Message;
+                    currentCart.coupon = null;
+                } else
+                {
+                    if (coupon.ResultObject.start_at > DateTime.Today || coupon.ResultObject.end_at < DateTime.Today)
                     {
-                        if (coupon.ResultObject.type.Equals("Phần trăm"))
+                        currentCart.coupon = null;
+                        ViewBag.ErrorMsg = "Mã giảm giá hiện không khả dụng";
+                    } else if (!coupon.ResultObject.isActive)
+                    {
+                        currentCart.coupon = null;
+                        ViewBag.ErrorMsg = "Mã giảm giá  đã bị vô hiệu hóa";
+                    }
+                    else if (coupon.ResultObject.quantity == 0)
+                    {
+                        ViewBag.ErrorMsg = "Mã giảm giá đã được sử dụng hết";
+                        currentCart.coupon = null;
+                    }
+                    else
+                    {
+                        coupon_id = coupon.ResultObject.id;
+                        if (coupon.ResultObject.min_order_value != null)
                         {
-                            if (coupon.ResultObject.max_price != null)
+                            if ((decimal)coupon.ResultObject.min_order_value <= total)
                             {
-                                discount = total * ((decimal)coupon.ResultObject.value / 100);
-                                if (discount > (decimal)coupon.ResultObject.max_price)
-                                    discount = (decimal)coupon.ResultObject.max_price;
+                                if (coupon.ResultObject.type.Equals("Phần trăm"))
+                                {
+                                    if (coupon.ResultObject.max_price != null)
+                                    {
+                                        discount = total * ((decimal)coupon.ResultObject.value / 100);
+                                        if (discount > (decimal)coupon.ResultObject.max_price)
+                                            discount = (decimal)coupon.ResultObject.max_price;
+                                    }
+                                    else discount = total * ((decimal)coupon.ResultObject.value / 100);
+                                }
+                                else discount = (decimal)coupon.ResultObject.value;
                             }
-                            else discount = total * ((decimal)coupon.ResultObject.value / 100);
                         }
-                        else discount = (decimal)coupon.ResultObject.value;
-                    }
-                }
-                else
-                {
-                    if (coupon.ResultObject.type.Equals("Phần trăm"))
-                    {
-                        if (coupon.ResultObject.max_price != null)
+                        else
                         {
-                            discount = total * ((decimal)coupon.ResultObject.value / 100);
-                            if (discount > (decimal)coupon.ResultObject.max_price)
-                                discount = (decimal)coupon.ResultObject.max_price;
+                            if (coupon.ResultObject.type.Equals("Phần trăm"))
+                            {
+                                if (coupon.ResultObject.max_price != null)
+                                {
+                                    discount = total * ((decimal)coupon.ResultObject.value / 100);
+                                    if (discount > (decimal)coupon.ResultObject.max_price)
+                                        discount = (decimal)coupon.ResultObject.max_price;
+                                }
+                                else discount = total * ((decimal)coupon.ResultObject.value / 100);
+                            }
+                            else discount = (decimal)coupon.ResultObject.value;
                         }
-                        else discount = total * ((decimal)coupon.ResultObject.value / 100);
                     }
-                    else discount = (decimal)coupon.ResultObject.value;
                 }
             }
             return View(new CheckoutRequest
@@ -223,16 +246,34 @@ namespace TechShopSolution.WebApp.Controllers
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
             if (currentCart.coupon != null)
             {
-                var result = await _couponApiClient.GetByCode(currentCart.coupon.code);
-                currentCart.coupon = new CouponViewModel
+                if (User.Identity.IsAuthenticated)
                 {
-                    code = result.ResultObject.code,
-                    type = result.ResultObject.type,
-                    value = result.ResultObject.value,
-                    max_value = result.ResultObject.max_price,
-                    min_order_value = result.ResultObject.min_order_value,
-                    quantity = result.ResultObject.quantity
-                };
+                    var cus_id = User.FindFirst(ClaimTypes.Sid).Value;
+                    var result = await _couponApiClient.UseCoupon(currentCart.coupon.code, int.Parse(cus_id));
+                    if (!result.IsSuccess)
+                    {
+                        currentCart.coupon = null;
+                    }
+                    else
+                    {
+                        if (result.ResultObject.start_at > DateTime.Today || result.ResultObject.end_at < DateTime.Today || !result.ResultObject.isActive || result.ResultObject.quantity == 0)
+                        {
+                            currentCart.coupon = null;
+                        }
+                        else
+                        {
+                            currentCart.coupon = new CouponViewModel
+                            {
+                                code = result.ResultObject.code,
+                                type = result.ResultObject.type,
+                                value = result.ResultObject.value,
+                                max_value = result.ResultObject.max_price,
+                                min_order_value = result.ResultObject.min_order_value,
+                                quantity = result.ResultObject.quantity
+                            };
+                        }
+                    }
+                }
             }
             return Ok(currentCart);
         }
@@ -277,7 +318,7 @@ namespace TechShopSolution.WebApp.Controllers
 
             return Ok(currentCart);
         }
-        public async Task<IActionResult> UpdateCart(int id, int quantity)
+        public IActionResult UpdateCart(int id, int quantity)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             CartViewModel currentCart = new CartViewModel();
@@ -294,27 +335,20 @@ namespace TechShopSolution.WebApp.Controllers
                     }
                     item.Quantity = quantity;
                     break;
-
                 }
-            }
-            if (currentCart.coupon != null)
-            {
-                var result = await _couponApiClient.GetByCode(currentCart.coupon.code);
-                currentCart.coupon = new CouponViewModel
-                {
-                    code = result.ResultObject.code,
-                    type = result.ResultObject.type,
-                    value = result.ResultObject.value,
-                    max_value = result.ResultObject.max_price,
-                    min_order_value = result.ResultObject.min_order_value,
-                    quantity = result.ResultObject.quantity
-                };
             }
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
         }
+        [Authorize]
         public async Task<IActionResult> UseCoupon(string code)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return BadRequest("Quý khách chưa đăng nhập");
+            }
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             if (session == null || session == "")
             {
@@ -322,22 +356,26 @@ namespace TechShopSolution.WebApp.Controllers
             }
             else
             {
-                var result = await _couponApiClient.GetByCode(code);
-                if (result.ResultObject == null)
-                    return BadRequest("Mã giảm giá không tồn tại");
-                if (result.ResultObject.start_at > DateTime.Today)
+                var result = await _couponApiClient.UseCoupon(code, int.Parse(id));
+                if (!result.IsSuccess)
                 {
-                    return BadRequest("Mã này sẽ có hiệu lực lúc " + result.ResultObject.start_at + ". Hãy thử lại sau bạn nhé");
+                    return BadRequest(result.Message);
                 }
-                if (result.ResultObject.end_at < DateTime.Today)
+                else
                 {
-                    return BadRequest("Mã này đã hết hạn");
+                    if (result.ResultObject.start_at > DateTime.Today)
+                    {
+                        return BadRequest("Mã này sẽ có hiệu lực lúc " + result.ResultObject.start_at + ". Hãy thử lại sau bạn nhé");
+                    }
+                    if (result.ResultObject.end_at < DateTime.Today)
+                    {
+                        return BadRequest("Mã này đã hết hạn");
+                    }
+                    if (!result.ResultObject.isActive)
+                        return BadRequest("Mã này đã bị vô hiệu hóa");
+                    if (result.ResultObject.quantity == 0)
+                        return BadRequest("Mã này đã được sử dụng hết");
                 }
-                if (!result.ResultObject.isActive)
-                    return BadRequest("Mã này đã bị vô hiệu hóa");
-                if (result.ResultObject.quantity == 0)
-                    return BadRequest("Mã này đã được sử dụng hết");
-
                 CartViewModel currentCart = new CartViewModel();
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
                 if (result.ResultObject.min_order_value != null)

@@ -64,7 +64,14 @@
                         <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
                         <div class="controls">
                             <input type="text" class="input-medium" id="codeCoupon" style="text-transform:uppercase" placeholder="CODE">
-                            <button type="button" class="btn" id="btnApplyCoupon" > Áp dụng </button><br />
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <button type="button" class="btn" onclick="alert('Quý khách cần đăng nhập để sử dụng mã giảm giá')"> Áp dụng </button><br />
+                            }
+                            else
+                            {
+                                <button type="button" class="btn" id="btnApplyCoupon"> Áp dụng </button><br />
+                            }
                             <span id="CouponMessage"></span>
                         </div>
                     </div>

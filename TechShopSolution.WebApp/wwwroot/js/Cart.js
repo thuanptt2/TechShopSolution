@@ -125,7 +125,7 @@
 
                 $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
 
-                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice ));
+                $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
 
 
                 var x = document.getElementById("snackbar");

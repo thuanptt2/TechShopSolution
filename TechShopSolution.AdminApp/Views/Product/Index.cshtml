@@ -121,17 +121,17 @@
                 <tbody>
                     @if (Model.Items == null)
                     {
-                    <tr>
-                        <th></th>
-                        <th>Không có sản phẩm nào.</th>
-                    </tr>
+                        <tr>
+                            <th></th>
+                            <th>Không có sản phẩm nào.</th>
+                        </tr>
                     }
                     else if (Model.TotalRecords == 0)
                     {
-                    <tr>
-                        <th></th>
-                        <th>Không tìm thấy sản phẩm.</th>
-                    </tr>
+                        <tr>
+                            <th></th>
+                            <th>Không tìm thấy sản phẩm.</th>
+                        </tr>
                     }
                     else
                     {
@@ -139,7 +139,7 @@
                         {
                             <tr>
                                 <td>
-                                   <img src="data:image/jpeg;base64,@item.image" width="50"/>
+                                    <img src="data:image/jpeg;base64,@item.image" width="50" />
                                 </td>
                                 <td>
                                     @Html.ActionLink(item.name, "Update", new { id = item.id })
@@ -147,11 +147,14 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.instock)
                                 </td>
+                                @{
+                                    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                }
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.unit_price)
+                                    @String.Format(info, "{0:N0}", item.unit_price)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.promotion_price)
+                                    @String.Format(info, "{0:N0}", item.promotion_price)
                                 </td>
                                 @if (item.isActive)
                                 {

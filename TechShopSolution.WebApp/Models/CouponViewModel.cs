@@ -13,5 +13,6 @@ namespace TechShopSolution.WebApp.Models
         public int? quantity { get; set; }
         public double? min_order_value { get; set; }
         public double? max_value { get; set; }
+        public string coupon_message { get; set; }
     }
 }

@@ -32,9 +32,11 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(result);
         }
         [HttpGet("code")]
-        public IActionResult GetByCode(string code)
+        public async Task<IActionResult> GetByCode(string code, int cus_id)
         {
-            var result = _couponService.GetByCode(code);
+            var result = await _couponService.UseCoupon(code, cus_id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
             return Ok(result);
         }
         [HttpPost]
