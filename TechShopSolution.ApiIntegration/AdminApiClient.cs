@@ -26,7 +26,7 @@ namespace TechShopSolution.ApiIntegration
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.PostAsync("https://localhost:5001/api/admin/authenticate", httpContent);
+            var respone = await client.PostAsync($"/api/admin/AdminLogin", httpContent);
             var token = await respone.Content.ReadAsStringAsync();
             return token;
         }
@@ -36,7 +36,7 @@ namespace TechShopSolution.ApiIntegration
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.PostAsync("https://localhost:5001/api/admin/authenticatecustomer", httpContent);
+            var respone = await client.PostAsync($"/api/admin/CustomerLogin", httpContent);
             var result = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
             {

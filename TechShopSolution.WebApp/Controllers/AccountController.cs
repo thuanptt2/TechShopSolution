@@ -20,7 +20,6 @@ using TechShopSolution.ViewModels.System;
 
 namespace TechShopSolution.WebApp.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private readonly IAdminApiClient _adminApiClient;
@@ -33,7 +32,6 @@ namespace TechShopSolution.WebApp.Controllers
             _customerApiClient = customerApiClient;
         }
         [Route("dang-nhap")]
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Login()
         {
@@ -43,7 +41,6 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [HttpPost]
         [Route("dang-nhap")]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginRequest request, string ReturnUrl)
         {
             if (!ModelState.IsValid)
@@ -57,7 +54,7 @@ namespace TechShopSolution.WebApp.Controllers
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(180),
                     IsPersistent = false
                 };
-                HttpContext.Session.SetString("Tokenuser", result.ResultObject);
+                HttpContext.Session.SetString("Token", result.ResultObject);
                 await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
@@ -75,13 +72,11 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [Route("dang-ky")]
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
         [HttpPost]
-        [AllowAnonymous]
         [Route("dang-ky")]
         public async Task<IActionResult> Register(CustomerRegisterRequest request, string returnUrl)
         {
@@ -114,6 +109,7 @@ namespace TechShopSolution.WebApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        [Authorize]
         [Route("tai-khoan")]
         public async Task<IActionResult> Detail()
         {
@@ -147,6 +143,7 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [HttpPost]
         [Route("tai-khoan")]
+        [Authorize]
         public async Task<IActionResult> Detail(CustomerPublicUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -157,11 +154,12 @@ namespace TechShopSolution.WebApp.Controllers
             if (result.IsSuccess)
             {
                 TempData["result"] = "Cập nhật tài khoản thành công";
-                return RedirectToAction("Detail","Account", new { id = request.Id.ToString()});
+                return RedirectToAction("Detail","Account");
             }
             ModelState.AddModelError("", "Cập nhật thất bại");
             return View(request);
         }
+        [Authorize]
         public async Task<IActionResult> UpdateAddress(int id)
         {
             var result = await _customerApiClient.GetById(id);
@@ -177,22 +175,22 @@ namespace TechShopSolution.WebApp.Controllers
             };
             return View(updateAddressRequest);
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+                return RedirectToAction(nameof(Detail));
             var result = await _customerApiClient.UpdateAddress(request);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Cập nhật địa chỉ thành công";
-                return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+                return RedirectToAction(nameof(Detail));
             }
             TempData["result"] = "Cập nhật địa chỉ thất bại";
-            return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+            return RedirectToAction(nameof(Detail));
         }
         [AcceptVerbs("GET", "POST")]
-        [AllowAnonymous]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {
             if (await _customerApiClient.VerifyEmail(email) == false)
@@ -284,6 +282,5 @@ namespace TechShopSolution.WebApp.Controllers
                           CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
-       
     }
 }

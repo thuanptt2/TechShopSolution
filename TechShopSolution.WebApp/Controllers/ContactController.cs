@@ -50,7 +50,7 @@ namespace TechShopSolution.WebApp.Controllers
             contentMailAdmin = contentMailClient.Replace("{{cus_email}}", request.email);
             TempData["result"] = "Gửi phản feedback thành công, chúng tôi sẽ tiếp nhận sớm nhất có thể.";
             await SendMail("thuanneuwu2@gmail.com", request.email, "Gửi phản hồi thành công", contentMailClient, "thuanneuwu2@gmail.com", "thanhthuan123");
-            await SendMail("thuanneuwu2@gmail.com", request.email, "Bạn có một phản hồi mới", contentMailClient, "thuanneuwu2@gmail.com", "thanhthuan123");
+            await SendMail("thuanneuwu2@gmail.com", "thuanneuwu2@gmail.com", "Bạn có một phản hồi mới", contentMailAdmin, "thuanneuwu2@gmail.com", "thanhthuan123");
 
             return RedirectToAction("Index");
         }

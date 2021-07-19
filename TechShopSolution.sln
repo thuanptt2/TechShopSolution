@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.BackendApi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.AdminApp", "TechShopSolution.AdminApp\TechShopSolution.AdminApp.csproj", "{5391C74A-3AEF-44B3-BBF8-E65B82B376D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechShopSolution.ApiIntegration", "TechShopSolution.ApiIntegration\TechShopSolution.ApiIntegration.csproj", "{2F32A3CA-9104-4CA5-B67E-0C8BA91266A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.ApiIntegration", "TechShopSolution.ApiIntegration\TechShopSolution.ApiIntegration.csproj", "{2F32A3CA-9104-4CA5-B67E-0C8BA91266A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
