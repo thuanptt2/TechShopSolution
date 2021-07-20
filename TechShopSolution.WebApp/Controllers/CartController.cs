@@ -230,8 +230,8 @@ namespace TechShopSolution.WebApp.Controllers
                 HttpContext.Session.Remove(SystemConstants.CartSession);
                 var contentMailClient = sendMailToClient(int.Parse(result.ResultObject), request);
                 var contentMailAdmin = sendMailToAdmin(int.Parse(result.ResultObject), request, customer.ResultObject);
-                await SendMail("thuanneuwu2@gmail.com", customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMailClient, "thuanneuwu2@gmail.com", "thanhthuan123");
-                await SendMail("thuanneuwu2@gmail.com", "thuanneuwu2@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin, "thuanneuwu2@gmail.com", "thanhthuan123");
+                await SendMail(customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMailClient);
+                await SendMail("thuanneuwu2@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin);
                 return RedirectToAction("Index","Home");
             }
             ModelState.AddModelError("", result.Message);
@@ -509,20 +509,20 @@ namespace TechShopSolution.WebApp.Controllers
             contentMail = contentMail.Replace("{{final_total}}", String.Format(info, "{0:N0}", final_total));
             return contentMail;
         }
-        public async Task SendMail(string _from, string _to, string _subject, string _body, string _gmail, string _password)
+        public async Task SendMail(string _to, string _subject, string _body)
         {
-            MailMessage message = new MailMessage(_from, _to, _subject, _body);
+            MailMessage message = new MailMessage();
             message.BodyEncoding = System.Text.Encoding.UTF8;
             message.SubjectEncoding = System.Text.Encoding.UTF8;
             message.IsBodyHtml = true;
+            message.From = new MailAddress("Techshop Việt Nam <admin@techshopvn.xyz>");
+            message.To.Add(new MailAddress(_to));
+            message.Subject = _subject;
+            message.Body = _body;
 
-            message.ReplyToList.Add(new MailAddress(_from));
-            message.Sender = new MailAddress(_from);
-
-            using var smtpClient = new SmtpClient("smtp.gmail.com");
-            smtpClient.Port = 587;
-            smtpClient.EnableSsl = true;
-            smtpClient.Credentials = new NetworkCredential(_gmail, _password);
+            using var smtpClient = new SmtpClient("mail.techshopvn.xyz", 587);
+            smtpClient.EnableSsl = false;
+            smtpClient.Credentials = new NetworkCredential("admin@techshopvn.xyz", "THANHTHUAn123");
 
             await smtpClient.SendMailAsync(message);
         }

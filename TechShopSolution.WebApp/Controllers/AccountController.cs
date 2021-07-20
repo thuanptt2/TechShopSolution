@@ -61,6 +61,10 @@ namespace TechShopSolution.WebApp.Controllers
                             authProperties);
                 if(!string.IsNullOrEmpty(ReturnUrl))
                 {
+                    if(ReturnUrl.Equals("/dang-nhap"))
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                     return Redirect(ReturnUrl);
                 } else
                 {
