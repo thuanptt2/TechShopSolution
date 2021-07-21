@@ -20,12 +20,15 @@ namespace TechShopSolution.WebApp.Controllers
         private readonly IProductApiClient _productApiClient;
         private readonly ICategoryApiClient _categorytApiClient;
         private readonly IBrandApiClient _brandApiClient;
+        private readonly ICustomerApiClient _customerApiClient;
 
-        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categorytApiClient, IBrandApiClient brandApiClient)
+        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categorytApiClient, IBrandApiClient brandApiClient,
+            ICustomerApiClient customerApiClient)
         {
             _productApiClient = productApiClient;
             _categorytApiClient = categorytApiClient;
             _brandApiClient = brandApiClient;
+            _customerApiClient = customerApiClient;
         }
         [Route("san-pham/{slug}")]
         public async Task<IActionResult> Detail(string slug)
@@ -97,7 +100,7 @@ namespace TechShopSolution.WebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Rating(ProductRatingRequest request)
         {
-            var result = await _productApiClient.RatingPoduct(request);
+            var result = await _customerApiClient.RatingPoduct(request);
             if (!result.IsSuccess)
             {
                 TempData["error"] = result.Message;
@@ -264,6 +267,14 @@ namespace TechShopSolution.WebApp.Controllers
                 return result;
             }
             return null;
+        }
+        [HttpPost]
+        public async Task<IActionResult> FavoriteProduct(int cus_id, int product_id)
+        {
+            var result = await _customerApiClient.FavoriteProduct(cus_id, product_id);
+            if (!result.IsSuccess)
+                return BadRequest(result.Message);
+            return Ok();
         }
     }
 }

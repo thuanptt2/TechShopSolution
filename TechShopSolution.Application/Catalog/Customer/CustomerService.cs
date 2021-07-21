@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
 
@@ -241,6 +242,48 @@ namespace TechShopSolution.Application.Catalog.Customer
             {
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
+        }
+        public async Task<ApiResult<bool>> FavoriteProduct(int cus_id, int product_id)
+        {
+            var product = await _context.Products.FindAsync(product_id);
+            if (product == null || product.isDelete == true)
+                return new ApiErrorResult<bool>("Sản phẩm này hiện không còn tồn tại");
+            if (!product.isActive)
+                return new ApiErrorResult<bool>("Sản phẩm này đang bị khóa, bạn không thể yêu thích sản phẩm này");
+            var favorite = new TechShopSolution.Data.Entities.Favorite
+            {
+                cus_id = cus_id,
+                product_id = product_id,
+                date_favorite = DateTime.Now
+            };
+            await _context.Favorites.AddAsync(favorite);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
+        public async Task<ApiResult<bool>> RatingProduct(ProductRatingRequest request)
+        {
+            var rating = await _context.Ratings.Where(x => x.cus_id == request.cus_id && x.product_id == request.product_id).FirstOrDefaultAsync();
+            if (rating != null)
+                return new ApiErrorResult<bool>("Bạn đã đánh giá sản phẩm này rồi, không thể đánh giá thêm lần nữa");
+            var product = await _context.Products.FindAsync(request.product_id);
+            if (product == null || product.isDelete == true)
+                return new ApiErrorResult<bool>("Sản phẩm bạn đánh giá hiện không còn tồn tại");
+            if (!product.isActive)
+                return new ApiErrorResult<bool>("Sản phẩm này đang bị khóa, bạn không thể đánh giá sản phẩm này");
+            var customer = await _context.Customers.FindAsync(request.cus_id);
+            
+
+            var newRating = new TechShopSolution.Data.Entities.Rating()
+            {
+                content = request.content,
+                cus_id = request.cus_id,
+                date_rating = DateTime.Now,
+                product_id = request.product_id,
+                score = request.score
+            };
+            await _context.Ratings.AddAsync(newRating);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
         }
         public async Task<bool> VerifyEmail(string email)
         {

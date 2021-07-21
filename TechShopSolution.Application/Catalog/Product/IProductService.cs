@@ -19,7 +19,6 @@ namespace TechShopSolution.Application.Catalog.Product
         PagedResult<ProductOverViewModel> GetAllPaging(GetProductPagingRequest request);
         PagedResult<ProductOverViewModel> GetPublicProducts(GetPublicProductPagingRequest request);
         Task<PublicCayegoyProductsViewModel> GetHomeProductByCategory(int id, int take);
-        Task<ApiResult<bool>> SaveRating(ProductRatingRequest request);
         Task<bool> isValidSlug(string Code, string slug);
         Task<List<ImageListResult>> GetImagesByProductID(int id);
         Task<ApiResult<bool>> OffFeatured(int id);

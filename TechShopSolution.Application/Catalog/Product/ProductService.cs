@@ -239,7 +239,7 @@ namespace TechShopSolution.Application.Catalog.Product
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
                             where p.isDelete == false && p.isActive == true
-                            select new { p, pic, c};
+                            select new { p, pic, c };
 
                 if (!String.IsNullOrEmpty(request.Keyword))
                     query = query.Where(x => EF.Functions.Like(x.p.name, $"%{request.Keyword}%"));
@@ -251,10 +251,10 @@ namespace TechShopSolution.Application.Catalog.Product
                 {
                     query = query.Where(x => x.p.Brand.brand_slug.Equals(request.BrandSlug));
                 }
-                switch(request.idSortType)
+                switch (request.idSortType)
                 {
                     case 1:
-                        query = query.OrderBy(x=>x.p.name);
+                        query = query.OrderBy(x => x.p.name);
                         break;
                     case 2:
                         query = query.OrderByDescending(x => x.p.name);
@@ -269,10 +269,10 @@ namespace TechShopSolution.Application.Catalog.Product
                 if (request.Lowestprice != null && request.Highestprice != null)
                 {
                     query = query.Where(x => x.p.unit_price >= request.Lowestprice && x.p.unit_price <= request.Highestprice);
-                } else if(request.Lowestprice != null && request.Highestprice == null)
+                } else if (request.Lowestprice != null && request.Highestprice == null)
                 {
                     query = query.Where(x => x.p.unit_price >= request.Lowestprice);
-                }else if(request.Lowestprice == null && request.Highestprice != null)
+                } else if (request.Lowestprice == null && request.Highestprice != null)
                 {
                     query = query.Where(x => x.p.unit_price <= request.Highestprice);
                 }
@@ -300,7 +300,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         isActive = a.Key.isActive,
                         unit_price = a.Key.unit_price,
                     }).ToList();
-               
+
 
                 var pageResult = new PagedResult<ProductOverViewModel>()
                 {
@@ -403,7 +403,7 @@ namespace TechShopSolution.Application.Catalog.Product
                             join c in _context.Categories on pic.cate_id equals c.id
                             where p.isDelete == false && c.id == id && p.isActive == true
                             select new { p, c };
-                
+
                 var category = await query.Select(a => new CategoryViewModel()
                 {
                     id = a.c.id,
@@ -427,7 +427,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     .Take(take)
                     .Select(a => new ProductOverViewModel()
                     {
-                       id = a.Key.id,
+                        id = a.Key.id,
                         name = a.Key.name,
                         best_seller = a.Key.best_seller,
                         featured = a.Key.featured,
@@ -450,10 +450,10 @@ namespace TechShopSolution.Application.Catalog.Product
         {
             try
             {
-               var query = from p in _context.Products
-                           join pic in _context.CategoryProducts on p.id equals pic.product_id
-                           where p.isDelete == false && p.brand_id == idBrand && p.isActive == true
-                           select new { p };
+                var query = from p in _context.Products
+                            join pic in _context.CategoryProducts on p.id equals pic.product_id
+                            where p.isDelete == false && p.brand_id == idBrand && p.isActive == true
+                            select new { p };
 
                 var group = query.AsEnumerable()
                    .GroupBy(g => g.p);
@@ -610,9 +610,9 @@ namespace TechShopSolution.Application.Catalog.Product
                         join c in _context.Categories on pic.cate_id equals c.id
                         join b in _context.Brands on p.brand_id equals b.id
                         where p.isDelete == false && p.isActive == true && p.slug == slug
-                        select new { p, pic, c, b};
+                        select new { p, pic, c, b };
 
-            if(await query.CountAsync() == 0)
+            if (await query.CountAsync() == 0)
             {
                 return new ApiErrorResult<PublicProductDetailViewModel>("Sản phẩm không tồn tại hoặc đã bị xóa");
             }
@@ -657,24 +657,24 @@ namespace TechShopSolution.Application.Catalog.Product
             await _context.SaveChangesAsync();
 
             var query2 = from r in _context.Ratings
-                        join c in _context.Customers on r.cus_id equals c.id
-                        join p in _context.Products on r.product_id equals p.id
-                        where p.isDelete == false && p.isActive == true && p.slug == slug
-                        select new { p, c, r };
+                         join c in _context.Customers on r.cus_id equals c.id
+                         join p in _context.Products on r.product_id equals p.id
+                         where p.isDelete == false && p.isActive == true && p.slug == slug
+                         select new { p, c, r };
 
             var dataRating = query2.AsEnumerable()
               .GroupBy(g => g.r);
 
             List<RatingViewModel> ListRating = dataRating.OrderByDescending(x => x.Key.date_rating)
                 .Select(x => new RatingViewModel()
-            {
-                cus_id = x.Key.cus_id,
-                content = x.Key.content,
-                cus_name = x.Key.Customer.name,
-                date_rating = x.Key.date_rating,
-                product_id = x.Key.product_id,
-                score = x.Key.score
-            }).ToList();
+                {
+                    cus_id = x.Key.cus_id,
+                    content = x.Key.content,
+                    cus_name = x.Key.Customer.name,
+                    date_rating = x.Key.date_rating,
+                    product_id = x.Key.product_id,
+                    score = x.Key.score
+                }).ToList();
 
             return new ApiSuccessResult<PublicProductDetailViewModel>(new PublicProductDetailViewModel() { Product = Pro, Ratings = ListRating });
         }
@@ -757,30 +757,6 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
-        }
-        public async Task<ApiResult<bool>> SaveRating(ProductRatingRequest request)
-        {
-            var rating = await _context.Ratings.Where(x => x.cus_id == request.cus_id && x.product_id == request.product_id).FirstOrDefaultAsync();
-            if (rating != null)
-                return new ApiErrorResult<bool>("Bạn đã đánh giá sản phẩm này rồi, không thể đánh giá thêm lần nữa");
-            var product = await _context.Products.FindAsync(request.product_id);
-            if (product == null || product.isDelete == true)
-                return new ApiErrorResult<bool>("Sản phẩm bạn đánh giá hiện không còn tồn tại");
-            var customer = await _context.Customers.FindAsync(request.cus_id);
-            if (customer == null || customer.isDelete == true)
-                return new ApiErrorResult<bool>("Không tìm thấy tài khoản của bạn trong CSDL");
-
-            var newRating = new TechShopSolution.Data.Entities.Rating()
-            {
-                content = request.content,
-                cus_id = request.cus_id,
-                date_rating = DateTime.Now,
-                product_id = request.product_id,
-                score = request.score
-            };
-            await _context.Ratings.AddAsync(newRating);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool>();
         }
         private async Task<string> SaveFile(IFormFile file)
         {

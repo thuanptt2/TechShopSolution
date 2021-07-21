@@ -193,7 +193,7 @@
                         html += "<tr class=\"unavaiable-product\">"
                             + "<td> <img width=\"60\" height=\"60\" src=\"data:image/jpeg;base64," + item.images + "\" alt=\"\" /></td>"
                             + "<td class='cart-item-name'><a href=\/san-pham\/" + item.slug + ">" + item.name + "\"</a></td>"
-                            + "<td><div class=\"input-append text-right\"><input class=\"span1 txtQuantity\" readonly=\"readonly\" style=\"max-width: 34px; data-id=\"" + item.id + "\" placeholder=\"1\" id=\"txt_quantity_" + item.id + "\" data-count=\"" + item.quantity + "\" value=\"" + item.quantity + "\"  data-instock=\"" + item.instock + "\" size=\"16\" type=\"text\">"
+                            + "<td><div class=\"input-append text-right\"><input class=\"span1 txtQuantity\" readonly=\"readonly\" style=\"max-width: 34px\" data-id=\"" + item.id + "\" placeholder=\"1\" id=\"txt_quantity_" + item.id + "\" data-count=\"" + item.quantity + "\" value=\"" + item.quantity + "\"  data-instock=\"" + item.instock + "\" size=\"16\" type=\"text\">"
                             + "<button class=\"btn btn-danger btn-remove\" type=\"button\" data-id=\"" + item.id + "\"><i class=\"icon-remove icon-white\"></i></button>"
                             + "</div>"
                             + "</td>"
