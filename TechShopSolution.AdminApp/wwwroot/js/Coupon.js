@@ -8,7 +8,7 @@
         $(this).datepicker('hide');
     });
     $.datepicker.setDefaults({
-        dateFormat: 'dd-mm-yy'
+        dateFormat: 'dd/mm/yy'
     });
 
     $('.datepicker').keyup(function () {
