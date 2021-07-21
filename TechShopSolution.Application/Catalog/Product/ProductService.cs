@@ -710,6 +710,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 featured = x.Key.featured,
                 id = x.Key.id,
                 instock = x.Key.instock,
+                view_count = x.Key.view_count,
                 isActive = x.Key.isActive,
                 meta_descriptions = x.Key.meta_descriptions,
                 meta_keywords = x.Key.meta_keywords,
@@ -723,6 +724,10 @@ namespace TechShopSolution.Application.Catalog.Product
                 update_at = (DateTime)x.Key.update_at,
                 warranty = x.Key.warranty
             }).FirstOrDefault();
+
+            var product = await _context.Products.FindAsync(Pro.id);
+            product.view_count = product.view_count + 1;
+            await _context.SaveChangesAsync();
 
             var query2 = from r in _context.Ratings
                         join c in _context.Customers on r.cus_id equals c.id

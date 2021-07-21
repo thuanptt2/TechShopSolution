@@ -22,6 +22,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public decimal promotion_price { get; set; }
         public int warranty { get; set; }
         public int? instock { get; set; }
+        public int view_count { get; set; }
         public string specifications { get; set; }
         public string short_desc { get; set; }
         public string descriptions { get; set; }
