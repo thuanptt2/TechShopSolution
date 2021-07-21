@@ -13,7 +13,7 @@ namespace TechShopSolution.WebApp.Models
     {
         public ProductViewModel Product { get; set; }
         public List<RatingViewModel> Ratings { get; set; }
-        public List<ProductViewModel> ProductsRelated { get; set; }
+        public List<ProductOverViewModel> ProductsRelated { get; set; }
         public List<ProductRecentlyViewModel> ProductsRecently { get; set; }
         public List<ImageListResult> ImageList { get; set; }
     }

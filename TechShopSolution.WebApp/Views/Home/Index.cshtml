@@ -45,8 +45,8 @@
                 <div id="featured" class="carousel slide">
                     <div class="carousel-inner">
                         @{
-                            List<List<ProductViewModel>> featuredProducts = new List<List<ProductViewModel>>();
-                            List<ProductViewModel> featuredPart = new List<ProductViewModel>();
+                            List<List<ProductOverViewModel>> featuredProducts = new List<List<ProductOverViewModel>>();
+                            List<ProductOverViewModel> featuredPart = new List<ProductOverViewModel>();
                         }
 
                         @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
@@ -55,7 +55,7 @@
                             if (featuredPart.Count == 4 || index == Model.FeaturedProducts.Count - 1)
                             {
                                 featuredProducts.Add(featuredPart);
-                                featuredPart = new List<ProductViewModel>();
+                                featuredPart = new List<ProductOverViewModel>();
                             }
                         }
                         @for (int index = 0; index < featuredProducts.Count; index++)
@@ -121,8 +121,8 @@
                 <div id="bestseller" class="carousel slide">
                     <div class="carousel-inner">
                         @{
-                            List<List<ProductViewModel>> bestProducts = new List<List<ProductViewModel>>();
-                            List<ProductViewModel> bestSellerPart = new List<ProductViewModel>();
+                            List<List<ProductOverViewModel>> bestProducts = new List<List<ProductOverViewModel>>();
+                            List<ProductOverViewModel> bestSellerPart = new List<ProductOverViewModel>();
                         }
 
                         @for (int index = 0; index < Model.BestSellerProducts.Count; index++)
@@ -131,7 +131,7 @@
                             if (bestSellerPart.Count == 4 || index == Model.BestSellerProducts.Count - 1)
                             {
                                 bestProducts.Add(bestSellerPart);
-                                bestSellerPart = new List<ProductViewModel>();
+                                bestSellerPart = new List<ProductOverViewModel>();
                             }
                         }
 

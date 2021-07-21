@@ -191,7 +191,7 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             if (result.IsSuccess)
             {
-                TempData["result"] = "Tắt top bán chạy thành công";
+                TempData["result"] = "Thay đổi trạng thái thành công";
                 return RedirectToAction("Index");
             }
             return View("Index");

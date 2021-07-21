@@ -394,15 +394,15 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<PublicCayegoyProductsViewModel>(body);
             return JsonConvert.DeserializeObject<PublicCayegoyProductsViewModel>(body);
         }
-        public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
+        public async Task<List<ProductOverViewModel>> GetProductsRelated(int id, int take)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/product/related?idBrand={id}&take={take}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
-            return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
+                return JsonConvert.DeserializeObject<List<ProductOverViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductOverViewModel>>(body);
         }
         public async Task<ApiResult<bool>> RatingPoduct(ProductRatingRequest request)
         {

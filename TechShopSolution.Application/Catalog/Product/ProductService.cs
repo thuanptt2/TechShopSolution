@@ -164,7 +164,7 @@ namespace TechShopSolution.Application.Catalog.Product
             }
             return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
         }
-        public PagedResult<ProductViewModel> GetAllPaging(GetProductPagingRequest request)
+        public PagedResult<ProductOverViewModel> GetAllPaging(GetProductPagingRequest request)
         {
             try
             {
@@ -192,34 +192,25 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 int totalRow = data.Count();
 
-                List<ProductViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                List<ProductOverViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
                     .Take(request.PageSize)
-                    .Select(a => new ProductViewModel()
+                    .Select(a => new ProductOverViewModel()
                     {
                         id = a.Key.id,
                         name = a.Key.name,
                         best_seller = a.Key.best_seller,
-                        brand_id = a.Key.brand_id,
-                        code = a.Key.code,
+                        isActive = a.Key.isActive,
                         create_at = a.Key.create_at,
-                        descriptions = a.Key.descriptions,
                         featured = a.Key.featured,
                         image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
                         instock = a.Key.instock,
-                        meta_descriptions = a.Key.meta_descriptions,
-                        meta_keywords = a.Key.meta_keywords,
-                        meta_tittle = a.Key.meta_tittle,
-                        more_images = a.Key.more_images,
                         promotion_price = a.Key.promotion_price,
                         short_desc = a.Key.short_desc,
                         slug = a.Key.slug,
-                        specifications = a.Key.specifications,
-                        isActive = a.Key.isActive,
                         unit_price = a.Key.unit_price,
-                        warranty = a.Key.warranty,
                     }).ToList();
 
-                var pageResult = new PagedResult<ProductViewModel>()
+                var pageResult = new PagedResult<ProductOverViewModel>()
                 {
                     TotalRecords = totalRow,
                     PageSize = request.PageSize,
@@ -230,7 +221,7 @@ namespace TechShopSolution.Application.Catalog.Product
             }
             catch
             {
-                var pageResult = new PagedResult<ProductViewModel>()
+                var pageResult = new PagedResult<ProductOverViewModel>()
                 {
                     TotalRecords = 0,
                     PageSize = request.PageSize,
@@ -240,7 +231,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 return pageResult;
             }
         }
-        public PagedResult<ProductViewModel> GetPublicProducts(GetPublicProductPagingRequest request)
+        public PagedResult<ProductOverViewModel> GetPublicProducts(GetPublicProductPagingRequest request)
         {
             try
             {
@@ -292,35 +283,26 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 int totalRow = data.Count();
 
-                List<ProductViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                List<ProductOverViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
                     .Take(request.PageSize)
-                    .Select(a => new ProductViewModel()
+                    .Select(a => new ProductOverViewModel()
                     {
                         id = a.Key.id,
                         name = a.Key.name,
                         best_seller = a.Key.best_seller,
-                        brand_id = a.Key.brand_id,
-                        code = a.Key.code,
                         create_at = a.Key.create_at,
-                        descriptions = a.Key.descriptions,
                         featured = a.Key.featured,
                         image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
                         instock = a.Key.instock,
-                        meta_descriptions = a.Key.meta_descriptions,
-                        meta_keywords = a.Key.meta_keywords,
-                        meta_tittle = a.Key.meta_tittle,
-                        more_images = a.Key.more_images,
                         promotion_price = a.Key.promotion_price,
                         short_desc = a.Key.short_desc,
                         slug = a.Key.slug,
-                        specifications = a.Key.specifications,
                         isActive = a.Key.isActive,
                         unit_price = a.Key.unit_price,
-                        warranty = a.Key.warranty,
                     }).ToList();
                
 
-                var pageResult = new PagedResult<ProductViewModel>()
+                var pageResult = new PagedResult<ProductOverViewModel>()
                 {
                     TotalRecords = totalRow,
                     PageSize = request.PageSize,
@@ -331,7 +313,7 @@ namespace TechShopSolution.Application.Catalog.Product
             }
             catch
             {
-                var pageResult = new PagedResult<ProductViewModel>()
+                var pageResult = new PagedResult<ProductOverViewModel>()
                 {
                     TotalRecords = 0,
                     PageSize = request.PageSize,
@@ -353,29 +335,18 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
-                    .Select(a => new ProductViewModel()
+                    .Select(a => new ProductOverViewModel()
                     {
                         id = a.p.id,
                         name = a.p.name,
                         best_seller = a.p.best_seller,
-                        brand_id = a.p.brand_id,
-                        code = a.p.code,
-                        create_at = a.p.create_at,
-                        descriptions = a.p.descriptions,
                         featured = a.p.featured,
                         image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
                         instock = a.p.instock,
-                        meta_descriptions = a.p.meta_descriptions,
-                        meta_keywords = a.p.meta_keywords,
-                        meta_tittle = a.p.meta_tittle,
-                        more_images = a.p.more_images,
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
                         slug = a.p.slug,
-                        specifications = a.p.specifications,
-                        isActive = a.p.isActive,
                         unit_price = a.p.unit_price,
-                        warranty = a.p.warranty,
                     }).ToListAsync();
 
 
@@ -400,29 +371,19 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
-                    .Select(a => new ProductViewModel()
+                    .Select(a => new ProductOverViewModel()
                     {
                         id = a.p.id,
                         name = a.p.name,
                         best_seller = a.p.best_seller,
-                        brand_id = a.p.brand_id,
-                        code = a.p.code,
                         create_at = a.p.create_at,
-                        descriptions = a.p.descriptions,
                         featured = a.p.featured,
                         image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
                         instock = a.p.instock,
-                        meta_descriptions = a.p.meta_descriptions,
-                        meta_keywords = a.p.meta_keywords,
-                        meta_tittle = a.p.meta_tittle,
-                        more_images = a.p.more_images,
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
                         slug = a.p.slug,
-                        specifications = a.p.specifications,
-                        isActive = a.p.isActive,
                         unit_price = a.p.unit_price,
-                        warranty = a.p.warranty,
                     }).ToListAsync();
 
 
@@ -462,31 +423,20 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 int Count = await query.CountAsync();
 
-                List<ProductViewModel> Products = data.OrderByDescending(m => m.Key.create_at)
+                List<ProductOverViewModel> Products = data.OrderByDescending(m => m.Key.create_at)
                     .Take(take)
-                    .Select(a => new ProductViewModel()
+                    .Select(a => new ProductOverViewModel()
                     {
                        id = a.Key.id,
                         name = a.Key.name,
                         best_seller = a.Key.best_seller,
-                        brand_id = a.Key.brand_id,
-                        code = a.Key.code,
-                        create_at = a.Key.create_at,
-                        descriptions = a.Key.descriptions,
                         featured = a.Key.featured,
                         image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
                         instock = a.Key.instock,
-                        meta_descriptions = a.Key.meta_descriptions,
-                        meta_keywords = a.Key.meta_keywords,
-                        meta_tittle = a.Key.meta_tittle,
-                        more_images = a.Key.more_images,
                         promotion_price = a.Key.promotion_price,
                         short_desc = a.Key.short_desc,
                         slug = a.Key.slug,
-                        specifications = a.Key.specifications,
-                        isActive = a.Key.isActive,
                         unit_price = a.Key.unit_price,
-                        warranty = a.Key.warranty,
                     }).ToList();
 
                 return new PublicCayegoyProductsViewModel { Count = Count, Products = Products, Category = category };
@@ -496,7 +446,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 return new PublicCayegoyProductsViewModel { Count = 0, Products = null, Category = null };
             }
         }
-        public List<ProductViewModel> GetProductsRelated(int idBrand, int take)
+        public List<ProductOverViewModel> GetProductsRelated(int idBrand, int take)
         {
             try
             {
@@ -510,29 +460,16 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 var data = group.OrderByDescending(m => m.Key.create_at)
                     .Take(take)
-                    .Select(a => new ProductViewModel()
+                    .Select(a => new ProductOverViewModel()
                     {
                         id = a.Key.id,
                         name = a.Key.name,
                         best_seller = a.Key.best_seller,
-                        brand_id = a.Key.brand_id,
-                        code = a.Key.code,
-                        create_at = a.Key.create_at,
-                        descriptions = a.Key.descriptions,
                         featured = a.Key.featured,
                         image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
-                        instock = a.Key.instock,
-                        meta_descriptions = a.Key.meta_descriptions,
-                        meta_keywords = a.Key.meta_keywords,
-                        meta_tittle = a.Key.meta_tittle,
-                        more_images = a.Key.more_images,
                         promotion_price = a.Key.promotion_price,
-                        short_desc = a.Key.short_desc,
                         slug = a.Key.slug,
-                        specifications = a.Key.specifications,
-                        isActive = a.Key.isActive,
                         unit_price = a.Key.unit_price,
-                        warranty = a.Key.warranty,
                     }).ToList();
 
                 return data;
@@ -554,29 +491,19 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 var data = query.OrderByDescending(m => m.p.create_at)
                     .Take(take)
-                    .Select(a => new ProductViewModel()
+                    .Select(a => new ProductOverViewModel()
                     {
                         id = a.p.id,
                         name = a.p.name,
                         best_seller = a.p.best_seller,
-                        brand_id = a.p.brand_id,
-                        code = a.p.code,
                         create_at = a.p.create_at,
-                        descriptions = a.p.descriptions,
                         featured = a.p.featured,
                         image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
                         instock = a.p.instock,
-                        meta_descriptions = a.p.meta_descriptions,
-                        meta_keywords = a.p.meta_keywords,
-                        meta_tittle = a.p.meta_tittle,
-                        more_images = a.p.more_images,
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
                         slug = a.p.slug,
-                        specifications = a.p.specifications,
-                        isActive = a.p.isActive,
                         unit_price = a.p.unit_price,
-                        warranty = a.p.warranty,
                     }).ToListAsync();
 
 
