@@ -27,7 +27,6 @@
                 </div>
 
                 <input type="checkbox" class="dd-input" id="test">
-
                 <ul class="dd-menu">
                     <li><a href="@Url.Action("Detail", "Account")"><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
                     <li><a href="@Url.Action("OrderTracking", "Order")"><i class="icon-file"></i> Kiểm tra đơn hàng</a></li>
@@ -35,7 +34,6 @@
                     <li class="divider"></li>
                     <li><a href="@Url.Action("Logout", "Account")"><i class="i"></i>Đăng xuất</a></li>
                 </ul>
-
             </label>
         </div>
     }
@@ -44,6 +42,5 @@
         <div class="btn-group btnDropdownAccount">
             <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" role="button" style="padding-right:0"><span class="btn btn-large btn-success">Đăng nhập</span></a>
         </div>
-
     }
 </div>

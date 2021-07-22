@@ -1,13 +1,17 @@
 ﻿@using TechShopSolution.ViewModels.Common;
 @model PagedResult<TechShopSolution.ViewModels.Catalog.Product.ProductOverViewModel>
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@using System.Security.Claims;
+
 
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
     ViewData["Title"] = "Sản phẩm yêu thích";
 }
-
+@section Script{
+    <script src="~/js/FavoriteProducts.js"></script>
+}
 @if (Model.Items != null)
 {
     <div class="span9">
@@ -25,7 +29,7 @@
         {
             for (int i = 0; i < Model.Items.Count; i++)
             {
-                <div class="wrapper-content margin-bottom-20 margin-top-20">
+                <div class="wrapper-content margin-bottom-20 margin-top-20" id="@Model.Items[i].id">
                     <div class="row">
                         <div class="span2">
                             <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Items[i].image)" alt="@Model.Items[i].name" />
@@ -62,10 +66,7 @@
                                 }
                                 <br class="clr" />
                                 <div class="margin-top-20">
-                                    @if (Model.Items[i].instock > 0 || Model.Items[i].instock == null)
-                                    {
-                                        <a href="#" class="btn btn-large" id="btnUnFavoriteProduct" data-id="@Model.Items[i].id"> Hủy yêu thích</a>
-                                    }
+                                    <button class="btn btn-large unfavorite" data-cusid="@User.FindFirst(ClaimTypes.Sid).Value" data-productid="@Model.Items[i].id"> Hủy yêu thích</button>
                                     <a href="@Url.Action("Detail", "Product", new { slug = Model.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
                                 </div>
                             </form>
@@ -79,7 +80,7 @@
         {
             <div class="text-center margin-top-20">
                 <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                <p>Chưa có đơn hàng</p>
+                <p>Quý khách chưa có sản phẩm yêu thích nào</p>
             </div>
         }
 

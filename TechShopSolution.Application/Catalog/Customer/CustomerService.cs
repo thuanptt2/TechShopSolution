@@ -352,6 +352,7 @@ namespace TechShopSolution.Application.Catalog.Customer
 
 
                 var data = query.AsEnumerable()
+                    .OrderByDescending(p => p.f.date_favorite)
                     .GroupBy(g => g.p);
 
                 int totalRow = data.Count();
