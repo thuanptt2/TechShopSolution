@@ -24,10 +24,6 @@ namespace TechShopSolution.Application.Catalog.Product
             _context = context;
             _storageService = storageService;
         }
-        public Task<ApiResult<bool>> AddImages(int productId, IFormFile file)
-        {
-            throw new NotImplementedException();
-        }
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
             if (request.Promotion_price == null)
@@ -202,7 +198,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         isActive = a.Key.isActive,
                         create_at = a.Key.create_at,
                         featured = a.Key.featured,
-                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
+                        image = a.Key.image,
                         instock = a.Key.instock,
                         promotion_price = a.Key.promotion_price,
                         short_desc = a.Key.short_desc,
@@ -292,7 +288,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         best_seller = a.Key.best_seller,
                         create_at = a.Key.create_at,
                         featured = a.Key.featured,
-                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
+                        image = a.Key.image,
                         instock = a.Key.instock,
                         promotion_price = a.Key.promotion_price,
                         short_desc = a.Key.short_desc,
@@ -341,7 +337,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         name = a.p.name,
                         best_seller = a.p.best_seller,
                         featured = a.p.featured,
-                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
+                        image = a.p.image,
                         instock = a.p.instock,
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
@@ -378,7 +374,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         best_seller = a.p.best_seller,
                         create_at = a.p.create_at,
                         featured = a.p.featured,
-                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
+                        image = a.p.image,
                         instock = a.p.instock,
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
@@ -431,7 +427,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         name = a.Key.name,
                         best_seller = a.Key.best_seller,
                         featured = a.Key.featured,
-                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
+                        image = a.Key.image,
                         instock = a.Key.instock,
                         promotion_price = a.Key.promotion_price,
                         short_desc = a.Key.short_desc,
@@ -466,7 +462,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         name = a.Key.name,
                         best_seller = a.Key.best_seller,
                         featured = a.Key.featured,
-                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.Key.image)),
+                        image = a.Key.image,
                         promotion_price = a.Key.promotion_price,
                         slug = a.Key.slug,
                         unit_price = a.Key.unit_price,
@@ -498,7 +494,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         best_seller = a.p.best_seller,
                         create_at = a.p.create_at,
                         featured = a.p.featured,
-                        image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
+                        image = a.p.image,
                         instock = a.p.instock,
                         promotion_price = a.p.promotion_price,
                         short_desc = a.p.short_desc,
@@ -514,49 +510,6 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 return new PublicProductsViewModel { Count = 0, Products = null };
             }
-        }
-        public async Task<List<ImageListResult>> GetImagesByProductID(int id)
-        {
-            List<ImageListResult> ImagesResult = new List<ImageListResult>();
-            var product = await _context.Products.FindAsync(id);
-            if (product != null || product.isDelete)
-            {
-                if (product.image != null)
-                {
-                    ImageListResult image = new ImageListResult();
-                    string imageBase64 = GetBase64StringForImage(_storageService.GetFileUrl(product.image));
-                    image.FileName = product.image;
-                    image.FileAsBase64 = imageBase64;
-                    ImagesResult.Add(image);
-                }
-                if (product.more_images != null)
-                {
-                    List<string> moreImagesName = product.more_images.Split(",").ToList();
-                    foreach (string moreimage in moreImagesName)
-                    {
-                        if (moreimage != "")
-                        {
-                            string filePath = _storageService.GetFileUrl(moreimage);
-                            if (filePath != "")
-                            {
-                                ImageListResult images = new ImageListResult();
-                                string imageBase64 = GetBase64StringForImage(filePath);
-                                images.FileName = moreimage;
-                                images.FileAsBase64 = imageBase64;
-                                ImagesResult.Add(images);
-                            }
-                        }
-                    }
-                }
-                return ImagesResult;
-            }
-            return ImagesResult;
-        }
-        protected static string GetBase64StringForImage(string imgPath)
-        {
-            byte[] imageBytes = File.ReadAllBytes(imgPath);
-            string base64String = Convert.ToBase64String(imageBytes);
-            return base64String;
         }
         public async Task<ApiResult<ProductViewModel>> GetById(int productId)
         {
@@ -586,7 +539,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 create_at = product.create_at,
                 descriptions = product.descriptions,
                 featured = product.featured,
-                image = GetBase64StringForImage(_storageService.GetFileUrl(product.image)),
+                image = product.image,
                 instock = product.instock,
                 meta_descriptions = product.meta_descriptions,
                 meta_keywords = product.meta_keywords,
@@ -631,7 +584,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 cate_name = x.Key.ProductInCategory.First().Category.cate_name.ToString(),
                 cate_slug = x.Key.ProductInCategory.First().Category.cate_slug.ToString(),
                 code = x.Key.code,
-                image = GetBase64StringForImage(_storageService.GetFileUrl(x.Key.image)),
+                image = x.Key.image,
                 create_at = x.Key.create_at,
                 descriptions = x.Key.descriptions,
                 featured = x.Key.featured,
@@ -849,5 +802,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
+     
     }
 }

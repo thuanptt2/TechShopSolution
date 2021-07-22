@@ -122,7 +122,7 @@ namespace TechShopSolution.Application.Website.Slide
                     id = a.id,
                     display_order = a.display_order,
                     status = a.status,
-                    image = GetBase64StringForImage(_storageService.GetFileUrl(a.image)),
+                    image = a.image,
                     create_at = a.create_at,
                     link = a.link,
                     update_at = a.update_at,
@@ -152,7 +152,7 @@ namespace TechShopSolution.Application.Website.Slide
                 status = result.status,
                 id = result.id,
                 update_at = result.update_at,
-                image = GetBase64StringForImage(_storageService.GetFileUrl(result.image)),
+                image = result.image,
                 link = result.link
             };
             return new ApiSuccessResult<SlideViewModel>(slide);
@@ -186,12 +186,6 @@ namespace TechShopSolution.Application.Website.Slide
             {
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
-        }
-        protected static string GetBase64StringForImage(string imgPath)
-        {
-            byte[] imageBytes = File.ReadAllBytes(imgPath);
-            string base64String = Convert.ToBase64String(imageBytes);
-            return base64String;
         }
         public async Task DisplayOrder(int slide_id, int display_position)
         {
@@ -236,7 +230,7 @@ namespace TechShopSolution.Application.Website.Slide
                     display_order = a.display_order,
                     status = a.status,
                     create_at = a.create_at,
-                    image = GetBase64StringForImage(_storageService.GetFileUrl(a.image)),
+                    image = a.image,
                     link = a.link,
                     update_at = a.update_at,
                 }).ToListAsync();

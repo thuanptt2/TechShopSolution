@@ -1,6 +1,7 @@
 ﻿
 @using TechShopSolution.ViewModels.Common;
 @model PagedResult<TechShopSolution.ViewModels.Catalog.Product.ProductViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
     ViewData["Title"] = "Danh sách sản phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -139,7 +140,7 @@
                         {
                             <tr>
                                 <td>
-                                    <img src="data:image/jpeg;base64,@item.image" width="50" />
+                                    <img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.image)" width="50" />
                                 </td>
                                 <td>
                                     @Html.ActionLink(item.name, "Update", new { id = item.id })

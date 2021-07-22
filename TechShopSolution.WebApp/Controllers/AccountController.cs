@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,6 +19,7 @@ using TechShopSolution.ViewModels.Catalog.Customer;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
+using TechShopSolution.WebApp.Models;
 
 namespace TechShopSolution.WebApp.Controllers
 {
@@ -306,6 +308,21 @@ namespace TechShopSolution.WebApp.Controllers
             ViewBag.PageResult = products;
             return View(products);
         }
-     
+        [Authorize]
+        [Route("tai-khoan/san-pham-da-xem")]
+        [HttpGet]
+        public async Task<IActionResult> RecentlyProducts(int pageIndex = 1)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
+            List<ProductRecentlyViewModel> RecentlyProducts = new List<ProductRecentlyViewModel>();
+            var session = HttpContext.Session.GetString("RecentlyProducts");
+            if (!string.IsNullOrWhiteSpace(session))
+            {
+                RecentlyProducts = JsonConvert.DeserializeObject<List<ProductRecentlyViewModel>>(session);
+            }            return View(RecentlyProducts);
+        }
     }
 }

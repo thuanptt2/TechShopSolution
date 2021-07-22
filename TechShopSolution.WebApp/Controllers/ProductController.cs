@@ -69,6 +69,7 @@ namespace TechShopSolution.WebApp.Controllers
                     name = product.ResultObject.name,
                     promotion_price = product.ResultObject.promotion_price,
                     slug = product.ResultObject.slug,
+                    instock = product.ResultObject.instock,
                     image = product.ResultObject.image,
                     unit_price = product.ResultObject.unit_price,
                     view_at = DateTime.Now,
@@ -82,7 +83,6 @@ namespace TechShopSolution.WebApp.Controllers
                 ProductsRecently = RecentlyProducts.OrderByDescending(x=> x.view_at).ToList(),
                 Ratings = await _productApiClient.GetRatingsProduct(slug),
                 ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.brand_id, 4),
-                ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.id),
             });
         }
         [HttpGet]

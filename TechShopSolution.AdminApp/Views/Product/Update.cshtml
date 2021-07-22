@@ -1,6 +1,8 @@
 ﻿@using TechShopSolution.ViewModels.Common
 @using TechShopSolution.ViewModels.Catalog.Category
 @model TechShopSolution.ViewModels.Catalog.Product.ProductUpdateRequest
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+
 
 @{
     ViewData["Title"] = "Cập nhật";
@@ -13,9 +15,7 @@
     <script src="~/js/Product.js"></script>
 
 }
-@{
-    var images = (List<ImageListResult>)ViewData["imageList"];
-}
+
 
 <div class="container-fluid">
     <h3 class="mt-4">Cập nhật sản phẩm</h3>
@@ -121,13 +121,13 @@
                                 <div class="form-group">
                                     <label asp-for="Image" class="control-label lableFormField"></label>
                                     <div class="ImageBoxMain">
-                                        @if (images == null)
+                                        @if (Model.image_name == null)
                                         {
                                             <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="ProductImage" class="image hoverDel" />
                                         }
                                         else
                                         {
-                                            <img src="data:image/jpeg;base64,@images.First().FileAsBase64" id="ProductImage" data-name="@images.First().FileName" class="image hoverDel" />
+                                            <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.image_name)" id="ProductImage" data-name="@(Configuration["BaseAddress"] + "/user-content/" + Model.image_name)" class="image hoverDel" />
                                         }
                                     </div>
                                     <div class="custom-file">
@@ -142,26 +142,31 @@
                                 <div class="form-group">
                                     <label asp-for="More_images" class="control-label lableFormField"></label>
                                     <div class="ImageBoxMain">
-                                        @if (images == null)
+                                        @if (string.IsNullOrWhiteSpace(Model.more_image_name))
                                         {
                                             <img src="~/assets/img/toppng.com-file-upload-image-icon-980x980.png" id="NonImageProduct" class="image hoverDel" />
                                         }
-                                        <div class="col-lg-12 col-12 col-sm-12">
-                                            <div class="row" id="ProductImages">
-                                                @if (images != null)
-                                                {
-                                                    @for (int i = 1; i < images.Count(); i++)
+                                        else
+                                        {
+                                            string[] more_image = Model.more_image_name.Split(",");
+                                            <div class="col-lg-12 col-12 col-sm-12">
+                                                <div class="row" id="ProductImages">
+                                                    @foreach (var item in more_image)
                                                     {
-                                                        <div class="col-lg-3 col-3 col-sm-3 mb-3">
-                                                            <img src="data:image/jpeg;base64,@images[i].FileAsBase64" data-name="@images[i].FileName" data-id="@Model.Id" class="ProductMoreImage" />
-                                                            <div class="DeleteImageButton" id="btnRemoveExistImage">
-                                                                <i class="fas fa-trash fa-2x"></i>
+                                                        if (!string.IsNullOrWhiteSpace(item))
+                                                        {
+                                                            <div class="col-lg-3 col-3 col-sm-3 mb-3">
+                                                                <img src="@(Configuration["BaseAddress"] + "/user-content/" + item)" data-name="@item" data-id="@Model.Id" class="ProductMoreImage" />
+                                                                <div class="DeleteImageButton" id="btnRemoveExistImage">
+                                                                    <i class="fas fa-trash fa-2x"></i>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        }
                                                     }
-                                                }
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
+
                                     </div>
 
                                     <div class="ProductMoreImages">
@@ -264,7 +269,7 @@
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                        <input type="checkbox" id="checkInstock"/>  Có quản lý tồn kho
+                                        <input type="checkbox" id="checkInstock" />  Có quản lý tồn kho
                                     </label>
                                 </div>
                             </div>
@@ -283,7 +288,7 @@
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        <input type="checkbox" checked="checked" id="checkInstock"/>  Có quản lý tồn kho
+                                        <input type="checkbox" checked="checked" id="checkInstock" />  Có quản lý tồn kho
                                     </label>
                                 </div>
                             </div>

@@ -1,5 +1,6 @@
 ﻿@using System.Security.Claims;
 @using Microsoft.AspNetCore.Http;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 @{
     ViewData["Title"] = "Giỏ hàng";
@@ -89,3 +90,4 @@
         }
     }
 </div>
+<input type="hidden" id="hidBaseAddress" value="@(Configuration["BaseAddress"])" />

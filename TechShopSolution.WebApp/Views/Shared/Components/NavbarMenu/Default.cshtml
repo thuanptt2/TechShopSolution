@@ -1,9 +1,10 @@
 ﻿@using TechShopSolution.ViewModels.Catalog.Category
 @model List<TechShopSolution.ViewModels.Catalog.Category.CategoryViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 
 <div class="navbar-inner">
-    <a class="brand" href="@Url.Action("Index", "Home", new { area = "" })"><img src="data:image/jpeg;base64,@ViewBag.Company_Logo" class="logo-company-navbar" alt="TechShop" /></a>
+    <a class="brand" href="@Url.Action("Index", "Home", new { area = "" })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @ViewBag.Company_Logo)" class="logo-company-navbar" alt="TechShop" /></a>
 
     <form class="form-inline navbar-search" asp-controller="Product" asp-action="SearchProducts" method="get">
         <input placeholder="Nhập từ khóa..." type="text" name="tukhoa" />
@@ -31,6 +32,7 @@
                     <li><a href="@Url.Action("Detail", "Account")"><i class="icon-pencil"></i> Thông tin tài khoản</a></li>
                     <li><a href="@Url.Action("OrderTracking", "Order")"><i class="icon-file"></i> Kiểm tra đơn hàng</a></li>
                     <li><a href="@Url.Action("FavoriteProducts", "Account")"><i class="icon-heart-empty"></i> Sản phẩm yêu thích</a></li>
+                    <li><a href="@Url.Action("RecentlyProducts", "Account")"><i class="icon-eye-open"></i> Sản phẩm đã xem</a></li>
                     <li class="divider"></li>
                     <li><a href="@Url.Action("Logout", "Account")"><i class="i"></i>Đăng xuất</a></li>
                 </ul>

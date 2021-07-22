@@ -1,5 +1,6 @@
 ﻿@using TechShopSolution.ViewModels.Common;
 @model PagedResult<TechShopSolution.ViewModels.Website.Slide.SlideViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Danh sách Slide";
@@ -110,7 +111,7 @@
                                 <tr>
 
                                     <td>
-                                        <a href="@Url.Action("Update", "Slide", new { id = item.id })"><img src="data:image/jpeg;base64,@item.image" width="200" height="70" /></a>
+                                        <a href="@Url.Action("Update", "Slide", new { id = item.id })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.image)" width="200" height="70" /></a>
                                     </td>
 
                                     <td>

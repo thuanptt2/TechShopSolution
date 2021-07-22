@@ -214,7 +214,7 @@ namespace TechShopSolution.Application.Catalog.Order
             {
                 order_id = a.od.order_id,
                 product_id = a.od.product_id,
-                product_image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
+                product_image = a.p.image,
                 product_name = a.p.name,
                 promotion_price = a.od.promotion_price,
                 quantity = a.od.quantity,
@@ -285,12 +285,6 @@ namespace TechShopSolution.Application.Catalog.Order
             return new ApiSuccessResult<string>("Duyệt đơn hàng thành công");
 
         }
-        protected static string GetBase64StringForImage(string imgPath)
-        {
-            byte[] imageBytes = File.ReadAllBytes(imgPath);
-            string base64String = Convert.ToBase64String(imageBytes);
-            return base64String;
-        }
         public async Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request)
         {
             try
@@ -344,7 +338,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     {
                         order_id = b.order_id,
                         product_id = b.product_id,
-                        product_image = GetBase64StringForImage(_storageService.GetFileUrl(b.Product.image)),
+                        product_image = b.Product.image,
                         product_name = b.Product.name,
                         promotion_price = b.promotion_price,
                         quantity = b.quantity,
@@ -400,7 +394,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     {
                         order_id = b.order_id,
                         product_id = b.product_id,
-                        product_image = GetBase64StringForImage(_storageService.GetFileUrl(b.Product.image)),
+                        product_image = b.Product.image,
                         product_name = b.Product.name,
                         product_slug = b.Product.slug,
                         promotion_price = b.promotion_price,

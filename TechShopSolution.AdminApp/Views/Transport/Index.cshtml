@@ -1,5 +1,6 @@
 ﻿@using TechShopSolution.ViewModels.Common;
 @model PagedResult<TechShopSolution.ViewModels.Transport.TransporterViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Danh sách đơn vị vận chuyển";
@@ -120,7 +121,7 @@
                                 <tr>
 
                                     <td>
-                                        <img src="data:image/jpeg;base64,@item.image" alt="@item.name" width="70" height="50" />
+                                        <img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.image)" alt="@item.name" width="70" height="50" />
                                     </td>
 
                                     <td>

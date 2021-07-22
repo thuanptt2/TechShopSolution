@@ -1,11 +1,12 @@
 ﻿@using System.Security.Claims;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     if (ViewBag.Model != null)
     {
         ViewData["Title"] = "Chi tiết đơn hàng #" + ViewBag.Model.id;
     }
-    
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
@@ -310,7 +311,7 @@
                 @foreach (var item in ViewBag.Model.Products)
                 {
                     <tr class="order-tracking-product">
-                        <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                        <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
                         <td class="order-tracking-product-name"><a href="@Url.Action("Detail", "Product", new { slug = item.product_slug })" target="_blank">@item.product_name</a></td>
                         <td style="width: 7%">x @item.quantity</td>
                         @if (item.promotion_price > 0)

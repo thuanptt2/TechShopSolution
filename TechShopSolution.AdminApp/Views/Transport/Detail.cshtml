@@ -1,5 +1,5 @@
 ﻿@model TechShopSolution.ViewModels.Sales.OrderDetailViewModel
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Chi tiết đơn vận chuyển";
@@ -346,7 +346,7 @@
                                 <tr>
                                     <th scope="row">
                                         <img style="display:block; width:60px;height:60px;"
-                                             src="data:image/jpeg;base64, @item.product_image" />
+                                             src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" />
                                     </th>
                                     <td><a href="@Url.Action("Update", "Product", new { id = item.product_id })" target="_blank">@item.product_name</a> </td>
                                     <td class="text-center">@item.quantity</td>

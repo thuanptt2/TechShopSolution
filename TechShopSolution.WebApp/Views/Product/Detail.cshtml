@@ -39,34 +39,27 @@ else
         </ul>
         <div class="row product-detail">
             <div id="gallery" class="span3">
+                <a href="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" title="@Model.Product.name">
+                    <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" style="width:100%" alt="@Model.Product.name" />
+                </a>
                 @{
-
-                    if (Model.ImageList.Count > 0)
-                    {
-
-                        <a href="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" title="@Model.Product.name">
-                            <img src="data:image/jpeg;base64,@Model.ImageList[0].FileAsBase64" style="width:100%" alt="@Model.Product.name" />
-                        </a>
-                    }
-                    else
-                    {
-                        <img src="none" style="width:100%" alt="Không có hình ảnh" />
-                    }
-                }
-                @{
-                    if (Model.ImageList.Count > 1)
+                    if (!string.IsNullOrWhiteSpace(Model.Product.more_images))
                     {
                         <div id="differentview" class="moreOptopm carousel slide">
                             <div class="carousel-inner">
                                 @{
                                     <div class="item active">
                                         @{
-                                            for (int i = 1; i < Model.ImageList.Count; i++)
+                                            string[] more_image = Model.Product.more_images.Split(",");
+                                            foreach (var item in more_image)
                                             {
-                                                <a href="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" title="@Model.Product.name"> <img style="width:29%" src="data:image/jpeg;base64,@Model.ImageList[i].FileAsBase64" alt="" /></a>
+                                                if (!string.IsNullOrWhiteSpace(item))
+                                                {
+                                                    <a href="@(Configuration["BaseAddress"] + "/user-content/" + item)" title="@Model.Product.name"> <img style="width:29%" src="@(Configuration["BaseAddress"] + "/user-content/" + item)" alt="" /></a>
+
+                                                }
                                             }
                                         }
-
                                     </div>
                                 }
                             </div>
@@ -348,7 +341,7 @@ else
                                 {
                                     <i class="tag"></i>
                                 }
-                                <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="data:image/jpeg;base64,@product.image" alt="@product.name" /></a>
+                                <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @product.image)" alt="@product.name" /></a>
                                 <div class="caption">
                                     <h5>@product.name</h5>
                                 </div>
@@ -411,7 +404,7 @@ else
                                             <li class="span3">
                                                 <div class="thumbnail">
                                                     <i class="tag-featured"></i>
-                                                    <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="data:image/jpeg;base64,@item.image" alt="@item.name"></a>
+                                                    <a href="@Url.Action("Detail", "Product", new { slug = item.slug })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.image)" alt="@item.name"></a>
                                                     <div class="caption">
                                                         <h5>@item.name</h5>
                                                     </div>

@@ -51,5 +51,7 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string Meta_keywords { get; set; }
         [Display(Name = "Miêu tả trang")]
         public string Meta_descriptions { get; set; }
+        public string more_image_name { get; set; }
+        public string image_name { get; set; }
     }
 }

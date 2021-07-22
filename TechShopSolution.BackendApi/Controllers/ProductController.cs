@@ -125,12 +125,6 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest();
         }
-        [HttpGet("image/{id}")]
-        public async Task<IActionResult> GetImageByProductID(int id)
-        {
-            var result = await _productService.GetImagesByProductID(id);
-            return Ok(result);
-        }
         [HttpGet("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus(int id)
         {

@@ -1,4 +1,6 @@
 ﻿@model TechShopSolution.ViewModels.Sales.CheckoutRequest
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+
 @{
     ViewData["Title"] = "Thanh toán đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -241,7 +243,7 @@
                                 foreach (var item in Model.OrderDetails)
                                 {
                                     <tr>
-                                        <td> <img width="60" height="60" src="data:image/jpeg;base64,@item.image" alt="@item.name" /></td>
+                                        <td> <img width="60" height="60" src="@(Configuration["BaseAddress"] + "/user-content/" + @item.image)" alt="@item.name" /></td>
                                         <td><a href="@Url.Action("Detail", "Product", new { slug = item.slug })" target="_blank">@item.name</a></td>
                                         <td align="center">
                                             @item.quantity

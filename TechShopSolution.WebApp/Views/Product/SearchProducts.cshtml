@@ -6,6 +6,8 @@
     <script src="~/js/FilterPrice.js"></script>
 }
 @model ProductCategoryViewModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 }
@@ -89,55 +91,57 @@
         <div class="tab-pane" id="listView">
             @for (int i = 0; i < Model.Products.Items.Count; i++)
             {
-                <div class="row">
-                    <div class="span2">
-                        <img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" />
-                    </div>
-                    <div class="span4">
-                        @{
-                            if (Model.Products.Items[i].instock > 0 || Model.Products.Items[i].instock == null)
-                            {
-                                <h4>Có sẵn</h4>
-                            }
-                            else
-                            {
-                                <h4 class="OutOfStock">Hết hàng</h4>
-                            }
-                        }
-                        <hr class="soft" />
-                        <h4 class="product-category-name">@Model.Products.Items[i].name</h4>
-                        <p class="product-category-description">
-                            @Model.Products.Items[i].meta_descriptions
-                        </p>
-                        <br class="clr" />
-                    </div>
-                    <div class="span3 alignR">
-                        <form class="form-horizontal qtyFrm">
-                            @if (Model.Products.Items[i].promotion_price > 1)
-                            {
-
-                                string percent = (1 - (Model.Products.Items[i].promotion_price / Model.Products.Items[i].unit_price)).ToString("0.00%");
-                                <i class="icon-tags"></i><span class="product-category-percent-price-promotion">&nbsp; Khuyến mãi @percent</span>
-                                <br class="clr">
-                                <span class="product-category-promotion-pirce">@String.Format(info, "{0:c}", Model.Products.Items[i].unit_price)</span>
-                                <span class="product-category-price">@String.Format(info, "{0:c}", Model.Products.Items[i].promotion_price)</span>
-                            }
-                            else
-                            {
-                                <span class="product-category-price">@String.Format(info, "{0:c}", Model.Products.Items[i].unit_price)</span>
-                            }
-                            <br class="clr" />
-                            <div class="margin-top-20">
-                                @if (Model.Products.Items[i].instock > 0 || Model.Products.Items[i].instock == null)
+                <div class="wrapper-content margin-bottom-20 margin-top-20">
+                    <div class="row">
+                        <div class="span2">
+                            <img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" />
+                        </div>
+                        <div class="span3">
+                            @{
+                                if (Model.Products.Items[i].instock > 0 || Model.Products.Items[i].instock == null)
                                 {
-                                    <a href="#" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Products.Items[i].id"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                    <h4>Có sẵn</h4>
                                 }
-                                <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
-                            </div>
-                        </form>
+                                else
+                                {
+                                    <h4 class="OutOfStock">Hết hàng</h4>
+                                }
+                            }
+                            <hr class="soft" />
+                            <h4 class="product-category-name">@Model.Products.Items[i].name</h4>
+                            <p class="product-category-description">
+                                @Model.Products.Items[i].meta_descriptions
+                            </p>
+                            <br class="clr" />
+                        </div>
+                        <div class="span3 alignR">
+                            <form class="form-horizontal qtyFrm">
+                                @if (Model.Products.Items[i].promotion_price > 1)
+                                {
+
+                                    string percent = (1 - (Model.Products.Items[i].promotion_price / Model.Products.Items[i].unit_price)).ToString("0.00%");
+                                    <i class="icon-tags"></i><span class="product-category-percent-price-promotion">&nbsp; Khuyến mãi @percent</span>
+                                    <br class="clr">
+                                    <span class="product-category-promotion-pirce">@String.Format(info, "{0:c}", Model.Products.Items[i].unit_price)</span>
+                                    <span class="product-category-price">@String.Format(info, "{0:c}", Model.Products.Items[i].promotion_price)</span>
+                                }
+                                else
+                                {
+                                    <span class="product-category-price">@String.Format(info, "{0:c}", Model.Products.Items[i].unit_price)</span>
+                                }
+                                <br class="clr" />
+                                <div class="margin-top-20">
+                                    @if (Model.Products.Items[i].instock > 0 || Model.Products.Items[i].instock == null)
+                                    {
+                                        <a href="#" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Products.Items[i].id"> Thêm vào <i class=" icon-shopping-cart"></i></a>
+                                    }
+                                    <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+
                 </div>
-                <hr class="soft" />
             }
             @await Component.InvokeAsync("Pager", ViewBag.PageResult)
 
@@ -167,7 +171,7 @@
                             {
                                 <i class="tag"></i>
                             }
-                            <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })"><img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" /></a>
+                            <a href="@Url.Action("Detail", "Product", new { slug = Model.Products.Items[i].slug })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Products.Items[i].image)" alt="@Model.Products.Items[i].name" /></a>
                             <div class="caption">
                                 <h5>@Model.Products.Items[i].name</h5>
                             </div>

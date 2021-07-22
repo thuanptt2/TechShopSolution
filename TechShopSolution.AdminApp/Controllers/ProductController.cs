@@ -119,8 +119,6 @@ namespace TechShopSolution.AdminApp.Controllers
                 TempData["error"] = result.Message;
                 return RedirectToAction("Index");
             }
-            var imageList = await Task.Run(() => _productApiClient.GetImageByProductID(id));
-            ViewData["imageList"] = imageList;
             var updateRequest = new ProductUpdateRequest()
             {
                 Id = result.ResultObject.id,
@@ -132,6 +130,8 @@ namespace TechShopSolution.AdminApp.Controllers
                 Featured = result.ResultObject.featured,
                 Instock = result.ResultObject.instock,
                 IsActive = result.ResultObject.isActive,
+                more_image_name = result.ResultObject.more_images,
+                image_name = result.ResultObject.image,
                 Meta_descriptions = result.ResultObject.meta_descriptions,
                 Meta_keywords = result.ResultObject.meta_keywords,
                 Meta_tittle = result.ResultObject.meta_tittle,

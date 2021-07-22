@@ -27,6 +27,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
     <link href="~/css/site.min.css" rel="stylesheet" />
+    @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 </head>
 <body>
     <div class="loaderbody" id="loaderbody">
@@ -70,7 +71,7 @@
             <hr class="soften" />
             <div class="row">
                 <div class="span3 margin-top-20">
-                    <img class="contact-company-logo" src="data:image/jpeg;base64, @Model.company_logo" />
+                    <img class="contact-company-logo" src="@(Configuration["BaseAddress"] + "/user-content/" + @Model.company_logo)" />
                 </div>
                 <div class="span5 margin-top-20">
                     <div class="contact-company-name">

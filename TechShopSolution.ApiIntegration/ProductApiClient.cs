@@ -332,20 +332,6 @@ namespace TechShopSolution.ApiIntegration
             var respone = await client.GetAsync($"/api/product?slug={slug}&code={Code}");
             return respone.IsSuccessStatusCode;
         }
-        public async Task<List<ImageListResult>> GetImageByProductID(int id)
-        {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/product/image/{id}");
-            var body = await respone.Content.ReadAsStringAsync();
-            if (respone.IsSuccessStatusCode)
-            {
-                var result =  JsonConvert.DeserializeObject<List<ImageListResult>>(body);
-                return result;
-            }
-            else return null;
-               
-        }
         public async Task<List<CategoryViewModel>> GetAllCategory()
         {
             var client = _httpClientFactory.CreateClient();
