@@ -121,5 +121,13 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpDelete("unfavorite")]
+        public async Task<IActionResult> UnFavoriteProduct(int cus_id, int product_id)
+        {
+            var result = await _customerService.UnFavoriteProduct(cus_id, product_id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

@@ -1283,6 +1283,17 @@ body {
         left: 42%;
         width: 50%;
     }
+    .loader {
+        top: 40%;
+        left: 35%;
+    }
+    .modal.fade.in {
+        top: 10% !important;
+        width: 73% !important;
+    }
+    .p_class {
+        padding: 40px !important;
+    }
 }
 .dropdown {
     display: inline-block;
@@ -1391,6 +1402,6 @@ body {
     word-break: break-all;
 }
 #btnUnFavoriteProduct {
-    background: #ff8401;
+    background: #ff6f31;
     color: #FFF;
 }

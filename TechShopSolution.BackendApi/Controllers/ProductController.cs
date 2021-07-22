@@ -37,11 +37,10 @@ namespace TechShopSolution.BackendApi.Controllers
             var product = await _productService.GetById(id);
             return Ok(product);
         }
-
         [HttpGet("slug")]
-        public async Task<IActionResult> GetPublicProductDetail(string slug)
+        public async Task<IActionResult> GetPublicProductDetail(string slug, int? cus_id)
         {
-            var result = await _productService.GetPublicProductDetail(slug);
+            var result = await _productService.GetPublicProductDetail(slug, cus_id);
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
@@ -74,6 +73,12 @@ namespace TechShopSolution.BackendApi.Controllers
         public IActionResult GetProductsRelated(int idBrand, int take)
         {
             var product = _productService.GetProductsRelated(idBrand, take);
+            return Ok(product);
+        }
+        [HttpGet("Rating")]
+        public IActionResult GetRatingsProduct(string slug)
+        {
+            var product = _productService.GetRatingsProduct(slug);
             return Ok(product);
         }
         [HttpPost]

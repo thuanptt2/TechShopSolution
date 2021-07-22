@@ -32,6 +32,7 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<string>> CancelOrder(OrderCancelRequest request);
         Task<ApiResult<bool>> RatingPoduct(ProductRatingRequest request);
         Task<ApiResult<bool>> FavoriteProduct(int cus_id, int product_id);
+        Task<ApiResult<bool>> UnFavoriteProduct(int cus_id, int product_id);
 
     }
 }

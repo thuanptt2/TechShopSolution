@@ -59,11 +59,11 @@ $("#btnFavoriteProduct").click(function () {
         success: function (res) {
 
             var favorite_total = $("#favorite-total").text();
+
             $("#favorite-total").text(parseInt(favorite_total) + 1);
-            function btnUnFavoriteProduct() {
-                alert("hello");
-            }
-            $("#favorite-button-area").html("<button class='btn' style=\"background: #ff6f31; color: #FFF;\" id='btnUnFavoriteProduct'  data-cusid='" + cus_id + "' data-productid='" + product_id + "'>Hủy Yêu thích</button>")
+
+            document.getElementById('favorite-button-area').style.display = "none";
+            document.getElementById('unfavorite-button-area').style.display = "block";
 
             var x = document.getElementById("snackbar");
             $('.ReultMessage').text("Yêu thích sản phẩm thành công");
@@ -73,42 +73,6 @@ $("#btnFavoriteProduct").click(function () {
 
             // After 3 seconds, remove the show class from DIV
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-
-            $("#btnUnFavoriteProduct").click(function () {
-                $.ajax({
-                    type: "POST",
-                    url: '/Product/UnFavoriteProduct/',
-                    data: {
-                        cus_id: parseInt(cus_id), product_id: parseInt(product_id),
-                    },
-                    success: function (res) {
-
-                        var favorite_total = $("#favorite-total").text();
-                        $("#favorite-total").text(parseInt(favorite_total) - 1);
-                       
-                        $("#favorite-button-area").html("<button class='btn' id='btnFavoriteProduct'  data-cusid='" + cus_id + "' data-productid='" + product_id + "'>♡ Yêu thích</button>")
-
-                        var x = document.getElementById("snackbar");
-                        $('.ReultMessage').text("Hủy yêu thích thành công");
-
-                        // Add the "show" class to DIV
-                        x.className = "show";
-
-                        // After 3 seconds, remove the show class from DIV
-                        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        var x = document.getElementById("snackbarDanger");
-                        $('#ErrorMessage').text(jqXHR.responseText);
-
-                        // Add the "show" class to DIV
-                        x.className = "show";
-
-                        // After 3 seconds, remove the show class from DIV
-                        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-                    }
-                });
-            })
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -122,5 +86,43 @@ $("#btnFavoriteProduct").click(function () {
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
         }
     });
-    
 });
+
+$("#btnUnFavoriteProduct").click(function () {
+    const cus_id = $(this).data('cusid');
+    const product_id = $(this).data('productid');
+    $.ajax({
+        type: "POST",
+        url: '/Product/UnFavoriteProduct/',
+        data: {
+            cus_id: parseInt(cus_id), product_id: parseInt(product_id),
+        },
+        success: function (res) {
+
+            var favorite_total = $("#favorite-total").text();
+            $("#favorite-total").text(parseInt(favorite_total) - 1);
+
+            document.getElementById('favorite-button-area').style.display = "block";
+            document.getElementById('unfavorite-button-area').style.display = "none";
+
+            var x = document.getElementById("snackbar");
+            $('.ReultMessage').text("Hủy yêu thích thành công");
+
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            var x = document.getElementById("snackbarDanger");
+            $('#ErrorMessage').text(jqXHR.responseText);
+
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        }
+    });
+})

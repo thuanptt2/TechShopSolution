@@ -602,7 +602,7 @@ namespace TechShopSolution.Application.Catalog.Product
             };
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
-        public async Task<ApiResult<PublicProductDetailViewModel>> GetPublicProductDetail(string slug)
+        public async Task<ApiResult<ProductViewModel>> GetPublicProductDetail(string slug, int? cus_id)
         {
 
             var query = from p in _context.Products
@@ -610,11 +610,11 @@ namespace TechShopSolution.Application.Catalog.Product
                         join c in _context.Categories on pic.cate_id equals c.id
                         join b in _context.Brands on p.brand_id equals b.id
                         where p.isDelete == false && p.isActive == true && p.slug == slug
-                        select new { p, pic, c, b };
+                        select new { p, pic, c, b};
 
             if (await query.CountAsync() == 0)
             {
-                return new ApiErrorResult<PublicProductDetailViewModel>("Sản phẩm không tồn tại hoặc đã bị xóa");
+                return new ApiErrorResult<ProductViewModel>("Sản phẩm không tồn tại hoặc đã bị xóa");
             }
 
             var dataProduct = query.AsEnumerable()
@@ -652,31 +652,52 @@ namespace TechShopSolution.Application.Catalog.Product
                 warranty = x.Key.warranty
             }).FirstOrDefault();
 
+
+            if (cus_id != null)
+            {
+                if (await _context.Favorites.AnyAsync(x => x.cus_id == cus_id && x.product_id == Pro.id))
+                    Pro.isFavorite = true;
+                else Pro.isFavorite = false;
+            } else Pro.isFavorite = false;
+            Pro.favorite_count = await _context.Favorites.Where(x => x.product_id == Pro.id).CountAsync();
+
             var product = await _context.Products.FindAsync(Pro.id);
             product.view_count = product.view_count + 1;
             await _context.SaveChangesAsync();
 
-            var query2 = from r in _context.Ratings
-                         join c in _context.Customers on r.cus_id equals c.id
-                         join p in _context.Products on r.product_id equals p.id
-                         where p.isDelete == false && p.isActive == true && p.slug == slug
-                         select new { p, c, r };
+            return new ApiSuccessResult<ProductViewModel>(Pro);
+        }
+        public List<RatingViewModel> GetRatingsProduct(string slug)
+        {
+            try
+            {
+                var query = from r in _context.Ratings
+                             join c in _context.Customers on r.cus_id equals c.id
+                             join p in _context.Products on r.product_id equals p.id
+                             where p.isDelete == false && p.isActive == true && p.slug == slug
+                             select new { p, c, r };
 
-            var dataRating = query2.AsEnumerable()
-              .GroupBy(g => g.r);
+                var dataRating = query.AsEnumerable()
+                  .GroupBy(g => g.r);
 
-            List<RatingViewModel> ListRating = dataRating.OrderByDescending(x => x.Key.date_rating)
-                .Select(x => new RatingViewModel()
-                {
-                    cus_id = x.Key.cus_id,
-                    content = x.Key.content,
-                    cus_name = x.Key.Customer.name,
-                    date_rating = x.Key.date_rating,
-                    product_id = x.Key.product_id,
-                    score = x.Key.score
-                }).ToList();
+                List<RatingViewModel> ListRating = dataRating.OrderByDescending(x => x.Key.date_rating)
+                    .Select(x => new RatingViewModel()
+                    {
+                        cus_id = x.Key.cus_id,
+                        content = x.Key.content,
+                        cus_name = x.Key.Customer.name,
+                        date_rating = x.Key.date_rating,
+                        product_id = x.Key.product_id,
+                        score = x.Key.score
+                    }).ToList();
 
-            return new ApiSuccessResult<PublicProductDetailViewModel>(new PublicProductDetailViewModel() { Product = Pro, Ratings = ListRating });
+                return ListRating;
+
+            }
+            catch
+            {
+                return null;
+            }
         }
         public async Task<bool> isValidSlug(string Code, string slug)
         {

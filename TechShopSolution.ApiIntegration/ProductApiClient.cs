@@ -186,15 +186,25 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
         }
-        public async Task<ApiResult<PublicProductDetailViewModel>> GetPublicProductDetail(string slug)
+        public async Task<ApiResult<ProductViewModel>> GetPublicProductDetail(string slug, int? cus_id)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/product/slug?slug={slug}");
+            var respone = await client.GetAsync($"/api/product/slug?slug={slug}&cus_id={cus_id}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<PublicProductDetailViewModel>>(body);
-            return JsonConvert.DeserializeObject<ApiErrorResult<PublicProductDetailViewModel>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
+        }
+        public async Task<List<RatingViewModel>> GetRatingsProduct(string slug)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/rating?slug={slug}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<RatingViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<RatingViewModel>>(body);
         }
         public async Task<PagedResult<ProductViewModel>> GetProductPagings(GetProductPagingRequest request)
         {

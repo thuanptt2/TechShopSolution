@@ -25,6 +25,7 @@ namespace TechShopSolution.Application.Catalog.Customer
         List<OrderViewModel> GetLatestOrder(int id, int take);
         Task<ApiResult<bool>> RatingProduct(ProductRatingRequest request);
         Task<ApiResult<bool>> FavoriteProduct(int cus_id, int product_id);
+        Task<ApiResult<bool>> UnFavoriteProduct(int cus_id, int product_id);
 
     }
 }

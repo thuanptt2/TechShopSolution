@@ -33,8 +33,15 @@ namespace TechShopSolution.WebApp.Controllers
         [Route("san-pham/{slug}")]
         public async Task<IActionResult> Detail(string slug)
         {
-            var product = await _productApiClient.GetPublicProductDetail(slug);
-            if (product.ResultObject == null || product.ResultObject.Product == null)
+            int? cus_id = null;
+            if(User.Identity.IsAuthenticated)
+            {
+                cus_id = int.Parse(User.FindFirst(ClaimTypes.Sid).Value);
+            }
+
+            var product = await _productApiClient.GetPublicProductDetail(slug, cus_id);
+
+            if (product.ResultObject == null)
             {
                 TempData["error"] = product.Message;
                 return RedirectToAction("Index", "Home");
@@ -54,16 +61,16 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 RecentlyProducts = JsonConvert.DeserializeObject<List<ProductRecentlyViewModel>>(session);
             }
-            if(!RecentlyProducts.Any(x=> x.id == product.ResultObject.Product.id))
+            if(!RecentlyProducts.Any(x=> x.id == product.ResultObject.id))
             {
                 var pro = new ProductRecentlyViewModel()
                 {
-                    id = product.ResultObject.Product.id,
-                    name = product.ResultObject.Product.name,
-                    promotion_price = product.ResultObject.Product.promotion_price,
-                    slug = product.ResultObject.Product.slug,
-                    image = product.ResultObject.Product.image,
-                    unit_price = product.ResultObject.Product.unit_price,
+                    id = product.ResultObject.id,
+                    name = product.ResultObject.name,
+                    promotion_price = product.ResultObject.promotion_price,
+                    slug = product.ResultObject.slug,
+                    image = product.ResultObject.image,
+                    unit_price = product.ResultObject.unit_price,
                     view_at = DateTime.Now,
                 };
                 RecentlyProducts.Add(pro);
@@ -71,11 +78,11 @@ namespace TechShopSolution.WebApp.Controllers
             }
             return View(new ProductDetailViewModel()
             {
-                Product = product.ResultObject.Product,
+                Product = product.ResultObject,
                 ProductsRecently = RecentlyProducts.OrderByDescending(x=> x.view_at).ToList(),
-                Ratings = product.ResultObject.Ratings,
-                ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.Product.brand_id, 4),
-                ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.Product.id),
+                Ratings = await _productApiClient.GetRatingsProduct(slug),
+                ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.brand_id, 4),
+                ImageList = await _productApiClient.GetImageByProductID(product.ResultObject.id),
             });
         }
         [HttpGet]
@@ -110,7 +117,7 @@ namespace TechShopSolution.WebApp.Controllers
             return RedirectToAction("Detail", new { slug = request.product_slug });
         }
         [Route("danh-muc/{slug}")]
-        public async Task<IActionResult> Category(string slug, decimal? giathapnhat = null, decimal? giacaonhat = null, int sortid = 1, int page = 1)
+        public async Task<IActionResult> Category(string slug, decimal? giathapnhat = null, decimal? giacaonhat = null, int sortid = 1, int pageIndex = 1)
         {
             var Category = await _categorytApiClient.GetBySlug(slug);
             var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
@@ -119,7 +126,7 @@ namespace TechShopSolution.WebApp.Controllers
                 Highestprice = giacaonhat,
                 idSortType = sortid,
                 Lowestprice = giathapnhat,
-                PageIndex = page,
+                PageIndex = pageIndex,
                 PageSize = 9,
                 
             });
@@ -133,11 +140,13 @@ namespace TechShopSolution.WebApp.Controllers
             });
         }
         [Route("san-pham")]
-        public async Task<IActionResult> SearchProducts(string tukhoa, string danhmuc, int? danhmuccha, string thuonghieu, int idsort = 1, decimal? giathapnhat = null, decimal? giacaonhat = null, bool tinhtrang = true, int pageIndex = 1)
+        public async Task<IActionResult> SearchProducts(int pageIndex = 1, string tukhoa = null, string danhmuc = null, int? danhmuccha = null, string thuonghieu = null, int idsort = 1, decimal? giathapnhat = null, decimal? giacaonhat = null, bool tinhtrang = true)
         {
             var Category = await _categorytApiClient.GetBySlug(danhmuc);
             var Brands = await _productApiClient.GetAllBrand();
             var Categories = await _categorytApiClient.GetAllCategory();
+
+            var request = HttpContext.Request;
 
             if (danhmuc != null)
             {
@@ -162,6 +171,7 @@ namespace TechShopSolution.WebApp.Controllers
                     giathapnhat = giacaonhat;
                     giacaonhat = temp;
                 }
+
                 var products = await _productApiClient.GetPublicProducts(new GetPublicProductPagingRequest()
                 {
                     CategorySlug = danhmuc,
@@ -272,6 +282,14 @@ namespace TechShopSolution.WebApp.Controllers
         public async Task<IActionResult> FavoriteProduct(int cus_id, int product_id)
         {
             var result = await _customerApiClient.FavoriteProduct(cus_id, product_id);
+            if (!result.IsSuccess)
+                return BadRequest(result.Message);
+            return Ok();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UnFavoriteProduct(int cus_id, int product_id)
+        {
+            var result = await _customerApiClient.UnFavoriteProduct(cus_id, product_id);
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
             return Ok();

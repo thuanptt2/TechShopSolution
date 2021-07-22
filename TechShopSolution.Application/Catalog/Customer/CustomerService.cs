@@ -260,6 +260,16 @@ namespace TechShopSolution.Application.Catalog.Customer
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
         }
+        public async Task<ApiResult<bool>> UnFavoriteProduct(int cus_id, int product_id)
+        {
+            var favorite = await _context.Favorites.Where(x=>x.cus_id == cus_id && x.product_id == product_id).FirstOrDefaultAsync();
+            if (favorite == null)
+                return new ApiErrorResult<bool>("Không tìm thấy yêu thích của bạn");
+           
+            _context.Favorites.Remove(favorite);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
         public async Task<ApiResult<bool>> RatingProduct(ProductRatingRequest request)
         {
             var rating = await _context.Ratings.Where(x => x.cus_id == request.cus_id && x.product_id == request.product_id).FirstOrDefaultAsync();
