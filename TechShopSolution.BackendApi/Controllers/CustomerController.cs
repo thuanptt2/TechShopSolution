@@ -129,5 +129,13 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpPost("favoriteproducts")]
+        public IActionResult GetPublicProducts(GetFavoriteProductsPagingRequest request)
+        {
+            var products = _customerService.GetFavoriteProduct(request);
+            if (products.Items == null)
+                return BadRequest("Không có sản phẩm nào");
+            return Ok(products);
+        }
     }
 }

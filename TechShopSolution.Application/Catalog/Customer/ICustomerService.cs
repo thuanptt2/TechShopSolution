@@ -26,6 +26,6 @@ namespace TechShopSolution.Application.Catalog.Customer
         Task<ApiResult<bool>> RatingProduct(ProductRatingRequest request);
         Task<ApiResult<bool>> FavoriteProduct(int cus_id, int product_id);
         Task<ApiResult<bool>> UnFavoriteProduct(int cus_id, int product_id);
-
+        public PagedResult<ProductOverViewModel> GetFavoriteProduct(GetFavoriteProductsPagingRequest request);
     }
 }

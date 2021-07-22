@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
 
@@ -286,5 +287,25 @@ namespace TechShopSolution.WebApp.Controllers
                           CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
+        [Authorize]
+        [Route("tai-khoan/san-pham-yeu-thich")]
+        [HttpGet]
+        public async Task<IActionResult> FavoriteProducts(int pageIndex = 1)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+            var products = await _customerApiClient.GetFavoriteProducts(new GetFavoriteProductsPagingRequest()
+            {
+                cus_id = int.Parse(id),
+                PageIndex = pageIndex,
+                PageSize = 8,
+            });
+            ViewBag.PageResult = products;
+            return View(products);
+        }
+     
     }
 }

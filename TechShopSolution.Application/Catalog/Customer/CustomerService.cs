@@ -340,5 +340,62 @@ namespace TechShopSolution.Application.Catalog.Customer
             }
             return result;
         }
+        public PagedResult<ProductOverViewModel> GetFavoriteProduct(GetFavoriteProductsPagingRequest request)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join f in _context.Favorites on p.id equals f.product_id
+                            join cus in _context.Customers on f.cus_id equals cus.id
+                            where p.isDelete == false && p.isActive == true && cus.id == request.cus_id
+                            select new { p, f, cus };
+
+
+                var data = query.AsEnumerable()
+                    .GroupBy(g => g.p);
+
+                int totalRow = data.Count();
+
+                List<ProductOverViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(a => new ProductOverViewModel()
+                    {
+                        id = a.Key.id,
+                        name = a.Key.name,
+                        best_seller = a.Key.best_seller,
+                        create_at = a.Key.create_at,
+                        featured = a.Key.featured,
+                        image = a.Key.image,
+                        instock = a.Key.instock,
+                        promotion_price = a.Key.promotion_price,
+                        short_desc = a.Key.short_desc,
+                        slug = a.Key.slug,
+                        isActive = a.Key.isActive,
+                        unit_price = a.Key.unit_price,
+                    }).ToList();
+
+
+                var pageResult = new PagedResult<ProductOverViewModel>()
+                {
+                    TotalRecords = totalRow,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = result,
+                };
+                return pageResult;
+            }
+            catch
+            {
+                var pageResult = new PagedResult<ProductOverViewModel>()
+                {
+                    TotalRecords = 0,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = null,
+                };
+                return pageResult;
+            }
+        }
+
     }
 }

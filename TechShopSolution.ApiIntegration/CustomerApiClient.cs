@@ -258,5 +258,18 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
+        public async Task<PagedResult<ProductOverViewModel>> GetFavoriteProducts(GetFavoriteProductsPagingRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var respone = await client.PostAsync($"/api/customer/FavoriteProducts", httpContent);
+            var body = await respone.Content.ReadAsStringAsync();
+            var products = JsonConvert.DeserializeObject<PagedResult<ProductOverViewModel>>(body);
+            return products;
+        }
     }
 }
