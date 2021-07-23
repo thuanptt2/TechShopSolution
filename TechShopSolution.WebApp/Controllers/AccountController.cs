@@ -93,8 +93,13 @@ namespace TechShopSolution.WebApp.Controllers
             if (result.IsSuccess)
             {
                 var token = await _adminApiClient.AuthenticateCustomer(new LoginRequest { Email = request.email, Password = request.password, Remeber_me = true });
+                if(!token.IsSuccess)
+                {
+                    return View();
+                }
 
                 var adminPrincipal = this.ValidateToken(token.ResultObject);
+
                 var authProperties = new AuthenticationProperties
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
@@ -311,7 +316,7 @@ namespace TechShopSolution.WebApp.Controllers
         [Authorize]
         [Route("tai-khoan/san-pham-da-xem")]
         [HttpGet]
-        public async Task<IActionResult> RecentlyProducts(int pageIndex = 1)
+        public IActionResult RecentlyProducts(int pageIndex = 1)
         {
             if (!User.Identity.IsAuthenticated)
             {

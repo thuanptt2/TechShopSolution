@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Catalog.Customer;
@@ -22,6 +24,13 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             try
             {
+                SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider();
+
+                byte[] password_bytes = Encoding.ASCII.GetBytes(request.password);
+                byte[] encrypted_bytes = sha1.ComputeHash(password_bytes);
+
+                request.password = Convert.ToBase64String(encrypted_bytes);
+
                 string addressCustomer = request.House + " " + request.Ward + ", " + request.District + ", " + request.City;
                 var customer = new TechShopSolution.Data.Entities.Customer
                 {
@@ -49,6 +58,13 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             try
             {
+                SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider();
+
+                byte[] password_bytes = Encoding.ASCII.GetBytes(request.password);
+                byte[] encrypted_bytes = sha1.ComputeHash(password_bytes);
+
+                request.password = Convert.ToBase64String(encrypted_bytes);
+
                 var customer = new TechShopSolution.Data.Entities.Customer
                 {
                     name = request.name,
