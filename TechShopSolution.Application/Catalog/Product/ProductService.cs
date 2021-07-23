@@ -92,31 +92,67 @@ namespace TechShopSolution.Application.Catalog.Product
             try
             {
                 var product = await _context.Products.FindAsync(productID);
-                if (product != null)
+                if (product == null)
+                {
+                     return new ApiErrorResult<bool>($"Sản phẩm không tồn tại");
+                }
+                if (await _context.OrDetails.AnyAsync(x => x.product_id == productID))
                 {
                     product.isDelete = true;
                     product.delete_at = DateTime.Now;
 
-                    //Xóa hình ảnh sản phẩm
-                    //if (product.image != null)
-                    //{
-                    //    await _storageService.DeleteFileAsync(product.image);
-                    //    product.image = "";
-                    //}
-                    //if (product.more_images != null)
-                    //{
-                    //    List<string> moreImages = product.more_images.Split(",").ToList();
-                    //    foreach (string img in moreImages)
-                    //    {
-                    //        await _storageService.DeleteFileAsync(img);
-                    //    }
-                    //    product.more_images = "";
-                    //}
+                    if (product.more_images != null)
+                    {
+                        List<string> moreImages = product.more_images.Split(",").ToList();
+                        foreach (string img in moreImages)
+                        {
+                            await _storageService.DeleteFileAsync(img);
+                        }
+                        product.more_images = "";
+                    }
 
-                    var result = await _context.SaveChangesAsync();
-                    return new ApiSuccessResult<bool>();
+                    var RatingItems = await _context.Ratings.Where(x => x.product_id == productID).ToListAsync();
+                    if (RatingItems != null)
+                    {
+                        _context.Ratings.RemoveRange(RatingItems);
+                    }
+
+                    var FavoriteItems = await _context.Favorites.Where(x => x.product_id == productID).ToListAsync();
+                    if (FavoriteItems != null)
+                    {
+                        _context.Favorites.RemoveRange(FavoriteItems);
+                    }
                 }
-                else return new ApiErrorResult<bool>($"Sản phẩm không tồn tại");
+                else
+                {
+                    await _storageService.DeleteFileAsync(product.image);
+
+                    if (product.more_images != null)
+                    {
+                        List<string> moreImages = product.more_images.Split(",").ToList();
+                        foreach (string img in moreImages)
+                        {
+                            await _storageService.DeleteFileAsync(img);
+                        }
+                        product.more_images = "";
+                    }
+
+                    var RatingItems = await _context.Ratings.Where(x => x.product_id == productID).ToListAsync();
+                    if (RatingItems != null)
+                    {
+                        _context.Ratings.RemoveRange(RatingItems);
+                    }
+
+                    var FavoriteItems = await _context.Favorites.Where(x => x.product_id == productID).ToListAsync();
+                    if (FavoriteItems != null)
+                    {
+                        _context.Favorites.RemoveRange(FavoriteItems);
+                    }
+                    _context.Products.Remove(product);
+                }
+               
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
             }
             catch (Exception ex)
             {
@@ -408,6 +444,7 @@ namespace TechShopSolution.Application.Catalog.Product
                     meta_descriptions = a.c.meta_descriptions,
                     meta_keywords = a.c.meta_keywords,
                     meta_title = a.c.meta_title,
+                    create_at = a.c.create_at,
                     parent_id = a.c.parent_id,
                     isActive = a.c.isActive,
                 }).FirstAsync();
@@ -428,6 +465,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         best_seller = a.Key.best_seller,
                         featured = a.Key.featured,
                         image = a.Key.image,
+                        create_at = a.Key.create_at,
                         instock = a.Key.instock,
                         promotion_price = a.Key.promotion_price,
                         short_desc = a.Key.short_desc,
@@ -465,6 +503,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         image = a.Key.image,
                         promotion_price = a.Key.promotion_price,
                         slug = a.Key.slug,
+                        create_at = a.Key.create_at,
                         unit_price = a.Key.unit_price,
                     }).ToList();
 
@@ -601,7 +640,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 short_desc = x.Key.short_desc,
                 specifications = x.Key.specifications,
                 unit_price = x.Key.unit_price,
-                update_at = (DateTime)x.Key.update_at,
                 warranty = x.Key.warranty
             }).FirstOrDefault();
 

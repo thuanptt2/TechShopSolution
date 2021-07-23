@@ -167,7 +167,7 @@
                             {
                                 <i class="tag-sale"></i>
                             }
-                            else if (days.TotalDays == 7)
+                            else if ((DateTime.Now - @Model.Products.Items[i].create_at).TotalDays < 7)
                             {
                                 <i class="tag"></i>
                             }

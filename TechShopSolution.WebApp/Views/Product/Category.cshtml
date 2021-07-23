@@ -136,7 +136,6 @@
                     {
                         <li class="span3">
                             <div class="thumbnail">
-                                @{ TimeSpan days = DateTime.Now.Subtract(@Model.Products.Items[i].create_at); }
                                 @if (@Model.Products.Items[i].featured)
                                 {
                                     <i class="tag-featured"></i>
@@ -149,7 +148,7 @@
                                 {
                                     <i class="tag-sale"></i>
                                 }
-                                else if (days.TotalDays == 7)
+                                else if ((DateTime.Now - @Model.Products.Items[i].create_at).TotalDays < 7)
                                 {
                                     <i class="tag"></i>
                                 }

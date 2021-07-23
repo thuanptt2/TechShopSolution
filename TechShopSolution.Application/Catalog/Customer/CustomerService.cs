@@ -278,6 +278,10 @@ namespace TechShopSolution.Application.Catalog.Customer
         }
         public async Task<ApiResult<bool>> UnFavoriteProduct(int cus_id, int product_id)
         {
+            var product = await _context.Products.FindAsync(product_id);
+            if (product == null)
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại hoặc đã bị xóa, không thể hủy yêu thích ngay bây giờ");
+
             var favorite = await _context.Favorites.Where(x=>x.cus_id == cus_id && x.product_id == product_id).FirstOrDefaultAsync();
             if (favorite == null)
                 return new ApiErrorResult<bool>("Không tìm thấy yêu thích của bạn");

@@ -89,7 +89,7 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light thead-dark">
                     <tr>
-                        <th scope="col" width="60px" class="text-center">
+                        <th scope="col" width="60px"  class="text-center">
                             Ảnh
                         </th>
                         <th scope="col" width="400px">
@@ -140,7 +140,7 @@
                         {
                             <tr>
                                 <td>
-                                    <img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.image)" width="50" />
+                                    <img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.image)" width="50" height="50"/>
                                 </td>
                                 <td>
                                     @Html.ActionLink(item.name, "Update", new { id = item.id })

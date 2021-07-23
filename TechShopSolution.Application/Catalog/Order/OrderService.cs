@@ -155,6 +155,10 @@ namespace TechShopSolution.Application.Catalog.Order
                         where o.id == id
                         select new { p, o, od, pm, c};
 
+            if(await query.CountAsync() == 0)
+            {
+                return new ApiErrorResult<OrderDetailViewModel>("Đơn hàng không tồn tại");
+            }
 
             OrderModel DataOrder = query.Select(a => new OrderModel()
             {
@@ -204,11 +208,6 @@ namespace TechShopSolution.Application.Catalog.Order
             }
             else DataOrder.ship_status = 0;
 
-            if (DataOrder == null)
-            {
-                return new ApiErrorResult<OrderDetailViewModel>("Đơn hàng không tồn tại");
-            }
-            
 
             List<OrderDetailModel> Details = query.Select(a => new OrderDetailModel()
             {
