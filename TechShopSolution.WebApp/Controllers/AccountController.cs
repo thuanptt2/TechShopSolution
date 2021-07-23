@@ -322,7 +322,8 @@ namespace TechShopSolution.WebApp.Controllers
             if (!string.IsNullOrWhiteSpace(session))
             {
                 RecentlyProducts = JsonConvert.DeserializeObject<List<ProductRecentlyViewModel>>(session);
-            }            return View(RecentlyProducts);
+            }            
+            return View(RecentlyProducts.OrderByDescending(x=>x.view_at).ToList());
         }
     }
 }

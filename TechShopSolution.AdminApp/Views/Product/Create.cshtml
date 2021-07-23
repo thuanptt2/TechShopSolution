@@ -10,6 +10,7 @@
     <script src="~/js/Product.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/AddonSEO.js"></script>
 
 }
 <div class="container-fluid">
@@ -36,7 +37,7 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-4">
                                     <label asp-for="CateID" class="control-label lableFormField"></label>
-                                    <input asp-for="CateID" class="form-control" id="txtCateID" hidden/>
+                                    <input asp-for="CateID" class="form-control" id="txtCateID" hidden />
                                     <select class="custom-select custom-select-sm" asp-for="CateID" asp-items="@(new SelectList(ViewBag.ListCate,"id", "cate_name"))" id="cboCategory">
                                         <option value="" selected>Chọn Danh mục sản phẩm</option>
                                     </select>
@@ -63,7 +64,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" asp-for="Unit_price" placeholder="0đ">
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id="formattedPrice" asp-for="Unit_price" placeholder="0đ">
                                         <div class="input-group-append">
                                             <span class="input-group-text">VND</span>
                                         </div>
@@ -76,7 +77,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" asp-for="Promotion_price" placeholder="0đ">
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id="formattedPromotionPrice" asp-for="Promotion_price" placeholder="0đ">
                                         <div class="input-group-append">
                                             <span class="input-group-text">VND</span>
                                         </div>
@@ -167,18 +168,23 @@
                             </a>
                         </div>
                         <hr />
-                        <label class="control-label mb-3">
+                        <label class="control-label mb-3" id="text-seo-sug">
                             Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy danh mục này trên công cụ tìm kiếm như Google
                         </label>
+                        <div class="collection-seo--preview mb-3 hide">
+                            <p class="collection-seo--preview-url text-truncate mb-0"></p>
+                            <p class="collection-seo--preview-title mb-1 mt-2"></p>
+                            <p class="collection-seo--preview-mota mb-1"></p>
+                        </div>
                         <div class="collapse" id="collapseSEO">
                             <div class="form-group mb-4">
                                 <label asp-for="Meta_tittle" class="control-label lableFormField"></label>
-                                <input asp-for="Meta_tittle" class="form-control" placeholder="Nhập tiêu đề trang" />
+                                <input asp-for="Meta_tittle" class="form-control" placeholder="Nhập tiêu đề trang" id="txtMetaTitle" />
                                 <span asp-validation-for="Meta_tittle" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
                                 <label asp-for="Meta_descriptions" class="control-label lableFormField"></label>
-                                <input asp-for="Meta_descriptions" class="form-control" placeholder="Nhập mô tả trang" />
+                                <input asp-for="Meta_descriptions" class="form-control" placeholder="Nhập mô tả trang" id="txtMetaDesc" />
                                 <span asp-validation-for="Meta_descriptions" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-3">
@@ -219,7 +225,7 @@
                         <div class="form-group">
                             <div class="checkbox">
                                 <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    <input type="checkbox" id="checkInstock"/>  Có quản lý tồn kho
+                                    <input type="checkbox" id="checkInstock" />  Có quản lý tồn kho
                                 </label>
                             </div>
                         </div>
@@ -253,14 +259,14 @@
                         <hr />
                         <div class="form-group ml-3 mb-4">
                             <div class="form-check form-switch">
-                                <input asp-for="Best_seller" class="form-check-input mr-3"  type="checkbox" id="flexSwitchCheckChecked2">
+                                <input asp-for="Best_seller" class="form-check-input mr-3" type="checkbox" id="flexSwitchCheckChecked2">
                                 <input type="hidden" asp-for="Best_seller" value="false" />
                                 <label asp-for="Best_seller" class="lableFormField" for="flexSwitchCheckChecked2"></label>
                             </div>
                         </div>
                         <div class="form-group ml-3">
                             <div class="form-check form-switch">
-                                <input asp-for="Featured" class="form-check-input mr-3"  type="checkbox" id="flexSwitchCheckChecked3">
+                                <input asp-for="Featured" class="form-check-input mr-3" type="checkbox" id="flexSwitchCheckChecked3">
                                 <input type="hidden" asp-for="Featured" value="false" />
                                 <label asp-for="Featured" class="lableFormField" for="flexSwitchCheckChecked3"></label>
                             </div>
@@ -272,3 +278,17 @@
     </form>
 </div>
 
+<script>
+    $("#formattedPrice").on('keyup', function (evt) {
+        var n = parseInt($(this).val().replace(/\D/g, ''), 10);
+        $(this).val(n.toLocaleString());
+        //do something else as per updated question
+        myFunc(); //call another function too
+    });
+    $("#formattedPromotionPrice").on('keyup', function (evt) {
+        var n = parseInt($(this).val().replace(/\D/g, ''), 10);
+        $(this).val(n.toLocaleString());
+        //do something else as per updated question
+        myFunc(); //call another function too
+    });
+</script>

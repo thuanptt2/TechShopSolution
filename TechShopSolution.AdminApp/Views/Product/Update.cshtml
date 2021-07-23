@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/Product.js"></script>
-
+    <script src="~/js/AddonSEO.js"></script>
 }
 
 
@@ -215,30 +215,54 @@
                             </a>
                         </div>
                         <hr />
-                        <label class="control-label mb-3">
-                            Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy danh mục này trên công cụ tìm kiếm như Google
-                        </label>
+                        @if (!string.IsNullOrWhiteSpace(Model.Meta_tittle) && !string.IsNullOrWhiteSpace(Model.Meta_descriptions))
+                        {
+                            <label class="control-label mb-3 hide" id="text-seo-sug">
+                                Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy danh mục này trên công cụ tìm kiếm như Google
+                            </label>
+
+                            <div class="collection-seo--preview mb-3">
+                                <p class="collection-seo--preview-url text-truncate mb-0">
+                                    https://techshopvn.xyz/san-pham/@Model.Slug
+                                </p>
+                                <p class="collection-seo--preview-title mb-1 mt-2">@Model.Meta_tittle</p>
+                                <p class="collection-seo--preview-mota mb-1">@Model.Meta_descriptions</p>
+
+                            </div>
+
+                        }
+                        else
+                        {
+                            <label class="control-label mb-3" id="text-seo-sug">
+                                Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy danh mục này trên công cụ tìm kiếm như Google
+                            </label>
+                            <div class="collection-seo--preview mb-3 hide">
+                                <p class="collection-seo--preview-url text-truncate mb-0"></p>
+                                <p class="collection-seo--preview-title mb-1 mt-2"></p>
+                                <p class="collection-seo--preview-mota mb-1"></p>
+                            </div>
+                        }
                         <div class="collapse" id="collapseSEO">
                             <div class="form-group mb-4">
                                 <label asp-for="Meta_tittle" class="control-label lableFormField"></label>
-                                <input asp-for="Meta_tittle" class="form-control" placeholder="Nhập tiêu đề trang" />
+                                <input asp-for="Meta_tittle" class="form-control" placeholder="Nhập tiêu đề trang" id="txtMetaTitle" />
                                 <span asp-validation-for="Meta_tittle" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
                                 <label asp-for="Meta_descriptions" class="control-label lableFormField"></label>
-                                <input asp-for="Meta_descriptions" class="form-control" placeholder="Nhập mô tả trang" />
+                                <input asp-for="Meta_descriptions" class="form-control" placeholder="Nhập mô tả trang" id="txtMetaDesc" />
                                 <span asp-validation-for="Meta_descriptions" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-3">
                                 <label asp-for="Meta_keywords" class="control-label lableFormField"></label>
-                                <input asp-for="Meta_keywords" class="form-control" placeholder="Nhập từ khóa trang" />
+                                <input asp-for="Meta_keywords" class="form-control" placeholder="Nhập từ khóa trang" id="txtMetaKeyword" />
                                 <span asp-validation-for="Meta_keywords" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
                                 <label asp-for="Slug" class="control-label lableFormField"></label>
                                 <div class="SlugProduct">
                                     <span class="SlugUrl">
-                                        http://techshop.io/san-pham/
+                                        https://techshopvn.xyz/san-pham/
                                     </span>
                                     <input asp-for="Slug" class="form-control InputSlug" placeholder="Đường dẫn sản phẩm" id="txtSlug" />
                                 </div>

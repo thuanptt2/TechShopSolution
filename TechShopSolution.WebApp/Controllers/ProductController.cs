@@ -61,7 +61,8 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 RecentlyProducts = JsonConvert.DeserializeObject<List<ProductRecentlyViewModel>>(session);
             }
-            if(!RecentlyProducts.Any(x=> x.id == product.ResultObject.id))
+            var recentlyProduct = RecentlyProducts.Where(x => x.id == product.ResultObject.id).FirstOrDefault();
+            if(recentlyProduct == null)
             {
                 var pro = new ProductRecentlyViewModel()
                 {
@@ -77,10 +78,15 @@ namespace TechShopSolution.WebApp.Controllers
                 RecentlyProducts.Add(pro);
                 HttpContext.Session.SetString("RecentlyProducts", JsonConvert.SerializeObject(RecentlyProducts));
             }
+            else
+            {
+                recentlyProduct.view_at = DateTime.Now;
+                HttpContext.Session.SetString("RecentlyProducts", JsonConvert.SerializeObject(RecentlyProducts));
+            }
             return View(new ProductDetailViewModel()
             {
                 Product = product.ResultObject,
-                ProductsRecently = RecentlyProducts.OrderByDescending(x=> x.view_at).ToList(),
+                ProductsRecently = RecentlyProducts.OrderByDescending(x => x.view_at).ToList(),
                 Ratings = await _productApiClient.GetRatingsProduct(slug),
                 ProductsRelated = await _productApiClient.GetProductsRelated(product.ResultObject.brand_id, 4),
             });

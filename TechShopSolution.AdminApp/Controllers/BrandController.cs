@@ -17,7 +17,7 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             _brandApiClient = brandApiClient;
         }
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 15)
         {
             var request = new GetBrandPagingRequest()
             {
