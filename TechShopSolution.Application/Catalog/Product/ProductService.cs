@@ -26,10 +26,8 @@ namespace TechShopSolution.Application.Catalog.Product
         }
         public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
-            if (request.Promotion_price == null)
-                request.Promotion_price = 0;
-            if (request.Warranty == null)
-                request.Warranty = 0;
+           
+            
             var product = new TechShopSolution.Data.Entities.Product
             {
                 name = request.Name,
@@ -43,14 +41,14 @@ namespace TechShopSolution.Application.Catalog.Product
                 meta_descriptions = request.Meta_descriptions,
                 meta_keywords = request.Meta_keywords,
                 meta_tittle = request.Meta_tittle,
-                promotion_price = (decimal)request.Promotion_price,
+                promotion_price = !string.IsNullOrWhiteSpace(request.Promotion_price) ? decimal.Parse(request.Promotion_price) : 0,
                 short_desc = request.Short_desc,
                 slug = request.Slug,
                 specifications = request.Specifications,
                 isActive = request.IsActive,
                 isDelete = false,
-                unit_price = request.Unit_price,
-                warranty = (int)request.Warranty,
+                unit_price = decimal.Parse(request.Unit_price),
+                warranty = request.Warranty != null ? (int)request.Warranty : 0,
             };
             if (request.Image != null)
             {
@@ -705,9 +703,7 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 product.name = request.Name;
                 product.slug = request.Slug;
-                if (request.Warranty == null)
-                    product.warranty = 0;
-                else product.warranty = (int)request.Warranty;
+                product.warranty = request.Warranty != null ? (int)request.Warranty : 0;
                 product.brand_id = request.Brand_id;
                 product.specifications = request.Specifications;
                 product.short_desc = request.Short_desc;
@@ -715,10 +711,8 @@ namespace TechShopSolution.Application.Catalog.Product
                 product.isActive = request.IsActive;
                 product.meta_descriptions = request.Meta_descriptions;
                 product.meta_keywords = request.Meta_keywords;
-                product.unit_price = request.Unit_price;
-                if (request.Promotion_price == null)
-                    product.promotion_price = 0;
-                else product.promotion_price = (decimal)request.Promotion_price;
+                product.unit_price = decimal.Parse(request.Unit_price);
+                product.promotion_price = !string.IsNullOrWhiteSpace(request.Promotion_price) ? decimal.Parse(request.Promotion_price) : 0;
                 product.best_seller = request.Best_seller;
                 product.featured = request.Featured;
                 product.instock = request.Instock;

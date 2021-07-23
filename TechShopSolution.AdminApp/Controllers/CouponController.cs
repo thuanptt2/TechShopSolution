@@ -67,8 +67,8 @@ namespace TechShopSolution.AdminApp.Controllers
                 value = result.ResultObject.value,
                 type = result.ResultObject.type,
                 code = result.ResultObject.code,
-                max_price = result.ResultObject.max_price,
-                min_order_value = result.ResultObject.min_order_value,
+                max_price = result.ResultObject.max_price.ToString(),
+                min_order_value = result.ResultObject.min_order_value.ToString(),
                 end_at = result.ResultObject.end_at,
                 isActive = result.ResultObject.isActive,
                 name = result.ResultObject.name,
@@ -115,7 +115,7 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Create(CouponCreateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _couponApiClient.CreateCoupon(request);
             if (result.IsSuccess)
             {

@@ -37,7 +37,23 @@ $().ready(function () {
 
     });
     $("#btnSave").click(function () {
+
         var form = $("#CreateForm");
+
+        var unit_price = $("#formattedPrice").val();
+        var pro_price = $("#formattedPromotionPrice").val();
+
+        if (unit_price.length != 0 && unit_price != "") {
+            unit_price = unit_price.replace(/(₫)/gm, "");
+            unit_price = unit_price.replace(/\s/g, "");
+            document.getElementById("formattedPrice").value = unit_price;
+        }
+        if (pro_price.length != 0 && pro_price != "") {
+            pro_price = pro_price.replace(/(₫)/gm, "");
+            pro_price = pro_price.replace(/\s/g, "");
+            document.getElementById("formattedPromotionPrice").value = pro_price;
+        }
+
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             listImages = new FormData();
@@ -133,7 +149,7 @@ $().ready(function () {
             console.error(err.stack);
         });
 
-    
+
     $('#cboCategory').change(function () {
         var CateID = $('#txtCateID').val();
         var value = $(this).val();
@@ -212,5 +228,22 @@ $().ready(function () {
         if (!isNaN(value)) {
             $('#txtBrandID').val(value);
         }
+    })
+
+    new AutoNumeric('#formattedPrice', {
+        allowDecimalPadding: false,
+        currencySymbol: "₫",
+        currencySymbolPlacement: "s",
+        digitGroupSeparator: " ",
+        maximumValue: "9999999999",
+        minimumValue: "0"
+    })
+    new AutoNumeric('#formattedPromotionPrice', {
+        allowDecimalPadding: false,
+        currencySymbol: "₫",
+        currencySymbolPlacement: "s",
+        digitGroupSeparator: " ",
+        maximumValue: "9999999999",
+        minimumValue: "0"
     })
 })

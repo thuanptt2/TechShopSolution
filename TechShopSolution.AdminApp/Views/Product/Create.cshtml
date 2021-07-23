@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/AddonSEO.js"></script>
-
+    <script src="~/js/autoNumeric.min.js"></script>
 }
 <div class="container-fluid">
     <h3 class="mt-4">Thêm sản phẩm</h3>
@@ -61,26 +61,14 @@
                                 <div class="col-lg-4 mb-4">
                                     <label asp-for="Unit_price" class="control-label lableFormField"></label>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div>
-                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id="formattedPrice" asp-for="Unit_price" placeholder="0đ">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">VND</span>
-                                        </div>
+                                        <input type="text" class="form-control" id="formattedPrice" asp-for="Unit_price" placeholder="0đ">
                                     </div>
                                     <span asp-validation-for="Unit_price" class="text-danger"></span>
                                 </div>
                                 <div class="col-lg-4 mb-4">
                                     <label asp-for="Promotion_price" class="control-label lableFormField"></label>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div>
-                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id="formattedPromotionPrice" asp-for="Promotion_price" placeholder="0đ">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">VND</span>
-                                        </div>
+                                        <input type="text" class="form-control" id="formattedPromotionPrice" asp-for="Promotion_price" placeholder="0đ">
                                     </div>
                                     <span asp-validation-for="Promotion_price" class="text-danger"></span>
                                 </div>
@@ -90,7 +78,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Tháng</span>
                                         </div>
-                                        <input type="number" min="0" class="form-control" placeholder="Thời hạn bảo hành" asp-for="Warranty">
+                                        <input type="number" min="0" max="1000" class="form-control" placeholder="Thời hạn bảo hành" asp-for="Warranty">
                                     </div>
                                     <span asp-validation-for="Warranty" class="text-danger"></span>
                                 </div>
@@ -233,7 +221,7 @@
                             <div class="well">
                                 <div class="form-group">
                                     <label asp-for="Instock" class="control-label lableFormField"></label>
-                                    <input id="txtInstock" asp-for="Instock" class="form-control" type="number" min="0" placeholder="Nhập số lượng tồn" />
+                                    <input id="txtInstock" asp-for="Instock" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập số lượng tồn" />
                                     <span asp-validation-for="Instock" class="text-danger"></span>
                                 </div>
                             </div>
@@ -277,18 +265,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    $("#formattedPrice").on('keyup', function (evt) {
-        var n = parseInt($(this).val().replace(/\D/g, ''), 10);
-        $(this).val(n.toLocaleString());
-        //do something else as per updated question
-        myFunc(); //call another function too
-    });
-    $("#formattedPromotionPrice").on('keyup', function (evt) {
-        var n = parseInt($(this).val().replace(/\D/g, ''), 10);
-        $(this).val(n.toLocaleString());
-        //do something else as per updated question
-        myFunc(); //call another function too
-    });
-</script>

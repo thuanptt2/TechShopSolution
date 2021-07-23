@@ -26,9 +26,9 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         [Display(Name = "Hình ảnh chi tiết")]
         public List<IFormFile> More_images { get; set; }
         [Display(Name = "Đơn giá")]
-        public decimal Unit_price { get; set; }
+        public string Unit_price { get; set; }
         [Display(Name = "Giá khuyến mãi")]
-        public decimal? Promotion_price { get; set; }
+        public string Promotion_price { get; set; }
         [Display(Name = "Bảo hành")]
         public int? Warranty { get; set; }
         [Display(Name = "Trong kho")]

@@ -41,19 +41,26 @@ namespace TechShopSolution.Application.Catalog.Coupon
         {
             try
             {
+                
                 var coupon = new TechShopSolution.Data.Entities.Coupon
                 {
                     code = request.code,
                     value = request.value,
                     type = request.type,
                     name = request.name,
-                    max_price = request.max_price,
-                    min_order_value = request.min_order_value,
                     end_at = request.end_at,
                     start_at = request.start_at,
                     isActive = request.isActive,
                     quantity = request.quantity,
                 };
+                if (!string.IsNullOrWhiteSpace(request.max_price))
+                    coupon.max_price = double.Parse(request.max_price);
+                else coupon.max_price = null;
+
+                if (!string.IsNullOrWhiteSpace(request.min_order_value))
+                    coupon.min_order_value = double.Parse(request.min_order_value);
+                else coupon.min_order_value = null;
+
                 _context.Coupons.Add(coupon);
                 await _context.SaveChangesAsync();
                 return new ApiSuccessResult<bool>();
@@ -184,8 +191,15 @@ namespace TechShopSolution.Application.Catalog.Coupon
                     Coupon.name = request.name;
                     Coupon.isActive = request.isActive;
                     Coupon.quantity = request.quantity;
-                    Coupon.max_price = request.max_price;
-                    Coupon.min_order_value = request.min_order_value;
+
+                    if (!string.IsNullOrWhiteSpace(request.max_price))
+                        Coupon.max_price = double.Parse(request.max_price);
+                    else Coupon.max_price = null;
+
+                    if (!string.IsNullOrWhiteSpace(request.min_order_value))
+                        Coupon.min_order_value = double.Parse(request.min_order_value);
+                    else Coupon.min_order_value = null;
+                 
                     Coupon.start_at = request.start_at;
                     Coupon.end_at = request.end_at;
                   

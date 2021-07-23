@@ -114,10 +114,13 @@ namespace TechShopSolution.ApiIntegration
             requestContent.Add(new StringContent(request.Instock.ToString()), "Instock");
             requestContent.Add(new StringContent(request.IsActive.ToString()), "IsActive");
             requestContent.Add(new StringContent(request.Name.ToString()), "Name");
-            requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
             requestContent.Add(new StringContent(request.Slug.ToString()), "Slug");
             requestContent.Add(new StringContent(request.Unit_price.ToString()), "Unit_price");
             requestContent.Add(new StringContent(request.Warranty.ToString()), "Warranty");
+            if (request.Promotion_price != null)
+            {
+                requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
+            }
             if (request.Specifications != null)
             {
                 requestContent.Add(new StringContent(request.Specifications.ToString()), "Specifications");
@@ -281,7 +284,6 @@ namespace TechShopSolution.ApiIntegration
                 requestContent.Add(byteArr, "More_images", item.Name);
                 File.Delete(item.PhysicalPath);
             }
-
             requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
             requestContent.Add(new StringContent(request.Brand_id.ToString()), "Brand_id");
             requestContent.Add(new StringContent(request.CateID.ToString()), "CateID");
@@ -291,10 +293,19 @@ namespace TechShopSolution.ApiIntegration
             requestContent.Add(new StringContent(request.Instock.ToString()), "Instock");
             requestContent.Add(new StringContent(request.IsActive.ToString()), "IsActive");
             requestContent.Add(new StringContent(request.Name.ToString()), "Name");
-            requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
             requestContent.Add(new StringContent(request.Slug.ToString()), "Slug");
-            requestContent.Add(new StringContent(request.Unit_price.ToString()), "Unit_price");
-            requestContent.Add(new StringContent(request.Warranty.ToString()), "Warranty");
+            if (request.Unit_price != null)
+            {
+                requestContent.Add(new StringContent(request.Unit_price.ToString()), "Unit_price");
+            }
+            if (request.Promotion_price != null)
+            {
+                requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
+            }
+            if (request.Warranty != null)
+            {
+                requestContent.Add(new StringContent(request.Warranty.ToString()), "Warranty");
+            }
             if (request.Specifications != null)
             {
                 requestContent.Add(new StringContent(request.Specifications.ToString()), "Specifications");

@@ -99,8 +99,14 @@ namespace TechShopSolution.AdminApp.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
+           
             if (!ModelState.IsValid)
+            {
+                var categoryList = await _productApiClient.GetAllCategory();
+                ViewBag.ListCate = await OrderCateToTree(categoryList);
+                ViewBag.ListBrand = await _productApiClient.GetAllBrand();
                 return View(request);
+            }
             var result = await _productApiClient.CreateProduct(request);
             if (result.IsSuccess)
             {
@@ -136,11 +142,11 @@ namespace TechShopSolution.AdminApp.Controllers
                 Meta_keywords = result.ResultObject.meta_keywords,
                 Meta_tittle = result.ResultObject.meta_tittle,
                 Name = result.ResultObject.name,
-                Promotion_price = result.ResultObject.promotion_price,
+                Promotion_price = result.ResultObject.promotion_price.ToString(),
                 Short_desc = result.ResultObject.short_desc,
                 Slug = result.ResultObject.slug,
                 Specifications = result.ResultObject.specifications,
-                Unit_price = result.ResultObject.unit_price,
+                Unit_price = result.ResultObject.unit_price.ToString(),
                 Warranty = result.ResultObject.warranty
             };
             if (TempData["result"] != null)
