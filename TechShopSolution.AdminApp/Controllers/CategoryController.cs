@@ -142,28 +142,28 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string pageIndex)
         {
             var result = await _categoryApiClient.Delete(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa loại sản phẩm thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
             TempData["error"] = result.Message;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         [HttpGet]
-        public async Task<IActionResult> ChangeStatus(int id)
+        public async Task<IActionResult> ChangeStatus(int id, string pageIndex)
         {
             var result = await _categoryApiClient.ChangeStatus(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Thay đổi trạng thái thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
             TempData["error"] = result.Message;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(int id, string cate_slug)

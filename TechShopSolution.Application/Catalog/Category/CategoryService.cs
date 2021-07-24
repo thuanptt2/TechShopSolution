@@ -113,9 +113,8 @@ namespace TechShopSolution.Application.Catalog.Category
                     if(await _context.CategoryProducts.AnyAsync(x=>x.cate_id == cate.id))
                         return new ApiErrorResult<bool>($"Đang có sản phẩm thuộc loại này nên không thể xóa, Vui lòng gỡ hết sản phẩm thuộc loại này để tiếp tục");
                     if (await _context.Categories.AnyAsync(x => x.parent_id == cate.id && x.isDelete == false))
-                        return new ApiErrorResult<bool>($"Loại sản phẩm này đang là cha của loại khác, xóa thất bại");
-                    cate.isDelete = true;
-                    cate.delete_at = DateTime.Now;
+                        return new ApiErrorResult<bool>($"Loại sản phẩm này đang là cha của loại khác, không thể xóa");
+                    _context.Categories.Remove(cate);
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }

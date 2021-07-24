@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = "Danh sách Slide";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var pageIndex = Context.Request.Query["pageIndex"];
 }
 
 @section jsFooter {
@@ -125,17 +126,17 @@
                                     @if (item.status)
                                     {
                                         <td align="center">
-                                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Slide", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Slide", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                         </td>
                                     }
                                     else
                                     {
                                         <td align="center">
-                                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Slide", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Slide", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                         </td>
                                     }
                                     <td align="center">
-                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa Slide này? thao tác này không thể hoàn tác?')">Xóa</a>
+                                        <a href="@Url.Action("Delete", "Slide", new { id = item.id, pageIndex = pageIndex })" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa Slide này? thao tác này không thể hoàn tác?')">Xóa</a>
                                     </td>
                                 </tr>
                             }

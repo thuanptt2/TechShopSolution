@@ -79,8 +79,16 @@ namespace TechShopSolution.Application.Catalog.Transport
                 var result = await _context.Transporters.FindAsync(id);
                 if (result != null)
                 {
-                    result.isDelete = true;
-                    result.delete_at = DateTime.Now;
+                    if (await _context.Transports.AnyAsync(x => x.transporter_id == id))
+                    {
+                        result.isDelete = true;
+                        result.delete_at = DateTime.Now;
+                    }
+                    else
+                    {
+                        await _storageService.DeleteFileAsync(result.image);
+                        _context.Transporters.Remove(result);
+                    }
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }

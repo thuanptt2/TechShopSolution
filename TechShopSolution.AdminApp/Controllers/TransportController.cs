@@ -38,19 +38,17 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(data);
         }
         [HttpGet]
-        public async Task<IActionResult> ChangeStatus(int id)
+        public async Task<IActionResult> ChangeStatus(int id, string pageIndex)
         {
             var result = await _transportApiClient.ChangeStatus(id);
-            if (result == null)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
-            if (result.IsSuccess)
-            {
-                TempData["result"] = "Thay đổi trạng thái thành công";
-                return RedirectToAction("Index");
-            }
-            return View("Index");
+            TempData["result"] = "Thay đổi trạng thái thành công";
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
+
         }
         [HttpGet]
         public async Task<IActionResult> Update(int id)
@@ -75,16 +73,16 @@ namespace TechShopSolution.AdminApp.Controllers
             }
             return View(updateRequest);
         }
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string pageIndex)
         {
             var result = await _transportApiClient.Delete(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
             TempData["error"] = result.Message;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         [HttpPost]
         [Consumes("multipart/form-data")]

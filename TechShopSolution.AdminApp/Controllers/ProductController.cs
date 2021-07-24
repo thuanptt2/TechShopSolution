@@ -188,49 +188,43 @@ namespace TechShopSolution.AdminApp.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> ChangeStatus(int id)
+        public async Task<IActionResult> ChangeStatus(int id, string pageIndex)
         {
             var result = await _productApiClient.ChangeStatus(id);
-            if (result == null)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
-            if (result.IsSuccess)
+            else
             {
                 TempData["result"] = "Thay đổi trạng thái thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
-            return View("Index");
         }
         [HttpGet]
-        public async Task<IActionResult> OffBestSeller(int id)
+        public async Task<IActionResult> OffBestSeller(int id, string pageIndex)
         {
             var result = await _productApiClient.OffBestSeller(id);
-            if (result == null)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
-            if (result.IsSuccess)
-            {
-                TempData["result"] = "Tắt top bán chạy thành công";
-                return RedirectToAction("Index");
-            }
-            return View("Index");
+            TempData["result"] = "Thay đổi trạng thái thành công";
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         [HttpGet]
-        public async Task<IActionResult> OffFeatured(int id)
+        public async Task<IActionResult> OffFeatured(int id, string pageIndex)
         {
             var result = await _productApiClient.OffFeautured(id);
-            if (result == null)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
-            if (result.IsSuccess)
-            {
-                TempData["result"] = "Tắt top nổi bật thành công";
-                return RedirectToAction("Index");
-            }
-            return View("Index");
+            TempData["result"] = "Thay đổi trạng thái thành công";
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         [HttpPost]
         public async Task<JsonResult> DeleteImage(int id, string fileName)
@@ -240,19 +234,19 @@ namespace TechShopSolution.AdminApp.Controllers
                 return Json(new { success = true, message = "Xóa hình ảnh thành công" });
             return Json(new { success = false, message = result.Message });
         }
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string pageIndex)
         {
             var result = await _productApiClient.Delete(id);
             if (result == null)
             {
-                ModelState.AddModelError("", result.Message);
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
-            if (result.IsSuccess)
+            else
             {
                 TempData["result"] = "Xóa sản phẩm thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
-            return View("Index");
         }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(string code, string slug)

@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Danh sách loại sản phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var pageIndex = Context.Request.Query["pageIndex"];
 }
 
 
@@ -129,17 +130,17 @@
                                 @if (item.isActive)
                                 {
                                     <td align="center">
-                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Category", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Category", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Category", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Category", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 <td align="center">
-                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa loại sản phẩm này? thao tác này không thể hoàn tác?')">Xóa</a>
+                                    <a href="@Url.Action("Delete", "Category", new { id = item.id, pageIndex = pageIndex })" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa loại sản phẩm này? thao tác này không thể hoàn tác?')">Xóa</a>
                                 </td>
                             </tr>
                         }
