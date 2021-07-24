@@ -1439,3 +1439,10 @@ body {
 .open ul {
     display: block;
 }
+.btn-coupon {
+    height: 30px !important;
+    border-radius: 0 !important;
+}
+.margin-left-10 {
+    margin-left: 10px !important;
+}

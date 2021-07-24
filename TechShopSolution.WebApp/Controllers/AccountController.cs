@@ -38,6 +38,10 @@ namespace TechShopSolution.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             await HttpContext.SignOutAsync(
                           CookieAuthenticationDefaults.AuthenticationScheme);
             return View();

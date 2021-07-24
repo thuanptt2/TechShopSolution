@@ -61,13 +61,44 @@ namespace TechShopSolution.WebApp.Controllers
                         {
                             item.Instock = product.ResultObject.instock;
                         }
-                        if (!item.isExist)
+                        if (!product.ResultObject.isActive)
                         {
-                            item.isExist = true;
+                            if (item.isActive)
+                                item.isActive = false;
+                        }
+                        else
+                        {
+                            if (!item.isActive)
+                                item.isActive = true;
                         }
                     }
                 }
                 HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+            }
+            if(currentCart.coupon != null)
+            {
+                ViewBag.CouponCode = currentCart.coupon.code;
+
+                var result = await _couponApiClient.GetById(currentCart.coupon.id);
+                if (!result.IsSuccess)
+                {
+                    ViewBag.CouponMessage = result.Message;
+                }
+                else
+                {
+                    if (result.ResultObject.start_at > DateTime.Today)
+                    {
+                        ViewBag.CouponMessage = "Mã này sẽ có hiệu lực lúc " + result.ResultObject.start_at + ". Hãy thử lại sau bạn nhé";
+                    }
+                    if (result.ResultObject.end_at < DateTime.Today)
+                    {
+                        ViewBag.CouponMessage = "Mã này đã hết hạn";
+                    }
+                    if (!result.ResultObject.isActive)
+                        ViewBag.CouponMessage = "Mã này đã bị vô hiệu hóa";
+                    if (result.ResultObject.quantity == 0)
+                        ViewBag.CouponMessage = "Mã này đã được sử dụng hết";
+                }
             }
             return View();
         }
@@ -86,6 +117,10 @@ namespace TechShopSolution.WebApp.Controllers
             if (customer.ResultObject != null)
             {
                 ViewBag.CustomerAddress = customer.ResultObject.address;
+            } else
+            {
+                TempData["error"] = customer.Message;
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
             }
             ViewBag.Payment = await _paymentApiClient.GetAll();
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
@@ -93,7 +128,7 @@ namespace TechShopSolution.WebApp.Controllers
             List<CreateOrderDetailRequest> OrderDetail = new List<CreateOrderDetailRequest>();
             if (session != null)
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
-            int? coupon_id = null; decimal amount = 0; decimal total = 0; decimal discount = 0;
+            string coupon_code = "";  decimal amount = 0; decimal total = 0; decimal discount = 0;
 
             foreach (var item in currentCart.items)
             {
@@ -113,78 +148,72 @@ namespace TechShopSolution.WebApp.Controllers
                 };
                 OrderDetail.Add(detail);
             }
+
             if (currentCart.coupon != null)
             {
-                var coupon = await _couponApiClient.UseCoupon(currentCart.coupon.code, int.Parse(id));
-                if (!coupon.IsSuccess)
+                coupon_code = currentCart.coupon.code;
+                if (currentCart.coupon.min_order_value != null)
                 {
-                    ViewBag.ErrorMsg = coupon.Message;
-                    currentCart.coupon = null;
-                } else
-                {
-                    if (coupon.ResultObject.start_at > DateTime.Today || coupon.ResultObject.end_at < DateTime.Today)
+                    if ((decimal)currentCart.coupon.min_order_value <= total)
                     {
-                        currentCart.coupon = null;
-                        ViewBag.ErrorMsg = "Mã giảm giá hiện không khả dụng";
-                    } else if (!coupon.ResultObject.isActive)
-                    {
-                        currentCart.coupon = null;
-                        ViewBag.ErrorMsg = "Mã giảm giá  đã bị vô hiệu hóa";
-                    }
-                    else if (coupon.ResultObject.quantity == 0)
-                    {
-                        ViewBag.ErrorMsg = "Mã giảm giá đã được sử dụng hết";
-                        currentCart.coupon = null;
-                    }
-                    else
-                    {
-                        coupon_id = coupon.ResultObject.id;
-                        if (coupon.ResultObject.min_order_value != null)
+                        if (currentCart.coupon.type.Equals("Phần trăm"))
                         {
-                            if ((decimal)coupon.ResultObject.min_order_value <= total)
+                            if (currentCart.coupon.max_value != null)
                             {
-                                if (coupon.ResultObject.type.Equals("Phần trăm"))
-                                {
-                                    if (coupon.ResultObject.max_price != null)
-                                    {
-                                        discount = total * ((decimal)coupon.ResultObject.value / 100);
-                                        if (discount > (decimal)coupon.ResultObject.max_price)
-                                            discount = (decimal)coupon.ResultObject.max_price;
-                                    }
-                                    else discount = total * ((decimal)coupon.ResultObject.value / 100);
-                                }
-                                else discount = (decimal)coupon.ResultObject.value;
+                                discount = total * ((decimal)currentCart.coupon.value / 100);
+                                if (discount > (decimal)currentCart.coupon.max_value)
+                                    discount = (decimal)currentCart.coupon.max_value;
                             }
+                            else discount = total * ((decimal)currentCart.coupon.value / 100);
                         }
                         else
                         {
-                            if (coupon.ResultObject.type.Equals("Phần trăm"))
+                            if (currentCart.coupon.value >= (double)total)
                             {
-                                if (coupon.ResultObject.max_price != null)
-                                {
-                                    discount = total * ((decimal)coupon.ResultObject.value / 100);
-                                    if (discount > (decimal)coupon.ResultObject.max_price)
-                                        discount = (decimal)coupon.ResultObject.max_price;
-                                }
-                                else discount = total * ((decimal)coupon.ResultObject.value / 100);
+                                discount = total;
                             }
-                            else discount = (decimal)coupon.ResultObject.value;
+                            else discount = (decimal)currentCart.coupon.value;
                         }
                     }
                 }
+                else
+                {
+                    if (currentCart.coupon.type.Equals("Phần trăm"))
+                    {
+                        if (currentCart.coupon.max_value != null)
+                        {
+                            discount = total * ((decimal)currentCart.coupon.value / 100);
+                            if (discount > (decimal)currentCart.coupon.max_value)
+                                discount = (decimal)currentCart.coupon.max_value;
+                        }
+                        else discount = total * ((decimal)currentCart.coupon.value / 100);
+                    }
+                    else
+                    {
+                        if (currentCart.coupon.value >= (double)total)
+                        {
+                            discount = total;
+                        }
+                        else discount = (decimal)currentCart.coupon.value;
+                    }
+                }
+            }
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
             }
             return View(new CheckoutRequest
             {
                 Order = new CreteOrderRequest
                 {
-                    address_receiver = customer.ResultObject.address,
-                    coupon_id = coupon_id,
-                    cus_id = customer.ResultObject.id,
+                    cus_id = int.Parse(id),
                     total = total,
+                    coupon_code = coupon_code,
                     discount = discount,
-                    name_receiver = customer.ResultObject.name,
+                    name_receiver = !customer.IsSuccess ? "" : customer.ResultObject.name,
                     note = null,
-                    phone_receiver = customer.ResultObject.phone,
+                    address_receiver = !customer.IsSuccess ? "" : customer.ResultObject.address,
+                    phone_receiver = !customer.IsSuccess ? "" : customer.ResultObject.phone,
                 },
                 OrderDetails = OrderDetail
             });
@@ -192,6 +221,7 @@ namespace TechShopSolution.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(CheckoutRequest request)
         {
+      
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             CartViewModel currentCart = new CartViewModel();
             List<CreateOrderDetailRequest> OrderDetail = new List<CreateOrderDetailRequest>();
@@ -234,8 +264,9 @@ namespace TechShopSolution.WebApp.Controllers
                 await SendMail("thuanneuwu2@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin);
                 return RedirectToAction("Index","Home");
             }
-            ModelState.AddModelError("", result.Message);
-            return View(request);
+            TempData["error"] = result.Message;
+            return RedirectToAction("Checkout");
+
         }
         [HttpGet]
         public async Task<IActionResult> GetListItems()
@@ -282,6 +313,8 @@ namespace TechShopSolution.WebApp.Controllers
             var product = await _productApiClient.GetById(id);
             if (product.ResultObject == null)
                 return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm không tồn tại hoặc đã bị xóa.");
+            if (!product.ResultObject.isActive)
+                return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm hiện tại đang bị khóa.");
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             var currentCart = new CartViewModel();
             currentCart.items = new List<CartItemViewModel>();
@@ -305,6 +338,7 @@ namespace TechShopSolution.WebApp.Controllers
                     Slug = product.ResultObject.slug,
                     Price = product.ResultObject.unit_price,
                     isExist = true,
+                    isActive = true,
                     PromotionPrice = product.ResultObject.promotion_price,
                     Images = product.ResultObject.image,
                     Name = product.ResultObject.name,
@@ -404,6 +438,7 @@ namespace TechShopSolution.WebApp.Controllers
 
                 currentCart.coupon = new CouponViewModel
                 {
+                    id = result.ResultObject.id,
                     code = result.ResultObject.code,
                     type = result.ResultObject.type,
                     value = result.ResultObject.value,
@@ -417,6 +452,18 @@ namespace TechShopSolution.WebApp.Controllers
                 return Ok(currentCart);
             }
 
+        }
+        public IActionResult CancelCoupon()
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+            if(!string.IsNullOrWhiteSpace(session))
+            {
+                CartViewModel currentCart = new CartViewModel();
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+                currentCart.coupon = null;
+                HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+            }
+            return Ok("Hủy bỏ mã giảm giá thành công");
         }
         public async Task<JsonResult> LoadProvince()
         {

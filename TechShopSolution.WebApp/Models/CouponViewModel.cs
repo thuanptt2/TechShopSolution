@@ -7,6 +7,7 @@ namespace TechShopSolution.WebApp.Models
 {
     public class CouponViewModel
     {
+        public int id { get; set; }
         public string code { get; set; }
         public string type { get; set; }
         public double value { get; set; }

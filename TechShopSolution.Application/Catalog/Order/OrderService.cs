@@ -24,71 +24,120 @@ namespace TechShopSolution.Application.Catalog.Order
         }
         public async Task<ApiResult<string>> Create(CheckoutRequest request)
         {
-            try
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
             {
-                var customer = await _context.Customers.FindAsync(request.Order.cus_id);
-                if (customer.address == "")
-                    customer.address = request.Order.address_receiver;
-                if(request.Order.coupon_id != null)
+                try
                 {
-                    var coupon = await _context.Coupons.FindAsync(request.Order.coupon_id);
-                    if (coupon != null)
+                    var customer = await _context.Customers.FindAsync(request.Order.cus_id);
+                    if (customer == null)
                     {
-                        if (coupon.quantity != null)
+                        return new ApiErrorResult<string>("Không tìm thấy tài khoản này của bạn trong CSDL, liên hệ QTV để biết thêm chi tiết");
+                    }
+                    else if (customer.isDelete)
+                    {
+                        return new ApiErrorResult<string>("Tài khoản của bạn đã bị xóa, liên hệ QTV để biết thêm chi tiết");
+                    }
+                    else if (!customer.isActive)
+                    {
+                        return new ApiErrorResult<string>("Tài khoản của bạn đã bị khóa, không thể mua hàng ngay bây giờ");
+                    }
+                    else
+                    {
+                        if (customer.address == "")
+                            customer.address = request.Order.address_receiver;
+                    }
+
+                    foreach (var item in request.OrderDetails)
+                    {
+                        var product = await _context.Products.FindAsync(item.product_id);
+                        if (product != null)
                         {
+                            if (product.isDelete)
+                            {
+                                return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã bị xóa vui lòng kiểm tra lại giỏ hàng.");
+                            }
+                            else if (!product.isActive)
+                            {
+                                return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã bị khóa vui lòng kiểm tra lại giỏ hàng.");
+                            }
+
+                            if (product.instock != null)
+                            {
+                                if (product.instock == 0)
+                                    return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã hết hàng vui lòng bỏ sản phẩm ra khỏi giỏ hàng.");
+                                else product.instock = product.instock - item.quantity;
+                            }
+                        }
+                        else return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn không tồn tại vui lòng kiểm tra lại giỏ hàng.");
+                    }
+
+                    int coupon_id = 0;
+                    if (request.Order.coupon_code != null)
+                    {
+                        var coupon = await _context.Coupons.Where(x => x.code.Equals(request.Order.coupon_code)).FirstOrDefaultAsync();
+                        if (coupon != null)
+                        {
+                            if (coupon.start_at > DateTime.Today || coupon.end_at < DateTime.Today)
+                            {
+                                return new ApiErrorResult<string>("Mã giảm giá hiện không khả dụng, vui lòng kiểm tra lại");
+                            }
+                            else if (!coupon.isActive)
+                            {
+                                return new ApiErrorResult<string>("Mã giảm giá  đã bị vô hiệu hóa, vui lòng kiểm tra lại");
+                            }
+                            else if (coupon.quantity == 0)
+                            {
+                                return new ApiErrorResult<string>("Mã giảm giá đã được sử dụng hết, vui lòng kiểm tra lại");
+                            }
+                            coupon_id = coupon.id;
                             if (coupon.quantity != 0 && coupon.quantity != null)
                                 coupon.quantity = coupon.quantity - 1;
                         }
                     }
-                }
-                var order = new TechShopSolution.Data.Entities.Order
-                {
-                    address_receiver = request.Order.address_receiver,
-                    coupon_id = request.Order.coupon_id,
-                    create_at = DateTime.Now,
-                    transport_fee = request.Order.transport_fee == null ? 0 : (decimal)request.Order.transport_fee,
-                    cus_id = request.Order.cus_id,
-                    discount = request.Order.discount,
-                    isPay = false,
-                    payment_id = (int)request.Order.payment_id,
-                    name_receiver = request.Order.name_receiver,
-                    note = request.Order.note,
-                    phone_receiver = request.Order.phone_receiver,
-                    status = 0,
-                    total = request.Order.total,
-                };
-                _context.Orders.Add(order);
-                await _context.SaveChangesAsync();
-
-                foreach (var item in request.OrderDetails)
-                {
-                    var detail = new TechShopSolution.Data.Entities.OrderDetail
+                    var order = new TechShopSolution.Data.Entities.Order
                     {
-                        order_id = order.id,
-                        product_id = item.product_id,
-                        promotion_price = item.promotion_price,
-                        quantity = item.quantity,
-                        unit_price = item.unit_price,
+                        address_receiver = request.Order.address_receiver,
+                        coupon_id = coupon_id == 0 ? (int?)null : coupon_id,
+                        create_at = DateTime.Now,
+                        transport_fee = request.Order.transport_fee == null ? 0 : (decimal)request.Order.transport_fee,
+                        cus_id = request.Order.cus_id,
+                        discount = request.Order.discount,
+                        isPay = false,
+                        payment_id = (int)request.Order.payment_id,
+                        name_receiver = request.Order.name_receiver,
+                        note = request.Order.note,
+                        phone_receiver = request.Order.phone_receiver,
+                        status = 0,
+                        total = request.Order.total,
                     };
-                    _context.OrDetails.Add(detail);
-                    var product = await _context.Products.FindAsync(item.product_id);
-                    if (product != null)
+                    _context.Orders.Add(order);
+                    await _context.SaveChangesAsync();
+
+                    foreach (var item in request.OrderDetails)
                     {
-                        if (product.instock != null)
+                        var detail = new TechShopSolution.Data.Entities.OrderDetail
                         {
-                            if (product.instock == 0)
-                                return new ApiErrorResult<string>("Một sản phẩm trong giỏ hàng của bạn đã hết hàng vui lòng bỏ sản phẩm ra khỏi giỏ hàng.");
-                            else product.instock = product.instock - item.quantity;
-                        }
+                            order_id = order.id,
+                            product_id = item.product_id,
+                            promotion_price = item.promotion_price,
+                            quantity = item.quantity,
+                            unit_price = item.unit_price,
+                        };
+                        _context.OrDetails.Add(detail);
                     }
+
+                    await _context.SaveChangesAsync();
+                    dbContextTransaction.Commit();
+                    return new ApiSuccessResult<string>(order.id.ToString());
                 }
-                await _context.SaveChangesAsync();
-                return new ApiSuccessResult<string>(order.id.ToString());
+                catch
+                {
+                    dbContextTransaction.Rollback();
+                    return new ApiErrorResult<string>("Tạo đơn đặt hàng thất bại, quý khách vui lòng thử lại sau");
+                }
             }
-            catch
-            {
-                return new ApiErrorResult<string>("Tạo đơn đặt hàng thất bại, quý khách vui lòng thử lại sau");
-            }
+
+                
         }
         public PagedResult<OrderViewModel> GetAllPaging(GetOrderPagingRequest request)
         {

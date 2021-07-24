@@ -63,16 +63,19 @@
                     <div class="control-group">
                         <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
                         <div class="controls">
-                            <input type="text" class="input-medium" id="codeCoupon" style="text-transform:uppercase" placeholder="CODE">
-                            @if (!User.Identity.IsAuthenticated)
-                            {
-                                <button type="button" class="btn" onclick="alert('Quý khách cần đăng nhập để sử dụng mã giảm giá')"> Áp dụng </button><br />
-                            }
-                            else
-                            {
-                                <button type="button" class="btn" id="btnApplyCoupon"> Áp dụng </button><br />
-                            }
-                            <span id="CouponMessage"></span>
+                            <div class="d-flex">
+                                <input type="text" class="input-medium" value="@ViewBag.CouponCode" id="codeCoupon" style="text-transform:uppercase" placeholder="CODE">
+                                @if (!User.Identity.IsAuthenticated)
+                                {
+                                    <button type="button" class="btn btn-coupon margin-left-10" onclick="alert('Quý khách cần đăng nhập để sử dụng mã giảm giá')"> Áp dụng </button><br />
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-coupon margin-left-10" id="btnApplyCoupon"> Áp dụng </button><br />
+                                }
+                                <input class="btn btn-danger btn-coupon" value="Hủy" type="@(!string.IsNullOrWhiteSpace(ViewBag.CouponCode) ? "button":"hidden")" id="btnCancelCoupon">
+                            </div>
+                            <span id="CouponMessage">@ViewBag.CouponMessage</span>
                         </div>
                     </div>
                 </td>

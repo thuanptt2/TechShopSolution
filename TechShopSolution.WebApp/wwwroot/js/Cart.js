@@ -120,13 +120,19 @@
                         }
                     }
                 }
-                else if (res.coupon.type == "Số tiền")
-                    couponPrice = res.coupon.value;
+                else if (res.coupon.type == "Số tiền") {
+                    if (res.coupon.value >= total)
+                        couponPrice = total;
+                    else couponPrice = res.coupon.value;
+                }
 
                 $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
 
                 $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
 
+
+                var btn = document.getElementById('btnCancelCoupon');
+                btn.setAttribute('type', 'button');
 
                 var x = document.getElementById("snackbar");
                 $('.ReultMessage').text("Sử dụng mã giảm giá thành công");
@@ -167,7 +173,6 @@
             }
         });
     }
-
     function loadData() {
         $.ajax({
             type: "GET",
@@ -180,6 +185,8 @@
                 var total = 0;
                 var isExist = true;
                 var isAvaiable = true;
+                var isActive = true;
+
                 $.each(res.items, function (i, item) {
                     if (item.promotionPrice > 0) {
                         var amount = item.promotionPrice * item.quantity;
@@ -189,7 +196,8 @@
                         var amount = item.price * item.quantity;
                         var promotion = 0;
                     }
-                    if (item.instock == 0 || !item.isExist) {
+
+                    if (item.instock == 0 || !item.isExist || !item.isActive) {
                         html += "<tr class=\"unavaiable-product\">"
                             + "<td> <img width=\"60\" height=\"60\" src=\"" + $('#hidBaseAddress').val() + "/user-content/" + item.images + "\" alt=\"\" /></td>"
                             + "<td class='cart-item-name'><a href=\/san-pham\/" + item.slug + ">" + item.name + "\"</a></td>"
@@ -201,8 +209,11 @@
                             + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(promotion) + "</td>"
                             + "<td>" + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount) + "</td>"
                             + "</tr>";
+
                         if (!item.isExist) {
                             isExist = false;
+                        } else if (!item.isActive) {
+                            isActive = false;
                         } else if (item.instock == 0) {
                             isAvaiable = false;
                         }
@@ -259,8 +270,11 @@
                                         }
                                     }
                                 }
-                                else if (res.coupon.type == "Số tiền")
-                                    couponPrice = res.coupon.value;
+                                else if (res.coupon.type == "Số tiền") {
+                                    if (res.coupon.value >= total) {
+                                        couponPrice = total;
+                                    } else couponPrice = res.coupon.value;
+                                }
 
                                 $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
                                 $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
@@ -280,12 +294,15 @@
                                     }
                                 }
                             }
-                            else if (res.coupon.type == "Số tiền")
-                                couponPrice = res.coupon.value;
+                            else if (res.coupon.type == "Số tiền") {
+                                if (res.coupon.value >= total) {
+                                    couponPrice = total;
+                                } else couponPrice = res.coupon.value;
+                            }
 
                             $('#lbl_couponprice').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(couponPrice));
                             $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
-                            $('#lbl_maintotal').text(new Instl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
+                            $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total - couponPrice));
                             $('#cart_body').html(html);
                             $('#lbl_number_of_items').text(res.items.length);
                         }
@@ -297,8 +314,12 @@
                     $('#lbl_total').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
                     $('#lbl_maintotal').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
                 }
+
                 if (!isExist) {
                     alert("Một sản phẩm trong giỏ hàng của bạn không còn tồn tại hoặc đã bị xóa, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé!")
+                    $('#btn-purchase').html('<button class="btn btn-large table-cart" disabled>Thanh toán <i class="icon-arrow-right"></i></button>');
+                } else if (!isActive) {
+                    alert("Một sản phẩm trong giỏ hàng của bạn hiện tại đang bị khóa, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé! ")
                     $('#btn-purchase').html('<button class="btn btn-large table-cart" disabled>Thanh toán <i class="icon-arrow-right"></i></button>');
                 } else if (!isAvaiable) {
                     alert("Một sản phẩm trong giỏ hàng của bạn đã hết hàng, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé!")
@@ -311,3 +332,26 @@
         })
     }
 }
+
+$("#btnCancelCoupon").click(function () {
+    if (confirm('Quý khách có chắn muốn hủy bỏ mã giảm giá này?')) {
+        $.ajax({
+            type: "GET",
+            url: '/Cart/CancelCoupon',
+            success: function (res) {
+                var btn = document.getElementById('btnCancelCoupon');
+                btn.setAttribute('type', 'hidden');
+
+                var x = document.getElementById("snackbar");
+                $('.ReultMessage').text(res);
+                document.getElementById('codeCoupon').value = "";
+                document.getElementById('CouponMessage').innerText = "";
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            }
+        });
+    }
+})

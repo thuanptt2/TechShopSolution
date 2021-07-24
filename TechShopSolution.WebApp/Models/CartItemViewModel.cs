@@ -12,6 +12,7 @@ namespace TechShopSolution.WebApp.Models
         public string Code { get; set; }
         public string Slug { get; set; }
         public bool isExist { get; set; }
+        public bool isActive { get; set; }
         public decimal Price { get; set; }
         public decimal PromotionPrice { get; set; }
         public int Quantity { get; set; }
