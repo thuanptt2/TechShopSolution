@@ -94,10 +94,19 @@ namespace TechShopSolution.Application.Catalog.Customer
                 var customer = await _context.Customers.FindAsync(cusID);
                 if (customer != null)
                 {
-                    if (await _context.Orders.AnyAsync(x => x.cus_id == customer.id))
-                        return new ApiErrorResult<bool>($"Khách hàng này đang có đơn hàng đấy, không thể xóa!");
-                    customer.isDelete = true;
-                    customer.delete_at = DateTime.Now;
+                    var ratings = await _context.Ratings.Where(x => x.cus_id == cusID).ToListAsync();
+                    _context.Ratings.RemoveRange(ratings);
+                    var favorites = await _context.Favorites.Where(x => x.cus_id == cusID).ToListAsync();
+                    _context.Favorites.RemoveRange(favorites);
+
+                    if (await _context.Orders.AnyAsync(x=>x.cus_id == cusID))
+                    {
+                        customer.isDelete = true;
+                        customer.delete_at = DateTime.Now;                    }
+                    else
+                    {
+                        _context.Customers.Remove(customer);
+                    }
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }

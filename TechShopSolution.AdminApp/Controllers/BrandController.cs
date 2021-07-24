@@ -96,29 +96,49 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-
         [HttpGet]
         public async Task<IActionResult> ChangeStatus(int id)
         {
+            int pageIndex = 1;
+            var request = HttpContext.Request;
+            foreach (var key in request.Query.Keys)
+            {
+                if (key == "pageIndex")
+                {
+                    pageIndex = int.Parse(key);
+                }
+            }
+
             var result = await _brandApiClient.ChangeStatus(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Thay đổi trạng thái thành công";
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Index", new { pageIndex = pageIndex });
             }
             ModelState.AddModelError("Cập nhật thất bại", result.Message);
-            return View("Index");
+            return View("Index", new { pageIndex = pageIndex });
         }
         public async Task<IActionResult> Delete(int id)
         {
+            int pageIndex = 1;
+            var request = HttpContext.Request;
+            foreach (var key in request.Query.Keys)
+            {
+                if (key == "pageIndex")
+                {
+                    pageIndex = int.Parse(key);
+                }
+            }
+
             var result = await _brandApiClient.Delete(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa thương hiệu thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = pageIndex });
             }
             TempData["error"] = result.Message;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { pageIndex = pageIndex });
         }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(int id, string brand_slug)
