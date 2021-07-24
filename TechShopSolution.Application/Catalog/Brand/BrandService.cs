@@ -71,8 +71,7 @@ namespace TechShopSolution.Application.Catalog.Brand
                 {
                     if (await _context.Products.AnyAsync(x => x.brand_id == brand.id))
                         return new ApiErrorResult<bool>($"Đang có sản phẩm thuộc thương hiệu này nên không thể xóa, Vui lòng gỡ hết sản phẩm thuộc thương hiệu này để tiếp tục");
-                    brand.isDelete = true;
-                    brand.delete_at = DateTime.Now;
+                    _context.Brands.Remove(brand);
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }

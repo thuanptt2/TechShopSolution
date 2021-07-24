@@ -13,8 +13,8 @@
 }
 
 .padding-container {
-    padding: 30px;
-    margin: 0 auto;
+    padding: 0px;
+    margin: 20px 0;
     width: auto;
     height: auto;
 }
@@ -475,4 +475,31 @@ table a:hover {
 .feedback-none-read {
     background: #e9ecef;
     font-weight: bold;
+}
+.collection-seo--preview-title {
+    font-size: 18px;
+    color: #1a0dab;
+    white-space: pre;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: pointer;
+}
+.collection-seo--preview-mota, .collection-seo--preview-title, .collection-seo--preview-url {
+    display: block;
+    line-height: 21px;
+}
+.collection-seo--preview-mota {
+    word-wrap: break-word;
+    color: #006621;
+}
+.collection-seo--preview-mota, .collection-seo--preview-url {
+    font-size: 13px;
+}
+.collection-seo--preview-url {
+    color: #545454;
+}
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

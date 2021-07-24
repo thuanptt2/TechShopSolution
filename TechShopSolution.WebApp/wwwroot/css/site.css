@@ -123,6 +123,7 @@ tr:nth-child(odd) {
 
 .OutOfStock {
     color: #ffc000;
+    font-size: 1.2rem;
 }
 
 .product-total-price {
@@ -226,13 +227,7 @@ tr:nth-child(odd) {
     height: 400px;
     width: 100%;
 }
-@media (max-width: 767px) {
-    .slider-image {
-        max-height: 150px;
-        max-width: 100%;
-        object-fit: cover !important;
-    }
-}
+
 .srchTxt:focus-within {
     background-image: none;
 }
@@ -395,7 +390,8 @@ input.input-validation-error {
     padding: 16px; /* Padding */
     position: fixed; /* Sit on top of the screen */
     z-index: 1; /* Add a z-index if needed */
-    left: 50%; /* Center the snackbar */
+    left: 50%;
+
     top: 60px; /* 30px from the bottom */
 }
 
@@ -419,7 +415,7 @@ input.input-validation-error {
     padding: 16px; /* Padding */
     position: fixed; /* Sit on top of the screen */
     z-index: 1; /* Add a z-index if needed */
-    left: 50%; /* Center the snackbar */
+    left: 50%;
     top: 60px; /* 30px from the bottom */
 }
 
@@ -443,7 +439,7 @@ input.input-validation-error {
     padding: 16px; /* Padding */
     position: fixed; /* Sit on top of the screen */
     z-index: 1; /* Add a z-index if needed */
-    left: 50%; /* Center the snackbar */
+    left: 50%;
     top: 60px; /* 30px from the bottom */
 }
 
@@ -1050,7 +1046,7 @@ body {
     padding: 0 30px;
 }
 #myTabContent2 .tab-pane {
-    margin: 30px
+    margin: 30px 0 30px 30px;
 }
 .Detail-Product figure {
     margin-left: -20px;
@@ -1184,4 +1180,274 @@ body {
 }
 .text-right {
     text-align: right;
+}
+#bestseller .span3 {
+    margin-bottom: 0;
+}
+#lightbox-container-image-box {
+    width: 520px !important;
+    height: 520px !important;
+}
+
+#lightbox-container-image-data-box {
+    width: 500px !important;
+}
+#lightbox-image {
+    width: 500px !important;
+    height: 500px !important;
+}
+
+@media (max-width: 767px) {
+    .w-100 {
+        width: 100%;
+    }
+    .slider-image {
+        max-height: 150px;
+        max-width: 100%;
+        object-fit: cover !important;
+    }
+
+    .navbar-search {
+        padding: 0 10px;
+        width: auto !important;
+    }
+
+    .navbar-search input {
+       width: 96%;
+    }
+    #topMenu {
+       padding: 0 10px;
+        float: none;
+    }
+    #myTabContent2 .tab-pane {
+        margin: 0;
+    }
+    .review {
+        padding: 0px;
+    }
+    .rating-box .score-container {
+        width: auto;
+    }
+    .rating-box {
+        margin: 0;
+        width: 100%;
+    }
+    .btnDropdownAccount {
+        display: block;
+        padding-top: 5px;
+        position: absolute;
+        top: 170px;
+        right: 45px;
+        width: 83px !important;
+        height: 30px !important;
+    }
+    .btn-large {
+        padding: 10px 12px !important;
+        font-size: 15px !important;
+    }
+    .span9 {
+        padding: 0 10px;
+    }
+
+    .step:nth-child(n+2):before {
+        width: 30px;
+        height: 3px;
+        display: block;
+        transform: translate(-33px, 20px);
+        content: '';
+    }
+    .step {
+        width: 35px;
+        display: inline-block;
+        border: 4px solid;
+        border-radius: 50%;
+        font-weight: 600;
+        text-align: center;
+        line-height: 35px;
+    }
+        .step:after {
+            width: 150px;
+            display: block;
+            transform: translate(-60px, 3px);
+            content: attr(data-desc);
+            font-weight: bold;
+            font-size: 7px;
+        }
+        .step:nth-child(n+2) {
+            margin: 0 0 0 25px;
+            transform: translate(0, -4px);
+        }
+    #steps {
+        width: 107%;
+    }
+    .wrapper-content {
+        padding: 10px
+    }
+    #snackbar {
+        left: 42%;
+        width: 50%;
+    }
+    #snackbarDanger {
+        left: 42%;
+        width: 50%;
+    }
+    #snackbarAccount {
+        left: 42%;
+        width: 50%;
+    }
+    .loader {
+        top: 40%;
+        left: 35%;
+    }
+    .modal.fade.in {
+        top: 10% !important;
+        width: 73% !important;
+    }
+    .p_class {
+        padding: 40px !important;
+    }
+
+    #lightbox-container-image-box {
+        width: 90% !important;
+        height: 300px !important;
+    }
+    #lightbox-image {
+        height: 290px !important;
+    }
+    #lightbox-container-image-data-box {
+        width: 85% !important;
+    }
+    .thumbnails > li {
+        float: none;
+        margin-left: 0;
+        padding: 5px 20px;
+    }
+}
+
+.dropdown {
+    display: inline-block;
+    position: relative;
+}
+
+.dd-button {
+    display: inline-block;
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 10px 30px 10px 20px;
+    background-color: #ffffff;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .dd-button:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid black;
+    }
+
+    .dd-button:hover {
+        background-color: #eeeeee;
+    }
+
+
+.dd-input {
+    display: none;
+}
+
+.dd-menu {
+    position: absolute;
+    top: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0;
+    margin: 2px 0 0 0;
+    box-shadow: 0 0 6px 0 rgba(0,0,0,0.1);
+    background-color: #ffffff;
+    list-style-type: none;
+}
+
+.dd-input + .dd-menu {
+    display: none;
+}
+
+.dd-input:checked + .dd-menu {
+    display: block;
+}
+
+.dd-menu li {
+    padding: 10px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .dd-menu li:hover {
+        background-color: #f6f6f6;
+    }
+
+    .dd-menu li a {
+        display: block;
+        margin: -10px -20px;
+        padding: 10px 20px;
+    }
+
+    .dd-menu li.divider {
+        padding: 0;
+        border-bottom: 1px solid #cccccc;
+    }
+.navbar-inner .btnDropdownAccount {
+    margin-top: 10px !important;
+}
+.dd-menu {
+    z-index: 1;
+}
+.table-responsive {
+   overflow-x:auto;
+}
+.contact-mainBody {
+    padding: 0 10px;
+}
+
+.product-client-infos-icon {
+    padding-top: 2px;
+    font-size: 18px;
+}
+
+.product-client-infos-item {
+    margin-right: 13px;
+    color: #3A3F44;
+    font-weight: 900;
+}
+.margin-right-30 {
+    margin-right: 30px;
+}
+#ErrorMessage {
+    word-break: break-all;
+}
+#btnUnFavoriteProduct {
+    background: #ff6f31;
+    color: #FFF;
+}
+.unfavorite {
+    background: #ff6f31;
+    color: #FFF;
+}
+.subMenu ul {
+    display: none;
+}
+.open ul {
+    display: block;
+}
+.btn-coupon {
+    height: 30px !important;
+    border-radius: 0 !important;
+}
+.margin-left-10 {
+    margin-left: 10px !important;
 }

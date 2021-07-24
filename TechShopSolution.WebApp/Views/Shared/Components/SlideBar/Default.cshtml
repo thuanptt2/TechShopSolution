@@ -14,6 +14,7 @@
             {
                 if (i == 0)
                 {
+                    i = 1;
                     <li class="subMenu open">
                         <a class="active" href="@Url.Action("Category", "Product", new { slug = parent.cate_slug })">@parent.cate_name</a>
 
@@ -30,7 +31,7 @@
                                     }
                                     @{
                                         var childItems = Cates.Where(x => x.parent_id == item.id).OrderBy(x => x.cate_name);
-                                        @foreach (var itemChild in childItems.ToList())
+                                        @foreach (var itemChild in childItems.ToList().OrderBy(x=>x.cate_name))
                                         {
                                             <a href="@Url.Action("Category", "Product", new { slug = itemChild.cate_slug })">
                                                 <span class="padding-left">
@@ -45,7 +46,6 @@
                             }
                         </ul>
                     </li>
-                    i = 1;
                 }
                 else
                 {
@@ -58,7 +58,7 @@
                             @foreach (var item in children.ToList())
                             {
                                 <li>
-                                    <a class="active" href="@Url.Action("Category", "Product", new { slug = item.cate_slug })"><i class="icon-chevron-right"></i>@item.cate_name</a>
+                                    <a href="@Url.Action("Category", "Product", new { slug = item.cate_slug })"><i class="icon-chevron-right"></i>@item.cate_name</a>
                                     @{
                                         Cates.Remove(item);
                                     }

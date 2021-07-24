@@ -10,7 +10,7 @@ namespace TechShopSolution.ViewModels.Catalog.Coupon.Validator
         public CouponUpdateValidator()
         {
             RuleFor(x => x.name).NotEmpty().WithMessage("Tên mã giảm giá không được để trống")
-                                .MaximumLength(255).WithMessage("Tên thương hiệu không thể vượt quá 255 kí tự");
+                                .MaximumLength(128).WithMessage("Tên mã giảm giá không thể vượt quá 128 kí tự");
             RuleFor(x => x.start_at).NotEmpty().WithMessage("Vui lòng chọn ngày bắt đầu")
                 .LessThan(m => m.end_at).WithMessage("Ngày bắt đầu phải nhỏ hơn ngày kết thúc");
             RuleFor(x => x.end_at).NotEmpty().WithMessage("Vui lòng chọn ngày kết thúc")

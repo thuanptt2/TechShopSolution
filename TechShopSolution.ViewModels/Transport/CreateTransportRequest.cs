@@ -13,7 +13,7 @@ namespace TechShopSolution.ViewModels.Transport
         public int transporter_id { get; set; }
         [Display(Name = "Tiền thu hộ (COD)")]
         [Required(ErrorMessage = "Vui lòng nhập số tiền thu hộ")]
-        public decimal? cod_price { get; set; }
+        public string cod_price { get; set; }
         [Display(Name = "Mã vận đơn")]
         public string lading_code { get; set; }
         [Display(Name = "Địa chỉ gửi hàng")]

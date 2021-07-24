@@ -5,7 +5,7 @@
 }
 
 
-<form asp-action="CreateShippingOrder" asp-controller="Transport" method="post" onsubmit="return SubmitForm(this);">
+<form asp-action="CreateShippingOrder" asp-controller="Transport" method="post" id="CreateShippingForm">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <input asp-for="order_id" class="form-control" hidden />
@@ -20,7 +20,7 @@
 
     <div class="form-group">
         <label asp-for="cod_price" class="control-label lableFormField"></label>
-        <input asp-for="cod_price" class="form-control" />
+        <input asp-for="cod_price" type="text" id="txtCodPrice" class="form-control" />
         <span asp-validation-for="cod_price" class="text-danger"></span>
     </div>
 
@@ -41,10 +41,36 @@
     </div>
 
     <div class="form-group text-right">
-        <input type="submit" value="Tạo đơn vận chuyển" class="btn btn-primary" />
+        <input type="button" value="Tạo đơn vận chuyển" id="btn-save" class="btn btn-primary"/>
     </div>
 </form>
 
 <script src="~/js/Location.js"></script>
 <script src="~/jquery-validate/jquery.validate.min.js"></script>
 <script src="~/jquery-validate-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/js/autoNumeric.min.js"></script>
+<script>
+    new AutoNumeric('#txtCodPrice', {
+        allowDecimalPadding: false,
+        currencySymbol: "₫",
+        currencySymbolPlacement: "s",
+        digitGroupSeparator: " ",
+        maximumValue: "9999999999",
+        minimumValue: "0"
+    });
+
+    $("#btn-save").click(function () {
+
+        var form = $("#CreateShippingForm");
+
+        var cod_price = $("#txtCodPrice").val();
+
+        if (cod_price.length != 0 && cod_price != "") {
+            cod_price = cod_price.replace(/(₫)/gm, "");
+            cod_price = cod_price.replace(/\s/g, "");
+            document.getElementById("txtCodPrice").value = cod_price;
+        }
+
+        form.submit();
+    });
+</script>

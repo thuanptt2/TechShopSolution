@@ -133,27 +133,27 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> ChangeStatus(int id)
+        public async Task<IActionResult> ChangeStatus(int id, string pageIndex)
         {
             var result = await _customerApiClient.ChangeStatus(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Thay đổi trạng thái thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
             TempData["error"] = result.Message;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string pageIndex)
         {
             var result = await _customerApiClient.Delete(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa khách hàng thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
             TempData["error"] = result.Message;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         public async Task<JsonResult> LoadProvince()
         {

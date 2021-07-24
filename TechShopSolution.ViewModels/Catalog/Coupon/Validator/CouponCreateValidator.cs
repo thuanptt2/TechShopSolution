@@ -10,18 +10,14 @@ namespace TechShopSolution.ViewModels.Catalog.Coupon.Validator
         public CouponCreateValidator()
         {
             RuleFor(x => x.name).NotEmpty().WithMessage("Tên mã giảm giá không được để trống")
-                                              .MaximumLength(255).WithMessage("Tên thương hiệu không thể vượt quá 255 kí tự");
+                   .MaximumLength(128).WithMessage("Tên mã giảm giá không thể vượt quá 128 kí tự");
             RuleFor(x => x.code).NotEmpty().WithMessage("Mã giảm giá không được để trống")
                   .MaximumLength(20).WithMessage("Mã giảm giá không được vượt quá 20 kí tự");
             RuleFor(x => x.value).NotEmpty().WithMessage("Giá trị không được để trống")
                     .Must((o, value) => { return BeAValidValuePercent(value, o.type); }).WithMessage("Giá trị giảm phải thuộc trong khoảng từ 1%-100%")
                     .Must((o, value) => { return BeAValidValueAmount(value, o.type); }).WithMessage("Giá trị phải lớn hơn 0");
-            RuleFor(x => x.min_order_value)
-                   .GreaterThanOrEqualTo(0).WithMessage("Giá trị đơn hàng tối thiểu không hợp lệ");
             RuleFor(x => x.quantity)
                    .GreaterThan(0).WithMessage("Số lượng không hợp lệ");
-            RuleFor(x => x.max_price)
-                  .GreaterThan(0).WithMessage("Giá giảm tối đa không hợp lệ");
             RuleFor(x => x.start_at).NotEmpty().WithMessage("Vui lòng chọn ngày bắt đầu")
                 .LessThan(m => m.end_at).WithMessage("Ngày bắt đầu phải nhỏ hơn ngày kết thúc");
             RuleFor(x => x.end_at).NotEmpty().WithMessage("Vui lòng chọn ngày kết thúc")

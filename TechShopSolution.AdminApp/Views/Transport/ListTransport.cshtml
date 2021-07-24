@@ -50,7 +50,7 @@
             Thêm mới
         </a>
         <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="ListTransport" method="get" style="float: right;">
+        <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="ListTransport" method="get" style="float: right;">
             <div class="input-group">
                 <label for="pet-select"></label>
                 <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
@@ -103,17 +103,13 @@
                         @if (Model.Items == null)
                         {
                             <tr>
-                                <td>
-                                    Không có đơn vận chuyển nào.
-                                </td>
+                                <td colspan="6">  Chưa có đơn vận chuyển nào.</td>
                             </tr>
                         }
                         else if (Model.TotalRecords == 0)
                         {
                             <tr>
-                                <td>
-                                    Không tìm thấy đơn vận chuyển.
-                                </td>
+                                <td colspan="6"> Không tìm thấy đơn vận chuyển.</td>
                             </tr>
                         }
                         else
@@ -159,10 +155,17 @@
                                         </td>
                                     }
                                     @{
-                                        var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-                                        <td class="text-center">
-                                            @String.Format(info, "{0:N0}", item.cod_price)
-                                        </td>
+                                        if (item.cod_price == 0)
+                                        {
+                                            <td class="text-center">Không thu</td>
+                                        }
+                                        else
+                                        {
+                                            var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                            <td class="text-center">
+                                                @String.Format(info, "{0:N0}", item.cod_price)
+                                            </td>
+                                        }
                                     }
                                 </tr>
                             }

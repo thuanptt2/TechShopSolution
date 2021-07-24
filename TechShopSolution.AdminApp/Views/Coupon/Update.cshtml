@@ -5,12 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section jsFooter {
-    <script src="~/js/ChangeNameToSlug.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="~/js/Coupon.js"></script>
-
+    <script src="~/js/autoNumeric.min.js"></script>
 }
 <div class="container-fluid">
     <h2 class="mt-4">Cập nhật mã giảm giá</h2>
@@ -19,7 +18,7 @@
         <li class="breadcrumb-item"><a href="/coupon/index">Mã giảm giá</a></li>
         <li class="breadcrumb-item active">Chi tiết mã giảm giá</li>
     </ol>
-    <form asp-action="Update" asp-controller="Coupon" method="post">
+    <form asp-action="Update" asp-controller="Coupon" method="post" id="CreateForm">
         <div class="padding-container">
             <div class="row">
                 <div class="col-lg-8 col-12">
@@ -80,7 +79,7 @@
                             <a class="btn btn-primary" href="/coupon/index">
                                 <i class="fa fa-chevron-left"></i>  Trở về
                             </a>
-                            <button class="btn btn-success" type="submit">
+                            <button class="btn btn-success" type="button" id="btn-save">
                                 <i class="fa fa-save"></i>
                                 Lưu lại
                             </button>
@@ -91,47 +90,24 @@
                     <div class="wrapper-content mb-3 shadow">
                         <label class="title-fill">Tùy chọn</label>
                         <hr />
-                        @if (Model != null)
+                        @if (Model.quantity != null)
                         {
-                            if (Model.quantity != null)
-                            {
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <label data-toggle="collapse" data-target="#collapseQuantity" aria-expanded="true" aria-controls="collapseQuantity">
-                                            <input type="checkbox" checked="checked" id="checkQuantity" /> Giới hạn số lượt sử dụng
-                                        </label>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label data-toggle="collapse" data-target="#collapseQuantity" aria-expanded="true" aria-controls="collapseQuantity">
+                                        <input type="checkbox" checked="checked" id="checkQuantity" /> Giới hạn số lượt sử dụng
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="collapseQuantity" aria-expanded="true" class="collapse show">
+                                <div class="well">
+                                    <div class="form-group">
+                                        <label asp-for="quantity" class="control-label lableFormField"></label>
+                                        <input asp-for="quantity" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập số mã giảm giá" id="txtQuantity" />
+                                        <span asp-validation-for="quantity" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div id="collapseQuantity" aria-expanded="true" class="collapse show">
-                                    <div class="well">
-                                        <div class="form-group">
-                                            <label asp-for="quantity" class="control-label lableFormField"></label>
-                                            <input asp-for="quantity" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập số mã giảm giá" id="txtQuantity" />
-                                            <span asp-validation-for="quantity" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <label data-toggle="collapse" data-target="#collapseQuantity" aria-expanded="false" aria-controls="collapseQuantity">
-                                            <input type="checkbox" id="checkQuantity" /> Giới hạn số lượt sử dụng
-                                        </label>
-                                    </div>
-                                </div>
-                                <div id="collapseQuantity" aria-expanded="false" class="collapse">
-                                    <div class="well">
-                                        <div class="form-group">
-                                            <label asp-for="quantity" class="control-label lableFormField"></label>
-                                            <input asp-for="quantity" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập số mã giảm giá" id="txtQuantity" />
-                                            <span asp-validation-for="quantity" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
+                            </div>
                         }
                         else
                         {
@@ -152,46 +128,24 @@
                                 </div>
                             </div>
                         }
-                        @if (Model != null)
+                        @if (!string.IsNullOrWhiteSpace(Model.min_order_value))
                         {
-                            if (Model.min_order_value != null)
-                            {
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <label data-toggle="collapse" data-target="#collapseMinValue" aria-expanded="true" aria-controls="collapseMinValue">
-                                            <input type="checkbox" checked="checked" id="checkMinValue" /> Đặt giá trị đơn hàng tối thiểu
-                                        </label>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label data-toggle="collapse" data-target="#collapseMinValue" aria-expanded="true" aria-controls="collapseMinValue">
+                                        <input type="checkbox" checked="checked" id="checkMinValue" /> Đặt giá trị đơn hàng tối thiểu
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="collapseMinValue" aria-expanded="true" class="collapse show">
+                                <div class="well">
+                                    <div class="form-group">
+                                        <label asp-for="min_order_value" class="control-label lableFormField"></label>
+                                        <input asp-for="min_order_value" class="form-control" type="text" placeholder="Nhập giá trị tối thiểu đơn hàng" id="txtMinValue" />
+                                        <span asp-validation-for="min_order_value" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div id="collapseMinValue" aria-expanded="true" class="collapse show">
-                                    <div class="well">
-                                        <div class="form-group">
-                                            <label asp-for="min_order_value" class="control-label lableFormField"></label>
-                                            <input asp-for="min_order_value" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập giá trị tối thiểu đơn hàng" id="txtMinValue" />
-                                            <span asp-validation-for="min_order_value" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <label data-toggle="collapse" data-target="#collapseMinValue" aria-expanded="false" aria-controls="collapseMinValue">
-                                            <input type="checkbox" id="checkMinValue" /> Đặt giá trị đơn hàng tối thiểu
-                                        </label>
-                                    </div>
-                                </div>
-                                <div id="collapseMinValue" aria-expanded="false" class="collapse">
-                                    <div class="well">
-                                        <div class="form-group">
-                                            <label asp-for="min_order_value" class="control-label lableFormField"></label>
-                                            <input asp-for="min_order_value" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập giá trị tối thiểu đơn hàng" id="txtMinValue" />
-                                            <span asp-validation-for="min_order_value" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
+                            </div>
                         }
                         else
                         {
@@ -206,16 +160,15 @@
                                 <div class="well">
                                     <div class="form-group">
                                         <label asp-for="min_order_value" class="control-label lableFormField"></label>
-                                        <input asp-for="min_order_value" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập giá trị tối thiểu đơn hàng" id="txtMinValue" />
+                                        <input asp-for="min_order_value" class="form-control" type="text" placeholder="Nhập giá trị tối thiểu đơn hàng" id="txtMinValue" />
                                         <span asp-validation-for="min_order_value" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
                         }
-
-                        @if (Model != null)
+                        @if (Model.type != "Số tiền")
                         {
-                            if (Model.max_price != null)
+                            if (!string.IsNullOrWhiteSpace(Model.max_price))
                             {
                                 <div class="form-group">
                                     <div class="checkbox">
@@ -228,7 +181,7 @@
                                     <div class="well">
                                         <div class="form-group">
                                             <label asp-for="max_price" class="control-label lableFormField"></label>
-                                            <input asp-for="max_price" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập giới hạn giá giảm" id="txtMaxValue" />
+                                            <input asp-for="max_price" class="form-control" type="text" placeholder="Nhập giới hạn giá giảm" id="txtMaxValue" />
                                             <span asp-validation-for="max_price" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -247,7 +200,7 @@
                                     <div class="well">
                                         <div class="form-group">
                                             <label asp-for="max_price" class="control-label lableFormField"></label>
-                                            <input asp-for="max_price" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập giới hạn giá giảm" id="txtMaxValue" />
+                                            <input asp-for="max_price" class="form-control" type="text" placeholder="Nhập giới hạn giá giảm" id="txtMaxValue" />
                                             <span asp-validation-for="max_price" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -258,16 +211,16 @@
                         {
                             <div class="form-group">
                                 <div class="checkbox">
-                                    <label data-toggle="collapse" data-target="#collapseMaxValue" aria-expanded="false" aria-controls="collapseMaxValue">
-                                        <input type="checkbox" id="checkMaxValue" /> Giảm tối đa
+                                    <label data-toggle="collapse">
+                                        <input type="checkbox" id="checkMaxValue" disabled /> Giảm tối đa
                                     </label>
                                 </div>
                             </div>
-                            <div id="collapseMaxValue" aria-expanded="false" class="collapse">
+                            <div id="collapseMaxValue" class="collapse">
                                 <div class="well">
                                     <div class="form-group">
                                         <label asp-for="max_price" class="control-label lableFormField"></label>
-                                        <input asp-for="max_price" class="form-control" type="number" min="0" max="1000000000" placeholder="Nhập giới hạn giá giảm" id="txtMaxValue" />
+                                        <input asp-for="max_price" class="form-control" type="text" placeholder="Nhập giới hạn giá giảm" id="txtMaxValue" />
                                         <span asp-validation-for="max_price" class="text-danger"></span>
                                     </div>
                                 </div>

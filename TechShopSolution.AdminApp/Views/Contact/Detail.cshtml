@@ -1,4 +1,5 @@
 ﻿@model TechShopSolution.ViewModels.Website.Contact.ContactUpdateRequest
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Chi tiết thông tin liên hệ";
@@ -82,7 +83,7 @@
                                         }
                                         else
                                         {
-                                            <img src="data:image/jpeg;base64,@Model.imageBase64" id="ProductImage" class="image hoverDel" />
+                                            <img src="@(Configuration["BaseAddress"] + "/user-content/" + @Model.imageBase64)" id="ProductImage" class="image hoverDel" />
                                         }
                                     </div>
                                     <div class="custom-file">

@@ -15,19 +15,18 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<ApiResult<bool>> Delete(int productID);
         Task<ApiResult<bool>> DeleteImage(int id, string fileName);
         Task<ApiResult<ProductViewModel>> GetById(int id);
-        Task<ApiResult<PublicProductDetailViewModel>> GetPublicProductDetail(string slug);
-        PagedResult<ProductViewModel> GetAllPaging(GetProductPagingRequest request);
-        PagedResult<ProductViewModel> GetPublicProducts(GetPublicProductPagingRequest request);
+        Task<ApiResult<ProductViewModel>> GetPublicProductDetail(string slug, int? cus_id);
+        PagedResult<ProductOverViewModel> GetAllPaging(GetProductPagingRequest request);
+        PagedResult<ProductOverViewModel> GetPublicProducts(GetPublicProductPagingRequest request);
+        List<RatingViewModel> GetRatingsProduct(string slug);
         Task<PublicCayegoyProductsViewModel> GetHomeProductByCategory(int id, int take);
-        Task<ApiResult<bool>> SaveRating(ProductRatingRequest request);
         Task<bool> isValidSlug(string Code, string slug);
-        Task<List<ImageListResult>> GetImagesByProductID(int id);
         Task<ApiResult<bool>> OffFeatured(int id);
         Task<ApiResult<bool>> OffBestSeller(int id);
         Task<ApiResult<bool>> ChangeStatus(int id);
         Task<PublicProductsViewModel> GetFeaturedProduct(int take);
         Task<PublicProductsViewModel> GetBestSellerProduct(int take);
         Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
-        List<ProductViewModel> GetProductsRelated(int product_id, int take);
+        List<ProductOverViewModel> GetProductsRelated(int product_id, int take);
     }
 }

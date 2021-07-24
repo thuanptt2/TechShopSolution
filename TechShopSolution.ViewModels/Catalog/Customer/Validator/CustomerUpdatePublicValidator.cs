@@ -10,7 +10,7 @@ namespace TechShopSolution.ViewModels.Catalog.Customer.Validator
         public CustomerUpdatePublicValidator()
         {
             RuleFor(x => x.name).NotEmpty().WithMessage("Tên không được để trống")
-                  .MaximumLength(255).WithMessage("Tên không thể vượt quá 255 kí tự");
+                  .MaximumLength(128).WithMessage("Tên không thể vượt quá 128 kí tự");
             RuleFor(x => x.phone).NotEmpty().WithMessage("Số điện thoại không được để trống")
                   .MinimumLength(10).WithMessage("Số điện thoại phải đủ 10 kí tự")
                   .MaximumLength(10).WithMessage("Số điện thoại không vượt quá 10 kí tự")

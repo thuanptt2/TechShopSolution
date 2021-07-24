@@ -1,5 +1,6 @@
 ﻿@using System.Security.Claims;
 @using Microsoft.AspNetCore.Http;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 @{
     ViewData["Title"] = "Giỏ hàng";
@@ -19,41 +20,40 @@
     </ul>
     <h3>
         GIỎ HÀNG <small><span id="lbl_number_of_items"><span></span></span> sản phẩm </small>
-        <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-large pull-right">
-            <i class="icon-arrow-left"></i> Tiếp tục mua hàng
-        </a>
     </h3>
     <hr class="soft" />
 
 
-    <table class="table table-bordered table-cart">
-        <thead>
-            <tr>
-                <th>Ảnh</th>
-                <th>Tên sản phẩm</th>
-                <th>Sớ lượng/Cập nhật</th>
-                <th>Giá</th>
-                <th>Khuyến mãi</th>
-                <th>Tổng</th>
-            </tr>
-        </thead>
-        <tbody id="cart_body">
-        </tbody>
-        <tfoot class="table-hr-top">
-            <tr>
-                <td colspan="5" style="text-align:right">Tổng tạm tính:	</td>
-                <td id="lbl_total">0đ</td>
-            </tr>
-            <tr>
-                <td colspan="5" style="text-align:right">Mã giảm giá:	</td>
-                <td>- <span id="lbl_couponprice">0đ</span></td>
-            </tr>
-            <tr>
-                <td colspan="5" style="text-align:right"><strong>Thành tiền </strong></td>
-                <td class="label label-important" style="display:block"> <strong><span id="lbl_maintotal">0đ</span></strong></td>
-            </tr>
-        </tfoot>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-bordered table-cart">
+            <thead>
+                <tr>
+                    <th>Ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Sớ lượng/Cập nhật</th>
+                    <th>Giá</th>
+                    <th>Khuyến mãi</th>
+                    <th>Tổng</th>
+                </tr>
+            </thead>
+            <tbody id="cart_body">
+            </tbody>
+            <tfoot class="table-hr-top">
+                <tr>
+                    <td colspan="5" style="text-align:right">Tổng tạm tính:	</td>
+                    <td id="lbl_total">0đ</td>
+                </tr>
+                <tr>
+                    <td colspan="5" style="text-align:right">Mã giảm giá:	</td>
+                    <td>- <span id="lbl_couponprice">0đ</span></td>
+                </tr>
+                <tr>
+                    <td colspan="5" style="text-align:right"><strong>Thành tiền </strong></td>
+                    <td class="label label-important" style="display:block"> <strong><span id="lbl_maintotal">0đ</span></strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
 
     <table class="table table-bordered table-cart">
@@ -63,9 +63,19 @@
                     <div class="control-group">
                         <label class="control-label"><strong> Mã GIẢM GIÁ: </strong> </label>
                         <div class="controls">
-                            <input type="text" class="input-medium" id="codeCoupon" style="text-transform:uppercase" placeholder="CODE">
-                            <button type="button" class="btn" id="btnApplyCoupon" > Áp dụng </button><br />
-                            <span id="CouponMessage"></span>
+                            <div class="d-flex">
+                                <input type="text" class="input-medium" value="@ViewBag.CouponCode" id="codeCoupon" style="text-transform:uppercase" placeholder="CODE">
+                                @if (!User.Identity.IsAuthenticated)
+                                {
+                                    <button type="button" class="btn btn-coupon margin-left-10" onclick="alert('Quý khách cần đăng nhập để sử dụng mã giảm giá')"> Áp dụng </button><br />
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-coupon margin-left-10" id="btnApplyCoupon"> Áp dụng </button><br />
+                                }
+                                <input class="btn btn-danger btn-coupon" value="Hủy" type="@(!string.IsNullOrWhiteSpace(ViewBag.CouponCode) ? "button":"hidden")" id="btnCancelCoupon">
+                            </div>
+                            <span id="CouponMessage">@ViewBag.CouponMessage</span>
                         </div>
                     </div>
                 </td>
@@ -83,3 +93,4 @@
         }
     }
 </div>
+<input type="hidden" id="hidBaseAddress" value="@(Configuration["BaseAddress"])" />

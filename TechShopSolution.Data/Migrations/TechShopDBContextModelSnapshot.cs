@@ -462,6 +462,26 @@ namespace TechShopSolution.Data.Migrations
                     b.ToTable("Customer");
                 });
 
+            modelBuilder.Entity("TechShopSolution.Data.Entities.Favorite", b =>
+                {
+                    b.Property<int>("product_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("cus_id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("date_favorite")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.HasKey("product_id", "cus_id");
+
+                    b.HasIndex("cus_id");
+
+                    b.ToTable("Favorite");
+                });
+
             modelBuilder.Entity("TechShopSolution.Data.Entities.Feedback", b =>
                 {
                     b.Property<int>("id")
@@ -824,6 +844,9 @@ namespace TechShopSolution.Data.Migrations
                     b.Property<DateTime?>("update_at")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("view_count")
+                        .HasColumnType("int");
+
                     b.Property<int>("warranty")
                         .HasColumnType("int");
 
@@ -1010,6 +1033,25 @@ namespace TechShopSolution.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("TechShopSolution.Data.Entities.Favorite", b =>
+                {
+                    b.HasOne("TechShopSolution.Data.Entities.Customer", "Customer")
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("cus_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TechShopSolution.Data.Entities.Product", "Product")
+                        .WithMany("Favoriters")
+                        .HasForeignKey("product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("TechShopSolution.Data.Entities.News", b =>
                 {
                     b.HasOne("TechShopSolution.Data.Entities.CategoryNews", "CategoryNews")
@@ -1136,6 +1178,8 @@ namespace TechShopSolution.Data.Migrations
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Customer", b =>
                 {
+                    b.Navigation("FavoriteProducts");
+
                     b.Navigation("Order");
 
                     b.Navigation("Ratings");
@@ -1155,6 +1199,8 @@ namespace TechShopSolution.Data.Migrations
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Product", b =>
                 {
+                    b.Navigation("Favoriters");
+
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductInCategory");

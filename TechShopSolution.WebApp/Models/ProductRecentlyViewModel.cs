@@ -8,6 +8,7 @@ namespace TechShopSolution.WebApp.Models
     public class ProductRecentlyViewModel
     {
         public int id { get; set; }
+        public int? instock { get; set; }
         public string name { get; set; }
         public string slug { get; set; }
         public string image { get; set; }

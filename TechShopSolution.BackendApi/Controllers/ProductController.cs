@@ -38,9 +38,9 @@ namespace TechShopSolution.BackendApi.Controllers
             return Ok(product);
         }
         [HttpGet("slug")]
-        public async Task<IActionResult> GetPublicProductDetail(string slug)
+        public async Task<IActionResult> GetPublicProductDetail(string slug, int? cus_id)
         {
-            var result = await _productService.GetPublicProductDetail(slug);
+            var result = await _productService.GetPublicProductDetail(slug, cus_id);
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
@@ -73,6 +73,12 @@ namespace TechShopSolution.BackendApi.Controllers
         public IActionResult GetProductsRelated(int idBrand, int take)
         {
             var product = _productService.GetProductsRelated(idBrand, take);
+            return Ok(product);
+        }
+        [HttpGet("Rating")]
+        public IActionResult GetRatingsProduct(string slug)
+        {
+            var product = _productService.GetRatingsProduct(slug);
             return Ok(product);
         }
         [HttpPost]
@@ -119,12 +125,6 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest();
         }
-        [HttpGet("image/{id}")]
-        public async Task<IActionResult> GetImageByProductID(int id)
-        {
-            var result = await _productService.GetImagesByProductID(id);
-            return Ok(result);
-        }
         [HttpGet("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus(int id)
         {
@@ -145,14 +145,6 @@ namespace TechShopSolution.BackendApi.Controllers
         public async Task<IActionResult> OffFeatured(int id)
         {
             var result = await _productService.OffFeatured(id);
-            if (!result.IsSuccess)
-                return BadRequest(result);
-            return Ok(result);
-        }
-        [HttpPost("rating")]
-        public async Task<IActionResult> RatingProduct(ProductRatingRequest request)
-        {
-            var result = await _productService.SaveRating(request);
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);

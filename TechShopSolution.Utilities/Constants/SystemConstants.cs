@@ -12,5 +12,6 @@ namespace TechShopSolution.Utilities.Constants
     public class AppSettings
     {
         public const string Token = "Token";
+        public const string PasswordKey = "A!9HHhi%XjjYY4YP2@Nob009X";
     }
 }

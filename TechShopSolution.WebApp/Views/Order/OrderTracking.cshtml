@@ -3,10 +3,8 @@
     ViewData["Title"] = "Đơn hàng của bạn";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section Script {
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
-
-}
 @{
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 }
@@ -67,8 +65,8 @@
                                     {
                                         <p class="pull-right text-warning-order"><strong>Chờ duyệt</strong></p>
                                     }
-                                    else if(ViewBag.Model[i].ship_status == 2) 
-                                    { 
+                                    else if (ViewBag.Model[i].ship_status == 2)
+                                    {
                                         <p class="pull-right text-success-order"><strong>✔ Giao hàng thành công</strong></p>
                                     }
 
@@ -80,7 +78,7 @@
                                             @foreach (var item in ViewBag.Model[i].Products)
                                             {
                                                 <tr class="order-tracking-product">
-                                                    <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
                                                     @if (item.promotion_price > 0)
@@ -141,7 +139,7 @@
                                             @foreach (var item in ViewBag.Model[i].Products)
                                             {
                                                 <tr class="order-tracking-product">
-                                                    <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
                                                     @if (item.promotion_price > 0)
@@ -201,7 +199,7 @@
                                             @foreach (var item in ViewBag.Model[i].Products)
                                             {
                                                 <tr class="order-tracking-product">
-                                                    <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
                                                     @if (item.promotion_price > 0)
@@ -261,7 +259,7 @@
                                             @foreach (var item in ViewBag.Model[i].Products)
                                             {
                                                 <tr class="order-tracking-product">
-                                                    <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
                                                     @if (item.promotion_price > 0)
@@ -321,7 +319,7 @@
                                             @foreach (var item in ViewBag.Model[i].Products)
                                             {
                                                 <tr class="order-tracking-product">
-                                                    <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
                                                     @if (item.promotion_price > 0)
@@ -381,7 +379,7 @@
                                             @foreach (var item in ViewBag.Model[i].Products)
                                             {
                                                 <tr class="order-tracking-product">
-                                                    <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
                                                     @if (item.promotion_price > 0)
@@ -441,7 +439,7 @@
                                             @foreach (var item in ViewBag.Model[i].Products)
                                             {
                                                 <tr class="order-tracking-product">
-                                                    <td><img src="data:image/jpeg;base64, @item.product_image" width="60" /></td>
+                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
                                                     <td class="order-tracking-product-name">@item.product_name</td>
                                                     <td style="width: 7%">x @item.quantity</td>
                                                     @if (item.promotion_price > 0)

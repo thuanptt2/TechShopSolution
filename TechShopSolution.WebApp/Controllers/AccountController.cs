@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,12 +16,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Sales;
 using TechShopSolution.ViewModels.System;
+using TechShopSolution.WebApp.Models;
 
 namespace TechShopSolution.WebApp.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private readonly IAdminApiClient _adminApiClient;
@@ -33,17 +35,19 @@ namespace TechShopSolution.WebApp.Controllers
             _customerApiClient = customerApiClient;
         }
         [Route("dang-nhap")]
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Login()
         {
+            if (TempData["error"] != null)
+            {
+                ViewBag.ErrorMsg = TempData["error"];
+            }
             await HttpContext.SignOutAsync(
                           CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
         [HttpPost]
         [Route("dang-nhap")]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginRequest request, string ReturnUrl)
         {
             if (!ModelState.IsValid)
@@ -57,13 +61,17 @@ namespace TechShopSolution.WebApp.Controllers
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(180),
                     IsPersistent = false
                 };
-                HttpContext.Session.SetString("Tokenuser", result.ResultObject);
+                HttpContext.Session.SetString("Token", result.ResultObject);
                 await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             adminPrincipal,
                             authProperties);
                 if(!string.IsNullOrEmpty(ReturnUrl))
                 {
+                    if(ReturnUrl.Equals("/dang-nhap"))
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                     return Redirect(ReturnUrl);
                 } else
                 {
@@ -75,13 +83,11 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [Route("dang-ky")]
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
         [HttpPost]
-        [AllowAnonymous]
         [Route("dang-ky")]
         public async Task<IActionResult> Register(CustomerRegisterRequest request, string returnUrl)
         {
@@ -91,8 +97,13 @@ namespace TechShopSolution.WebApp.Controllers
             if (result.IsSuccess)
             {
                 var token = await _adminApiClient.AuthenticateCustomer(new LoginRequest { Email = request.email, Password = request.password, Remeber_me = true });
+                if(!token.IsSuccess)
+                {
+                    return View();
+                }
 
                 var adminPrincipal = this.ValidateToken(token.ResultObject);
+
                 var authProperties = new AuthenticationProperties
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
@@ -114,6 +125,7 @@ namespace TechShopSolution.WebApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        [Authorize]
         [Route("tai-khoan")]
         public async Task<IActionResult> Detail()
         {
@@ -147,6 +159,7 @@ namespace TechShopSolution.WebApp.Controllers
         }
         [HttpPost]
         [Route("tai-khoan")]
+        [Authorize]
         public async Task<IActionResult> Detail(CustomerPublicUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -157,11 +170,12 @@ namespace TechShopSolution.WebApp.Controllers
             if (result.IsSuccess)
             {
                 TempData["result"] = "Cập nhật tài khoản thành công";
-                return RedirectToAction("Detail","Account", new { id = request.Id.ToString()});
+                return RedirectToAction("Detail","Account");
             }
             ModelState.AddModelError("", "Cập nhật thất bại");
             return View(request);
         }
+        [Authorize]
         public async Task<IActionResult> UpdateAddress(int id)
         {
             var result = await _customerApiClient.GetById(id);
@@ -177,22 +191,22 @@ namespace TechShopSolution.WebApp.Controllers
             };
             return View(updateAddressRequest);
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateAddress(CustomerUpdateAddressRequest request)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+                return RedirectToAction(nameof(Detail));
             var result = await _customerApiClient.UpdateAddress(request);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Cập nhật địa chỉ thành công";
-                return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+                return RedirectToAction(nameof(Detail));
             }
             TempData["result"] = "Cập nhật địa chỉ thất bại";
-            return RedirectToAction(nameof(Detail), new { id = request.Id.ToString() });
+            return RedirectToAction(nameof(Detail));
         }
         [AcceptVerbs("GET", "POST")]
-        [AllowAnonymous]
         public async Task<IActionResult> VerifyEmail(string email, int Id)
         {
             if (await _customerApiClient.VerifyEmail(email) == false)
@@ -284,6 +298,41 @@ namespace TechShopSolution.WebApp.Controllers
                           CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
-       
+        [Authorize]
+        [Route("tai-khoan/san-pham-yeu-thich")]
+        [HttpGet]
+        public async Task<IActionResult> FavoriteProducts(int pageIndex = 1)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+            var products = await _customerApiClient.GetFavoriteProducts(new GetFavoriteProductsPagingRequest()
+            {
+                cus_id = int.Parse(id),
+                PageIndex = pageIndex,
+                PageSize = 8,
+            });
+            ViewBag.PageResult = products;
+            return View(products);
+        }
+        [Authorize]
+        [Route("tai-khoan/san-pham-da-xem")]
+        [HttpGet]
+        public IActionResult RecentlyProducts(int pageIndex = 1)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Path });
+            }
+            List<ProductRecentlyViewModel> RecentlyProducts = new List<ProductRecentlyViewModel>();
+            var session = HttpContext.Session.GetString("RecentlyProducts");
+            if (!string.IsNullOrWhiteSpace(session))
+            {
+                RecentlyProducts = JsonConvert.DeserializeObject<List<ProductRecentlyViewModel>>(session);
+            }            
+            return View(RecentlyProducts.OrderByDescending(x=>x.view_at).ToList());
+        }
     }
 }

@@ -19,8 +19,7 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             _adminService = adminService;
         }
-        [HttpPost("authenticate")]
-        [AllowAnonymous]
+        [HttpPost("AdminLogin")]
         public IActionResult Authenticate([FromBody] LoginRequest request)
         {
             if (ModelState.IsValid)
@@ -34,8 +33,7 @@ namespace TechShopSolution.BackendApi.Controllers
             }
             return BadRequest(ModelState);
         }
-        [HttpPost("authenticatecustomer")]
-        [AllowAnonymous]
+        [HttpPost("CustomerLogin")]
         public IActionResult AuthenticateCustomer([FromBody] LoginRequest request)
         {
             var result = _adminService.AuthenticateCustomer(request);

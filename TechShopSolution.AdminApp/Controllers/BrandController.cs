@@ -17,7 +17,7 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             _brandApiClient = brandApiClient;
         }
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 15)
         {
             var request = new GetBrandPagingRequest()
             {
@@ -96,29 +96,30 @@ namespace TechShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-
         [HttpGet]
-        public async Task<IActionResult> ChangeStatus(int id)
+        public async Task<IActionResult> ChangeStatus(int id, string pageIndex)
         {
             var result = await _brandApiClient.ChangeStatus(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Thay đổi trạng thái thành công";
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
             ModelState.AddModelError("Cập nhật thất bại", result.Message);
-            return View("Index");
+            return View("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1});
         }
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string pageIndex)
         {
+            
             var result = await _brandApiClient.Delete(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa thương hiệu thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
             TempData["error"] = result.Message;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> isValidSlug(int id, string brand_slug)

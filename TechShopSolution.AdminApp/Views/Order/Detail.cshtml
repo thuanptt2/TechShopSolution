@@ -1,5 +1,5 @@
 ﻿@model TechShopSolution.ViewModels.Sales.OrderDetailViewModel
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
@@ -180,26 +180,26 @@
                         Thao tác
                     </button>
                 }
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item item-dropdown" href="@Url.Action("ConfirmOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn duyệt đơn hàng này?')">Duyệt đơn hàng</a>
-                @if (Model.Order.status == 0)
-                {
-                    <a class="dropdown-item item-dropdown" onclick="alert('Bạn chưa duyệt đơn hàng này, hãy duyệt đơn hàng trước')">Xác nhận thanh toán</a>
-                }
-                else
-                {
-                    <a class="dropdown-item item-dropdown" href="@Url.Action("PaymentConfirm", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn thanh toán cho đơn hàng này?')">Xác nhận thanh toán</a>
-                }
-                @if (Model.Order.ship_status == 1)
-                {
-                    <a class="dropdown-item" href="#" id="btnCancelOrder" onclick="alert('Đơn hàng này đang được vận chuyển thông thể Hủy')">Hủy đơn hàng</a>
-                }
-                else
-                {
-                    <a class="dropdown-item" href="#" id="btnCancelOrder" onclick="showInPopup('@Url.Action("CancelOrder","Order",new { id = Model.Order.id }, Context.Request.Scheme)','Chọn lý do hủy đơn hàng')">Hủy đơn hàng</a>
-                }
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item item-dropdown" href="@Url.Action("ConfirmOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn duyệt đơn hàng này?')">Duyệt đơn hàng</a>
+                    @if (Model.Order.status == 0)
+                    {
+                        <a class="dropdown-item item-dropdown" onclick="alert('Bạn chưa duyệt đơn hàng này, hãy duyệt đơn hàng trước')">Xác nhận thanh toán</a>
+                    }
+                    else
+                    {
+                        <a class="dropdown-item item-dropdown" href="@Url.Action("PaymentConfirm", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn thanh toán cho đơn hàng này?')">Xác nhận thanh toán</a>
+                    }
+                    @if (Model.Order.ship_status == 1)
+                    {
+                        <a class="dropdown-item" href="#" id="btnCancelOrder" onclick="alert('Đơn hàng này đang được vận chuyển thông thể Hủy')">Hủy đơn hàng</a>
+                    }
+                    else
+                    {
+                        <a class="dropdown-item" href="#" id="btnCancelOrder" onclick="showInPopup('@Url.Action("CancelOrder","Order",new { id = Model.Order.id }, Context.Request.Scheme)','Chọn lý do hủy đơn hàng')">Hủy đơn hàng</a>
+                    }
 
-            </div>
+                </div>
             </div>
         </div>
     </div>
@@ -264,7 +264,7 @@
                                 <tr>
                                     <th scope="row">
                                         <img style="display:block; width:60px;height:60px;"
-                                             src="data:image/jpeg;base64, @item.product_image" />
+                                             src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" />
                                     </th>
                                     <td><a href="@Url.Action("Update", "Product", new { id = item.product_id })" target="_blank">@item.product_name</a> </td>
                                     <td class="text-center">@item.quantity</td>
