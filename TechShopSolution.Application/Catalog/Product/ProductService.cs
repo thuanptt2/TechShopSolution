@@ -314,6 +314,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 int totalRow = data.Count();
 
                 List<ProductOverViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                    .OrderBy(emp => Guid.NewGuid())
                     .Take(request.PageSize)
                     .Select(a => new ProductOverViewModel()
                     {
@@ -363,7 +364,7 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 int Count = await query.CountAsync();
 
-                var data = query.OrderByDescending(m => m.p.create_at)
+                var data = query.OrderBy(emp => Guid.NewGuid())
                     .Take(take)
                     .Select(a => new ProductOverViewModel()
                     {
@@ -399,7 +400,7 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 int Count = await query.CountAsync();
 
-                var data = query.OrderByDescending(m => m.p.create_at)
+                var data = query.OrderBy(emp => Guid.NewGuid())
                     .Take(take)
                     .Select(a => new ProductOverViewModel()
                     {
@@ -430,8 +431,8 @@ namespace TechShopSolution.Application.Catalog.Product
             {
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
-                            join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && c.id == id && p.isActive == true
+                            join c in _context.Categories on pic.cate_id equals c.id 
+                            where p.isDelete == false && c.id == id && p.isActive == true && p.instock != 0
                             select new { p, c };
 
                 var category = await query.Select(a => new CategoryViewModel()
@@ -454,7 +455,7 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 int Count = await query.CountAsync();
 
-                List<ProductOverViewModel> Products = data.OrderByDescending(m => m.Key.create_at)
+                List<ProductOverViewModel> Products = data.OrderBy(emp => Guid.NewGuid())
                     .Take(take)
                     .Select(a => new ProductOverViewModel()
                     {
@@ -490,7 +491,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 var group = query.AsEnumerable()
                    .GroupBy(g => g.p);
 
-                var data = group.OrderByDescending(m => m.Key.create_at)
+                var data = group.OrderBy(emp => Guid.NewGuid())
                     .Take(take)
                     .Select(a => new ProductOverViewModel()
                     {
@@ -522,7 +523,7 @@ namespace TechShopSolution.Application.Catalog.Product
 
                 int Count = await query.CountAsync();
 
-                var data = query.OrderByDescending(m => m.p.create_at)
+                var data = query.OrderBy(emp => Guid.NewGuid())
                     .Take(take)
                     .Select(a => new ProductOverViewModel()
                     {

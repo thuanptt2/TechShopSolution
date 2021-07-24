@@ -1317,6 +1317,11 @@ body {
     #lightbox-container-image-data-box {
         width: 85% !important;
     }
+    .thumbnails > li {
+        float: none;
+        margin-left: 0;
+        padding: 5px 20px;
+    }
 }
 
 .dropdown {

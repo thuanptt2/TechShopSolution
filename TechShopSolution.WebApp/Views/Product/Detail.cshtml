@@ -320,47 +320,44 @@ else
             {
                 foreach (var product in Model.ProductsRelated)
                 {
-                    if (product.id != Model.Product.id)
-                    {
-                        <li class="span3">
-                            <div class="thumbnail">
-                                @if (product.featured)
-                                {
-                                    <i class="tag-featured"></i>
-                                }
-                                else if (product.best_seller)
-                                {
-                                    <i class="tag-best-seller"></i>
-                                }
-                                else if (product.promotion_price > 1)
-                                {
-                                    <i class="tag-sale"></i>
-                                }
-                                else if ((DateTime.Now - product.create_at).TotalDays < 7)
-                                {
-                                    <i class="tag"></i>
-                                }
-                                <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @product.image)" alt="@product.name" /></a>
-                                <div class="caption">
-                                    <h5>@product.name</h5>
-                                </div>
-                                <div class="footer-thumbnail">
-                                    @if (product.promotion_price > 1)
-                                    {
-                                        <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
-                                        <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
-                                    }
-                                </div>
-                                <h4 style="text-align:center">
-                                    <a class="btn" href="@Url.Action("Detail", "Product", new { slug = product.slug })">Xem Chi tiết</a>
-                                </h4>
-                            </div>
-                        </li>
-                    }
+                <li class="span3">
+                    <div class="thumbnail">
+                        @if (product.featured)
+                        {
+                            <i class="tag-featured"></i>
+                        }
+                        else if (product.best_seller)
+                        {
+                            <i class="tag-best-seller"></i>
+                        }
+                        else if (product.promotion_price > 1)
+                        {
+                            <i class="tag-sale"></i>
+                        }
+                        else if ((DateTime.Now - product.create_at).TotalDays < 7)
+                        {
+                            <i class="tag"></i>
+                        }
+                        <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @product.image)" alt="@product.name" /></a>
+                        <div class="caption">
+                            <h5>@product.name</h5>
+                        </div>
+                        <div class="footer-thumbnail">
+                            @if (product.promotion_price > 1)
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                            else
+                            {
+                                <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                            }
+                        </div>
+                        <h4 style="text-align:center">
+                            <a class="btn" href="@Url.Action("Detail", "Product", new { slug = product.slug })">Xem Chi tiết</a>
+                        </h4>
+                    </div>
+                </li>
                 }
             }
         }

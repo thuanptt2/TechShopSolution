@@ -79,7 +79,7 @@
                     <div class="wrapper-content margin-bottom-20 margin-top-20">
                         <div class="row">
                             <div class="span2">
-                                <img src="data:image/jpeg;base64,@Model.Products.Items[i].image" alt="@Model.Products.Items[i].name" />
+                                <img src="@(Configuration["BaseAddress"] + "/user-content/" + @Model.Products.Items[i].image)" alt="@Model.Products.Items[i].name" />
                             </div>
                             <div class="span3">
                                 @{
