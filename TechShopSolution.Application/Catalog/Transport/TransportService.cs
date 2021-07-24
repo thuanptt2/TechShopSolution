@@ -335,7 +335,7 @@ namespace TechShopSolution.Application.Catalog.Transport
                 var transport = new TechShopSolution.Data.Entities.Transport
                 {
                     create_at = DateTime.Now,
-                    cod_price = (decimal)request.cod_price,
+                    cod_price = !string.IsNullOrWhiteSpace(request.cod_price) ? decimal.Parse(request.cod_price) : 0,
                     lading_code = request.lading_code,
                     order_id = request.order_id,
                     ship_status = 1,

@@ -10,6 +10,7 @@
     });
    
     function SubmitForm(form) {
+
         $.validator.unobtrusive.parse(form);
         if ($(form).valid() == true) {
             $.ajax({
