@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
 
@@ -21,6 +24,13 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             try
             {
+                SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider();
+
+                byte[] password_bytes = Encoding.ASCII.GetBytes(request.password);
+                byte[] encrypted_bytes = sha1.ComputeHash(password_bytes);
+
+                request.password = Convert.ToBase64String(encrypted_bytes);
+
                 string addressCustomer = request.House + " " + request.Ward + ", " + request.District + ", " + request.City;
                 var customer = new TechShopSolution.Data.Entities.Customer
                 {
@@ -48,6 +58,13 @@ namespace TechShopSolution.Application.Catalog.Customer
         {
             try
             {
+                SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider();
+
+                byte[] password_bytes = Encoding.ASCII.GetBytes(request.password);
+                byte[] encrypted_bytes = sha1.ComputeHash(password_bytes);
+
+                request.password = Convert.ToBase64String(encrypted_bytes);
+
                 var customer = new TechShopSolution.Data.Entities.Customer
                 {
                     name = request.name,
@@ -77,10 +94,19 @@ namespace TechShopSolution.Application.Catalog.Customer
                 var customer = await _context.Customers.FindAsync(cusID);
                 if (customer != null)
                 {
-                    if (await _context.Orders.AnyAsync(x => x.cus_id == customer.id))
-                        return new ApiErrorResult<bool>($"Khách hàng này đang có đơn hàng đấy, không thể xóa!");
-                    customer.isDelete = true;
-                    customer.delete_at = DateTime.Now;
+                    var ratings = await _context.Ratings.Where(x => x.cus_id == cusID).ToListAsync();
+                    _context.Ratings.RemoveRange(ratings);
+                    var favorites = await _context.Favorites.Where(x => x.cus_id == cusID).ToListAsync();
+                    _context.Favorites.RemoveRange(favorites);
+
+                    if (await _context.Orders.AnyAsync(x=>x.cus_id == cusID))
+                    {
+                        customer.isDelete = true;
+                        customer.delete_at = DateTime.Now;                    }
+                    else
+                    {
+                        _context.Customers.Remove(customer);
+                    }
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }
@@ -242,6 +268,62 @@ namespace TechShopSolution.Application.Catalog.Customer
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
+        public async Task<ApiResult<bool>> FavoriteProduct(int cus_id, int product_id)
+        {
+            var product = await _context.Products.FindAsync(product_id);
+            if (product == null || product.isDelete == true)
+                return new ApiErrorResult<bool>("Sản phẩm này hiện không còn tồn tại");
+            if (!product.isActive)
+                return new ApiErrorResult<bool>("Sản phẩm này đang bị khóa, bạn không thể yêu thích sản phẩm này");
+            var favorite = new TechShopSolution.Data.Entities.Favorite
+            {
+                cus_id = cus_id,
+                product_id = product_id,
+                date_favorite = DateTime.Now
+            };
+            await _context.Favorites.AddAsync(favorite);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
+        public async Task<ApiResult<bool>> UnFavoriteProduct(int cus_id, int product_id)
+        {
+            var product = await _context.Products.FindAsync(product_id);
+            if (product == null)
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại hoặc đã bị xóa, không thể hủy yêu thích ngay bây giờ");
+
+            var favorite = await _context.Favorites.Where(x=>x.cus_id == cus_id && x.product_id == product_id).FirstOrDefaultAsync();
+            if (favorite == null)
+                return new ApiErrorResult<bool>("Không tìm thấy yêu thích của bạn");
+           
+            _context.Favorites.Remove(favorite);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
+        public async Task<ApiResult<bool>> RatingProduct(ProductRatingRequest request)
+        {
+            var rating = await _context.Ratings.Where(x => x.cus_id == request.cus_id && x.product_id == request.product_id).FirstOrDefaultAsync();
+            if (rating != null)
+                return new ApiErrorResult<bool>("Bạn đã đánh giá sản phẩm này rồi, không thể đánh giá thêm lần nữa");
+            var product = await _context.Products.FindAsync(request.product_id);
+            if (product == null || product.isDelete == true)
+                return new ApiErrorResult<bool>("Sản phẩm bạn đánh giá hiện không còn tồn tại");
+            if (!product.isActive)
+                return new ApiErrorResult<bool>("Sản phẩm này đang bị khóa, bạn không thể đánh giá sản phẩm này");
+            var customer = await _context.Customers.FindAsync(request.cus_id);
+            
+
+            var newRating = new TechShopSolution.Data.Entities.Rating()
+            {
+                content = request.content,
+                cus_id = request.cus_id,
+                date_rating = DateTime.Now,
+                product_id = request.product_id,
+                score = request.score
+            };
+            await _context.Ratings.AddAsync(newRating);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
         public async Task<bool> VerifyEmail(string email)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(x => x.email.Equals(email) && x.isDelete == false);
@@ -287,5 +369,63 @@ namespace TechShopSolution.Application.Catalog.Customer
             }
             return result;
         }
+        public PagedResult<ProductOverViewModel> GetFavoriteProduct(GetFavoriteProductsPagingRequest request)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join f in _context.Favorites on p.id equals f.product_id
+                            join cus in _context.Customers on f.cus_id equals cus.id
+                            where p.isDelete == false && p.isActive == true && cus.id == request.cus_id
+                            select new { p, f, cus };
+
+
+                var data = query.AsEnumerable()
+                    .OrderByDescending(p => p.f.date_favorite)
+                    .GroupBy(g => g.p);
+
+                int totalRow = data.Count();
+
+                List<ProductOverViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(a => new ProductOverViewModel()
+                    {
+                        id = a.Key.id,
+                        name = a.Key.name,
+                        best_seller = a.Key.best_seller,
+                        create_at = a.Key.create_at,
+                        featured = a.Key.featured,
+                        image = a.Key.image,
+                        instock = a.Key.instock,
+                        promotion_price = a.Key.promotion_price,
+                        short_desc = a.Key.short_desc,
+                        slug = a.Key.slug,
+                        isActive = a.Key.isActive,
+                        unit_price = a.Key.unit_price,
+                    }).ToList();
+
+
+                var pageResult = new PagedResult<ProductOverViewModel>()
+                {
+                    TotalRecords = totalRow,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = result,
+                };
+                return pageResult;
+            }
+            catch
+            {
+                var pageResult = new PagedResult<ProductOverViewModel>()
+                {
+                    TotalRecords = 0,
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    Items = null,
+                };
+                return pageResult;
+            }
+        }
+
     }
 }

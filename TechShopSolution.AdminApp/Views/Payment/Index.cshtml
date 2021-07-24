@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Danh sách phương thức thanh toán";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var pageIndex = Context.Request.Query["pageIndex"];
 }
 
 @section jsFooter {
@@ -49,7 +50,7 @@
             Thêm mới
         </a>
         <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
+        <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
             <div class="input-group">
                 <label for="pet-select"></label>
                 <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
@@ -98,17 +99,13 @@
                     @if (Model.Items == null)
                     {
                         <tr>
-                            <td>
-                                Không có phương thức nào.
-                            </td>
+                            <td colspan="5"> Chưa có phương thức nào.</td>
                         </tr>
                     }
                     else if (Model.TotalRecords == 0)
                     {
                         <tr>
-                            <td>
-                                Không tìm thấy phương thức.
-                            </td>
+                            <td colspan="5"> Không tìm thấy phương thức.</td>
                         </tr>
                     }
                     else
@@ -132,17 +129,17 @@
                                 @if (item.isActive)
                                 {
                                     <td align="center">
-                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Payment", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Payment", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Payment", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Payment", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 <td align="center">
-                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa phương thức này? thao tác này không thể hoàn tác?')">Xóa</a>
+                                    <a href="@Url.Action("Delete", "Payment", new { id = item.id, pageIndex = pageIndex })" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa phương thức này? thao tác này không thể hoàn tác?')">Xóa</a>
                                 </td>
                             </tr>
                         }

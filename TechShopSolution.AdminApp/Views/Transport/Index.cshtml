@@ -1,9 +1,11 @@
 ﻿@using TechShopSolution.ViewModels.Common;
 @model PagedResult<TechShopSolution.ViewModels.Transport.TransporterViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Danh sách đơn vị vận chuyển";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var pageIndex = Context.Request.Query["pageIndex"];
 }
 
 @section jsFooter {
@@ -50,7 +52,7 @@
             Thêm mới
         </a>
         <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
+        <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
             <div class="input-group">
                 <label for="pet-select"></label>
                 <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
@@ -100,17 +102,13 @@
                         @if (Model.Items == null)
                         {
                             <tr>
-                                <td>
-                                    Không có đơn vị vận chuyển nào.
-                                </td>
+                                <td colspan="5"> Chưa có đơn vị vận chuyển nào.</td>
                             </tr>
                         }
                         else if (Model.TotalRecords == 0)
                         {
                             <tr>
-                                <td>
-                                    Không tìm thấy đơn vị vận chuyển.
-                                </td>
+                                <td colspan="5">Không tìm thấy đơn vị vận chuyển.</td>
                             </tr>
                         }
                         else
@@ -120,7 +118,7 @@
                                 <tr>
 
                                     <td>
-                                        <img src="data:image/jpeg;base64,@item.image" alt="@item.name" width="70" height="50" />
+                                        <img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.image)" alt="@item.name" width="70" height="50" />
                                     </td>
 
                                     <td>
@@ -134,17 +132,17 @@
                                     @if (item.isActive)
                                     {
                                         <td align="center">
-                                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Transport", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                            <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Transport", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                         </td>
                                     }
                                     else
                                     {
                                         <td align="center">
-                                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Transport", new { id = item.id })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                            <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Transport", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                         </td>
                                     }
                                     <td align="center">
-                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa đơn vị này? thao tác này không thể hoàn tác?')">Xóa</a>
+                                        <a href="@Url.Action("Delete", "Transport", new { id = item.id, pageIndex = pageIndex })" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa đơn vị này? thao tác này không thể hoàn tác?')">Xóa</a>
                                     </td>
                                 </tr>
                             }

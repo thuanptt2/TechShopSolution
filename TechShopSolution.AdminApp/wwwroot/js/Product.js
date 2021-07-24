@@ -37,7 +37,23 @@ $().ready(function () {
 
     });
     $("#btnSave").click(function () {
+
         var form = $("#CreateForm");
+
+        var unit_price = $("#formattedPrice").val();
+        var pro_price = $("#formattedPromotionPrice").val();
+
+        if (unit_price.length != 0 && unit_price != "") {
+            unit_price = unit_price.replace(/(₫)/gm, "");
+            unit_price = unit_price.replace(/\s/g, "");
+            document.getElementById("formattedPrice").value = unit_price;
+        }
+        if (pro_price.length != 0 && pro_price != "") {
+            pro_price = pro_price.replace(/(₫)/gm, "");
+            pro_price = pro_price.replace(/\s/g, "");
+            document.getElementById("formattedPromotionPrice").value = pro_price;
+        }
+
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             listImages = new FormData();
@@ -134,38 +150,6 @@ $().ready(function () {
         });
 
 
-    function to_slug(str) {
-        // Chuyển hết sang chữ thường
-        str = str.toLowerCase();
-
-        // xóa dấu
-        str = str.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, 'a');
-        str = str.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, 'e');
-        str = str.replace(/(ì|í|ị|ỉ|ĩ)/g, 'i');
-        str = str.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, 'o');
-        str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, 'u');
-        str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, 'y');
-        str = str.replace(/(đ)/g, 'd');
-
-        // Xóa ký tự đặc biệt
-        str = str.replace(/([^0-9a-z-\s])/g, '');
-
-        // Xóa khoảng trắng thay bằng ký tự -
-        str = str.replace(/(\s+)/g, '-');
-
-        // xóa phần dự - ở đầu
-        str = str.replace(/^-+/g, '');
-
-        // xóa phần dư - ở cuối
-        str = str.replace(/-+$/g, '');
-
-        // return
-        return str;
-    }
-    $('#txtName').on("keyup change", function () {
-        var content = to_slug($('#txtName').val());
-        $('#txtSlug').val(content);
-    })
     $('#cboCategory').change(function () {
         var CateID = $('#txtCateID').val();
         var value = $(this).val();
@@ -245,5 +229,21 @@ $().ready(function () {
             $('#txtBrandID').val(value);
         }
     })
-})
 
+    new AutoNumeric('#formattedPrice', {
+        allowDecimalPadding: false,
+        currencySymbol: "₫",
+        currencySymbolPlacement: "s",
+        digitGroupSeparator: " ",
+        maximumValue: "9999999999",
+        minimumValue: "0"
+    })
+    new AutoNumeric('#formattedPromotionPrice', {
+        allowDecimalPadding: false,
+        currencySymbol: "₫",
+        currencySymbolPlacement: "s",
+        digitGroupSeparator: " ",
+        maximumValue: "9999999999",
+        minimumValue: "0"
+    })
+})

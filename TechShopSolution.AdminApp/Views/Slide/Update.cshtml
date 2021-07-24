@@ -1,4 +1,5 @@
 ﻿@model TechShopSolution.ViewModels.Website.Slide.SlideUpdateRequest
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Chi tiết Slide";
@@ -38,7 +39,7 @@
                                     }
                                     else
                                     {
-                                        <img src="data:image/jpeg;base64,@Model.imageBase64" id="ProductImage" class="image hoverDel" height="250" />
+                                        <img src="@(Configuration["BaseAddress"] + "/user-content/" + @Model.imageBase64)" id="ProductImage" class="image hoverDel" height="250" />
                                     }
                                 </div>
                                 <div class="custom-file">
@@ -59,7 +60,7 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group mt-2">
                                 <label asp-for="display_order" class="control-label lableFormField"></label>
-                                <input asp-for="display_order" class="form-control" type="number"  min="1"/>
+                                <input asp-for="display_order" class="form-control" type="number" min="1" />
                                 <span asp-validation-for="display_order" class="text-danger"></span>
                             </div>
                             <div class="form-group">

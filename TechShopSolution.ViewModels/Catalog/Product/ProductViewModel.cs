@@ -5,7 +5,7 @@ using TechShopSolution.Data.Entities;
 
 namespace TechShopSolution.ViewModels.Catalog.Product
 {
-    public class ProductViewModel
+    public class ProductViewModel : CustomerInteraction
     {
         public int id { get; set; }
         public string name { get; set; }
@@ -22,6 +22,8 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public decimal promotion_price { get; set; }
         public int warranty { get; set; }
         public int? instock { get; set; }
+        public int view_count { get; set; }
+        public int favorite_count { get; set; }
         public string specifications { get; set; }
         public string short_desc { get; set; }
         public string descriptions { get; set; }
@@ -33,6 +35,5 @@ namespace TechShopSolution.ViewModels.Catalog.Product
         public string meta_descriptions { get; set; }
         public DateTime create_at { get; set; }
         public DateTime update_at { get; set; }
-
     }
 }

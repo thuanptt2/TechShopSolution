@@ -159,6 +159,14 @@ namespace TechShopSolution.WebApp
                   });
 
                 endpoints.MapControllerRoute(
+              name: "don hang da mua",
+              pattern: "tai-khoan/san-pham-yeu-thich", new
+              {
+                  controller = "Account",
+                  action = "FavoriteProducts"
+              });
+
+                endpoints.MapControllerRoute(
                   name: "Thanh toan gio hang",
                   pattern: "/gio-hang/thanh-toan", new
                   {

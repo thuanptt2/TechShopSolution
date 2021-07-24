@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.Application.Catalog.Customer;
 using TechShopSolution.ViewModels.Catalog.Customer;
+using TechShopSolution.ViewModels.Catalog.Product;
 
 namespace TechShopSolution.BackendApi.Controllers
 {
@@ -103,6 +104,38 @@ namespace TechShopSolution.BackendApi.Controllers
         {
             var result = _customerService.GetLatestOrder(id, take);
             return Ok(result);
+        }
+        [HttpPost("rating")]
+        public async Task<IActionResult> RatingProduct(ProductRatingRequest request)
+        {
+            var result = await _customerService.RatingProduct(request);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("favorite")]
+        public async Task<IActionResult> FavoriteProduct(int cus_id, int product_id)
+        {
+            var result = await _customerService.FavoriteProduct(cus_id, product_id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpDelete("unfavorite")]
+        public async Task<IActionResult> UnFavoriteProduct(int cus_id, int product_id)
+        {
+            var result = await _customerService.UnFavoriteProduct(cus_id, product_id);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpPost("favoriteproducts")]
+        public IActionResult GetPublicProducts(GetFavoriteProductsPagingRequest request)
+        {
+            var products = _customerService.GetFavoriteProduct(request);
+            if (products.Items == null)
+                return BadRequest("Không có sản phẩm nào");
+            return Ok(products);
         }
     }
 }

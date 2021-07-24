@@ -38,19 +38,16 @@ namespace TechShopSolution.AdminApp.Controllers
             return View(data);
         }
         [HttpGet]
-        public async Task<IActionResult> ChangeStatus(int id)
+        public async Task<IActionResult> ChangeStatus(int id, string pageIndex)
         {
             var result = await _couponApiClient.ChangeStatus(id);
-            if (result == null)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError("Cập nhật thất bại", result.Message);
+                TempData["error"] = result.Message;
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
-            if (result.IsSuccess)
-            {
-                TempData["result"] = "Thay đổi trạng thái thành công";
-                return RedirectToAction("Index");
-            }
-            return View("Index");
+            TempData["result"] = "Thay đổi trạng thái thành công";
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         [HttpGet]
         public async Task<IActionResult> Update(int id)
@@ -67,8 +64,8 @@ namespace TechShopSolution.AdminApp.Controllers
                 value = result.ResultObject.value,
                 type = result.ResultObject.type,
                 code = result.ResultObject.code,
-                max_price = result.ResultObject.max_price,
-                min_order_value = result.ResultObject.min_order_value,
+                max_price = result.ResultObject.max_price.ToString(),
+                min_order_value = result.ResultObject.min_order_value.ToString(),
                 end_at = result.ResultObject.end_at,
                 isActive = result.ResultObject.isActive,
                 name = result.ResultObject.name,
@@ -101,21 +98,21 @@ namespace TechShopSolution.AdminApp.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string pageIndex)
         {
             var result = await _couponApiClient.Delete(id);
             if (result.IsSuccess)
             {
                 TempData["result"] = "Xóa mã giảm giá thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
             }
             TempData["error"] = result.Message;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { pageIndex = !string.IsNullOrWhiteSpace(pageIndex) ? int.Parse(pageIndex) : 1 });
         }
         public async Task<IActionResult> Create(CouponCreateRequest request)
         {
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
             var result = await _couponApiClient.CreateCoupon(request);
             if (result.IsSuccess)
             {

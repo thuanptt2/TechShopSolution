@@ -22,7 +22,7 @@ namespace TechShopSolution.AdminApp.Controllers
             _orderApiClient = orderApiClient;
             _transportApiClient = transportApiClient;
         }
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 20)
+        public async Task<IActionResult> Index(string keyword, int type = 1, int pageIndex = 1, int pageSize = 20)
         {
             var request = new GetOrderPagingRequest()
             {

@@ -79,8 +79,16 @@ namespace TechShopSolution.Application.Catalog.Transport
                 var result = await _context.Transporters.FindAsync(id);
                 if (result != null)
                 {
-                    result.isDelete = true;
-                    result.delete_at = DateTime.Now;
+                    if (await _context.Transports.AnyAsync(x => x.transporter_id == id))
+                    {
+                        result.isDelete = true;
+                        result.delete_at = DateTime.Now;
+                    }
+                    else
+                    {
+                        await _storageService.DeleteFileAsync(result.image);
+                        _context.Transporters.Remove(result);
+                    }
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }
@@ -112,7 +120,7 @@ namespace TechShopSolution.Application.Catalog.Transport
                     id = a.id,
                     name = a.name,
                     isActive = a.isActive,
-                    image = GetBase64StringForImage(_storageService.GetFileUrl(a.image)),
+                    image = a.image,
                     create_at = a.create_at,
                     link = a.link,
                 }).ToListAsync();
@@ -141,7 +149,7 @@ namespace TechShopSolution.Application.Catalog.Transport
                 isActive = result.isActive,
                 id = result.id,
                 update_at = result.update_at,
-                image = GetBase64StringForImage(_storageService.GetFileUrl(result.image)),
+                image = result.image,
                 link = result.link
             };
             return new ApiSuccessResult<TransporterViewModel>(transporter);
@@ -193,12 +201,7 @@ namespace TechShopSolution.Application.Catalog.Transport
 
             return await data;
         }
-        protected static string GetBase64StringForImage(string imgPath)
-        {
-            byte[] imageBytes = File.ReadAllBytes(imgPath);
-            string base64String = Convert.ToBase64String(imageBytes);
-            return base64String;
-        }
+       
         public async Task<ApiResult<OrderDetailViewModel>> Detail(int id)
         {
             var query = from tp in _context.Transports
@@ -265,7 +268,7 @@ namespace TechShopSolution.Application.Catalog.Transport
             {
                 order_id = a.od.order_id,
                 product_id = a.od.product_id,
-                product_image = GetBase64StringForImage(_storageService.GetFileUrl(a.p.image)),
+                product_image = a.p.image,
                 product_name = a.p.name,
                 promotion_price = a.od.promotion_price,
                 quantity = a.od.quantity,
@@ -340,7 +343,7 @@ namespace TechShopSolution.Application.Catalog.Transport
                 var transport = new TechShopSolution.Data.Entities.Transport
                 {
                     create_at = DateTime.Now,
-                    cod_price = (decimal)request.cod_price,
+                    cod_price = !string.IsNullOrWhiteSpace(request.cod_price) ? decimal.Parse(request.cod_price) : 0,
                     lading_code = request.lading_code,
                     order_id = request.order_id,
                     ship_status = 1,

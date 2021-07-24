@@ -1,5 +1,5 @@
 ﻿@model TechShopSolution.ViewModels.Sales.OrderDetailViewModel
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Chi tiết đơn vận chuyển";
@@ -43,7 +43,7 @@
 <div class="container-fluid detail-order">
     <ol class="breadcrumb mb-4 mt-3">
         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-        <li class="breadcrumb-item"><a href="/order/index">Đơn vận chuyển</a></li>
+        <li class="breadcrumb-item"><a href="/transport/ListTransport">Đơn vận chuyển</a></li>
         <li class="breadcrumb-item active">@Model.Transport.id</li>
     </ol>
     @if (ViewBag.SuccessMsg != null)
@@ -346,7 +346,7 @@
                                 <tr>
                                     <th scope="row">
                                         <img style="display:block; width:60px;height:60px;"
-                                             src="data:image/jpeg;base64, @item.product_image" />
+                                             src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" />
                                     </th>
                                     <td><a href="@Url.Action("Update", "Product", new { id = item.product_id })" target="_blank">@item.product_name</a> </td>
                                     <td class="text-center">@item.quantity</td>
@@ -380,10 +380,10 @@
                 @if (Model.Transport.ship_status != -1 && Model.Transport.ship_status != 2)
                 {
                     <div class="text-right mt-3">
-                        <a class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn vận chuyển này, hành động này không thể hoàn tác?')" href="@Url.Action("CancelShippingOrder","Transport",new { id = Model.Transport.id })">
+                        <a class="btn btn-danger mb-3" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn vận chuyển này, hành động này không thể hoàn tác?')" href="@Url.Action("CancelShippingOrder","Transport",new { id = Model.Transport.id })">
                             Hủy giao hàng
                         </a>
-                        <a class="btn btn-success" onclick="return confirm('Bạn có chắc chắn muốn xác nhận giao hàng thành công không, hành động này không thể hoàn tác?')" href="@Url.Action("ConfirmDoneShip","Transport",new { transport_id = Model.Transport.id })">
+                        <a class="btn btn-success mb-3" onclick="return confirm('Bạn có chắc chắn muốn xác nhận giao hàng thành công không, hành động này không thể hoàn tác?')" href="@Url.Action("ConfirmDoneShip","Transport",new { transport_id = Model.Transport.id })">
                             Xác nhận giao hàng thành công
                         </a>
                     </div>

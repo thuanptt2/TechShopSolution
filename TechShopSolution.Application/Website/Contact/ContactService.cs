@@ -39,7 +39,7 @@ namespace TechShopSolution.Application.Website.Contact
             {
                 adress = a.adress,
                 company_name = a.company_name,
-                company_logo = GetBase64StringForImage(_storageService.GetFileUrl(a.company_logo)),
+                company_logo = a.company_logo,
                 email = a.email,
                 fax = a.fax,
                 hotline = a.hotline,
@@ -84,12 +84,6 @@ namespace TechShopSolution.Application.Website.Contact
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-        protected static string GetBase64StringForImage(string imgPath)
-        {
-            byte[] imageBytes = File.ReadAllBytes(imgPath);
-            string base64String = Convert.ToBase64String(imageBytes);
-            return base64String;
-        }
         public async Task<ApiResult<bool>> CreateFeedback(FeedbackCreateRequest request)
         {
             try
@@ -126,7 +120,7 @@ namespace TechShopSolution.Application.Website.Contact
 
             int totalRow = await query.CountAsync();
 
-            var data = query.OrderBy(m => m.create_at)
+            var data = query.OrderByDescending(m => m.create_at)
                 .Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(a => new FeedbackViewModel()

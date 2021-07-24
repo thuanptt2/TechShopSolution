@@ -114,10 +114,13 @@ namespace TechShopSolution.ApiIntegration
             requestContent.Add(new StringContent(request.Instock.ToString()), "Instock");
             requestContent.Add(new StringContent(request.IsActive.ToString()), "IsActive");
             requestContent.Add(new StringContent(request.Name.ToString()), "Name");
-            requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
             requestContent.Add(new StringContent(request.Slug.ToString()), "Slug");
             requestContent.Add(new StringContent(request.Unit_price.ToString()), "Unit_price");
             requestContent.Add(new StringContent(request.Warranty.ToString()), "Warranty");
+            if (request.Promotion_price != null)
+            {
+                requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
+            }
             if (request.Specifications != null)
             {
                 requestContent.Add(new StringContent(request.Specifications.ToString()), "Specifications");
@@ -186,15 +189,25 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
         }
-        public async Task<ApiResult<PublicProductDetailViewModel>> GetPublicProductDetail(string slug)
+        public async Task<ApiResult<ProductViewModel>> GetPublicProductDetail(string slug, int? cus_id)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/product/slug?slug={slug}");
+            var respone = await client.GetAsync($"/api/product/slug?slug={slug}&cus_id={cus_id}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<PublicProductDetailViewModel>>(body);
-            return JsonConvert.DeserializeObject<ApiErrorResult<PublicProductDetailViewModel>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
+        }
+        public async Task<List<RatingViewModel>> GetRatingsProduct(string slug)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/rating?slug={slug}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<RatingViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<RatingViewModel>>(body);
         }
         public async Task<PagedResult<ProductViewModel>> GetProductPagings(GetProductPagingRequest request)
         {
@@ -271,7 +284,6 @@ namespace TechShopSolution.ApiIntegration
                 requestContent.Add(byteArr, "More_images", item.Name);
                 File.Delete(item.PhysicalPath);
             }
-
             requestContent.Add(new StringContent(request.Best_seller.ToString()), "Best_seller");
             requestContent.Add(new StringContent(request.Brand_id.ToString()), "Brand_id");
             requestContent.Add(new StringContent(request.CateID.ToString()), "CateID");
@@ -281,10 +293,19 @@ namespace TechShopSolution.ApiIntegration
             requestContent.Add(new StringContent(request.Instock.ToString()), "Instock");
             requestContent.Add(new StringContent(request.IsActive.ToString()), "IsActive");
             requestContent.Add(new StringContent(request.Name.ToString()), "Name");
-            requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
             requestContent.Add(new StringContent(request.Slug.ToString()), "Slug");
-            requestContent.Add(new StringContent(request.Unit_price.ToString()), "Unit_price");
-            requestContent.Add(new StringContent(request.Warranty.ToString()), "Warranty");
+            if (request.Unit_price != null)
+            {
+                requestContent.Add(new StringContent(request.Unit_price.ToString()), "Unit_price");
+            }
+            if (request.Promotion_price != null)
+            {
+                requestContent.Add(new StringContent(request.Promotion_price.ToString()), "Promotion_price");
+            }
+            if (request.Warranty != null)
+            {
+                requestContent.Add(new StringContent(request.Warranty.ToString()), "Warranty");
+            }
             if (request.Specifications != null)
             {
                 requestContent.Add(new StringContent(request.Specifications.ToString()), "Specifications");
@@ -321,20 +342,6 @@ namespace TechShopSolution.ApiIntegration
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/product?slug={slug}&code={Code}");
             return respone.IsSuccessStatusCode;
-        }
-        public async Task<List<ImageListResult>> GetImageByProductID(int id)
-        {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/product/image/{id}");
-            var body = await respone.Content.ReadAsStringAsync();
-            if (respone.IsSuccessStatusCode)
-            {
-                var result =  JsonConvert.DeserializeObject<List<ImageListResult>>(body);
-                return result;
-            }
-            else return null;
-               
         }
         public async Task<List<CategoryViewModel>> GetAllCategory()
         {
@@ -394,29 +401,15 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<PublicCayegoyProductsViewModel>(body);
             return JsonConvert.DeserializeObject<PublicCayegoyProductsViewModel>(body);
         }
-        public async Task<List<ProductViewModel>> GetProductsRelated(int id, int take)
+        public async Task<List<ProductOverViewModel>> GetProductsRelated(int id, int take)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var respone = await client.GetAsync($"/api/product/related?idBrand={id}&take={take}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
-            return JsonConvert.DeserializeObject<List<ProductViewModel>>(body);
-        }
-        public async Task<ApiResult<bool>> RatingPoduct(ProductRatingRequest request)
-        {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var respone = await client.PostAsync($"/api/product/rating", httpContent);
-            var result = await respone.Content.ReadAsStringAsync();
-            if (respone.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-            else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+                return JsonConvert.DeserializeObject<List<ProductOverViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductOverViewModel>>(body);
         }
 
     }

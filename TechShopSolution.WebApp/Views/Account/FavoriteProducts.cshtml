@@ -1,0 +1,90 @@
+﻿@using TechShopSolution.ViewModels.Common;
+@model PagedResult<TechShopSolution.ViewModels.Catalog.Product.ProductOverViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@using System.Security.Claims;
+
+
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+    ViewData["Title"] = "Sản phẩm yêu thích";
+}
+@section Script{
+    <script src="~/js/FavoriteProducts.js"></script>
+}
+@if (Model.Items != null)
+{
+    <div class="span9">
+        <ul class="breadcrumb">
+            <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+            <li> <a href="@Url.Action("Detail", "Account")">Tài khoản</a> <span class="divider">/</span></li>
+            <li class="active">Sản phẩm yêu thích</li>
+        </ul>
+        <h3> Danh sách sản phẩm yêu thích</h3>
+        <hr class="soft" />
+
+
+        <br class="clr" />
+        @if (Model.Items.Count != 0)
+        {
+            for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <div class="wrapper-content margin-bottom-20 margin-top-20" id="@Model.Items[i].id">
+                    <div class="row">
+                        <div class="span2">
+                            <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Items[i].image)" alt="@Model.Items[i].name" />
+                        </div>
+                        <div class="span3">
+                            @{
+                                if (Model.Items[i].instock > 1 || Model.Items[i].instock == null)
+                                {
+                                    <h4>Có sẵn</h4>
+                                }
+                                else
+                                {
+                                    <h4 class="OutOfStock">Hết hàng</h4>
+                                }
+                            }
+                            <hr class="soft" />
+                            <h4 class="product-category-name">@Model.Items[i].name</h4>
+                            <br class="clr" />
+                        </div>
+                        <div class="span3 alignR">
+                            <form class="form-horizontal qtyFrm">
+                                @if (Model.Items[i].promotion_price > 1)
+                                {
+
+                                    string percent = (1 - (Model.Items[i].promotion_price / Model.Items[i].unit_price)).ToString("0.00%");
+                                    <i class="icon-tags"></i><span class="product-category-percent-price-promotion">&nbsp; Khuyến mãi @percent</span>
+                                    <br class="clr">
+                                    <span class="product-category-promotion-pirce">@String.Format(info, "{0:c}", Model.Items[i].unit_price)</span>
+                                    <span class="product-category-price">@String.Format(info, "{0:c}", Model.Items[i].promotion_price)</span>
+                                }
+                                else
+                                {
+                                    <span class="product-category-price">@String.Format(info, "{0:c}", Model.Items[i].unit_price)</span>
+                                }
+                                <br class="clr" />
+                                <div class="margin-top-20">
+                                    <button class="btn btn-large unfavorite" data-cusid="@User.FindFirst(ClaimTypes.Sid).Value" data-productid="@Model.Items[i].id"> Hủy yêu thích</button>
+                                    <a href="@Url.Action("Detail", "Product", new { slug = Model.Items[i].slug })" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+        else
+        {
+            <div class="text-center margin-top-20">
+                <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
+                <p>Quý khách chưa có sản phẩm yêu thích nào</p>
+            </div>
+        }
+
+        <hr class="soft" />
+        @await Component.InvokeAsync("Pager", ViewBag.PageResult)
+    </div>
+}

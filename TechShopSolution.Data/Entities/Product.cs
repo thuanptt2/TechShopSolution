@@ -17,6 +17,7 @@ namespace TechShopSolution.Data.Entities
         public decimal promotion_price { get; set; }
         public int warranty { get; set; }
         public int? instock { get; set; }
+        public int view_count { get; set; }
         public string specifications { get; set; }
         public string short_desc { get; set; }
         public string descriptions { get; set; }
@@ -34,5 +35,6 @@ namespace TechShopSolution.Data.Entities
         public List<CategoryProduct> ProductInCategory { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
         public List<Rating> Ratings { get; set; }
+        public List<Favorite> Favoriters { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@model TechShopSolution.ViewModels.Transport.TransporterUpdateRequest
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Chi tiết đơn vị vận chuyển";
@@ -39,7 +40,7 @@
                                         }
                                         else
                                         {
-                                            <img src="data:image/jpeg;base64,@Model.imageBase64" id="ProductImage" data-name="@Model.name" class="image hoverDel" />
+                                            <img src="@(Configuration["BaseAddress"] + "/user-content/" + @Model.imageBase64)" id="ProductImage" data-name="@Model.name" class="image hoverDel" />
                                         }
                                     </div>
                                     <div class="custom-file">

@@ -4,6 +4,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.Data.EF;
@@ -30,7 +31,16 @@ namespace TechShopSolution.Application.System
             {
                 return null;
             }
-            if (admin.password != request.Password)
+
+            SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider();
+
+
+            byte[] password_bytes = Encoding.ASCII.GetBytes(request.Password);
+            byte[] encrypted_bytes = sha1.ComputeHash(password_bytes);
+
+            request.Password = Convert.ToBase64String(encrypted_bytes);
+
+            if (!admin.password.Equals(request.Password))
             {
                 return null;
             }
@@ -67,6 +77,15 @@ namespace TechShopSolution.Application.System
                 {
                     return new ApiErrorResult<string>("Tài khoản này đang bị khóa. Quý khách vui lòng liên hệ với QTV để biết thêm thông tin.");
                 }
+
+                SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider();
+
+
+                byte[] password_bytes = Encoding.ASCII.GetBytes(request.Password);
+                byte[] encrypted_bytes = sha1.ComputeHash(password_bytes);
+
+                request.Password = Convert.ToBase64String(encrypted_bytes);
+
                 if (customer.password != request.Password)
                 {
                     return new ApiErrorResult<string>("Sai mật khẩu.");

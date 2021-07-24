@@ -10,10 +10,12 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TechShopSolution.ApiIntegration;
 using TechShopSolution.ViewModels.System;
+using System.Security.Cryptography;
 
 namespace TechShopSolution.AdminApp.Controllers
 {
@@ -53,6 +55,7 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 if (!ModelState.IsValid)
                     return View(request);
+               
                 var token = await _adminApiClient.Authenticate(request);
 
                 var adminPrincipal = this.ValidateToken(token);
@@ -80,7 +83,6 @@ namespace TechShopSolution.AdminApp.Controllers
                 return View(request);
             }
         }
-
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
@@ -97,6 +99,27 @@ namespace TechShopSolution.AdminApp.Controllers
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
 
             return principal;
+        }
+    }
+    public class HashSaltWithRounds
+    {
+        int saltLength = 32;
+        public byte[] GenerateSalt()
+        {
+            using (var randomNumberGenerator = new RNGCryptoServiceProvider())
+            {
+                var randomNumber = new byte[saltLength];
+                randomNumberGenerator.GetBytes(randomNumber);
+                return randomNumber;
+            }
+        }
+
+        public string HashDataWithRounds(byte[] password, byte[] salt, int rounds)
+        {
+            using (var rfc2898 = new Rfc2898DeriveBytes(password, salt, rounds))
+            {
+                return Convert.ToBase64String(rfc2898.GetBytes(32));
+            }
         }
     }
 }
