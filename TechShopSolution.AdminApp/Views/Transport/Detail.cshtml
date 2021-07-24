@@ -380,10 +380,10 @@
                 @if (Model.Transport.ship_status != -1 && Model.Transport.ship_status != 2)
                 {
                     <div class="text-right mt-3">
-                        <a class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn vận chuyển này, hành động này không thể hoàn tác?')" href="@Url.Action("CancelShippingOrder","Transport",new { id = Model.Transport.id })">
+                        <a class="btn btn-danger mb-3" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn vận chuyển này, hành động này không thể hoàn tác?')" href="@Url.Action("CancelShippingOrder","Transport",new { id = Model.Transport.id })">
                             Hủy giao hàng
                         </a>
-                        <a class="btn btn-success" onclick="return confirm('Bạn có chắc chắn muốn xác nhận giao hàng thành công không, hành động này không thể hoàn tác?')" href="@Url.Action("ConfirmDoneShip","Transport",new { transport_id = Model.Transport.id })">
+                        <a class="btn btn-success mb-3" onclick="return confirm('Bạn có chắc chắn muốn xác nhận giao hàng thành công không, hành động này không thể hoàn tác?')" href="@Url.Action("ConfirmDoneShip","Transport",new { transport_id = Model.Transport.id })">
                             Xác nhận giao hàng thành công
                         </a>
                     </div>
