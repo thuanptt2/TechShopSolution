@@ -290,21 +290,22 @@ namespace TechShopSolution.Application.Catalog.Product
                         query = query.OrderByDescending(x => x.p.name);
                         break;
                     case 3:
-                        query = query.OrderBy(x => x.p.unit_price);
+                        query = query.OrderBy(x => x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price);
                         break;
                     case 4:
-                        query = query.OrderByDescending(x => x.p.unit_price);
+                        query = query.OrderByDescending(x => x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price);
                         break;
                 }
                 if (request.Lowestprice != null && request.Highestprice != null)
                 {
-                    query = query.Where(x => x.p.unit_price >= request.Lowestprice && x.p.unit_price <= request.Highestprice);
+                    query = query.Where(x => (x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price) >= request.Lowestprice 
+                    && (x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price) <= request.Highestprice);
                 } else if (request.Lowestprice != null && request.Highestprice == null)
                 {
-                    query = query.Where(x => x.p.unit_price >= request.Lowestprice);
+                    query = query.Where(x => (x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price) >= request.Lowestprice);
                 } else if (request.Lowestprice == null && request.Highestprice != null)
                 {
-                    query = query.Where(x => x.p.unit_price <= request.Highestprice);
+                    query = query.Where(x => (x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price) <= request.Highestprice);
                 }
 
 
@@ -314,7 +315,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 int totalRow = data.Count();
 
                 List<ProductOverViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
-                    .OrderBy(emp => Guid.NewGuid())
                     .Take(request.PageSize)
                     .Select(a => new ProductOverViewModel()
                     {

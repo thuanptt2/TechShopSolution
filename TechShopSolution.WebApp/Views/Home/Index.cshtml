@@ -50,7 +50,7 @@
                             List<ProductOverViewModel> featuredPart = new List<ProductOverViewModel>();
                         }
 
-                        @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
+                        @for (int index = 0; index < Model.FeaturedProducts.Products.Count; index++)
                         {
                             featuredPart.Add(Model.FeaturedProducts.Products[index]);
                             if (featuredPart.Count == 4 || index == Model.FeaturedProducts.Count - 1)
@@ -126,7 +126,7 @@
                             List<ProductOverViewModel> bestSellerPart = new List<ProductOverViewModel>();
                         }
 
-                        @for (int index = 0; index < Model.BestSellerProducts.Count; index++)
+                        @for (int index = 0; index < Model.BestSellerProducts.Products.Count; index++)
                         {
                             bestSellerPart.Add(Model.BestSellerProducts.Products[index]);
                             if (bestSellerPart.Count == 4 || index == Model.BestSellerProducts.Count - 1)
@@ -353,7 +353,6 @@
                         {
                             <li class="span3">
                                 <div class="thumbnail">
-                                    @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
                                     @if (product.featured)
                                     {
                                         <i class="tag-featured"></i>
@@ -366,7 +365,7 @@
                                     {
                                         <i class="tag-sale"></i>
                                     }
-                                    else if (days.TotalDays == 7)
+                                    else if ((DateTime.Now - product.create_at).TotalDays < 7)
                                     {
                                         <i class="tag"></i>
                                     }
@@ -422,7 +421,6 @@
                         {
                             <li class="span3">
                                 <div class="thumbnail">
-                                    @{ TimeSpan days = DateTime.Now.Subtract(product.create_at); }
                                     @if (product.featured)
                                     {
                                         <i class="tag-featured"></i>
@@ -435,7 +433,7 @@
                                     {
                                         <i class="tag-sale"></i>
                                     }
-                                    else if (days.TotalDays == 7)
+                                    else if ((DateTime.Now - product.create_at).TotalDays < 7)
                                     {
                                         <i class="tag"></i>
                                     }
@@ -468,5 +466,74 @@
                 }
             </ul>
         </div>
+
+        <div class="background-category-section-1 ladi-image-background">
+            <div class="image-category-mainboard image-category-product">
+
+
+            </div>
+            @if (Model.ListCategoryProducts[3].Category != null)
+            {
+                <a class="pull-right-text read-more" href="@Url.Action("Category", "Product", new { slug = Model.ListCategoryProducts[3].Category.cate_slug })">
+
+                    <img src="~/images/button-9-18-8-2018.gif" width="100" height="50" />
+                </a>
+            }
+
+            <ul class="thumbnails category-products">
+                @{
+                    if (Model.ListCategoryProducts[3].Products != null)
+                    {
+                        foreach (var product in Model.ListCategoryProducts[3].Products)
+                        {
+                            <li class="span3">
+                                <div class="thumbnail">
+                                    @if (product.featured)
+                                    {
+                                        <i class="tag-featured"></i>
+                                    }
+                                    else if (product.best_seller)
+                                    {
+                                        <i class="tag-best-seller"></i>
+                                    }
+                                    else if (product.promotion_price > 1)
+                                    {
+                                        <i class="tag-sale"></i>
+                                    }
+                                    else if ((DateTime.Now - product.create_at).TotalDays < 7)
+                                    {
+                                        <i class="tag"></i>
+                                    }
+                                    <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @product.image)" alt="@product.name" /></a>
+                                    <div class="caption">
+                                        <h5>@product.name</h5>
+                                    </div>
+                                    <div class="footer-thumbnail">
+                                        @if (product.promotion_price > 1)
+                                        {
+                                            <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                            <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                        }
+                                    </div>
+                                    <div class="product-short-desc">
+                                        @Html.Raw(product.short_desc)
+                                    </div>
+                                    <h4 style="text-align:center">
+                                        <a class="btn btn-add-cart" data-id="@product.id" href="#">Thêm vào <i class="icon-shopping-cart"></i></a>
+                                        <a class="btn btn-danger btn-buy-now" data-id="@product.id" href="#">Mua ngay</a>
+                                    </h4>
+                                </div>
+                            </li>
+                        }
+
+                    }
+                }
+            </ul>
+        </div>
+
     </div>
 </div>

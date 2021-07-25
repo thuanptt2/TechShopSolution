@@ -40,7 +40,7 @@ else
         <div class="row product-detail">
             <div id="gallery" class="span3">
                 <a href="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" title="@Model.Product.name">
-                    <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" style="width:100%" alt="@Model.Product.name" />
+                    <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" style="width:96%" alt="@Model.Product.name" />
                 </a>
                 @{
                     if (!string.IsNullOrWhiteSpace(Model.Product.more_images))

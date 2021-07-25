@@ -5,7 +5,7 @@
 @{
     ViewData["Title"] = "Danh sách sản phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var pageIndex = Context.Request.Query["pageIndex"];
+    var query = Context.Request.Query;
 }
 @section jsFooter {
     @if (ViewBag.ErrorMsg != null)
@@ -90,7 +90,7 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light thead-dark">
                     <tr>
-                        <th scope="col" width="60px"  class="text-center">
+                        <th scope="col" width="60px" class="text-center">
                             Ảnh
                         </th>
                         <th scope="col" width="400px">
@@ -129,7 +129,7 @@
                     }
                     else if (Model.TotalRecords == 0)
                     {
-                      
+
                         <tr>
                             <td colspan="9"> Không tìm thấy sản phẩm.</td>
                         </tr>
@@ -155,18 +155,19 @@
                                     @String.Format(info, "{0:N0}", item.unit_price)
                                 </td>
                                 <td>
-                                    @String.Format(info, "{0:N0}", item.promotion_price)
+                                    @(item.promotion_price != 0 ? String.Format(info, "{0:N0}", item.promotion_price) : "")
+                                  
                                 </td>
                                 @if (item.isActive)
                                 {
                                     <td align="center">
-                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Product", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("ChangeStatus", "Product", new { id = item.id, pageIndex = query["pageIndex"], Keyword = query["Keyword"], CategoryID = query["CategoryID"], BrandID = query["BrandID"] })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Product", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("ChangeStatus", "Product", new { id = item.id, pageIndex = query["pageIndex"], Keyword = query["Keyword"], CategoryID = query["CategoryID"], BrandID = query["BrandID"] })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
 
@@ -174,29 +175,29 @@
                                 @if (item.best_seller)
                                 {
                                     <td align="center">
-                                        <input type="checkbox" checked onchange="location.href='@Url.Action("OffBestSeller", "Product", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("OffBestSeller", "Product", new { id = item.id, pageIndex = query["pageIndex"], Keyword = query["Keyword"], CategoryID = query["CategoryID"], BrandID = query["BrandID"] })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("OffBestSeller", "Product", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("OffBestSeller", "Product", new { id = item.id, pageIndex = query["pageIndex"], Keyword = query["Keyword"], CategoryID = query["CategoryID"], BrandID = query["BrandID"] })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 @if (item.featured)
                                 {
                                     <td align="center">
-                                        <input type="checkbox" checked onchange="location.href='@Url.Action("OffFeatured", "Product", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" checked onchange="location.href='@Url.Action("OffFeatured", "Product", new { id = item.id, pageIndex = query["pageIndex"], Keyword = query["Keyword"], CategoryID = query["CategoryID"], BrandID = query["BrandID"] })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 else
                                 {
                                     <td align="center">
-                                        <input type="checkbox" onchange="location.href='@Url.Action("OffFeatured", "Product", new { id = item.id, pageIndex = pageIndex })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
+                                        <input type="checkbox" onchange="location.href='@Url.Action("OffFeatured", "Product", new { id = item.id, pageIndex = query["pageIndex"], Keyword = query["Keyword"], CategoryID = query["CategoryID"], BrandID = query["BrandID"] })'" data-toggle="toggle" data-onstyle="info" data-height="30" data-width="70">
                                     </td>
                                 }
                                 <td align="center">
-                                    <a href="@Url.Action("Delete", "Product", new { id = item.id, pageIndex = pageIndex })" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này, hành động này không thể hoàn tác?')">Xóa</a>
+                                    <a href="@Url.Action("Delete", "Product", new { id = item.id, pageIndex = query["pageIndex"], Keyword = query["Keyword"], CategoryID = query["CategoryID"], BrandID = query["BrandID"] })" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này, hành động này không thể hoàn tác?')">Xóa</a>
                                 </td>
                             </tr>
                         }

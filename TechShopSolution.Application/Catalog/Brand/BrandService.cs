@@ -126,7 +126,7 @@ namespace TechShopSolution.Application.Catalog.Brand
             if (query == null)
                 return null;
 
-            var data = query.OrderByDescending(m => m.create_at)
+            var data = query.OrderBy(m => m.brand_name)
                 .Select(a => new BrandViewModel()
                 {
                     id = a.id,

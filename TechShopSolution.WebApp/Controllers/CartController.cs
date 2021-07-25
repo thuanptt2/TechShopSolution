@@ -126,8 +126,11 @@ namespace TechShopSolution.WebApp.Controllers
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             CartViewModel currentCart = new CartViewModel();
             List<CreateOrderDetailRequest> OrderDetail = new List<CreateOrderDetailRequest>();
-            if (session != null)
+            if (!string.IsNullOrWhiteSpace(session))
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+            else {
+                return RedirectToAction("Index", "Home");
+            }
             string coupon_code = "";  decimal amount = 0; decimal total = 0; decimal discount = 0;
 
             foreach (var item in currentCart.items)
@@ -261,7 +264,7 @@ namespace TechShopSolution.WebApp.Controllers
                 var contentMailClient = sendMailToClient(int.Parse(result.ResultObject), request);
                 var contentMailAdmin = sendMailToAdmin(int.Parse(result.ResultObject), request, customer.ResultObject);
                 await SendMail(customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMailClient);
-                await SendMail("thuanneuwu2@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin);
+                await SendMail("thuanneuwu@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin);
                 return RedirectToAction("Index","Home");
             }
             TempData["error"] = result.Message;
