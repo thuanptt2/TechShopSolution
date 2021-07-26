@@ -1,0 +1,32 @@
+﻿
+@{
+    Layout = null;
+}﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.ErrorTitle</title>
+    <link href="~/css/Error.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="page">
+        <div class="main">
+            <h1>Có lỗi xảy ra</h1>
+            <div class="error-code">@ViewBag.StatusCode</div>
+            <h2>@ViewBag.ErrorTitle</h2>
+            <p class="lead">@ViewBag.ErrorMsg</p>
+            <hr />
+            <p>Bạn có thể làm gì ?</p>
+            <div class="help-actions">
+                <a href="javascript:location.reload();">Tải lại trang</a>
+                <a href="javascript:history.back();">Trở về trang trước</a>
+                <a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a>
+            </div>
+            <h3>Hoặc <a href="@Url.Action("Index", "Contact")">gửi phản hồi</a> với chúng tôi để thông báo về sự cố này.</h3>
+        </div>
+    </div>
+</body>
+</html>

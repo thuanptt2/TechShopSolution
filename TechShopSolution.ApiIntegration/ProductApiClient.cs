@@ -5,8 +5,10 @@ using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -197,6 +199,10 @@ namespace TechShopSolution.ApiIntegration
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
+            if((int)respone.StatusCode > 400)
+            {
+                return new ApiErrorResult<ProductViewModel>("", (int)respone.StatusCode);
+            }
             return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
         }
         public async Task<List<RatingViewModel>> GetRatingsProduct(string slug)
