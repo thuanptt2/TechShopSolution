@@ -27,9 +27,8 @@ namespace TechShopSolution.WebApp.Controllers
             _customerApiClient = customerApiClient;
         }
 
-        [HttpGet]
-            [Route("tai-khoan/don-hang")]
-        public async Task<IActionResult> OrderTracking()
+        [Route("tai-khoan/don-hang")]
+        public async Task<IActionResult> OrderTracking(string dieukien, int pageIndex = 1, int pageSize = 8)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -37,14 +36,14 @@ namespace TechShopSolution.WebApp.Controllers
             }
             var id = User.FindFirst(ClaimTypes.Sid).Value;
 
-            var result = await _customerApiClient.GetCustomerOrders(int.Parse(id));
-            if (!result.IsSuccess)
-            {
-                TempData["error"] = result.Message;
-                return RedirectToAction("Index", "Home");
-            }
-            ViewBag.Model = result.ResultObject;
-            return View();
+            var result = await _customerApiClient.GetCustomerOrders(new GetCustomerOrderRequest() { 
+                cus_id = int.Parse(id),
+                filter = dieukien,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            });
+            ViewBag.DieuKien = dieukien;
+            return View(result);
         }
         [HttpGet]
         [Route("tai-khoan/don-hang/{id}")]

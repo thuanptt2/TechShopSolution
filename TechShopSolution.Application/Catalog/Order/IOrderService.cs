@@ -16,7 +16,7 @@ namespace TechShopSolution.Application.Catalog.Order
         Task<ApiResult<string>> PaymentConfirm(int id);
         Task<ApiResult<string>> ConfirmOrder(int id);
         Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request);
-        Task<ApiResult<List<OrderPublicViewModel>>> GetCustomerOrders(int id);
+        PagedResult<OrderPublicViewModel> GetCustomerOrders(GetCustomerOrderRequest request);
         ApiResult<OrderPublicViewModel> GetDetailOrder(int id, int cus_id );
     }
 }

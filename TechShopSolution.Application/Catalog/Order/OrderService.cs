@@ -187,7 +187,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     break;
                 case 3:
                     // Chờ thanh toán
-                    result = result.Where(x => !x.isPay).ToList();
+                    result = result.Where(x => !x.isPay && x.status == 1).ToList();
                     break;
                 case 4:
                     // Chờ vận chuyển
@@ -383,18 +383,13 @@ namespace TechShopSolution.Application.Catalog.Order
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-        public async Task<ApiResult<List<OrderPublicViewModel>>> GetCustomerOrders(int id)
+        public PagedResult<OrderPublicViewModel> GetCustomerOrders(GetCustomerOrderRequest request)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if(customer == null)
-                return new ApiErrorResult<List<OrderPublicViewModel>>("Khách hàng không tồn tại");
-
             var query = from od in _context.OrDetails
                         join p in _context.Products on od.product_id equals p.id
                         join o in _context.Orders on od.order_id equals o.id
-                        where o.cus_id == id
+                        where o.cus_id == request.cus_id
                         select new { p, o, od };
-            
 
             var data = query.AsEnumerable()
                   .GroupBy(g => g.o);
@@ -428,7 +423,37 @@ namespace TechShopSolution.Application.Catalog.Order
                 else item.ship_status = 0;
             }
 
-            return new ApiSuccessResult<List<OrderPublicViewModel>>(Orders);
+
+            if (!String.IsNullOrEmpty(request.filter))
+            {
+                if (request.filter == "cho-duyet")
+                    Orders = Orders.Where(x => x.order_status == 0).ToList();
+                else if (request.filter == "cho-thanh-toan")
+                    Orders = Orders.Where(x => !x.pay_status && x.order_status == 1).ToList();
+                else if (request.filter == "cho-giao-hang")
+                    Orders = Orders.Where(x => x.ship_status == 0 && x.pay_status && x.order_status != -1).ToList();
+                else if (request.filter == "dang-giao-hang")
+                    Orders = Orders.Where(x => x.ship_status == 1).ToList();
+                else if (request.filter == "thanh-cong")
+                    Orders = Orders.Where(x => x.ship_status == 2).ToList();
+                else if (request.filter == "da-huy")
+                    Orders = Orders.Where(x => x.order_status == -1).ToList();
+            }
+
+            int totalRow = Orders.Count();
+
+            Orders = Orders.Skip((request.PageIndex - 1) * request.PageSize)
+                           .Take(request.PageSize).ToList();
+
+
+            var pageResult = new PagedResult<OrderPublicViewModel>()
+            {
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Items = Orders,
+            };
+            return pageResult;
         }
         public ApiResult<OrderPublicViewModel> GetDetailOrder(int id, int cus_id)
         {
