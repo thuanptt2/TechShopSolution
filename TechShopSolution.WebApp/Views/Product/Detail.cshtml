@@ -65,7 +65,7 @@
             <div typeof="schema:Offer">
                 <div property="schema:price" content="@(Model.Product.promotion_price > 0 ?  Model.Product.promotion_price :  Model.Product.unit_price)"></div>
                 <div property="schema:availability" content="https://schema.org/InStock"></div>
-                <div property="schema:priceCurrency" content="VND"></div>
+                <div property="schema:priceCurrency" content="VNĐ"></div>
                 <div property="schema:priceValidUntil" datatype="xsd:date" content="@DateTime.Now"></div>
                 <div rel="schema:url" resource="@(Configuration["BaseAddress"] + "/" + Model.Product.slug)"></div>
                 <div property="schema:itemCondition" content="https://schema.org/UsedCondition"></div>
@@ -73,8 +73,6 @@
         </div>
         <div rel="schema:image" resource="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)"></div>
     </div>
-    <!--Structured data Giấy phép hình ảnh-->
-
 
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0&appId=846669762547678&autoLogAppEvents=1" nonce="xvuFE9SJ"></script>
@@ -105,9 +103,10 @@ else
         </ul>
         <div class="row product-detail">
             <div id="gallery" class="span3">
-                <a href="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" title="@Model.Product.name">
+                <a href="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)">
                     <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" style="width:96%" alt="@Model.Product.name" />
                 </a>
+
                 @{
                     if (!string.IsNullOrWhiteSpace(Model.Product.more_images))
                     {

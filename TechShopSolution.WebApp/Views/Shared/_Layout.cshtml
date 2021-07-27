@@ -1,4 +1,6 @@
 ﻿@using System.Security.Claims;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +8,7 @@
     <title>@ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@ViewData["Description"]">
-    <meta name="author" content="TechShop">
+    <meta name="author" content="TechShop Việt Nam">
     <meta name="keywords" content="@ViewData["Keywords"]">
     <link id="callCss" rel="stylesheet" href="/themes/bootshop/bootstrap.min.css" media="screen" />
     <link href="/themes/css/base.css" rel="stylesheet" media="screen" />
@@ -16,7 +18,7 @@
     <!-- Google-code-prettify -->
     <link href="/themes/js/google-code-prettify/prettify.css" rel="stylesheet" />
     <!-- fav and touch icons -->
-    <link rel="shortcut icon" href="/themes/images/ico/favicon.ico">
+    <link rel="shortcut icon" href="@(Configuration["BaseAddress"] + "/user-content/logo_company.jpg")">
     <style type="text/css" id="enject"></style>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
