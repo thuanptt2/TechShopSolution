@@ -16,11 +16,9 @@ namespace TechShopSolution.Application.Catalog.Order
     public class OrderService : IOrderService
     {
         private readonly TechShopDBContext _context;
-        private readonly IStorageService _storageService;
-        public OrderService(TechShopDBContext context, IStorageService storageService)
+        public OrderService(TechShopDBContext context)
         {
             _context = context;
-            _storageService = storageService;
         }
         public async Task<ApiResult<string>> Create(CheckoutRequest request)
         {
@@ -143,23 +141,15 @@ namespace TechShopSolution.Application.Catalog.Order
         {
             var query = from o in _context.Orders
                         join c in _context.Customers on o.cus_id equals c.id
-                        join od in _context.OrDetails on o.id equals od.order_id
-                        select new { o , od, c};
-
-            if (!String.IsNullOrEmpty(request.Keyword))
-            {
-                query = query.Where(x => x.o.id.ToString().Contains(request.Keyword) || x.o.name_receiver.Contains(request.Keyword));
-            }
+                        join od in _context.OrDetails on o.id equals od.order_id 
+                        select new { o , c };
 
 
             var data = query.AsEnumerable()
                    .GroupBy(g => g.o);
 
-            int totalRow = data.Count();
 
             List<OrderViewModel> result = data.OrderByDescending(x => x.Key.create_at)
-                .Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
                 .Select(a => new OrderViewModel()
                 {
                     id = a.Key.id,
@@ -184,6 +174,40 @@ namespace TechShopSolution.Application.Catalog.Order
                 }
                 else item.ship_status = 0;
             }
+
+            if (!String.IsNullOrEmpty(request.Keyword))
+            {
+                result = result.Where(x => x.id.ToString().Contains(request.Keyword) || x.name_receiver.Contains(request.Keyword)).ToList();
+            }
+            switch (request.type)
+            {
+                case 2:
+                    // Chờ duyệt
+                    result = result.Where(x => x.status == 0).ToList();
+                    break;
+                case 3:
+                    // Chờ thanh toán
+                    result = result.Where(x => !x.isPay).ToList();
+                    break;
+                case 4:
+                    // Chờ vận chuyển
+                    result = result.Where(x => x.ship_status == 0 && x.isPay & x.status != -1).ToList();
+                    break;
+                case 5:
+                    // Giao thành công
+                    result = result.Where(x => x.ship_status == 2).ToList();
+                    break;
+                case 6:
+                    // Đơn hàng đã hủy
+                    result = result.Where(x => x.status == -1).ToList();
+                    break;
+            }
+
+            int totalRow = result.Count();
+
+            result = result.Skip((request.PageIndex - 1) * request.PageSize)
+                           .Take(request.PageSize).ToList();
+
 
             var pageResult = new PagedResult<OrderViewModel>()
             {

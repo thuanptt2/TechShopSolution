@@ -33,6 +33,7 @@ namespace TechShopSolution.AdminApp.Controllers
             };
             var data = await _orderApiClient.GetOrderPagings(request);
             ViewBag.Keyword = keyword;
+            ViewBag.IdSort = type;
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];

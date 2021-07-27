@@ -38,7 +38,7 @@ namespace TechShopSolution.ApiIntegration
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/order/paging?Keyword={request.Keyword}&pageIndex=" +
+            var respone = await client.GetAsync($"/api/order/paging?Keyword={request.Keyword}&type={request.type}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
             var body = await respone.Content.ReadAsStringAsync();
             var order = JsonConvert.DeserializeObject<PagedResult<OrderViewModel>>(body);

@@ -201,7 +201,6 @@ namespace TechShopSolution.Application.Catalog.Transport
 
             return await data;
         }
-       
         public async Task<ApiResult<OrderDetailViewModel>> Detail(int id)
         {
             var query = from tp in _context.Transports

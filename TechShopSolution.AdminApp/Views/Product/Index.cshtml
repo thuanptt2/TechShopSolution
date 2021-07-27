@@ -45,29 +45,32 @@
     </ol>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="padding-container">
-        <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Product">
+        <a class="btn btn-success mt-3" asp-action="Create" asp-controller="Product">
             <i class="fa fa-plus"></i>
             Thêm mới
         </a>
         <!-- Navbar Search-->
         <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
-            <div class="input-group">
-                <label for="pet-select"></label>
-
-                <div class="form-group mr-3">
+            <div class="input-group mb-3">
+                <div class="form-group mr-3 mb-3">
+                    <label>Lọc sản phẩm theo loại: </label>
                     <select name="CategoryID" asp-items="ViewBag.Categories" class="form-select">
-                        <option value="" class="font-italic">Lọc theo loại sản phẩm</option>
+                        <option value="" class="font-italic">Chọn loại sản phẩm</option>
                     </select>
                 </div>
-                <div class="form-group mr-3">
+                <div class="form-group mr-3 mb-3">
+                    <label>Lọc sản phẩm theo thương hiệu: </label>
                     <select name="BrandID" asp-items="ViewBag.Brands" class="form-select">
-                        <option value="" class="font-italic">Lọc theo thương hiệu</option>
+                        <option value="" class="font-italic">Chọn thương hiệu</option>
                     </select>
                 </div>
-                <div class="form-group d-flex">
-                    <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
-                    <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/product/index'"><i class="fas fa-times"></i></button>
+                <div class="form-group flex-column align-items-sm-start">
+                    <label>Tìm kiếm sản phẩm: </label>
+                    <div class="d-flex">
+                        <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
+                        <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
+                        <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/product/index'"><i class="fas fa-times"></i></button>
+                    </div>
                 </div>
             </div>
         </form>
