@@ -5,6 +5,7 @@
     if (ViewBag.Model != null)
     {
         ViewData["Title"] = "Chi tiết đơn hàng #" + ViewBag.Model.id;
+        ViewData["Robots"] = "noindex,nofollow";
     }
 
     Layout = "~/Views/Shared/_Layout.cshtml";

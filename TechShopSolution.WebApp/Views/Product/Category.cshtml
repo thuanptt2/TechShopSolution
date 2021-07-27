@@ -9,6 +9,7 @@
         ViewData["Description"] = Model.Category.meta_descriptions;
         ViewData["Keywords"] = Model.Category.meta_keywords;
     }
+    ViewData["Robots"] = "index,follow";
 }
 @section Script {
     <script src="~/js/FilterPrice.js"></script>

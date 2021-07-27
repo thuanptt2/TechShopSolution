@@ -26,6 +26,7 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             var request = new GetOrderPagingRequest()
             {
+                type = type,
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
