@@ -268,7 +268,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && p.isActive == true
+                            where p.isDelete == false
                             select new { p, pic, c };
 
                 if (!String.IsNullOrEmpty(request.Keyword))
@@ -395,7 +395,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && c.id == id && p.isActive == true
+                            where p.isDelete == false && c.id == id
                             select new { p, pic, c };
 
                 int Count = await query.CountAsync();
@@ -600,7 +600,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         join pic in _context.CategoryProducts on p.id equals pic.product_id
                         join c in _context.Categories on pic.cate_id equals c.id
                         join b in _context.Brands on p.brand_id equals b.id
-                        where p.isDelete == false && p.isActive == true && p.slug == slug
+                        where p.isDelete == false && p.slug == slug
                         select new { p, pic, c, b};
 
             if (await query.CountAsync() == 0)

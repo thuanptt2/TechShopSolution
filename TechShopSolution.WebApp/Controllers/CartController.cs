@@ -317,7 +317,7 @@ namespace TechShopSolution.WebApp.Controllers
             if (product.ResultObject == null)
                 return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm không tồn tại hoặc đã bị xóa.");
             if (!product.ResultObject.isActive)
-                return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm hiện tại đang bị khóa.");
+                return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm hiện tại đã ngừng kinh doanh.");
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             var currentCart = new CartViewModel();
             currentCart.items = new List<CartItemViewModel>();

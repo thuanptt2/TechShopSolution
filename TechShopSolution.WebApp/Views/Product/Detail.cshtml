@@ -73,6 +73,8 @@
         </div>
         <div rel="schema:image" resource="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)"></div>
     </div>
+    <!--Structured data Giấy phép hình ảnh-->
+
 
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0&appId=846669762547678&autoLogAppEvents=1" nonce="xvuFE9SJ"></script>
@@ -154,18 +156,16 @@ else
                     </p>
                 }
 
-                @if (Model.Product.promotion_price > 1)
+                @if (!Model.Product.isActive)
+                {
+                    <span class="stop-for-sale-text">Ngừng kinh doanh</span>
+                }
+                else if (Model.Product.promotion_price > 1)
                 {
                     var a = Model.Product.unit_price - Model.Product.promotion_price;
                     <span class="product-price detail-product-price">@String.Format(info, "{0:c}", Model.Product.promotion_price)&nbsp;&nbsp;</span>
                     <span class="product-promotion-pirce">@String.Format(info, "{0:c}", Model.Product.unit_price)&nbsp;&nbsp;</span>
                     <span class="product-total-price">Tiết kiệm @String.Format(info, "{0:c}", a)</span>
-                }
-                else if (Model.Product.unit_price == 0)
-                {
-                    <div class="btnGroup">
-                        <button type="button" class="btn btn-large btn-primary">Liên hệ<i class=" icon-shopping-cart"></i></button>
-                    </div>
                 }
                 else
                 {
@@ -173,42 +173,43 @@ else
                 }
                 <br />
                 <hr class="soft" />
-                <form class="form-horizontal qtyFrm">
-                    <div class="control-group">
-                        <div>
-                            @if (Model.Product.instock == null)
-                            {
-                                <div class="btnGroup">
-                                    <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
-                                    <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
-                                </div>
-                            }
-                            else if (Model.Product.instock == 0)
-                            {
-                                <span class="OutOfStock">Hết hàng</span>
-                            }
-                            else
-                            {
-                                <h5>
-                                    @(Model.Product.instock < 5 ? "Chỉ còn lại" : "Còn lại"): @Model.Product.instock <small>sản phẩm</small>
-                                </h5>
-                                <br />
-                                <div class="btnGroup">
-                                    <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
-                                    <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
-                                </div>
-                            }
-                            <div class="pull-right d-flex margin-right-20">
-                                <div class="product-client-infos-item">
-                                    <i class="icon-eye-open product-client-infos-icon"></i>&nbsp; @Model.Product.view_count
-                                </div>
-                                <div class="product-client-infos-item">
-                                    <i class="icon-heart-empty product-client-infos-icon"></i>&nbsp; <span id="favorite-total">@Model.Product.favorite_count</span>
-                                </div>
-                            </div>
-                        </div>
+                @if (!Model.Product.isActive)
+                {
+
+                    <div class="btnGroup">
+                        <a class="btn btn-large btn-primary" href="@Url.Action("Index","Contact")">Liên hệ</a>
                     </div>
-                </form>
+                }
+                else if (Model.Product.instock == null)
+                {
+                    <div class="btnGroup">
+                        <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                        <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
+                    </div>
+                }
+                else if (Model.Product.instock == 0)
+                {
+                    <span class="OutOfStock">Hết hàng</span>
+                }
+                else
+                {
+                    <h5>
+                        @(Model.Product.instock < 5 ? "Chỉ còn lại" : "Còn lại"): @Model.Product.instock <small>sản phẩm</small>
+                    </h5>
+                    <br />
+                    <div class="btnGroup">
+                        <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                        <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
+                    </div>
+                }
+                <div class="pull-right d-flex margin-right-20">
+                    <div class="product-client-infos-item">
+                        <i class="icon-eye-open product-client-infos-icon"></i>&nbsp; @Model.Product.view_count
+                    </div>
+                    <div class="product-client-infos-item">
+                        <i class="icon-heart-empty product-client-infos-icon"></i>&nbsp; <span id="favorite-total">@Model.Product.favorite_count</span>
+                    </div>
+                </div><br /><br />
                 @if (User.Identity.IsAuthenticated)
                 {
                     if (Model.Product.isFavorite)
