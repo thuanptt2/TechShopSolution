@@ -327,6 +327,9 @@ namespace TechShopSolution.WebApp.Controllers
             if (currentCart.items.Any(x => x.Id == product.ResultObject.id))
             {
                 var item = currentCart.items.First(x => x.Id == id);
+                if (product.ResultObject.instock == item.Quantity)
+                    return BadRequest("Sản phẩm chỉ còn lại " + product.ResultObject.instock + " cái, bạn không thể mua thêm được.");
+
                 if (item.Quantity >= 5)
                     return BadRequest("Bạn chỉ được mua tối đa 5 sản phẩm, sản phẩm này đã có trong giỏ hàng của bạn.");
                 else item.Quantity++;
