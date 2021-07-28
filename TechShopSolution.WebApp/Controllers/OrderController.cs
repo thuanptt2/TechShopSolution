@@ -28,7 +28,7 @@ namespace TechShopSolution.WebApp.Controllers
         }
 
         [Route("tai-khoan/don-hang")]
-        public async Task<IActionResult> OrderTracking(string dieukien, int pageIndex = 1, int pageSize = 8)
+        public async Task<IActionResult> OrderTracking(string dieukien, int pageIndex = 1, int pageSize = 5)
         {
             if (!User.Identity.IsAuthenticated)
             {

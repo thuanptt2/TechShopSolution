@@ -20,13 +20,13 @@
             <a href="#" name="detail"></a>
             <hr class="soft" />
             <ul id="infoDetail" class="nav padding-container nav-tabs">
-                <li class="active"><a href="#">Tất cả</a></li>
-                <li><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-duyet" })">Chờ duyệt</a></li>
-                <li><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-thanh-toan" })">Chờ thanh toán</a></li>
-                <li><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-giao-hang" })">Chờ giao hàng</a></li>
-                <li><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "dang-giao-hang" })">Đang giao hàng</a></li>
-                <li><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "thanh-cong" })">Thành công</a></li>
-                <li><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "da-huy" })">Đã hủy</a></li>
+                <li class="@(string.IsNullOrWhiteSpace(ViewBag.DieuKien) ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order")">Tất cả</a></li>
+                <li class="@(ViewBag.DieuKien == "cho-duyet" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-duyet" })">Chờ duyệt</a></li>
+                <li class="@(ViewBag.DieuKien == "cho-thanh-toan" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-thanh-toan" })">Chờ thanh toán</a></li>
+                <li class="@(ViewBag.DieuKien == "cho-giao-hang" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-giao-hang" })">Chờ giao hàng</a></li>
+                <li class="@(ViewBag.DieuKien == "dang-giao-hang" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "dang-giao-hang" })">Đang giao hàng</a></li>
+                <li class="@(ViewBag.DieuKien == "thanh-cong" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "thanh-cong" })">Thành công</a></li>
+                <li class="@(ViewBag.DieuKien == "da-huy" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "da-huy" })">Đã hủy</a></li>
             </ul>
             @if (Model.Items.Count != 0)
             {
