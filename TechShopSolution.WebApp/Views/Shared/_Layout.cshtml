@@ -4,15 +4,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>@ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
     <meta name="description" content="@ViewData["Description"]">
-    <meta name="author" content="TechShop Việt Nam">
+    <meta name="author" content="TechShop Việt Nam">    
     <meta name="keywords" content="@ViewData["Keywords"]">
+    @RenderSection("SEOMeta", required: false)
     <link id="callCss" rel="stylesheet" href="/themes/bootshop/bootstrap.min.css" media="screen" />
     <link href="/themes/css/base.css" rel="stylesheet" media="screen" />
     <meta http-equiv="content-language" content="vi" />
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
     <!-- Bootstrap style responsive -->
     <link href="/themes/css/bootstrap-responsive.min.css" rel="stylesheet" />
@@ -32,7 +33,7 @@
     <meta name="robots" content="@ViewData["Robots"]" />
 </head>
 <body>
-    @RenderSection("FacebookComments", required: false)
+    @RenderSection("AddonProductSEO", required: false)
     <div class="loaderbody" id="loaderbody">
         <div class="loader"></div>
     </div>

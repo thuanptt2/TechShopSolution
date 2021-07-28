@@ -4,15 +4,47 @@
 @using System.Security.Claims;
 @{
     ViewData["Robots"] = "index,follow";
-    int score5 = 0;
-    int score4 = 0;
-    int score3 = 0;
-    int score2 = 0;
-    int score1 = 0;
+    int score5 = 0; int score4 = 0; int score3 = 0; int score2 = 0; int score1 = 0;
     bool flag = true;
     var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    int ratingCount = Model.Ratings.Count;
+    double totalScore = 0;
+    double bestScore = 0;
+    string ratingBy = "";
 }
-@section FacebookComments{
+@section SEOMeta {
+    <meta property="og:type" content="og:product" />
+    <meta property="og:title" content="@Model.Product.meta_tittle" />
+    <meta property="og:image" content="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" />
+    <meta property="og:description" content="@Model.Product.meta_descriptions" />
+    <meta property="og:url" content="@(Configuration["BaseAddress"] + "/" + Model.Product.slug)" />
+    <meta property="product:plural_title" content="@Model.Product.meta_tittle" />
+    <meta property="product:price:amount" content="@(Model.Product.promotion_price > 0 ?  Model.Product.promotion_price :  Model.Product.unit_price)">
+    <meta property="product:price:currency" content="VNĐ">
+    <meta property="product:price:availability" content="instock">
+    <meta property="product:price:brand" content="@Model.Product.brand_name">
+    @if (ratingCount != 0)
+    {
+        bestScore = Model.Ratings[0].score;
+        ratingBy = Model.Ratings[0].cus_name;
+        foreach (var item in Model.Ratings)
+        {
+            if (bestScore < item.score)
+            {
+                bestScore = item.score;
+                ratingBy = item.cus_name;
+            }
+            totalScore += item.score;
+        }
+        <meta itemprop="ratingValue" content="@(totalScore/ratingCount)">
+        <meta content="5" itemprop="bestRating">
+        <meta itemprop="worstRating" content="1">
+        <meta itemprop="ratingCount" content="@ratingCount">
+        <meta itemprop="reviewCount" content="@ratingCount">
+    }
+}
+
+@section AddonProductSEO{
     <!--Này là mình dùng "Structured Data" để tối ưu SEO khi search trên công cụ tìm kiếm, các bạn có thể tìm hiểu từ khóa này-->
     <div typeof="schema:Product">
         <div rel="schema:image" resource="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)"></div>
@@ -24,33 +56,20 @@
                 <div property="schema:name" content="@Model.Product.brand_name"></div>
             </div>
         </div>
-        @if (Model.Ratings.Count != 0)
+        @if (ratingCount != 0)
         {
             <div rel="schema:aggregateRating">
                 <div typeof="schema:AggregateRating">
-                    <div property="schema:reviewCount" content="@Model.Ratings.Count"></div>
-                    @{
-                        float score = 0;
-                        double bestScore = Model.Ratings[0].score; string ratingBy = Model.Ratings[0].cus_name;
-                        foreach (var item in Model.Ratings)
-                        {
-                            if (bestScore < item.score)
-                            {
-                                bestScore = item.score;
-                                ratingBy = item.cus_name;
-                            }
-                            score += item.score;
-                        }
-                    }
-                    <div property="schema:ratingValue" content="@(score/Model.Ratings.Count)"></div>
+                    <div property="schema:reviewCount" content="@ratingCount"></div>
+                    <div property="schema:ratingValue" content="@(totalScore/ratingCount)"></div>
                 </div>
             </div>
             <div rel="schema:review">
                 <div typeof="schema:Review">
                     <div rel="schema:reviewRating">
                         <div typeof="schema:Rating">
-                            <div property="schema:ratingValue" content="@(score/Model.Ratings.Count)"></div>
-                            <div property="schema:bestRating" content="@bestScore"></div>
+                            <div property="schema:ratingValue" content="@(totalScore/ratingCount)"></div>
+                            <div property="schema:bestRating" content="5"></div>
                         </div>
                     </div>
                     <div rel="schema:author">
