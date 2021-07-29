@@ -100,5 +100,16 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
+        public async Task<ApiResult<OrderStatisticsViewModel>> GetOrderStatistics()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/Order/OrderStatistics");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<OrderStatisticsViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<OrderStatisticsViewModel>>(body);
+        }
+
     }
 }

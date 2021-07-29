@@ -54,13 +54,13 @@
             <div class="input-group mb-3">
                 <div class="form-group mr-3 mb-3">
                     <label>Lọc sản phẩm theo loại: </label>
-                    <select name="CategoryID" asp-items="ViewBag.Categories" class="form-select">
+                    <select name="CategoryID" asp-items="ViewBag.Categories" class="form-select" onchange="this.form.submit()">
                         <option value="" class="font-italic">Chọn loại sản phẩm</option>
                     </select>
                 </div>
                 <div class="form-group mr-3 mb-3">
                     <label>Lọc sản phẩm theo thương hiệu: </label>
-                    <select name="BrandID" asp-items="ViewBag.Brands" class="form-select">
+                    <select name="BrandID" asp-items="ViewBag.Brands" class="form-select" onchange="this.form.submit()">
                         <option value="" class="font-italic">Chọn thương hiệu</option>
                     </select>
                 </div>

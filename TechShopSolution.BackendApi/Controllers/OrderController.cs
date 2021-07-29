@@ -85,5 +85,12 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+
+        [HttpGet("OrderStatistics")]
+        public IActionResult GetContactData()
+        {
+            var result = _orderService.GetOrderStatistics();
+            return Ok(result);
+        }
     }
 }

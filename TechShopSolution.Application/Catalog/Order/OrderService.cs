@@ -135,14 +135,14 @@ namespace TechShopSolution.Application.Catalog.Order
                 }
             }
 
-                
+
         }
         public PagedResult<OrderViewModel> GetAllPaging(GetOrderPagingRequest request)
         {
             var query = from o in _context.Orders
                         join c in _context.Customers on o.cus_id equals c.id
-                        join od in _context.OrDetails on o.id equals od.order_id 
-                        select new { o , c };
+                        join od in _context.OrDetails on o.id equals od.order_id
+                        select new { o, c };
 
 
             var data = query.AsEnumerable()
@@ -165,7 +165,7 @@ namespace TechShopSolution.Application.Catalog.Order
 
                 }).ToList();
 
-            foreach(var item in result)
+            foreach (var item in result)
             {
                 var tranport = _context.Transports.Where(x => x.order_id == item.id).FirstOrDefault();
                 if (tranport != null)
@@ -194,10 +194,14 @@ namespace TechShopSolution.Application.Catalog.Order
                     result = result.Where(x => x.ship_status == 0 && x.isPay & x.status != -1).ToList();
                     break;
                 case 5:
+                    // Đang vận chuyển
+                    result = result.Where(x => x.ship_status == 1).ToList();
+                    break;
+                case 6:
                     // Giao thành công
                     result = result.Where(x => x.ship_status == 2).ToList();
                     break;
-                case 6:
+                case 7:
                     // Đơn hàng đã hủy
                     result = result.Where(x => x.status == -1).ToList();
                     break;
@@ -226,9 +230,9 @@ namespace TechShopSolution.Application.Catalog.Order
                         join pm in _context.PaymentMethods on o.payment_id equals pm.id
                         join c in _context.Customers on o.cus_id equals c.id
                         where o.id == id
-                        select new { p, o, od, pm, c};
+                        select new { p, o, od, pm, c };
 
-            if(await query.CountAsync() == 0)
+            if (await query.CountAsync() == 0)
             {
                 return new ApiErrorResult<OrderDetailViewModel>("Đơn hàng không tồn tại");
             }
@@ -304,7 +308,7 @@ namespace TechShopSolution.Application.Catalog.Order
             var order = await _context.Orders.FindAsync(id);
             if (order == null)
                 return new ApiErrorResult<string>("Không tìm thấy đơn hàng này trong CSDL");
-            if(order.isPay)
+            if (order.isPay)
                 return new ApiErrorResult<string>("Đơn hàng này đã được thanh toán rồi, không thể thanh toán lại");
             order.isPay = true;
             order.pay_at = DateTime.Now;
@@ -319,7 +323,7 @@ namespace TechShopSolution.Application.Catalog.Order
             if (order.status == -1)
                 return new ApiErrorResult<string>("Đơn hàng này đã bị hủy trước đó, không thể hủy lại");
             var isValid = await _context.Transports.AnyAsync(x => x.order_id == request.Id && x.ship_status == 1);
-            if(isValid)
+            if (isValid)
                 return new ApiErrorResult<string>("Đơn hàng này đã được tạo đơn vận chuyển, không thể hủy");
             else
             {
@@ -330,9 +334,9 @@ namespace TechShopSolution.Application.Catalog.Order
                 foreach (var item in details)
                 {
                     var product = _context.Products.Find(item.product_id);
-                    if(product != null)
+                    if (product != null)
                     {
-                        if(product.instock != null)
+                        if (product.instock != null)
                         {
                             product.instock += item.quantity;
                         }
@@ -364,7 +368,7 @@ namespace TechShopSolution.Application.Catalog.Order
                 var order = await _context.Orders.FindAsync(request.Id);
                 if (order != null)
                 {
-                    if(order.status == -1)
+                    if (order.status == -1)
                         return new ApiErrorResult<bool>("Đơn hàng này đã bị hủy, không thể cập nhật địa chỉ giao hàng");
                     else
                     {
@@ -457,7 +461,7 @@ namespace TechShopSolution.Application.Catalog.Order
         }
         public ApiResult<OrderPublicViewModel> GetDetailOrder(int id, int cus_id)
         {
-           
+
             var query = from od in _context.OrDetails
                         join p in _context.Products on od.product_id equals p.id
                         join o in _context.Orders on od.order_id equals o.id
@@ -513,7 +517,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     Order.enter_lading_code_at = transport.update_at;
                     Order.done_ship_at = transport.done_at;
                     var transporter = _context.Transporters.Where(x => x.id == transport.transporter_id).FirstOrDefault();
-                    if(transporter != null)
+                    if (transporter != null)
                     {
                         Order.transporter_link = transporter.link;
                         Order.transporter_name = transporter.name;
@@ -526,6 +530,23 @@ namespace TechShopSolution.Application.Catalog.Order
             }
 
             return new ApiSuccessResult<OrderPublicViewModel>(Order);
+        }
+        public ApiResult<OrderStatisticsViewModel> GetOrderStatistics()
+        {
+            var query = from o in _context.Orders
+                        join tp in _context.Transports on o.id equals tp.order_id into otp
+                        from g in otp.DefaultIfEmpty()
+                        select new { g, o };
+
+            var model = new OrderStatisticsViewModel()
+            {
+                orderWaitForConfirm = query.Where(x => x.o.status == 0).Count(),
+                orderWaitForPay = query.Where(x => x.o.status == 1 && !x.o.isPay).Count(),
+                orderWaitForShip = query.Where(x => x.g == null && x.o.isPay & x.o.status != -1).Count(),
+                orderBeingShip = query.Where(x => x.g.ship_status == 1).Count(),
+
+            };
+            return new ApiSuccessResult<OrderStatisticsViewModel>(model);
         }
     }
 }

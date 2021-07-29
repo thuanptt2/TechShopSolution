@@ -18,5 +18,6 @@ namespace TechShopSolution.Application.Catalog.Order
         Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request);
         PagedResult<OrderPublicViewModel> GetCustomerOrders(GetCustomerOrderRequest request);
         ApiResult<OrderPublicViewModel> GetDetailOrder(int id, int cus_id );
+        ApiResult<OrderStatisticsViewModel> GetOrderStatistics();
     }
 }

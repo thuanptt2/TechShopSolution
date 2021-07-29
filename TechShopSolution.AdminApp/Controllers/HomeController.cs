@@ -7,23 +7,26 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.AdminApp.Models;
+using TechShopSolution.ApiIntegration;
 
 namespace TechShopSolution.AdminApp.Controllers
 { 
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IOrderApiClient _orderApiClient;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IOrderApiClient orderApiClient)
         {
-            _logger = logger;
+            _orderApiClient = orderApiClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var adminName = User.Identity.Name;
-            return View();
+            var orderStatistics = await _orderApiClient.GetOrderStatistics();
+            return View(new DashBoardViewModel() {
+                OrderStatistics = orderStatistics.ResultObject
+            }); 
         }
 
         public IActionResult Privacy()

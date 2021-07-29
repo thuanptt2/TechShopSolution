@@ -16,5 +16,6 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<string>> CancelOrder(OrderCancelRequest request);
         Task<ApiResult<string>> ConfirmOrder(int id);
         Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request);
+        Task<ApiResult<OrderStatisticsViewModel>> GetOrderStatistics();
     }
 }

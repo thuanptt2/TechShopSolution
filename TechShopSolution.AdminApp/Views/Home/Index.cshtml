@@ -1,4 +1,5 @@
-﻿@{
+﻿@model DashBoardViewModel
+@{
     ViewData["Title"] = "Trang chủ";
 }
 
@@ -18,7 +19,9 @@
             <div class="card bg-warning text-white mb-4">
                 <div class="card-body">Chờ duyệt: </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="text-white stretched-link" href="#">3 đơn hàng</a>
+                    <a class="text-white stretched-link" href="@Url.Action("Index", "Order", new { type = "2"})" target="_blank">
+                        @Model.OrderStatistics.orderWaitForConfirm đơn hàng
+                    </a>
                     <div class="text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -27,7 +30,9 @@
             <div class="card bg-success text-white mb-4">
                 <div class="card-body">Chờ thanh toán: </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="text-white stretched-link" href="#">2 đơn hàng</a>
+                    <a class="text-white stretched-link" href="@Url.Action("Index", "Order", new { type = "3"})" target="_blank">
+                        @Model.OrderStatistics.orderWaitForPay đơn hàng
+                    </a>
                     <div class="text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -36,7 +41,9 @@
             <div class="card bg-primary text-white mb-4">
                 <div class="card-body">Chờ vận chuyển: </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="text-white stretched-link" href="#">3 đơn hàng</a>
+                    <a class="text-white stretched-link" href="@Url.Action("Index", "Order", new { type = "4"})" target="_blank">
+                        @Model.OrderStatistics.orderWaitForShip đơn hàng
+                    </a>
                     <div class="text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -45,7 +52,9 @@
             <div class="card bg-danger text-white mb-4">
                 <div class="card-body">Đang vận chuyển</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="text-white stretched-link" href="#">3 đơn hàng</a>
+                    <a class="text-white stretched-link" href="@Url.Action("Index", "Order", new { type = "5"})" target="_blank">
+                        @Model.OrderStatistics.orderBeingShip đơn hàng
+                    </a>
                     <div class=" text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
