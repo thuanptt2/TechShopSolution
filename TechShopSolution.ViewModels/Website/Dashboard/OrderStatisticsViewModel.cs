@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TechShopSolution.ViewModels.Sales
+namespace TechShopSolution.ViewModels.Website.Dashboard
 {
     public class OrderStatisticsViewModel
     {

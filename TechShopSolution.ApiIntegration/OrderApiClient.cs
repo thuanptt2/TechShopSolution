@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using TechShopSolution.ViewModels.Catalog.Coupon;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.ApiIntegration
 {
