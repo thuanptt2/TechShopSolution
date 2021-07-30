@@ -34,6 +34,7 @@ namespace TechShopSolution.ApiIntegration
         Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
         Task<List<ProductOverViewModel>> GetProductsRelated(int id, int take);
         Task<List<ProductRankingViewModel>> GetProductViewRanking(int take);
-        Task<List<ProductRankingViewModel>> GetProductRatingRanking(int take);
+        Task<List<ProductRankingViewModel>> GetProductMostSalesRanking(int take);
+        Task<List<ProductRankingViewModel>> GetProductFavoriteRanking(int take);
     }
 }

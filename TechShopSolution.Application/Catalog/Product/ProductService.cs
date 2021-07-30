@@ -863,7 +863,7 @@ namespace TechShopSolution.Application.Catalog.Product
 
             return new List<ProductRankingViewModel>(listMostViewProducts);
         }
-        public List<ProductRankingViewModel> GetProductRatingRanking(int take)
+        public List<ProductRankingViewModel> GetProductMostSalesRanking(int take)
         {
             var query = from od in _context.OrDetails
                         join o in _context.Orders on od.order_id equals o.id
@@ -895,6 +895,34 @@ namespace TechShopSolution.Application.Catalog.Product
             result = result.OrderByDescending(x => x.count).Take(take).ToList();
 
             return new List<ProductRankingViewModel>(result);
+        }
+        public List<ProductRankingViewModel> GetProductFavoriteRanking(int take)
+        {
+            var query = from p in _context.Products
+                        join f in _context.Favorites on p.id equals f.product_id 
+                        where p.isDelete == false
+                        select new { p, f };
+
+            var group = query.AsEnumerable()
+               .GroupBy(g => g.p);
+
+            var listMostViewProducts = group.OrderByDescending(x => x.Key.Favoriters.Count)
+                 .Take(take)
+                 .Select(a => new ProductRankingViewModel()
+                 {
+                     id = a.Key.id,
+                     name = a.Key.name,
+                     best_seller = a.Key.best_seller,
+                     featured = a.Key.featured,
+                     image = a.Key.image,
+                     promotion_price = a.Key.promotion_price,
+                     slug = a.Key.slug,
+                     create_at = a.Key.create_at,
+                     unit_price = a.Key.unit_price,
+                     count = a.Key.Favoriters.Count,
+                 }).ToList();
+
+            return new List<ProductRankingViewModel>(listMostViewProducts);
         }
     }
 }

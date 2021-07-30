@@ -27,11 +27,13 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             var orderStatistics = await _orderApiClient.GetOrderStatistics();
             var viewRanking = await _productApiClient.GetProductViewRanking(10);
-            var ratingRanking = await _productApiClient.GetProductRatingRanking(10);
+            var ratingRanking = await _productApiClient.GetProductMostSalesRanking(10);
+            var favoriteRanking = await _productApiClient.GetProductFavoriteRanking(10);
             return View(new DashBoardViewModel() {
                 OrderStatistics = orderStatistics.ResultObject,
                 viewRanking = viewRanking,
-                ratingRanking = ratingRanking
+                salesRanking = ratingRanking,
+                favoriteRanking = favoriteRanking
             }); 
         }
 
