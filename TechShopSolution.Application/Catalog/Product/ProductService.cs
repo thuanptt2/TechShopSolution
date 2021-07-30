@@ -845,7 +845,6 @@ namespace TechShopSolution.Application.Catalog.Product
             var group = query.AsEnumerable()
                .GroupBy(g => g.p);
 
-
             var listMostViewProducts = group.OrderByDescending(x => x.Key.view_count)
                  .Take(take)
                  .Select(a => new ProductRankingViewModel()
@@ -862,8 +861,40 @@ namespace TechShopSolution.Application.Catalog.Product
                      count = a.Key.view_count,
                  }).ToList();
 
-          
             return new List<ProductRankingViewModel>(listMostViewProducts);
+        }
+        public List<ProductRankingViewModel> GetProductRatingRanking(int take)
+        {
+            var query = from od in _context.OrDetails
+                        join o in _context.Orders on od.order_id equals o.id
+                        join p in _context.Products on od.product_id equals p.id
+                        where o.status != -1
+                        select new { p, od };
+
+            var group = query.AsEnumerable()
+               .GroupBy(g => g.p);
+
+            var result = new List<ProductRankingViewModel>();
+
+
+            foreach (var item in group)
+            {
+                var product = new ProductRankingViewModel();
+                product.id = item.Key.id;
+                product.name = item.Key.name;
+                product.image = item.Key.image;
+                product.slug = item.Key.slug;
+                product.count = 0;
+                foreach(var od in item.Key.OrderDetails)
+                {
+                    product.count += od.quantity;
+                }
+                result.Add(product);
+            }
+
+            result = result.OrderByDescending(x => x.count).Take(take).ToList();
+
+            return new List<ProductRankingViewModel>(result);
         }
     }
 }

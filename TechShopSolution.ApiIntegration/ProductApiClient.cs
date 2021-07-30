@@ -422,7 +422,17 @@ namespace TechShopSolution.ApiIntegration
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/product/DashBoardRanking/{take}");
+            var respone = await client.GetAsync($"/api/product/ViewRanking/{take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+        }
+        public async Task<List<ProductRankingViewModel>> GetProductRatingRanking(int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/RatingRanking/{take}");
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);

@@ -149,10 +149,16 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-        [HttpGet("DashBoardRanking/{take}")]
-        public IActionResult GetProductsRanking(int take)
+        [HttpGet("ViewRanking/{take}")]
+        public IActionResult GetProductViewRanking(int take)
         {
             var result = _productService.GetProductViewRanking(take);
+            return Ok(result);
+        }
+        [HttpGet("RatingRanking/{take}")]
+        public IActionResult GetProductRatingRanking(int take)
+        {
+            var result = _productService.GetProductRatingRanking(take);
             return Ok(result);
         }
     }

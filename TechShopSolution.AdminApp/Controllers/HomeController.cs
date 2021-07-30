@@ -26,10 +26,12 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Index()
         {
             var orderStatistics = await _orderApiClient.GetOrderStatistics();
-            var productRanking = await _productApiClient.GetProductViewRanking(10);
+            var viewRanking = await _productApiClient.GetProductViewRanking(10);
+            var ratingRanking = await _productApiClient.GetProductRatingRanking(10);
             return View(new DashBoardViewModel() {
                 OrderStatistics = orderStatistics.ResultObject,
-                viewRanking = productRanking,
+                viewRanking = viewRanking,
+                ratingRanking = ratingRanking
             }); 
         }
 

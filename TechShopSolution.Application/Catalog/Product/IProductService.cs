@@ -30,5 +30,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
         List<ProductOverViewModel> GetProductsRelated(int product_id, int take);
         List<ProductRankingViewModel> GetProductViewRanking(int take);
+        List<ProductRankingViewModel> GetProductRatingRanking(int take);
     }
 }

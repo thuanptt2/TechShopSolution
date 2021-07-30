@@ -7,5 +7,7 @@ namespace TechShopSolution.AdminApp.Models
     {
         public OrderStatisticsViewModel OrderStatistics { get; set; }
         public List<ProductRankingViewModel> viewRanking { get; set; }
+        public List<ProductRankingViewModel> ratingRanking { get; set; }
+        public List<ProductRankingViewModel> favoriteRanking { get; set; }
     }
 }
