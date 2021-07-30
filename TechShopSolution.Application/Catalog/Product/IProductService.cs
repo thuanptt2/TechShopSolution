@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Catalog.Product;
 using Microsoft.AspNetCore.Http;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.Application.Catalog.Product
 {
@@ -28,5 +29,6 @@ namespace TechShopSolution.Application.Catalog.Product
         Task<PublicProductsViewModel> GetBestSellerProduct(int take);
         Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
         List<ProductOverViewModel> GetProductsRelated(int product_id, int take);
+        List<ProductRankingViewModel> GetProductViewRanking(int take);
     }
 }

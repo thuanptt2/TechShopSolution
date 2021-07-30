@@ -17,6 +17,7 @@ using TechShopSolution.ViewModels.Catalog.Brand;
 using TechShopSolution.ViewModels.Catalog.Category;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.ApiIntegration
 {
@@ -417,6 +418,15 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<List<ProductOverViewModel>>(body);
             return JsonConvert.DeserializeObject<List<ProductOverViewModel>>(body);
         }
-
+        public async Task<List<ProductRankingViewModel>> GetProductViewRanking(int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/DashBoardRanking/{take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+        }
     }
 }

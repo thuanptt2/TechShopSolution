@@ -15,17 +15,21 @@ namespace TechShopSolution.AdminApp.Controllers
     public class HomeController : Controller
     {
         private readonly IOrderApiClient _orderApiClient;
+        private readonly IProductApiClient _productApiClient;
 
-        public HomeController(IOrderApiClient orderApiClient)
+        public HomeController(IOrderApiClient orderApiClient, IProductApiClient productApiClient)
         {
             _orderApiClient = orderApiClient;
+            _productApiClient = productApiClient;
         }
 
         public async Task<IActionResult> Index()
         {
             var orderStatistics = await _orderApiClient.GetOrderStatistics();
+            var productRanking = await _productApiClient.GetProductViewRanking(10);
             return View(new DashBoardViewModel() {
-                OrderStatistics = orderStatistics.ResultObject
+                OrderStatistics = orderStatistics.ResultObject,
+                viewRanking = productRanking,
             }); 
         }
 

@@ -6,6 +6,7 @@ using TechShopSolution.ViewModels.Catalog.Brand;
 using TechShopSolution.ViewModels.Catalog.Category;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.ApiIntegration
 {
@@ -32,5 +33,6 @@ namespace TechShopSolution.ApiIntegration
         Task<PublicProductsViewModel> GetBestSellerProducts(int take);
         Task<PublicProductsViewModel> GetProductsByCategory(int id, int take);
         Task<List<ProductOverViewModel>> GetProductsRelated(int id, int take);
+        Task<List<ProductRankingViewModel>> GetProductViewRanking(int take);
     }
 }

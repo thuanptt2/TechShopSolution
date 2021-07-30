@@ -12,6 +12,7 @@ using TechShopSolution.Application.Common;
 using TechShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using TechShopSolution.ViewModels.Catalog.Category;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.Application.Catalog.Product
 {
@@ -835,6 +836,34 @@ namespace TechShopSolution.Application.Catalog.Product
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-     
+        public List<ProductRankingViewModel> GetProductViewRanking(int take)
+        {
+            var query = from p in _context.Products
+                        where p.isDelete == false
+                        select new { p };
+
+            var group = query.AsEnumerable()
+               .GroupBy(g => g.p);
+
+
+            var listMostViewProducts = group.OrderByDescending(x => x.Key.view_count)
+                 .Take(take)
+                 .Select(a => new ProductRankingViewModel()
+                 {
+                     id = a.Key.id,
+                     name = a.Key.name,
+                     best_seller = a.Key.best_seller,
+                     featured = a.Key.featured,
+                     image = a.Key.image,
+                     promotion_price = a.Key.promotion_price,
+                     slug = a.Key.slug,
+                     create_at = a.Key.create_at,
+                     unit_price = a.Key.unit_price,
+                     count = a.Key.view_count,
+                 }).ToList();
+
+          
+            return new List<ProductRankingViewModel>(listMostViewProducts);
+        }
     }
 }

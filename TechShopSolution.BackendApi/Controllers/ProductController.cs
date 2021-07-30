@@ -149,5 +149,11 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("DashBoardRanking/{take}")]
+        public IActionResult GetProductsRanking(int take)
+        {
+            var result = _productService.GetProductViewRanking(take);
+            return Ok(result);
+        }
     }
 }
