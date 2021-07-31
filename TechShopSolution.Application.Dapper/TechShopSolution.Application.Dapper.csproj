@@ -10,9 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="SqlCommand\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Report\" />
+    <ProjectReference Include="..\TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>
