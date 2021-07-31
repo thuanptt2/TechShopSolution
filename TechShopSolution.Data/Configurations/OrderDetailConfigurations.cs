@@ -11,7 +11,7 @@ namespace TechShopSolution.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<OrderDetail> builder)
         {
-            builder.ToTable("OrderDetail");
+            builder.ToTable("BillDetail");
             builder.HasKey(x => new { x.order_id, x.product_id });
             builder.Property(x => x.unit_price).IsRequired();
             builder.Property(x => x.quantity).IsRequired();
