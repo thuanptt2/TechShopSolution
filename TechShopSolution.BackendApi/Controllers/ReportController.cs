@@ -19,7 +19,7 @@ namespace TechShopSolution.BackendApi.Controllers
             _reportService = reportService;
         }
         [HttpGet("Revenue")]
-        public async Task<IActionResult> GetByID([FromBody]GetRevenueRequest request) 
+        public async Task<IActionResult> GetRevenueReport([FromQuery]GetRevenueRequest request) 
         {
             var result = await _reportService.GetReportAsync(request.fromDate, request.toDate);
             if (result.IsSuccess)

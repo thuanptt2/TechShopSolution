@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.AdminApp.Models;
 using TechShopSolution.ApiIntegration;
+using TechShopSolution.ViewModels.Report;
 
 namespace TechShopSolution.AdminApp.Controllers
 { 
@@ -16,11 +17,13 @@ namespace TechShopSolution.AdminApp.Controllers
     {
         private readonly IOrderApiClient _orderApiClient;
         private readonly IProductApiClient _productApiClient;
+        private readonly IReportApiClient _reportApiClient;
 
-        public HomeController(IOrderApiClient orderApiClient, IProductApiClient productApiClient)
+        public HomeController(IOrderApiClient orderApiClient, IProductApiClient productApiClient, IReportApiClient reportApiClient)
         {
             _orderApiClient = orderApiClient;
             _productApiClient = productApiClient;
+            _reportApiClient = reportApiClient;
         }
 
         public async Task<IActionResult> Index()
@@ -35,6 +38,13 @@ namespace TechShopSolution.AdminApp.Controllers
                 salesRanking = ratingRanking,
                 favoriteRanking = favoriteRanking
             }); 
+        }
+        public async Task<IActionResult> GetRevenueReport(string fromDate = null, string toDate = null)
+        {
+            var result = await _reportApiClient.GetRevenueReport(new GetRevenueRequest { fromDate = fromDate, toDate = toDate });
+            if(result.IsSuccess)
+                return Ok(result.ResultObject);
+            return BadRequest(result.Message);
         }
 
         public IActionResult Privacy()

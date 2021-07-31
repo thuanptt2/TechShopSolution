@@ -17,7 +17,7 @@ namespace TechShopSolution.Application.Dapper.Report
         {
             _configuration = configuration;
         }
-        public async Task<ApiResult<IEnumerable<RevenueReportViewModel>>> GetReportAsync(string fromDate, string toDate)
+        public async Task<ApiResult<List<RevenueReportViewModel>>> GetReportAsync(string fromDate, string toDate)
         {
             using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("TechShopSolutionDB")))
             {
@@ -33,13 +33,15 @@ namespace TechShopSolution.Application.Dapper.Report
 
                 try
                 {
-                    var result = await sqlConnection.QueryAsync<RevenueReportViewModel>("GetRevenueDaily", dynamicParameters, 
+                    var result = (List<RevenueReportViewModel>)
+                        await sqlConnection.QueryAsync<RevenueReportViewModel>("GetRevenueDaily", dynamicParameters, 
                         commandType: System.Data.CommandType.StoredProcedure);
-                    return new ApiSuccessResult<IEnumerable<RevenueReportViewModel>>(result);
+
+                    return new ApiSuccessResult<List<RevenueReportViewModel>>(result);
                 }
                 catch(Exception ex)
                 {
-                    return new ApiErrorResult<IEnumerable<RevenueReportViewModel>>(ex.Message);
+                    return new ApiErrorResult<List<RevenueReportViewModel>>(ex.Message);
                 }
             }
         }
