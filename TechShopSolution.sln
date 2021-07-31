@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.AdminApp",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechShopSolution.ApiIntegration", "TechShopSolution.ApiIntegration\TechShopSolution.ApiIntegration.csproj", "{2F32A3CA-9104-4CA5-B67E-0C8BA91266A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechShopSolution.Application.Dapper", "TechShopSolution.Application.Dapper\TechShopSolution.Application.Dapper.csproj", "{C610E7F8-161F-43E6-98F5-0C0327021BB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{2F32A3CA-9104-4CA5-B67E-0C8BA91266A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F32A3CA-9104-4CA5-B67E-0C8BA91266A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F32A3CA-9104-4CA5-B67E-0C8BA91266A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C610E7F8-161F-43E6-98F5-0C0327021BB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C610E7F8-161F-43E6-98F5-0C0327021BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C610E7F8-161F-43E6-98F5-0C0327021BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C610E7F8-161F-43E6-98F5-0C0327021BB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{F6DBA955-0D95-43C3-A105-E6654D8E735F} = {7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}
 		{5391C74A-3AEF-44B3-BBF8-E65B82B376D6} = {7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}
 		{2F32A3CA-9104-4CA5-B67E-0C8BA91266A6} = {7B8DB311-8FA4-4E64-8B4E-59B39D25DA86}
+		{C610E7F8-161F-43E6-98F5-0C0327021BB0} = {E3C4AF1A-ABC4-4D25-A290-2ECE3DAAE2E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B94A4BC-1A94-45F5-B575-B503FAA6ADCB}
