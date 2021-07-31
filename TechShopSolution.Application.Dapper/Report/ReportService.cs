@@ -10,7 +10,7 @@ using TechShopSolution.ViewModels.Common;
 
 namespace TechShopSolution.Application.Dapper.Report
 {
-    public class ReportService
+    public class ReportService : IReportService
     {
         private readonly IConfiguration _configuration;
         public ReportService(IConfiguration configuration)
@@ -39,7 +39,7 @@ namespace TechShopSolution.Application.Dapper.Report
                 }
                 catch(Exception ex)
                 {
-                    throw;
+                    return new ApiErrorResult<IEnumerable<RevenueReportViewModel>>(ex.Message);
                 }
             }
         }
