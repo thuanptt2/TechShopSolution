@@ -48,8 +48,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                     value = request.value,
                     type = request.type,
                     name = request.name,
-                    end_at = request.end_at,
-                    start_at = request.start_at,
+                    end_at = DateTime.Parse(request.end_at),
+                    start_at = DateTime.Parse(request.start_at),
                     isActive = request.isActive,
                     quantity = request.quantity,
                 };
@@ -200,8 +200,8 @@ namespace TechShopSolution.Application.Catalog.Coupon
                         Coupon.min_order_value = double.Parse(request.min_order_value);
                     else Coupon.min_order_value = null;
                  
-                    Coupon.start_at = request.start_at;
-                    Coupon.end_at = request.end_at;
+                    Coupon.start_at = DateTime.Parse(request.start_at);
+                    Coupon.end_at = DateTime.Parse(request.end_at);
                   
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();

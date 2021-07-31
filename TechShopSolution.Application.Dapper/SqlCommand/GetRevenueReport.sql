@@ -17,3 +17,4 @@ END
 EXEC dbo.GetRevenueDaily @fromDate = '07/02/2021',
 						 @toDate = '07/31/2021'
 select * from Bill
+

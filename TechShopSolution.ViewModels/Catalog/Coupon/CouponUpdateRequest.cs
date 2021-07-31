@@ -24,11 +24,9 @@ namespace TechShopSolution.ViewModels.Catalog.Coupon
         public int? quantity { get; set; }
         [Display(Name = "Trạng thái")]
         public bool isActive { get; set; }
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Ngày bắt đầu")]
-        public DateTime start_at { get; set; }
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public string start_at { get; set; }
         [Display(Name = "Ngày kết thúc")]
-        public DateTime end_at { get; set; }
+        public string end_at { get; set; }
     }
 }

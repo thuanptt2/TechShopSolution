@@ -26,8 +26,8 @@ namespace TechShopSolution.ViewModels.Catalog.Coupon
         [Display(Name = "Trạng thái")]
         public bool isActive { get; set; }
         [Display(Name = "Ngày bắt đầu")]
-        public DateTime start_at { get; set; }
+        public string start_at { get; set; }
         [Display(Name = "Ngày kết thúc")]
-        public DateTime end_at { get; set; }
+        public string end_at { get; set; }
     }
 }
