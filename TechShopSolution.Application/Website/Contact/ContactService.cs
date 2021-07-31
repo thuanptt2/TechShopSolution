@@ -26,7 +26,7 @@ namespace TechShopSolution.Application.Website.Contact
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            var fileName = "logo_company.jpg";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
         }

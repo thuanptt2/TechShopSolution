@@ -5,8 +5,10 @@ using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,6 +17,7 @@ using TechShopSolution.ViewModels.Catalog.Brand;
 using TechShopSolution.ViewModels.Catalog.Category;
 using TechShopSolution.ViewModels.Catalog.Product;
 using TechShopSolution.ViewModels.Common;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.ApiIntegration
 {
@@ -197,6 +200,10 @@ namespace TechShopSolution.ApiIntegration
             var body = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<ProductViewModel>>(body);
+            if((int)respone.StatusCode > 400)
+            {
+                return new ApiErrorResult<ProductViewModel>("", (int)respone.StatusCode);
+            }
             return JsonConvert.DeserializeObject<ApiErrorResult<ProductViewModel>>(body);
         }
         public async Task<List<RatingViewModel>> GetRatingsProduct(string slug)
@@ -411,6 +418,35 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<List<ProductOverViewModel>>(body);
             return JsonConvert.DeserializeObject<List<ProductOverViewModel>>(body);
         }
-
+        public async Task<List<ProductRankingViewModel>> GetProductViewRanking(int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/ViewRanking/{take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+        }
+        public async Task<List<ProductRankingViewModel>> GetProductMostSalesRanking(int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/salesRanking/{take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+        }
+        public async Task<List<ProductRankingViewModel>> GetProductFavoriteRanking(int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/product/FavoriteRanking/{take}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+            return JsonConvert.DeserializeObject<List<ProductRankingViewModel>>(body);
+        }
     }
 }

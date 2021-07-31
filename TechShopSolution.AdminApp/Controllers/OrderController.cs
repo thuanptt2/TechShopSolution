@@ -26,6 +26,7 @@ namespace TechShopSolution.AdminApp.Controllers
         {
             var request = new GetOrderPagingRequest()
             {
+                type = type,
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
@@ -40,6 +41,16 @@ namespace TechShopSolution.AdminApp.Controllers
             {
                 ViewBag.ErrorMsg = TempData["error"];
             }
+            ViewBag.SortType = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1", Text = "Tất cả", Selected = type == 1 ? true : false},
+                new SelectListItem { Value = "2", Text = "Đơn hàng chờ duyệt", Selected = type == 2 ? true : false},
+                new SelectListItem { Value = "3", Text = "Đơn hàng chờ thanh toán", Selected = type == 3 ? true : false},
+                new SelectListItem { Value = "4", Text = "Đơn hàng chờ vận chuyển", Selected = type == 4 ? true : false},
+                new SelectListItem { Value = "5", Text = "Đơn hàng đang vận chuyển", Selected = type == 5 ? true : false},
+                new SelectListItem { Value = "6", Text = "Đơn hàng giao thành công", Selected = type == 6 ? true : false},
+                new SelectListItem { Value = "7", Text = "Đơn hàng đã hủy", Selected = type == 7 ? true : false},
+            };
             return View(data);
         }
         [HttpGet]

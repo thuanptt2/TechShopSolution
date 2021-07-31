@@ -51,7 +51,7 @@ $('#txtMetaTitle').on("keyup change", function () {
 
 $('#txtMetaDesc').on("keyup change", function () {
     var content = $('#txtMetaDesc').val();
-    var contentTitle = $('#txtMetaDesc').val();
+    var contentTitle = $('#txtMetaTitle').val();
     if (!content || !content.trim()) {
         $(".collection-seo--preview").hide();
         $("#text-seo-sug").removeClass("hide");

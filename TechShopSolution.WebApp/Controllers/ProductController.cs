@@ -41,16 +41,17 @@ namespace TechShopSolution.WebApp.Controllers
 
             var product = await _productApiClient.GetPublicProductDetail(slug, cus_id);
 
-            if (product.ResultObject == null)
+            if (!product.IsSuccess)
             {
-                TempData["error"] = product.Message;
-                return RedirectToAction("Index", "Home");
+                if (product.statusCode != null)
+                    return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = product.statusCode });
+                else
+                {
+                    TempData["error"] = product.Message;
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            if (!product.ResultObject.isActive)
-            {
-                TempData["error"] = "Sản phẩm này đang bị khóa, vui lòng liên hệ QTV để biết thêm chi tiết.";
-                return RedirectToAction("Index", "Home");
-            }
+
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];

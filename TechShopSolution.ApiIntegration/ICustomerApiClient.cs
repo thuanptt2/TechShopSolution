@@ -26,7 +26,7 @@ namespace TechShopSolution.ApiIntegration
         Task<ApiResult<List<DistrictModel>>> LoadDistrict(int provinceID);
         Task<ApiResult<List<WardModel>>> LoadWard(int districtID);
         Task<List<OrderViewModel>> GetLatestOrder(int id, int take);
-        Task<ApiResult<List<OrderPublicViewModel>>> GetCustomerOrders(int id);
+        Task<PagedResult<OrderPublicViewModel>> GetCustomerOrders(GetCustomerOrderRequest request);
         Task<ApiResult<OrderPublicViewModel>> GetOrderDetail(int id, int cus_id);
         Task<ApiResult<string>> ConfirmDoneShip(int id);
         Task<ApiResult<string>> CancelOrder(OrderCancelRequest request);

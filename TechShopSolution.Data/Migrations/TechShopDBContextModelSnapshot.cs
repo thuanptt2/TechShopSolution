@@ -663,7 +663,7 @@ namespace TechShopSolution.Data.Migrations
 
                     b.HasIndex("payment_id");
 
-                    b.ToTable("Order");
+                    b.ToTable("Bill");
                 });
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.OrderDetail", b =>
@@ -688,7 +688,7 @@ namespace TechShopSolution.Data.Migrations
 
                     b.HasIndex("product_id");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("BillDetail");
                 });
 
             modelBuilder.Entity("TechShopSolution.Data.Entities.Partner", b =>

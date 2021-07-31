@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using TechShopSolution.ViewModels.Catalog.Coupon;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.ApiIntegration
 {
@@ -38,7 +37,7 @@ namespace TechShopSolution.ApiIntegration
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/order/paging?Keyword={request.Keyword}&pageIndex=" +
+            var respone = await client.GetAsync($"/api/order/paging?Keyword={request.Keyword}&type={request.type}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
             var body = await respone.Content.ReadAsStringAsync();
             var order = JsonConvert.DeserializeObject<PagedResult<OrderViewModel>>(body);
@@ -100,5 +99,16 @@ namespace TechShopSolution.ApiIntegration
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             else return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
+        public async Task<ApiResult<OrderStatisticsViewModel>> GetOrderStatistics()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.GetAsync($"/api/Order/OrderStatistics");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<OrderStatisticsViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<OrderStatisticsViewModel>>(body);
+        }
+
     }
 }

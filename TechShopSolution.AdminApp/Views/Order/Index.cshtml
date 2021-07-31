@@ -64,10 +64,20 @@
         <!-- Navbar Search-->
         <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
             <div class="input-group">
-                <label for="pet-select"></label>
-                <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
-                <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/order/index'"><i class="fas fa-times"></i></button>
+                <div class="form-group mr-3">
+                    <label>Lọc đơn hàng theo: </label>
+                    <select name="type" class="form-select" asp-items="@ViewBag.SortType" onchange="this.form.submit()">
+                    </select>
+                </div>
+                <div class="form-group flex-column align-items-sm-start">
+                    <label>Tìm kiếm đơn hàng: </label>
+                    <div class="d-flex">
+                        <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />
+                        <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
+                        <button class="btn btn-secondary" id="btnNavbarSearch" type="button" onclick="window.location.href='/order/index'"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                
             </div>
         </form>
 
@@ -167,6 +177,7 @@
                                         </td>
                                     }
                                 }
+
                                 @if (item.ship_status == 2)
                                 {
                                     <td class="text-success-order text-center">

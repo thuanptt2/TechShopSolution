@@ -126,8 +126,11 @@ namespace TechShopSolution.WebApp.Controllers
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             CartViewModel currentCart = new CartViewModel();
             List<CreateOrderDetailRequest> OrderDetail = new List<CreateOrderDetailRequest>();
-            if (session != null)
+            if (!string.IsNullOrWhiteSpace(session))
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
+            else {
+                return RedirectToAction("Index", "Home");
+            }
             string coupon_code = "";  decimal amount = 0; decimal total = 0; decimal discount = 0;
 
             foreach (var item in currentCart.items)
@@ -258,10 +261,10 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 TempData["result"] = "Đặt hàng thành công. Cảm ơn quý khách đã mua hàng của chúng tôi.";
                 HttpContext.Session.Remove(SystemConstants.CartSession);
-                var contentMailClient = sendMailToClient(int.Parse(result.ResultObject), request);
-                var contentMailAdmin = sendMailToAdmin(int.Parse(result.ResultObject), request, customer.ResultObject);
-                await SendMail(customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMailClient);
-                await SendMail("thuanneuwu2@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin);
+                //var contentMailClient = sendMailToClient(int.Parse(result.ResultObject), request);
+                //var contentMailAdmin = sendMailToAdmin(int.Parse(result.ResultObject), request, customer.ResultObject);
+                //await SendMail(customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMailClient);
+                //await SendMail("thuanneuwu@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin);
                 return RedirectToAction("Index","Home");
             }
             TempData["error"] = result.Message;
@@ -314,7 +317,7 @@ namespace TechShopSolution.WebApp.Controllers
             if (product.ResultObject == null)
                 return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm không tồn tại hoặc đã bị xóa.");
             if (!product.ResultObject.isActive)
-                return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm hiện tại đang bị khóa.");
+                return BadRequest("Thêm vào giỏ hàng thất bại ! Sản phẩm hiện tại đã ngừng kinh doanh.");
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
             var currentCart = new CartViewModel();
             currentCart.items = new List<CartItemViewModel>();
@@ -324,6 +327,9 @@ namespace TechShopSolution.WebApp.Controllers
             if (currentCart.items.Any(x => x.Id == product.ResultObject.id))
             {
                 var item = currentCart.items.First(x => x.Id == id);
+                if (product.ResultObject.instock == item.Quantity)
+                    return BadRequest("Sản phẩm chỉ còn lại " + product.ResultObject.instock + " cái, bạn không thể mua thêm được.");
+
                 if (item.Quantity >= 5)
                     return BadRequest("Bạn chỉ được mua tối đa 5 sản phẩm, sản phẩm này đã có trong giỏ hàng của bạn.");
                 else item.Quantity++;

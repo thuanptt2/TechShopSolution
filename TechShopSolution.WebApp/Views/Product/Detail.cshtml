@@ -3,21 +3,105 @@
 @using TechShopSolution.WebApp.Models
 @using System.Security.Claims;
 @{
-    int score5 = 0;
-    int score4 = 0;
-    int score3 = 0;
-    int score2 = 0;
-    int score1 = 0;
+    ViewData["Robots"] = "index,follow";
+    int score5 = 0; int score4 = 0; int score3 = 0; int score2 = 0; int score1 = 0;
     bool flag = true;
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    int ratingCount = Model.Ratings.Count;
+    double totalScore = 0;
+    double bestScore = 0;
+    string ratingBy = "";
 }
-@section FacebookComments{
+@section SEOMeta {
+    <meta property="og:type" content="og:product" />
+    <meta property="og:title" content="@Model.Product.meta_tittle" />
+    <meta property="og:image" content="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" />
+    <meta property="og:description" content="@Model.Product.meta_descriptions" />
+    <meta property="og:url" content="@(Configuration["BaseAddress"] + "/" + Model.Product.slug)" />
+    <meta property="product:plural_title" content="@Model.Product.meta_tittle" />
+    <meta property="product:price:amount" content="@(Model.Product.promotion_price > 0 ?  Model.Product.promotion_price :  Model.Product.unit_price)">
+    <meta property="product:price:currency" content="VNĐ">
+    <meta property="product:price:availability" content="instock">
+    <meta property="product:price:brand" content="@Model.Product.brand_name">
+    @if (ratingCount != 0)
+    {
+        bestScore = Model.Ratings[0].score;
+        ratingBy = Model.Ratings[0].cus_name;
+        foreach (var item in Model.Ratings)
+        {
+            if (bestScore < item.score)
+            {
+                bestScore = item.score;
+                ratingBy = item.cus_name;
+            }
+            totalScore += item.score;
+        }
+        <meta itemprop="ratingValue" content="@(totalScore/ratingCount)">
+        <meta content="5" itemprop="bestRating">
+        <meta itemprop="worstRating" content="1">
+        <meta itemprop="ratingCount" content="@ratingCount">
+        <meta itemprop="reviewCount" content="@ratingCount">
+    }
+}
+
+@section AddonProductSEO{
+    <!--Này là mình dùng "Structured Data" để tối ưu SEO khi search trên công cụ tìm kiếm, các bạn có thể tìm hiểu từ khóa này-->
+    <div typeof="schema:Product">
+        <div rel="schema:image" resource="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)"></div>
+        <div property="schema:mpn" content="@Model.Product.code"></div>
+        <div property="schema:name" content="@Model.Product.meta_tittle"></div>
+        <div property="schema:description" content="@Model.Product.meta_descriptions"></div>
+        <div rel="schema:brand">
+            <div typeof="schema:Brand">
+                <div property="schema:name" content="@Model.Product.brand_name"></div>
+            </div>
+        </div>
+        @if (ratingCount != 0)
+        {
+            <div rel="schema:aggregateRating">
+                <div typeof="schema:AggregateRating">
+                    <div property="schema:reviewCount" content="@ratingCount"></div>
+                    <div property="schema:ratingValue" content="@(totalScore/ratingCount)"></div>
+                </div>
+            </div>
+            <div rel="schema:review">
+                <div typeof="schema:Review">
+                    <div rel="schema:reviewRating">
+                        <div typeof="schema:Rating">
+                            <div property="schema:ratingValue" content="@(totalScore/ratingCount)"></div>
+                            <div property="schema:bestRating" content="5"></div>
+                        </div>
+                    </div>
+                    <div rel="schema:author">
+                        <div typeof="schema:Person">
+                            <div property="schema:name" content="@ratingBy"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div rel="schema:offers">
+            <div typeof="schema:Offer">
+                <div property="schema:price" content="@(Model.Product.promotion_price > 0 ?  Model.Product.promotion_price :  Model.Product.unit_price)"></div>
+                <div property="schema:availability" content="https://schema.org/InStock"></div>
+                <div property="schema:priceCurrency" content="VNĐ"></div>
+                <div property="schema:priceValidUntil" datatype="xsd:date" content="@DateTime.Now"></div>
+                <div rel="schema:url" resource="@(Configuration["BaseAddress"] + "/" + Model.Product.slug)"></div>
+                <div property="schema:itemCondition" content="https://schema.org/UsedCondition"></div>
+            </div>
+        </div>
+        <div rel="schema:image" resource="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)"></div>
+    </div>
+
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0&appId=846669762547678&autoLogAppEvents=1" nonce="xvuFE9SJ"></script>
 }
+
 @section Script{
     <script src="~/js/Product.js"></script>
     <script src="~/js/OrderCancelReason.js"></script>
 }
+
 @if (Model == null)
 {
     <div class="span9">
@@ -26,7 +110,6 @@
 }
 else
 {
-    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
     ViewData["Title"] = Model.Product.meta_tittle;
     ViewData["Description"] = Model.Product.meta_descriptions;
     ViewData["Keywords"] = Model.Product.meta_keywords;
@@ -39,9 +122,10 @@ else
         </ul>
         <div class="row product-detail">
             <div id="gallery" class="span3">
-                <a href="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" title="@Model.Product.name">
-                    <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" style="width:100%" alt="@Model.Product.name" />
+                <a href="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)">
+                    <img src="@(Configuration["BaseAddress"] + "/user-content/" + Model.Product.image)" style="width:96%" alt="@Model.Product.name" />
                 </a>
+
                 @{
                     if (!string.IsNullOrWhiteSpace(Model.Product.more_images))
                     {
@@ -55,7 +139,7 @@ else
                                             {
                                                 if (!string.IsNullOrWhiteSpace(item))
                                                 {
-                                                    <a href="@(Configuration["BaseAddress"] + "/user-content/" + item)" title="@Model.Product.name"> <img style="width:29%" src="@(Configuration["BaseAddress"] + "/user-content/" + item)" alt="" /></a>
+                                                    <a href="@(Configuration["BaseAddress"] + "/user-content/" + item)" title="@Model.Product.name"> <img style="width:29%" src="@(Configuration["BaseAddress"] + "/user-content/" + item)" alt="@Model.Product.name" title="@Model.Product.name" /></a>
 
                                                 }
                                             }
@@ -90,18 +174,16 @@ else
                     </p>
                 }
 
-                @if (Model.Product.promotion_price > 1)
+                @if (!Model.Product.isActive)
+                {
+                    <span class="stop-for-sale-text">Ngừng kinh doanh</span>
+                }
+                else if (Model.Product.promotion_price > 1)
                 {
                     var a = Model.Product.unit_price - Model.Product.promotion_price;
                     <span class="product-price detail-product-price">@String.Format(info, "{0:c}", Model.Product.promotion_price)&nbsp;&nbsp;</span>
                     <span class="product-promotion-pirce">@String.Format(info, "{0:c}", Model.Product.unit_price)&nbsp;&nbsp;</span>
                     <span class="product-total-price">Tiết kiệm @String.Format(info, "{0:c}", a)</span>
-                }
-                else if (Model.Product.unit_price == 0)
-                {
-                    <div class="btnGroup">
-                        <button type="button" class="btn btn-large btn-primary">Liên hệ<i class=" icon-shopping-cart"></i></button>
-                    </div>
                 }
                 else
                 {
@@ -109,43 +191,43 @@ else
                 }
                 <br />
                 <hr class="soft" />
-                <form class="form-horizontal qtyFrm">
-                    <div class="control-group">
-                        <div>
-                            @{
-                                if (Model.Product.instock > 1)
-                                {
-                                    <h5>
-                                        Còn lại: @Model.Product.instock <small>sản phẩm</small>
-                                    </h5><br />
-                                    <div class="btnGroup">
-                                        <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
-                                        <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
-                                    </div>
-                                }
-                                else if (Model.Product.instock == null)
-                                {
-                                    <div class="btnGroup">
-                                        <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
-                                        <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span class="OutOfStock">Hết hàng</span>
-                                }
-                            }
-                            <div class="pull-right d-flex margin-right-20">
-                                <div class="product-client-infos-item">
-                                    <i class="icon-eye-open product-client-infos-icon"></i>&nbsp; @Model.Product.view_count
-                                </div>
-                                <div class="product-client-infos-item">
-                                    <i class="icon-heart-empty product-client-infos-icon"></i>&nbsp; <span id="favorite-total">@Model.Product.favorite_count</span>
-                                </div>
-                            </div>
-                        </div>
+                @if (!Model.Product.isActive)
+                {
+
+                    <div class="btnGroup">
+                        <a class="btn btn-large btn-primary" href="@Url.Action("Index","Contact")">Liên hệ</a>
                     </div>
-                </form>
+                }
+                else if (Model.Product.instock == null)
+                {
+                    <div class="btnGroup">
+                        <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                        <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
+                    </div>
+                }
+                else if (Model.Product.instock == 0)
+                {
+                    <span class="OutOfStock">Hết hàng</span>
+                }
+                else
+                {
+                    <h5>
+                        @(Model.Product.instock < 5 ? "Chỉ còn lại" : "Còn lại"): @Model.Product.instock <small>sản phẩm</small>
+                    </h5>
+                    <br />
+                    <div class="btnGroup">
+                        <button type="button" class="btn btn-large btn-primary btn-add-cart" data-id="@Model.Product.id"> Thêm vào <i class=" icon-shopping-cart"></i></button>
+                        <button type="button" class="btn btn-large btn-danger btn-buy-now" data-id="@Model.Product.id"> Mua ngay</button>
+                    </div>
+                }
+                <div class="pull-right d-flex margin-right-20">
+                    <div class="product-client-infos-item">
+                        <i class="icon-eye-open product-client-infos-icon"></i>&nbsp; @Model.Product.view_count
+                    </div>
+                    <div class="product-client-infos-item">
+                        <i class="icon-heart-empty product-client-infos-icon"></i>&nbsp; <span id="favorite-total">@Model.Product.favorite_count</span>
+                    </div>
+                </div><br /><br />
                 @if (User.Identity.IsAuthenticated)
                 {
                     if (Model.Product.isFavorite)
@@ -199,12 +281,12 @@ else
                         {
                             foreach (var item in Model.Ratings)
                             {
-                                <div class="review" itemscope itemtype="http://schema.org/Review">
+                                <div class="review">
                                     <div class="space-between-flex">
-                                        <h4 class="subheading" itemprop="itemReviewed">@item.content</h4>
+                                        <h4 class="subheading">@item.content</h4>
                                         <p class="receive-item">@item.date_rating</p>
                                     </div>
-                                    <p class="author" itemprop="author"><small>Bởi:</small> @item.cus_name</p>
+                                    <p class="author"><small>Bởi:</small> @item.cus_name</p>
                                     <div class="rating rating--read-only">
                                         @if (item.score == 1)
                                         {
@@ -320,44 +402,44 @@ else
             {
                 foreach (var product in Model.ProductsRelated)
                 {
-                <li class="span3">
-                    <div class="thumbnail">
-                        @if (product.featured)
-                        {
-                            <i class="tag-featured"></i>
-                        }
-                        else if (product.best_seller)
-                        {
-                            <i class="tag-best-seller"></i>
-                        }
-                        else if (product.promotion_price > 1)
-                        {
-                            <i class="tag-sale"></i>
-                        }
-                        else if ((DateTime.Now - product.create_at).TotalDays < 7)
-                        {
-                            <i class="tag"></i>
-                        }
-                        <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @product.image)" alt="@product.name" /></a>
-                        <div class="caption">
-                            <h5>@product.name</h5>
-                        </div>
-                        <div class="footer-thumbnail">
-                            @if (product.promotion_price > 1)
+                    <li class="span3">
+                        <div class="thumbnail">
+                            @if (product.featured)
                             {
-                                <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
-                                <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                <i class="tag-featured"></i>
                             }
-                            else
+                            else if (product.best_seller)
                             {
-                                <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                <i class="tag-best-seller"></i>
                             }
+                            else if (product.promotion_price > 1)
+                            {
+                                <i class="tag-sale"></i>
+                            }
+                            else if ((DateTime.Now - product.create_at).TotalDays < 7)
+                            {
+                                <i class="tag"></i>
+                            }
+                            <a href="@Url.Action("Detail", "Product", new { slug = product.slug })"><img src="@(Configuration["BaseAddress"] + "/user-content/" + @product.image)" alt="@product.name" /></a>
+                            <div class="caption">
+                                <h5>@product.name</h5>
+                            </div>
+                            <div class="footer-thumbnail">
+                                @if (product.promotion_price > 1)
+                                {
+                                    <span class="product-price">@String.Format(info, "{0:c}", product.promotion_price)</span><br />
+                                    <span class="product-promotion-pirce">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                }
+                                else
+                                {
+                                    <span class="product-price">@String.Format(info, "{0:c}", product.unit_price)</span>
+                                }
+                            </div>
+                            <h4 style="text-align:center">
+                                <a class="btn" href="@Url.Action("Detail", "Product", new { slug = product.slug })">Xem Chi tiết</a>
+                            </h4>
                         </div>
-                        <h4 style="text-align:center">
-                            <a class="btn" href="@Url.Action("Detail", "Product", new { slug = product.slug })">Xem Chi tiết</a>
-                        </h4>
-                    </div>
-                </li>
+                    </li>
                 }
             }
         }
@@ -414,7 +496,6 @@ else
                                                         {
                                                             <span class="product-price">@String.Format(info, "{0:c}", item.unit_price)</span>
                                                         }
-
                                                     </div>
                                                 </div>
                                             </li>

@@ -3,12 +3,10 @@
     $('.datepicker').datepicker({
         autoclose: true,
         endDate: today,
+        dateFormat: 'dd/mm/yy',
         minDate: 0
     }).on('changeDate', function (ev) {
         $(this).datepicker('hide');
-    });
-    $.datepicker.setDefaults({
-        dateFormat: 'dd/mm/yy'
     });
 
     $('.datepicker').keyup(function () {

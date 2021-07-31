@@ -7,23 +7,34 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.AdminApp.Models;
+using TechShopSolution.ApiIntegration;
 
 namespace TechShopSolution.AdminApp.Controllers
 { 
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IOrderApiClient _orderApiClient;
+        private readonly IProductApiClient _productApiClient;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IOrderApiClient orderApiClient, IProductApiClient productApiClient)
         {
-            _logger = logger;
+            _orderApiClient = orderApiClient;
+            _productApiClient = productApiClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var adminName = User.Identity.Name;
-            return View();
+            var orderStatistics = await _orderApiClient.GetOrderStatistics();
+            var viewRanking = await _productApiClient.GetProductViewRanking(10);
+            var ratingRanking = await _productApiClient.GetProductMostSalesRanking(10);
+            var favoriteRanking = await _productApiClient.GetProductFavoriteRanking(10);
+            return View(new DashBoardViewModel() {
+                OrderStatistics = orderStatistics.ResultObject,
+                viewRanking = viewRanking,
+                salesRanking = ratingRanking,
+                favoriteRanking = favoriteRanking
+            }); 
         }
 
         public IActionResult Privacy()
