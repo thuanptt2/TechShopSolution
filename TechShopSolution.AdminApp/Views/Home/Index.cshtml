@@ -7,7 +7,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="js/chart-sales.js"></script>
     <script src="~/js/chart-sales-bar.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" rel="stylesheet" />
 }
+
 
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
@@ -63,6 +67,10 @@
 
     <div class="row">
         <div class="col-xl-6">
+            <div class="form-group mb-2">
+                <label class="control-label lableFormField"></label>
+                <input type="text" class="form-control date" readonly="readonly" id="Txt_Date" onchange="loadRevenue()" placeholder="Lọc từ ngày - đến ngày" style="cursor: pointer;">
+            </div>
             <div class="card mb-4">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
@@ -73,7 +81,7 @@
                         <b id="totalRevenueLine">Tổng doanh thu: </b>
                     </div>
                 </div>
-                <div class="card-body"><canvas id="myAreaChart" width="100" height="40"></canvas></div>
+                <div class="card-body" id="chart-revenue-line"><canvas id="myAreaChart" width="100" height="40"></canvas></div>
             </div>
         </div>
         <div class="col-xl-6">
@@ -99,10 +107,10 @@
                 <ol class="ranking-board-product">
                     @foreach (var item in Model.viewRanking)
                     {
-                        <li>
-                            <a href="@Url.Action("Update","Product", new { id = item.id })" target="_blank">@item.name</a>
-                            <small>@item.count</small>
-                        </li>
+                    <li>
+                        <a href="@Url.Action("Update","Product", new { id = item.id })" target="_blank">@item.name</a>
+                        <small>@item.count</small>
+                    </li>
                     }
                 </ol>
             </div>
@@ -118,10 +126,10 @@
                 <ol class="ranking-board-product">
                     @foreach (var item in Model.favoriteRanking)
                     {
-                        <li>
-                            <a href="@Url.Action("Update","Product", new { id = item.id })" target="_blank">@item.name</a>
-                            <small>@item.count</small>
-                        </li>
+                    <li>
+                        <a href="@Url.Action("Update","Product", new { id = item.id })" target="_blank">@item.name</a>
+                        <small>@item.count</small>
+                    </li>
                     }
                 </ol>
             </div>
@@ -137,10 +145,10 @@
                 <ol class="ranking-board-product">
                     @foreach (var item in Model.salesRanking)
                     {
-                        <li>
-                            <a href="@Url.Action("Update","Product", new { id = item.id })" target="_blank">@item.name</a>
-                            <small>@item.count</small>
-                        </li>
+                    <li>
+                        <a href="@Url.Action("Update","Product", new { id = item.id })" target="_blank">@item.name</a>
+                        <small>@item.count</small>
+                    </li>
                     }
                 </ol>
             </div>

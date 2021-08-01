@@ -2,6 +2,18 @@
     Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#292b2c';
     loadData();
+
+    var dateToday = new Date();
+    $("#Txt_Date").datepicker({
+        format: 'mm/dd/yyyy',
+        inline: false,
+        lang: 'en',
+        step: 2,
+        endDate: new Date(),
+        todayHighlight: true,
+        multidate: 2,
+        closeOnDateSelect: true,
+    });
 });
 
 function loadData(from, to) {
@@ -14,18 +26,19 @@ function loadData(from, to) {
         },
         dataType: "json",
         success: function (res) {
+            $("#chart-revenue-line").html('<canvas id="myAreaChart" width="100" height="40"></canvas>')
             initChartLine(res);
         },
-        error: function (res) {
-            alert(res.Message);
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText);
         }
     });
-}
+};
 
 function initChartLine(data) {
     var arrRevenueDate = [];
     var arrRevenueValue = [];
-    var maxValue = data[0].revenue;
+    var maxValue = 0;
     var total = 0;
     $.each(data, function (i, item) {
         var itemDate = new Date(item.date);
@@ -56,7 +69,6 @@ function initChartLine(data) {
                 pointHitRadius: 50,
                 pointBorderWidth: 2,
                 data: arrRevenueValue,
-                
             }],
         },
         options: {
@@ -99,4 +111,24 @@ function initChartLine(data) {
             }
         }
     });
+};
+
+function loadRevenue() {
+    var dataArr = ($("#Txt_Date").val()).split(",");
+
+    if (dataArr.length == 2) {
+       
+        var date1 = new Date(dataArr[0]);
+        var date2 = new Date(dataArr[1]);
+        if (date1.getTime() > date2.getTime()) {
+            var fromDate = (date2.getMonth() + 1) + "/" + date2.getDate() + "/" + date2.getFullYear();
+            var toDate = (date1.getMonth() + 1) + "/" + date1.getDate() + "/" + date1.getFullYear();
+            loadData(fromDate, toDate);
+        }
+        else {
+            var fromDate = (date1.getMonth() + 1) + "/" + date1.getDate() + "/" + date1.getFullYear();
+            var toDate = (date2.getMonth() + 1) + "/" + date2.getDate() + "/" + date2.getFullYear();
+            loadData(fromDate, toDate);
+        }
+    }
 }

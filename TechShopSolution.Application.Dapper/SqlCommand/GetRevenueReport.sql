@@ -14,7 +14,7 @@ BEGIN
 				group by CAST(b.create_at as DATE)
 END
 
-EXEC dbo.GetRevenueDaily @fromDate = '07/02/2021',
-						 @toDate = '07/31/2021'
+EXEC dbo.GetRevenueDaily @fromDate = '7/1/2021',
+						 @toDate = '7/31/2021'
 select * from Bill
 
