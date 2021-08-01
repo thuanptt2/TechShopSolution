@@ -46,6 +46,13 @@ namespace TechShopSolution.AdminApp.Controllers
                 return Ok(result.ResultObject);
             return BadRequest(result.Message);
         }
+        public async Task<IActionResult> GetRevenueByMonthReport(string fromDate = null, string toDate = null)
+        {
+            var result = await _reportApiClient.GetRevenueByMonthReport(new GetRevenueRequest { fromDate = fromDate, toDate = toDate });
+            if (result.IsSuccess)
+                return Ok(result.ResultObject);
+            return BadRequest(result.Message);
+        }
 
         public IActionResult Privacy()
         {

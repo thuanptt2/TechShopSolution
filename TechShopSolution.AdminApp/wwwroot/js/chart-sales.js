@@ -2,6 +2,7 @@
     Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#292b2c';
     loadData();
+    loadDatabyMonth();
 
     var dateToday = new Date();
     $("#Txt_Date").datepicker({
@@ -28,6 +29,23 @@ function loadData(from, to) {
         success: function (res) {
             $("#chart-revenue-line").html('<canvas id="myAreaChart" width="100" height="40"></canvas>')
             initChartLine(res);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText);
+        }
+    });
+};
+function loadDatabyMonth(from, to) {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetRevenueByMonthReport",
+        data: {
+            fromDate: from,
+            toDate: to
+        },
+        dataType: "json",
+        success: function (res) {
+            initChartBar(res);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(jqXHR.responseText);
@@ -87,15 +105,80 @@ function initChartLine(data) {
                 yAxes: [{
                     ticks: {
                         min: 0,
-                        max: maxValue * 1.4,
+                        max: maxValue,
                         maxTicksLimit: 6,
-
                         callback: function (value) {
                             return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value)
                         }
                     },
                     gridLines: {
                         color: "rgba(0, 0, 0, .125)",
+                    }
+                }],
+            },
+            legend: {
+                display: false
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]);
+                    }
+                }
+            }
+        }
+    });
+};
+function initChartBar(data) {
+    var arrRevenueMonth = [];
+    var arrRevenueValue = [];
+    var maxValue = 0;
+    $.each(data, function (i, item) {
+        var itemDate = new Date(item.date);
+        var month = item.month;
+        var value = item.revenue;
+        arrRevenueMonth.push(month);
+        arrRevenueValue.push(value);
+        if (value > maxValue)
+            maxValue = value;
+    });
+    var ctx = document.getElementById("myBarChart");
+    var myLineChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: arrRevenueMonth,
+            datasets: [{
+                label: "Doanh thu",
+                backgroundColor: "rgba(2,117,216,1)",
+                borderColor: "rgba(2,117,216,1)",
+                data: arrRevenueValue,
+            }],
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    time: {
+                        unit: 'month'
+                    },
+                    barPercentage: 0.2,
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        maxTicksLimit: 12
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: maxValue,
+                        maxTicksLimit: 6,
+                        callback: function (value) {
+                            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value)
+                        },
+                    },
+                    gridLines: {
+                        display: true
                     }
                 }],
             },
@@ -129,6 +212,35 @@ function loadRevenue() {
             var fromDate = (date1.getMonth() + 1) + "/" + date1.getDate() + "/" + date1.getFullYear();
             var toDate = (date2.getMonth() + 1) + "/" + date2.getDate() + "/" + date2.getFullYear();
             loadData(fromDate, toDate);
+        }
+    }
+}
+function loadRevenueByMonth() {
+
+    var fromMonth = document.getElementById('fromMonth').value;
+    var toMonth = document.getElementById('toMonth').value;
+   
+    if (fromMonth != "" && toMonth != "") {
+
+        var lastday = function (y, m) {
+            return new Date(y, m + 1, 0).getDate();
+        }
+
+        fromMonth = new Date(fromMonth);
+        toMonth = new Date(toMonth);
+        if (fromMonth.getTime() > toMonth.getTime()) {
+            var temp = fromMonth;
+            fromMonth = toMonth;
+            toMonth = temp;
+
+            fromMonth = (fromMonth.getMonth() + 1) + "/01/" + fromMonth.getFullYear();
+            toMonth = (toMonth.getMonth() + 1) + "/" + lastday(toMonth.getFullYear(), toMonth.getMonth()) + "/" + toMonth.getFullYear();
+            loadDatabyMonth(fromMonth, toMonth);
+        }
+        else {
+            fromMonth = (fromMonth.getMonth() + 1) + "/01/" + fromMonth.getFullYear();
+            toMonth = (toMonth.getMonth() + 1) + "/" + lastday(toMonth.getFullYear(), toMonth.getMonth()) + "/" + toMonth.getFullYear();
+            loadDatabyMonth(fromMonth, toMonth);
         }
     }
 }
