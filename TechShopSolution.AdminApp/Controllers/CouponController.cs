@@ -66,11 +66,11 @@ namespace TechShopSolution.AdminApp.Controllers
                 code = result.ResultObject.code,
                 max_price = result.ResultObject.max_price.ToString(),
                 min_order_value = result.ResultObject.min_order_value.ToString(),
-                end_at = result.ResultObject.end_at.ToString("dd/MM/yyyy"),
+                end_at = result.ResultObject.end_at,
                 isActive = result.ResultObject.isActive,
                 name = result.ResultObject.name,
                 quantity = result.ResultObject.quantity,
-                start_at = result.ResultObject.start_at.ToString("dd/MM/yyyy"),
+                start_at = result.ResultObject.start_at,
             };
             if (TempData["result"] != null)
             {
