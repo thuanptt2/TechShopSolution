@@ -10,5 +10,6 @@ namespace TechShopSolution.Application.Dapper.Report
     public interface IReportService
     {
         Task<ApiResult<List<RevenueReportViewModel>>> GetReportAsync(string fromDate, string toDate);
+        Task<ApiResult<List<RevenueByMonthReportViewModel>>> GetReportByMonthAsync(string fromDate, string toDate);
     }
 }

@@ -26,5 +26,13 @@ namespace TechShopSolution.BackendApi.Controllers
                 return Ok(result);
             else return BadRequest(result);
         }
+        [HttpGet("RevenueByMonth")]
+        public async Task<IActionResult> GetRevenueByMonthReport([FromQuery] GetRevenueRequest request)
+        {
+            var result = await _reportService.GetReportByMonthAsync(request.fromDate, request.toDate);
+            if (result.IsSuccess)
+                return Ok(result);
+            else return BadRequest(result);
+        }
     }
 }

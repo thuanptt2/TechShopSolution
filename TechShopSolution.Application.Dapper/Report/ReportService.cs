@@ -45,6 +45,33 @@ namespace TechShopSolution.Application.Dapper.Report
                 }
             }
         }
+        public async Task<ApiResult<List<RevenueByMonthReportViewModel>>> GetReportByMonthAsync(string fromDate, string toDate)
+        {
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("TechShopSolutionDB")))
+            {
+                await sqlConnection.OpenAsync();
+                var dynamicParameters = new DynamicParameters();
 
+                var now = DateTime.Now;
+                var today = new DateTime(now.Year, now.Month, now.Day);
+                var sixMonthsBack = today.AddMonths(-6);
+
+                dynamicParameters.Add("@fromDate", string.IsNullOrEmpty(fromDate) ? sixMonthsBack.ToString("MM/dd/yyyy") : fromDate);
+                dynamicParameters.Add("@toDate", string.IsNullOrEmpty(toDate) ? today.ToString("MM/dd/yyyy") : toDate);
+
+                try
+                {
+                    var result = (List<RevenueByMonthReportViewModel>)
+                        await sqlConnection.QueryAsync<RevenueByMonthReportViewModel>("GetRevenueByMonth", dynamicParameters,
+                        commandType: System.Data.CommandType.StoredProcedure);
+
+                    return new ApiSuccessResult<List<RevenueByMonthReportViewModel>>(result);
+                }
+                catch (Exception ex)
+                {
+                    return new ApiErrorResult<List<RevenueByMonthReportViewModel>>(ex.Message);
+                }
+            }
+        }
     }
 }
