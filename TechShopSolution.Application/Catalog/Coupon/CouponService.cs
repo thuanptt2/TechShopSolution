@@ -7,6 +7,7 @@ using TechShopSolution.ViewModels.Catalog.Coupon;
 using TechShopSolution.ViewModels.Common;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace TechShopSolution.Application.Catalog.Coupon
 {
@@ -199,10 +200,10 @@ namespace TechShopSolution.Application.Catalog.Coupon
                     if (!string.IsNullOrWhiteSpace(request.min_order_value))
                         Coupon.min_order_value = double.Parse(request.min_order_value);
                     else Coupon.min_order_value = null;
-                 
+
                     Coupon.start_at = request.start_at;
                     Coupon.end_at = request.end_at;
-                  
+
                     await _context.SaveChangesAsync();
                     return new ApiSuccessResult<bool>();
                 }

@@ -5,16 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section jsFooter {
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   
     <script src="~/js/Coupon.js"></script>
     <script src="~/js/autoNumeric.min.js"></script>
 }
 <div class="container-fluid">
     <h2 class="mt-4">Cập nhật mã giảm giá</h2>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a></li>
         <li class="breadcrumb-item"><a href="/coupon/index">Mã giảm giá</a></li>
         <li class="breadcrumb-item active">Chi tiết mã giảm giá</li>
     </ol>
@@ -52,12 +50,12 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="start_at" class="control-label lableFormField"></label>
-                            <input asp-for="start_at" type="text" class="form-control datepicker" readonly="readonly" />
+                            <input asp-for="start_at" type="date" class="form-control" />
                             <span asp-validation-for="start_at" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="end_at" class="control-label lableFormField"></label>
-                            <input asp-for="end_at" type="text" class="form-control datepicker" readonly="readonly" />
+                            <input asp-for="end_at" type="date" class="form-control" />
                             <span asp-validation-for="end_at" class="text-danger"></span>
                         </div>
                         <div class="form-group">

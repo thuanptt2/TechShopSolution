@@ -390,8 +390,9 @@ input.input-validation-error {
     padding: 16px; /* Padding */
     position: fixed; /* Sit on top of the screen */
     z-index: 1; /* Add a z-index if needed */
-    left: 50%;
-
+    left: 45%;
+    right: 50%;
+    width: 400px;
     top: 60px; /* 30px from the bottom */
 }
 
@@ -415,7 +416,9 @@ input.input-validation-error {
     padding: 16px; /* Padding */
     position: fixed; /* Sit on top of the screen */
     z-index: 1; /* Add a z-index if needed */
-    left: 50%;
+    left: 45%;
+    right: 50%;
+    width: 400px;
     top: 60px; /* 30px from the bottom */
 }
 
@@ -439,7 +442,9 @@ input.input-validation-error {
     padding: 16px; /* Padding */
     position: fixed; /* Sit on top of the screen */
     z-index: 1; /* Add a z-index if needed */
-    left: 50%;
+    left: 45%;
+    right: 50%;
+    width: 400px;
     top: 60px; /* 30px from the bottom */
 }
 
@@ -605,6 +610,7 @@ html {
 .image-category-ram {
     background-image: url('../images/menu-10-20210405030920.png');
 }
+
 
 .category-products {
     padding: 80px 0;

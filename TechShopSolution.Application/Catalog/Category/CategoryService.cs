@@ -89,7 +89,8 @@ namespace TechShopSolution.Application.Catalog.Category
             if (query == null)
                 return null;
 
-            var data = query.Select(a => new CategoryViewModel()
+            var data = query.OrderBy(x=>x.cate_name).Select(a => new CategoryViewModel()
+            
             {
                 id = a.id,
                 cate_name = a.cate_name,

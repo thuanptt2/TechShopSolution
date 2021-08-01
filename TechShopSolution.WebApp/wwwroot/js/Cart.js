@@ -319,7 +319,7 @@
                     alert("Một sản phẩm trong giỏ hàng của bạn không còn tồn tại hoặc đã bị xóa, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé!")
                     $('#btn-purchase').html('<button class="btn btn-large table-cart" disabled>Thanh toán <i class="icon-arrow-right"></i></button>');
                 } else if (!isActive) {
-                    alert("Một sản phẩm trong giỏ hàng của bạn hiện tại đang bị khóa, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé! ")
+                    alert("Một sản phẩm trong giỏ hàng của bạn hiện tại đã ngừng kinh doanh, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé! ")
                     $('#btn-purchase').html('<button class="btn btn-large table-cart" disabled>Thanh toán <i class="icon-arrow-right"></i></button>');
                 } else if (!isAvaiable) {
                     alert("Một sản phẩm trong giỏ hàng của bạn đã hết hàng, vui lòng xóa sản phẩm này khỏi giỏ hàng để thanh toán bạn nhé!")

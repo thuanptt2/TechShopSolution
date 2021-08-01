@@ -11,7 +11,7 @@ namespace TechShopSolution.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.ToTable("Order");
+            builder.ToTable("Bill");
             builder.HasKey(x => x.id);
             builder.Property(x => x.id).UseIdentityColumn(100000,1);
             builder.Property(x => x.cus_id).IsRequired();

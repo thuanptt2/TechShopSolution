@@ -3,10 +3,11 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 @{
-    ViewData["Title"] = "Giỏ hàng";
+    ViewData["Title"] = "Giỏ hàng - TechShop Việt Nam";
+    ViewData["Robots"] = "noindex,nofollow";
 }
 @section Script{
-    <script src="~/js/Cart.js"></script>
+    <script src="~/js/Cart.min.js"></script>
     <script>
         var cartController = new CartController();
         cartController.initialize();

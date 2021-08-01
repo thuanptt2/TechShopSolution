@@ -7,23 +7,51 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShopSolution.AdminApp.Models;
+using TechShopSolution.ApiIntegration;
+using TechShopSolution.ViewModels.Report;
 
 namespace TechShopSolution.AdminApp.Controllers
 { 
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IOrderApiClient _orderApiClient;
+        private readonly IProductApiClient _productApiClient;
+        private readonly IReportApiClient _reportApiClient;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IOrderApiClient orderApiClient, IProductApiClient productApiClient, IReportApiClient reportApiClient)
         {
-            _logger = logger;
+            _orderApiClient = orderApiClient;
+            _productApiClient = productApiClient;
+            _reportApiClient = reportApiClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var adminName = User.Identity.Name;
-            return View();
+            var orderStatistics = await _orderApiClient.GetOrderStatistics();
+            var viewRanking = await _productApiClient.GetProductViewRanking(10);
+            var ratingRanking = await _productApiClient.GetProductMostSalesRanking(10);
+            var favoriteRanking = await _productApiClient.GetProductFavoriteRanking(10);
+            return View(new DashBoardViewModel() {
+                OrderStatistics = orderStatistics.ResultObject,
+                viewRanking = viewRanking,
+                salesRanking = ratingRanking,
+                favoriteRanking = favoriteRanking
+            }); 
+        }
+        public async Task<IActionResult> GetRevenueReport(string fromDate = null, string toDate = null)
+        {
+            var result = await _reportApiClient.GetRevenueReport(new GetRevenueRequest { fromDate = fromDate, toDate = toDate });
+            if(result.IsSuccess)
+                return Ok(result.ResultObject);
+            return BadRequest(result.Message);
+        }
+        public async Task<IActionResult> GetRevenueByMonthReport(string fromDate = null, string toDate = null)
+        {
+            var result = await _reportApiClient.GetRevenueByMonthReport(new GetRevenueRequest { fromDate = fromDate, toDate = toDate });
+            if (result.IsSuccess)
+                return Ok(result.ResultObject);
+            return BadRequest(result.Message);
         }
 
         public IActionResult Privacy()

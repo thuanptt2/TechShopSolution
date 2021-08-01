@@ -149,5 +149,23 @@ namespace TechShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("ViewRanking/{take}")]
+        public IActionResult GetProductViewRanking(int take)
+        {
+            var result = _productService.GetProductViewRanking(take);
+            return Ok(result);
+        }
+        [HttpGet("SalesRanking/{take}")]
+        public IActionResult GetProductMostSalesRanking(int take)
+        {
+            var result = _productService.GetProductMostSalesRanking(take);
+            return Ok(result);
+        }
+        [HttpGet("FavoriteRanking/{take}")]
+        public IActionResult GetProductFavoriteRanking(int take)
+        {
+            var result = _productService.GetProductFavoriteRanking(take);
+            return Ok(result);
+        }
     }
 }

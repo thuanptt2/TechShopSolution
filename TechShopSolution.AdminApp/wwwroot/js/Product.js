@@ -155,7 +155,7 @@ $().ready(function () {
         var value = $(this).val();
         var cateName = $("#cboCategory option:selected").text();
         var cateID = $("#cboCategory option:selected").val();
-        if (CateID.length == 0) {
+        if (CateID.length == 0 && cateID!="") {
             $(".CateTag").append('<span class="badge badge-pill badge-info badge-cate-tag"  data-id="' + cateID + '">' + cateName + '<span class="deleteCateTag">x</span></span>');
             $('#txtCateID').val(value + "," + CateID);
         }

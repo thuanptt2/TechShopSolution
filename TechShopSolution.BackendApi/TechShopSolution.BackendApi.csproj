@@ -13,10 +13,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TechShopSolution.Application.Dapper\TechShopSolution.Application.Dapper.csproj" />
     <ProjectReference Include="..\TechShopSolution.Application\TechShopSolution.Application.csproj" />
     <ProjectReference Include="..\TechShopSolution.Data\TechShopSolution.Data.csproj" />
     <ProjectReference Include="..\TechShopSolution.Utilities\TechShopSolution.Utilities.csproj" />
     <ProjectReference Include="..\TechShopSolution.ViewModels\TechShopSolution.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\user-content\NewFolder\" />
   </ItemGroup>
 
 </Project>

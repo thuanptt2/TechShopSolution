@@ -1,483 +1,110 @@
-﻿
-@{
-    ViewData["Title"] = "Đơn hàng của bạn";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+﻿@model TechShopSolution.ViewModels.Common.PagedResult<TechShopSolution.ViewModels.Sales.OrderPublicViewModel>
+    @{
+        ViewData["Title"] = "Đơn hàng của bạn - TechShop Việt Nam";
+        ViewData["Robots"] = "noindex,nofollow";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
-@{
-    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-}
-<div class="row">
-    <div class="span9">
-        <ul class="breadcrumb">
-            <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
-            <li> <a href="@Url.Action("Detail", "Account")">Tài khoản</a> <span class="divider">/</span></li>
-            <li class="active">Đơn hàng</li>
-        </ul>
+    @{
+        var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    }
+    <div class="row">
+        <div class="span9">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index", "Home", new { area = "" })">Trang chủ</a> <span class="divider">/</span></li>
+                <li> <a href="@Url.Action("Detail", "Account")">Tài khoản</a> <span class="divider">/</span></li>
+                <li class="active">Đơn hàng</li>
+            </ul>
 
-        <a href="#" name="detail"></a>
-        <hr class="soft" />
-        <ul id="infoDetail" class="nav padding-container nav-tabs">
-            <li class="active"><a href="#0" data-toggle="tab">Tất cả</a></li>
-            <li><a href="#1" data-toggle="tab">Chờ duyệt</a></li>
-            <li><a href="#2" data-toggle="tab">Chờ thanh toán</a></li>
-            <li><a href="#3" data-toggle="tab">Chờ giao hàng</a></li>
-            <li><a href="#4" data-toggle="tab">Đang giao hàng</a></li>
-            <li><a href="#5" data-toggle="tab">Thành công</a></li>
-            <li><a href="#6" data-toggle="tab">Đã hủy</a></li>
-        </ul>
-        <div id="myTabContent" class="tab-content">
-            <div class="tab-pane fade active in" id="0">
-                @if (ViewBag.Model != null)
+            <a href="#" name="detail"></a>
+            <hr class="soft" />
+            <ul id="infoDetail" class="nav padding-container nav-tabs">
+                <li class="@(string.IsNullOrWhiteSpace(ViewBag.DieuKien) ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order")">Tất cả</a></li>
+                <li class="@(ViewBag.DieuKien == "cho-duyet" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-duyet" })">Chờ duyệt</a></li>
+                <li class="@(ViewBag.DieuKien == "cho-thanh-toan" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-thanh-toan" })">Chờ thanh toán</a></li>
+                <li class="@(ViewBag.DieuKien == "cho-giao-hang" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "cho-giao-hang" })">Chờ giao hàng</a></li>
+                <li class="@(ViewBag.DieuKien == "dang-giao-hang" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "dang-giao-hang" })">Đang giao hàng</a></li>
+                <li class="@(ViewBag.DieuKien == "thanh-cong" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "thanh-cong" })">Thành công</a></li>
+                <li class="@(ViewBag.DieuKien == "da-huy" ? "active" : "")"><a href="@Url.Action("OrderTracking", "Order", new { dieukien = "da-huy" })">Đã hủy</a></li>
+            </ul>
+            @if (Model.Items.Count != 0)
+            {
+                for (int i = 0; i < Model.Items.Count; i++)
                 {
-                    if (ViewBag.Model.Count != 0)
-                    {
-                        for (int i = 0; i < ViewBag.Model.Count; i++)
-                        {
-                            <div class="wrapper-content margin-bottom-20 margin-top-20">
-                                <div class="space-between-flex">
-                                    <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
-                                    @if (ViewBag.Model[i].order_status == -1)
-                                    {
-                                        <p class="pull-right text-danger-order"><strong>× Đã hủy</strong></p>
-                                    }
-                                    else if (ViewBag.Model[i].ship_status == 1)
-                                    {
-                                        <p class="pull-right text-info-order"><strong>Đang giao hàng</strong></p>
-                                    }
-                                    else if (ViewBag.Model[i].ship_status == 0 && ViewBag.Model[i].order_status == 1)
-                                    {
-                                        if (ViewBag.Model[i].pay_status)
-                                        {
-                                            <p class="pull-right text-warning-order"><strong>Chờ giao hàng</strong></p>
-                                        }
-                                        else
-                                        {
-                                            <p class="pull-right text-warning-order"><strong>Chờ thanh toán</strong></p>
-                                        }
-                                    }
-                                    else if (ViewBag.Model[i].ship_status == -1)
-                                    {
-                                        <p class="pull-right text-danger-order"><strong>× Đơn vận chuyển bị hủy</strong></p>
-                                    }
-                                    else if (ViewBag.Model[i].order_status == 0)
-                                    {
-                                        <p class="pull-right text-warning-order"><strong>Chờ duyệt</strong></p>
-                                    }
-                                    else if (ViewBag.Model[i].ship_status == 2)
-                                    {
-                                        <p class="pull-right text-success-order"><strong>✔ Giao hàng thành công</strong></p>
-                                    }
-
-                                </div>
-                                <hr class="order-hr" />
-                                <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                            @foreach (var item in ViewBag.Model[i].Products)
-                                            {
-                                                <tr class="order-tracking-product">
-                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
-                                                    <td class="order-tracking-product-name">@item.product_name</td>
-                                                    <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > 0)
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
-                                                    }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </a>
-                                <hr />
-                                <div class="pull-right-text margin-top-20">
-                                    Tổng số tiền: <strong>@String.Format(info, "{0:c}", ViewBag.Model[i].total)</strong>
-                                </div>
-                            </div>
-                        }
-
-                    }
-                    else
-                    {
-                        <div class="text-center margin-top-20">
-                            <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                            <p>Chưa có đơn hàng</p>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center margin-top-20">
-                        <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                        <p>Chưa có đơn hàng</p>
-                    </div>
-                }
-            </div>
-            <div class="tab-pane fade" id="1">
-                @if (ViewBag.Model != null)
-                {
-                    int type1 = 0;
-                    for (int i = 0; i < ViewBag.Model.Count; i++)
-                    {
-                        @if (ViewBag.Model[i].order_status == 0)
-                        {
-                            type1++;
-                            <div class="wrapper-content margin-bottom-20 margin-top-20">
-                                <div class="space-between-flex">
-                                    <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
-                                    <p class="pull-right text-warning-order"><strong>Chờ duyệt</strong></p>
-                                </div>
-                                <hr class="order-hr" />
-                                <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                            @foreach (var item in ViewBag.Model[i].Products)
-                                            {
-                                                <tr class="order-tracking-product">
-                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
-                                                    <td class="order-tracking-product-name">@item.product_name</td>
-                                                    <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > 0)
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
-                                                    }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </a>
-                                <hr />
-                                <div class="pull-right-text">
-                                    Tổng số tiền: <strong>@String.Format(info, "{0:c}", ViewBag.Model[i].total)</strong>
-                                </div>
-                            </div>
-                        }
-                    }
-                    if (type1 == 0)
-                    {
-                        <div class="text-center margin-top-20">
-                            <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                            <h4>Chưa có đơn hàng</h4>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center margin-top-20">
-                        <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                        <p>Chưa có đơn hàng</p>
-                    </div>
-                }
-            </div>
-            <div class="tab-pane fade" id="2">
-                @if (ViewBag.Model != null)
-                {
-                    int type2 = 0;
-                    for (int i = 0; i < ViewBag.Model.Count; i++)
-                    {
-                        @if (!ViewBag.Model[i].pay_status && ViewBag.Model[i].order_status == 1)
-                        {
-                            type2++;
-                            <div class="wrapper-content margin-bottom-20 margin-top-20">
-                                <div class="space-between-flex">
-                                    <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
-                                    <p class="pull-right text-warning-order"><strong>Chờ thanh toán</strong></p>
-                                </div>
-                                <hr class="order-hr" />
-                                <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                            @foreach (var item in ViewBag.Model[i].Products)
-                                            {
-                                                <tr class="order-tracking-product">
-                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
-                                                    <td class="order-tracking-product-name">@item.product_name</td>
-                                                    <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > 0)
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
-                                                    }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </a>
-                                <hr />
-                                <div class="pull-right-text">
-                                    Tổng số tiền: <strong>@String.Format(info, "{0:c}", ViewBag.Model[i].total)</strong>
-                                </div>
-                            </div>
-                        }
-                    }
-                    if (type2 == 0)
-                    {
-                        <div class="text-center margin-top-20">
-                            <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                            <h4>Chưa có đơn hàng</h4>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center margin-top-20">
-                        <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                        <p>Chưa có đơn hàng</p>
-                    </div>
-                }
-            </div>
-            <div class="tab-pane fade" id="3">
-                @if (ViewBag.Model != null)
-                {
-                    int type3 = 0;
-                    for (int i = 0; i < ViewBag.Model.Count; i++)
-                    {
-                        @if (ViewBag.Model[i].ship_status == 0 && ViewBag.Model[i].order_status == 1 && ViewBag.Model[i].pay_status)
-                        {
-                            type3++;
-                            <div class="wrapper-content margin-bottom-20 margin-top-20">
-                                <div class="space-between-flex">
-                                    <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
+                    <div class="wrapper-content margin-bottom-20 margin-top-20">
+                        <div class="space-between-flex">
+                            <a href="@Url.Action("OrderDetail", "Order", new { id = Model.Items[i].id })"><strong>Đơn hàng #@Model.Items[i].id</strong></a>
+                            @if (Model.Items[i].order_status == -1)
+                            {
+                                <p class="pull-right text-danger-order"><strong>× Đã hủy</strong></p>
+                            }
+                            else if (Model.Items[i].ship_status == 1)
+                            {
+                                <p class="pull-right text-info-order"><strong>Đang giao hàng</strong></p>
+                            }
+                            else if (Model.Items[i].ship_status == 0 && Model.Items[i].order_status == 1)
+                            {
+                                if (Model.Items[i].pay_status)
+                                {
                                     <p class="pull-right text-warning-order"><strong>Chờ giao hàng</strong></p>
-                                </div>
-                                <hr class="order-hr" />
-                                <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                            @foreach (var item in ViewBag.Model[i].Products)
-                                            {
-                                                <tr class="order-tracking-product">
-                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
-                                                    <td class="order-tracking-product-name">@item.product_name</td>
-                                                    <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > 0)
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
-                                                    }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </a>
-                                <hr />
-                                <div class="pull-right-text">
-                                    Tổng số tiền: <strong>@String.Format(info, "{0:c}", ViewBag.Model[i].total)</strong>
-                                </div>
-                            </div>
-                        }
-                    }
-                    if (type3 == 0)
-                    {
-                        <div class="text-center margin-top-20">
-                            <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                            <h4>Chưa có đơn hàng</h4>
+                                }
+                                else
+                                {
+                                    <p class="pull-right text-warning-order"><strong>Chờ thanh toán</strong></p>
+                                }
+                            }
+                            else if (Model.Items[i].ship_status == -1)
+                            {
+                                <p class="pull-right text-danger-order"><strong>× Đơn vận chuyển bị hủy</strong></p>
+                            }
+                            else if (Model.Items[i].order_status == 0)
+                            {
+                                <p class="pull-right text-warning-order"><strong>Chờ duyệt</strong></p>
+                            }
+                            else if (Model.Items[i].ship_status == 2)
+                            {
+                                <p class="pull-right text-success-order"><strong>✔ Giao hàng thành công</strong></p>
+                            }
+
                         </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center margin-top-20">
-                        <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                        <p>Chưa có đơn hàng</p>
+                        <hr class="order-hr" />
+                        <a href="@Url.Action("OrderDetail", "Order", new { id = Model.Items[i].id })">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    @foreach (var item in Model.Items[i].Products)
+                                    {
+                                        <tr class="order-tracking-product">
+                                            <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
+                                            <td class="order-tracking-product-name">@item.product_name</td>
+                                            <td style="width: 7%">x @item.quantity</td>
+                                            @if (item.promotion_price > 0)
+                                            {
+                                                <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="width: 15%">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </a>
+                        <hr />
+                        <div class="pull-right-text margin-top-20">
+                            Tổng số tiền: <strong>@String.Format(info, "{0:c}", Model.Items[i].total)</strong>
+                        </div>
                     </div>
                 }
-            </div>
-            <div class="tab-pane fade" id="4">
-                @if (ViewBag.Model != null)
-                {
-                    int type4 = 0;
-                    for (int i = 0; i < ViewBag.Model.Count; i++)
-                    {
-                        @if (ViewBag.Model[i].ship_status == 1)
-                        {
-                            type4++;
-                            <div class="wrapper-content margin-bottom-20 margin-top-20">
-                                <div class="space-between-flex">
-                                    <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
-                                    <p class="pull-right text-info-order"><strong>Đang giao hàng</strong></p>
-                                </div>
-                                <hr class="order-hr" />
-                                <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                            @foreach (var item in ViewBag.Model[i].Products)
-                                            {
-                                                <tr class="order-tracking-product">
-                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
-                                                    <td class="order-tracking-product-name">@item.product_name</td>
-                                                    <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > 0)
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
-                                                    }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </a>
-                                <hr />
-                                <div class="pull-right-text">
-                                    Tổng số tiền: <strong>@String.Format(info, "{0:c}", ViewBag.Model[i].total)</strong>
-                                </div>
-                            </div>
-                        }
-                    }
-                    if (type4 == 0)
-                    {
-                        <div class="text-center margin-top-20">
-                            <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                            <h4>Chưa có đơn hàng</h4>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center margin-top-20">
-                        <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                        <p>Chưa có đơn hàng</p>
-                    </div>
-                }
-            </div>
-            <div class="tab-pane fade" id="5">
-                @if (ViewBag.Model != null)
-                {
-                    int type5 = 0;
-                    for (int i = 0; i < ViewBag.Model.Count; i++)
-                    {
-                        @if (ViewBag.Model[i].ship_status == 2)
-                        {
-                            type5++;
-                            <div class="wrapper-content margin-bottom-20 margin-top-20">
-                                <div class="space-between-flex">
-                                    <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
-                                    <p class="pull-right text-success-order"><strong>✔ Giao hàng thành công</strong></p>
-                                </div>
-                                <hr class="order-hr" />
-                                <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                            @foreach (var item in ViewBag.Model[i].Products)
-                                            {
-                                                <tr class="order-tracking-product">
-                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
-                                                    <td class="order-tracking-product-name">@item.product_name</td>
-                                                    <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > 0)
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
-                                                    }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </a>
-                                <hr />
-                                <div class="pull-right-text">
-                                    Tổng số tiền: <strong>@String.Format(info, "{0:c}", ViewBag.Model[i].total)</strong>
-                                </div>
-                            </div>
-                        }
-                    }
-                    if (type5 == 0)
-                    {
-                        <div class="text-center margin-top-20">
-                            <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                            <h4>Chưa có đơn hàng</h4>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center margin-top-20">
-                        <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                        <p>Chưa có đơn hàng</p>
-                    </div>
-                }
-            </div>
-            <div class="tab-pane fade" id="6">
-                @if (ViewBag.Model != null)
-                {
-                    int type6 = 0;
-                    for (int i = 0; i < ViewBag.Model.Count; i++)
-                    {
-                        @if (ViewBag.Model[i].order_status == -1)
-                        {
-                            type6++;
-                            <div class="wrapper-content margin-bottom-20 margin-top-20">
-                                <div class="space-between-flex">
-                                    <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })"><strong>Đơn hàng #@ViewBag.Model[i].id</strong></a>
-                                    <p class="pull-right text-danger-order"><strong>× Đã hủy</strong></p>
-                                </div>
-                                <hr class="order-hr" />
-                                <a href="@Url.Action("OrderDetail", "Order", new { id = ViewBag.Model[i].id })">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                            @foreach (var item in ViewBag.Model[i].Products)
-                                            {
-                                                <tr class="order-tracking-product">
-                                                    <td><img src="@(Configuration["BaseAddress"] + "/user-content/" + @item.product_image)" width="60" /></td>
-                                                    <td class="order-tracking-product-name">@item.product_name</td>
-                                                    <td style="width: 7%">x @item.quantity</td>
-                                                    @if (item.promotion_price > 0)
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.promotion_price * item.quantity)</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td style="width: 15%">@String.Format(info, "{0:c}", item.unit_price * item.quantity)</td>
-                                                    }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </a>
-                                <hr />
-                                <div class="pull-right-text">
-                                    Tổng số tiền: <strong>@String.Format(info, "{0:c}", ViewBag.Model[i].total)</strong>
-                                </div>
-                            </div>
-                        }
-                    }
-                    if (type6 == 0)
-                    {
-                        <div class="text-center margin-top-20">
-                            <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                            <h4>Chưa có đơn hàng</h4>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center margin-top-20">
-                        <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
-                        <p>Chưa có đơn hàng</p>
-                    </div>
-                }
-            </div>
+                @await Component.InvokeAsync("Pager", Model)
+            }
+            else
+            {
+                <div class="text-center margin-top-20">
+                    <img src="~/images/5fafbb923393b712b96488590b8f781f.png" />
+                    <p>Chưa có đơn hàng</p>
+                </div>
+            }
         </div>
     </div>
-</div>

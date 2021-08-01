@@ -12,6 +12,7 @@ using TechShopSolution.Application.Common;
 using TechShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using TechShopSolution.ViewModels.Catalog.Category;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.Application.Catalog.Product
 {
@@ -268,7 +269,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && p.isActive == true
+                            where p.isDelete == false
                             select new { p, pic, c };
 
                 if (!String.IsNullOrEmpty(request.Keyword))
@@ -290,21 +291,22 @@ namespace TechShopSolution.Application.Catalog.Product
                         query = query.OrderByDescending(x => x.p.name);
                         break;
                     case 3:
-                        query = query.OrderBy(x => x.p.unit_price);
+                        query = query.OrderBy(x => x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price);
                         break;
                     case 4:
-                        query = query.OrderByDescending(x => x.p.unit_price);
+                        query = query.OrderByDescending(x => x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price);
                         break;
                 }
                 if (request.Lowestprice != null && request.Highestprice != null)
                 {
-                    query = query.Where(x => x.p.unit_price >= request.Lowestprice && x.p.unit_price <= request.Highestprice);
+                    query = query.Where(x => (x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price) >= request.Lowestprice 
+                    && (x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price) <= request.Highestprice);
                 } else if (request.Lowestprice != null && request.Highestprice == null)
                 {
-                    query = query.Where(x => x.p.unit_price >= request.Lowestprice);
+                    query = query.Where(x => (x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price) >= request.Lowestprice);
                 } else if (request.Lowestprice == null && request.Highestprice != null)
                 {
-                    query = query.Where(x => x.p.unit_price <= request.Highestprice);
+                    query = query.Where(x => (x.p.promotion_price > 0 ? x.p.promotion_price : x.p.unit_price) <= request.Highestprice);
                 }
 
 
@@ -314,7 +316,6 @@ namespace TechShopSolution.Application.Catalog.Product
                 int totalRow = data.Count();
 
                 List<ProductOverViewModel> result = data.Skip((request.PageIndex - 1) * request.PageSize)
-                    .OrderBy(emp => Guid.NewGuid())
                     .Take(request.PageSize)
                     .Select(a => new ProductOverViewModel()
                     {
@@ -395,7 +396,7 @@ namespace TechShopSolution.Application.Catalog.Product
                 var query = from p in _context.Products
                             join pic in _context.CategoryProducts on p.id equals pic.product_id
                             join c in _context.Categories on pic.cate_id equals c.id
-                            where p.isDelete == false && c.id == id && p.isActive == true
+                            where p.isDelete == false && c.id == id
                             select new { p, pic, c };
 
                 int Count = await query.CountAsync();
@@ -600,7 +601,7 @@ namespace TechShopSolution.Application.Catalog.Product
                         join pic in _context.CategoryProducts on p.id equals pic.product_id
                         join c in _context.Categories on pic.cate_id equals c.id
                         join b in _context.Brands on p.brand_id equals b.id
-                        where p.isDelete == false && p.isActive == true && p.slug == slug
+                        where p.isDelete == false && p.slug == slug
                         select new { p, pic, c, b};
 
             if (await query.CountAsync() == 0)
@@ -835,6 +836,93 @@ namespace TechShopSolution.Application.Catalog.Product
                 return new ApiErrorResult<bool>("Cập nhật thất bại");
             }
         }
-     
+        public List<ProductRankingViewModel> GetProductViewRanking(int take)
+        {
+            var query = from p in _context.Products
+                        where p.isDelete == false
+                        select new { p };
+
+            var group = query.AsEnumerable()
+               .GroupBy(g => g.p);
+
+            var listMostViewProducts = group.OrderByDescending(x => x.Key.view_count)
+                 .Take(take)
+                 .Select(a => new ProductRankingViewModel()
+                 {
+                     id = a.Key.id,
+                     name = a.Key.name,
+                     best_seller = a.Key.best_seller,
+                     featured = a.Key.featured,
+                     image = a.Key.image,
+                     promotion_price = a.Key.promotion_price,
+                     slug = a.Key.slug,
+                     create_at = a.Key.create_at,
+                     unit_price = a.Key.unit_price,
+                     count = a.Key.view_count,
+                 }).ToList();
+
+            return new List<ProductRankingViewModel>(listMostViewProducts);
+        }
+        public List<ProductRankingViewModel> GetProductMostSalesRanking(int take)
+        {
+            var query = from od in _context.OrDetails
+                        join o in _context.Orders on od.order_id equals o.id
+                        join p in _context.Products on od.product_id equals p.id
+                        where o.status != -1
+                        select new { p, od };
+
+            var group = query.AsEnumerable()
+               .GroupBy(g => g.p);
+
+            var result = new List<ProductRankingViewModel>();
+
+
+            foreach (var item in group)
+            {
+                var product = new ProductRankingViewModel();
+                product.id = item.Key.id;
+                product.name = item.Key.name;
+                product.image = item.Key.image;
+                product.slug = item.Key.slug;
+                product.count = 0;
+                foreach(var od in item.Key.OrderDetails)
+                {
+                    product.count += od.quantity;
+                }
+                result.Add(product);
+            }
+
+            result = result.OrderByDescending(x => x.count).Take(take).ToList();
+
+            return new List<ProductRankingViewModel>(result);
+        }
+        public List<ProductRankingViewModel> GetProductFavoriteRanking(int take)
+        {
+            var query = from p in _context.Products
+                        join f in _context.Favorites on p.id equals f.product_id 
+                        where p.isDelete == false
+                        select new { p, f };
+
+            var group = query.AsEnumerable()
+               .GroupBy(g => g.p);
+
+            var listMostViewProducts = group.OrderByDescending(x => x.Key.Favoriters.Count)
+                 .Take(take)
+                 .Select(a => new ProductRankingViewModel()
+                 {
+                     id = a.Key.id,
+                     name = a.Key.name,
+                     best_seller = a.Key.best_seller,
+                     featured = a.Key.featured,
+                     image = a.Key.image,
+                     promotion_price = a.Key.promotion_price,
+                     slug = a.Key.slug,
+                     create_at = a.Key.create_at,
+                     unit_price = a.Key.unit_price,
+                     count = a.Key.Favoriters.Count,
+                 }).ToList();
+
+            return new List<ProductRankingViewModel>(listMostViewProducts);
+        }
     }
 }

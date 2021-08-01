@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TechShopSolution.ViewModels.Common;
 using TechShopSolution.ViewModels.Sales;
+using TechShopSolution.ViewModels.Website.Dashboard;
 
 namespace TechShopSolution.Application.Catalog.Order
 {
@@ -16,7 +14,8 @@ namespace TechShopSolution.Application.Catalog.Order
         Task<ApiResult<string>> PaymentConfirm(int id);
         Task<ApiResult<string>> ConfirmOrder(int id);
         Task<ApiResult<bool>> UpdateAddress(OrderUpdateAddressRequest request);
-        Task<ApiResult<List<OrderPublicViewModel>>> GetCustomerOrders(int id);
+        PagedResult<OrderPublicViewModel> GetCustomerOrders(GetCustomerOrderRequest request);
         ApiResult<OrderPublicViewModel> GetDetailOrder(int id, int cus_id );
+        ApiResult<OrderStatisticsViewModel> GetOrderStatistics();
     }
 }

@@ -4,7 +4,8 @@
 @{
     if (ViewBag.Model != null)
     {
-        ViewData["Title"] = "Chi tiết đơn hàng #" + ViewBag.Model.id;
+        ViewData["Title"] = "Chi tiết đơn hàng #" + ViewBag.Model.id + "- TechShop Việt Nam";
+        ViewData["Robots"] = "noindex,nofollow";
     }
 
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -39,10 +40,17 @@
             <div class="step" data-desc="Đơn hàng đã đặt"><i class="fas fa-receipt"></i></div>
             @if (ViewBag.Model.confirm_at == null)
             {
-                <div class="step active" data-desc="Chờ duyệt"><i class="fas fa-clipboard-check"></i></div>
-                <div class="step" data-desc="Thanh toán"><i class="fas fa-handshake"></i></div>
-                <div class="step" data-desc="Vận chuyển"><i class="fas fa-shipping-fast"></i></div>
-                <div class="step" data-desc="Nhận hàng"><i class="fas fa-box"></i></div>
+                if (ViewBag.Model.cancel_at == null)
+                {
+                    <div class="step active" data-desc="Chờ duyệt"><i class="fas fa-clipboard-check"></i></div>
+                    <div class="step" data-desc="Thanh toán"><i class="fas fa-handshake"></i></div>
+                    <div class="step" data-desc="Vận chuyển"><i class="fas fa-shipping-fast"></i></div>
+                    <div class="step" data-desc="Nhận hàng"><i class="fas fa-box"></i></div>
+                }
+                else
+                {
+                    <div class="step" data-desc="Đơn hàng đã bị hủy"></div>
+                }
             }
             else
             {
