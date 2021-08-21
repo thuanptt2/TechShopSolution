@@ -14,6 +14,7 @@ namespace TechShopSolution.ViewModels.Sales
         public decimal? ship_fee { get; set; }
         public decimal? discount { get; set; }
         public bool pay_status { get; set; }
+        public int payment_id { get; set; }
         public string payment_name { get; set; }
         public string receiver_address { get; set; }
         public string receiver_name { get; set; }

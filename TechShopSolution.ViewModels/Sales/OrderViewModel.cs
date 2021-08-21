@@ -8,6 +8,7 @@ namespace TechShopSolution.ViewModels.Sales
     {
         public int id { get; set; }
         public int cus_id { get; set; }
+        public int payment_id { get; set; }
         public string cus_name { get; set; }
         public string name_receiver { get; set; }
         public decimal total { get; set; }

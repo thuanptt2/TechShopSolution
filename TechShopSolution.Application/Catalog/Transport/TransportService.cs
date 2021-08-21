@@ -390,6 +390,10 @@ namespace TechShopSolution.Application.Catalog.Transport
 
             transport.ship_status = 2;
             transport.done_at = DateTime.Now;
+            var order = await _context.Orders.FindAsync(transport.order_id);
+            order.pay_at = DateTime.Now;
+            order.isPay = true;
+
             _context.SaveChanges();
             return new ApiSuccessResult<string>("Xác nhận thành công");
         }

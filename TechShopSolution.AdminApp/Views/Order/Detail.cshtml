@@ -182,13 +182,17 @@
                 }
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item item-dropdown" href="@Url.Action("ConfirmOrder", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn duyệt đơn hàng này?')">Duyệt đơn hàng</a>
-                    @if (Model.Order.status == 0)
+                    @if (Model.Order.payment_id != 1)
                     {
-                        <a class="dropdown-item item-dropdown" onclick="alert('Bạn chưa duyệt đơn hàng này, hãy duyệt đơn hàng trước')">Xác nhận thanh toán</a>
-                    }
-                    else
-                    {
-                        <a class="dropdown-item item-dropdown" href="@Url.Action("PaymentConfirm", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn thanh toán cho đơn hàng này?')">Xác nhận thanh toán</a>
+
+                        if (Model.Order.status == 0)
+                        {
+                            <a class="dropdown-item item-dropdown" onclick="alert('Bạn chưa duyệt đơn hàng này, hãy duyệt đơn hàng trước')">Xác nhận thanh toán</a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item item-dropdown" href="@Url.Action("PaymentConfirm", "Order", new { id = Model.Order.id })" onclick="return confirm('Bạn có chắc muốn thanh toán cho đơn hàng này?')">Xác nhận thanh toán</a>
+                        }
                     }
                     @if (Model.Order.ship_status == 1)
                     {
@@ -373,7 +377,7 @@
                                     Giao hàng
                                 </a>
                             }
-                            else if (!Model.Order.isPay)
+                            else if (!Model.Order.isPay && Model.Order.payment_id != 1)
                             {
                                 <a id="btnEdit" class="btn btn-primary" onclick="return alert('Đơn hàng này chưa thanh toán, Hãy liên hệ với khách hàng để thanh toán trước đã nhé!')">
                                     Giao hàng

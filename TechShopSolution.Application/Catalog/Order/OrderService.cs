@@ -158,6 +158,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     discount = a.Key.discount,
                     isPay = a.Key.isPay,
                     status = a.Key.status,
+                    payment_id = a.Key.payment_id,
                     total = a.Key.total,
                     transport_fee = a.Key.transport_fee
 
@@ -185,11 +186,12 @@ namespace TechShopSolution.Application.Catalog.Order
                     break;
                 case 3:
                     // Chờ thanh toán
-                    result = result.Where(x => !x.isPay && x.status == 1).ToList();
+                    result = result.Where(x => !x.isPay && x.status == 1 && x.payment_id != 1).ToList();
                     break;
                 case 4:
                     // Chờ vận chuyển
-                    result = result.Where(x => x.ship_status == 0 && x.isPay & x.status != -1).ToList();
+                    result = result.Where(x => x.ship_status == 0 && x.isPay && x.status == 1 && x.payment_id != 1)
+                        .Union(result.Where(x => x.payment_id == 1 && x.status == 1 && x.ship_status == 0)).ToList();
                     break;
                 case 5:
                     // Đang vận chuyển
@@ -481,6 +483,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     cancel_at = a.Key.cancel_at,
                     cancel_reason = a.Key.cancel_reason,
                     confirm_at = a.Key.confirm_at,
+                    payment_id = a.Key.payment_id,
                     payment_name = a.Key.PaymentMethod.name,
                     pay_at = a.Key.pay_at,
                     discount = a.Key.discount,
@@ -539,8 +542,9 @@ namespace TechShopSolution.Application.Catalog.Order
             var model = new OrderStatisticsViewModel()
             {
                 orderWaitForConfirm = query.Where(x => x.o.status == 0).Count(),
-                orderWaitForPay = query.Where(x => x.o.status == 1 && !x.o.isPay).Count(),
-                orderWaitForShip = query.Where(x => x.g == null && x.o.isPay & x.o.status != -1).Count(),
+                orderWaitForPay = query.Where(x => !x.o.isPay && x.o.status == 1 && x.o.payment_id != 1).Count(),
+                orderWaitForShip = query.Where(x => x.g == null && x.o.isPay && x.o.status == 1 && x.o.payment_id != 1)
+                        .Union(query.Where(x => x.o.payment_id == 1 && x.o.status == 1 && x.g == null)).Count(),
                 orderBeingShip = query.Where(x => x.g.ship_status == 1).Count(),
 
             };
