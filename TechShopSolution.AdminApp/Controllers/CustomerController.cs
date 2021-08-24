@@ -91,7 +91,10 @@ namespace TechShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Update(CustomerUpdateRequest request)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.LatestOrde = await _customerApiClient.GetLatestOrder(request.Id, 20);
                 return View(request);
+            }
             var result = await _customerApiClient.UpdateCustomer(request);
             if (result.IsSuccess)
             {
