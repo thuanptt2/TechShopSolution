@@ -45,26 +45,26 @@
     </ol>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="padding-container">
-        <a class="btn btn-success mt-3" asp-action="Create" asp-controller="Product">
+        <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Product">
             <i class="fa fa-plus"></i>
             Thêm mới
         </a>
         <!-- Navbar Search-->
         <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="index" method="get" style="float: right;">
-            <div class="input-group mb-3">
-                <div class="form-group mr-3 mb-3">
+            <div class="input-group mb-3 row">
+                <div class="form-group mr-3 mb-3 col-md-3">
                     <label>Lọc sản phẩm theo loại: </label>
                     <select name="CategoryID" asp-items="ViewBag.Categories" class="form-select" onchange="this.form.submit()">
                         <option value="" class="font-italic">Chọn loại sản phẩm</option>
                     </select>
                 </div>
-                <div class="form-group mr-3 mb-3">
+                <div class="form-group mr-3 mb-3 col-md-3">
                     <label>Lọc sản phẩm theo thương hiệu: </label>
                     <select name="BrandID" asp-items="ViewBag.Brands" class="form-select" onchange="this.form.submit()">
                         <option value="" class="font-italic">Chọn thương hiệu</option>
                     </select>
                 </div>
-                <div class="form-group flex-column align-items-sm-start">
+                <div class="form-group flex-column align-items-sm-start col-md-4">
                     <label>Tìm kiếm sản phẩm: </label>
                     <div class="d-flex">
                         <input class="form-control" name="Keyword" type="text" value="@ViewBag.Keyword" placeholder="Nhập từ khóa tìm kiếm..." aria-label="Nhập từ khóa tìm kiếm..." aria-describedby="btnNavbarSearch" />

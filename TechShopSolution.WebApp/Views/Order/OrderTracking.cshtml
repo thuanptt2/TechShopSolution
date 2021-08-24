@@ -45,7 +45,7 @@
                             }
                             else if (Model.Items[i].ship_status == 0 && Model.Items[i].order_status == 1)
                             {
-                                if (Model.Items[i].pay_status)
+                                if (Model.Items[i].pay_status || Model.Items[i].payment_id == 1)
                                 {
                                     <p class="pull-right text-warning-order"><strong>Chờ giao hàng</strong></p>
                                 }

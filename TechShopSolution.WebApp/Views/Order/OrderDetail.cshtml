@@ -278,19 +278,59 @@
                                 </div>
                             </li>
                         }
-                        @if (ViewBag.Model.cancel_at != null && flag == false)
+                        @if (ViewBag.Model.payment_id == 1)
                         {
-                        flag = true;
-                        <li class="tl-item">
-                            <div class="timestamp">
-                                @String.Format("{0:t}", ViewBag.Model.cancel_at)<br>
-                            </div>
-                            <div class="item-title">Đơn hàng đã bị hủy</div>
-                            <div class="item-detail">
-                                <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p>
-                                <p>Lý do: <strong>@ViewBag.Model.cancel_reason</strong></p>
-                            </div>
-                        </li>
+                            if (ViewBag.Model.cancel_at != null && flag == false)
+                            {
+                                flag = true;
+                                <li class="tl-item">
+                                    <div class="timestamp">
+                                        @String.Format("{0:t}", ViewBag.Model.cancel_at)<br>
+                                    </div>
+                                    <div class="item-title">Đơn hàng đã bị hủy</div>
+                                    <div class="item-detail">
+                                        <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p>
+                                        <p>Lý do: <strong>@ViewBag.Model.cancel_reason</strong></p>
+                                    </div>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            if (ViewBag.Model.pay_at != null)
+                            {
+                                if (ViewBag.Model.cancel_at != null && flag == false)
+                                {
+                                    flag = true;
+                                    <li class="tl-item">
+                                        <div class="timestamp">
+                                            @String.Format("{0:t}", ViewBag.Model.cancel_at)<br>
+                                        </div>
+                                        <div class="item-title">Đơn hàng đã bị hủy</div>
+                                        <div class="item-detail">
+                                            <p>Đơn hàng đã bị hủy vào lúc @ViewBag.Model.cancel_at</p>
+                                            <p>Lý do: <strong>@ViewBag.Model.cancel_reason</strong></p>
+                                        </div>
+                                    </li>
+                                    <li class="tl-item">
+                                        <div class="timestamp">
+                                            @String.Format("{0:t}", ViewBag.Model.pay_at)<br>
+                                        </div>
+                                        <div class="item-title">Thanh toán thành công</div>
+                                        <div class="item-detail">Chúng tôi xác nhận thanh toán thành công số tiền <strong>@String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</strong></div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="tl-item">
+                                        <div class="timestamp">
+                                            @String.Format("{0:t}", ViewBag.Model.pay_at)<br>
+                                        </div>
+                                        <div class="item-title">Thanh toán thành công</div>
+                                        <div class="item-detail">Chúng tôi xác nhận thanh toán thành công số tiền <strong>@String.Format(info, "{0:c}", ViewBag.Model.total - ViewBag.Model.discount + ViewBag.Model.ship_fee)</strong></div>
+                                    </li>
+                                }
+                            }
                         }
                         @if (ViewBag.Model.confirm_at != null)
                         {

@@ -405,6 +405,7 @@ namespace TechShopSolution.Application.Catalog.Order
                     order_status = a.Key.status,
                     total = a.Key.total - a.Key.discount + a.Key.transport_fee,
                     pay_status = a.Key.isPay,
+                    payment_id = a.Key.payment_id,
                     Products = a.Key.OrderDetails.Select(b => new OrderDetailModel()
                     {
                         order_id = b.order_id,
@@ -433,9 +434,10 @@ namespace TechShopSolution.Application.Catalog.Order
                 if (request.filter == "cho-duyet")
                     Orders = Orders.Where(x => x.order_status == 0).ToList();
                 else if (request.filter == "cho-thanh-toan")
-                    Orders = Orders.Where(x => !x.pay_status && x.order_status == 1).ToList();
+                    Orders = Orders.Where(x => !x.pay_status && x.order_status == 1 && x.payment_id != 1).ToList();
                 else if (request.filter == "cho-giao-hang")
-                    Orders = Orders.Where(x => x.ship_status == 0 && x.pay_status && x.order_status != -1).ToList();
+                    Orders = Orders.Where(x => x.ship_status == 0 && x.pay_status && x.order_status == 1 && x.payment_id != 1)
+                        .Union(Orders.Where(x => x.payment_id == 1 && x.order_status == 1 && x.ship_status == 0)).OrderByDescending(x => x.create_at).ToList();
                 else if (request.filter == "dang-giao-hang")
                     Orders = Orders.Where(x => x.ship_status == 1).ToList();
                 else if (request.filter == "thanh-cong")

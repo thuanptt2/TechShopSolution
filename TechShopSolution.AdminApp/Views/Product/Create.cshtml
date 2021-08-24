@@ -1,4 +1,5 @@
 ﻿@model TechShopSolution.ViewModels.Catalog.Product.ProductCreateRequest
+@using TechShopSolution.ViewModels.Catalog.Category
 
 @{
     ViewData["Title"] = "Create";
@@ -42,7 +43,21 @@
                                         <option value="" selected>Chọn Danh mục sản phẩm</option>
                                     </select>
                                     <div class="CateTag">
-
+                                        @if(Model !=null) {
+                                            var CateTree = ViewBag.ListCate as List<CategoryViewModel>;
+                                            if (CateTree != null && Model.CateID != "")
+                                            {
+                                                string[] catelist = Model.CateID.Split(",");
+                                                for (int i = 0; i < catelist.Length; i++)
+                                                {
+                                                    if (catelist[i] != "")
+                                                    {
+                                                        var cate = CateTree.FirstOrDefault(x => x.id == int.Parse(catelist[i]));
+                                                        <span class="badge badge-pill badge-info badge-cate-tag OldCate" data-id="@cate.id">@cate.cate_name<span class="deleteCateTag">x</span></span>
+                                                    }
+                                                }
+                                            }
+                                        }
                                     </div>
                                     <span asp-validation-for="CateID" class="text-danger"></span>
                                 </div>
