@@ -261,10 +261,10 @@ namespace TechShopSolution.WebApp.Controllers
             {
                 TempData["result"] = "Đặt hàng thành công. Cảm ơn quý khách đã mua hàng của chúng tôi.";
                 HttpContext.Session.Remove(SystemConstants.CartSession);
-                //var contentMailClient = sendMailToClient(int.Parse(result.ResultObject), request);
-                //var contentMailAdmin = sendMailToAdmin(int.Parse(result.ResultObject), request, customer.ResultObject);
-                //await SendMail(customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMailClient);
-                //await SendMail("thuanneuwu@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin);
+                var contentMailClient = sendMailToClient(int.Parse(result.ResultObject), request);
+                var contentMailAdmin = sendMailToAdmin(int.Parse(result.ResultObject), request, customer.ResultObject);
+                await SendMail(customer.ResultObject.email, "Đặt hàng thành công - Đơn hàng #" + result.ResultObject, contentMailClient);
+                await SendMail("thuanneuwu@gmail.com", "Đơn hàng mới #" + result.ResultObject, contentMailAdmin);
                 return RedirectToAction("Index","Home");
             }
             TempData["error"] = result.Message;
